@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Foundation;
+using System;
 
 using UIKit;
 
@@ -20,6 +21,18 @@ namespace Askker.App.iOS
         {
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.
+        }
+
+        public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
+        {
+            base.PrepareForSegue(segue, sender);
+
+            // set the View Controller that’s powering the screen we’re
+            // transitioning to
+
+            var registerContoller = segue.DestinationViewController as RegisterController;
+
+           
         }
     }
 }

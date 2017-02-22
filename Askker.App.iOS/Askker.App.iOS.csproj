@@ -91,6 +91,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RegisterController.cs" />
+    <Compile Include="RegisterController.designer.cs">
+      <DependentUpon>RegisterController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
@@ -106,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entitlements.plist" />
+    <BundleResource Include="Resources\assets\img\logo_180.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Askker.App.PortableLibrary\Askker.App.PortableLibrary.csproj">
