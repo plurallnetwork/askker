@@ -17,6 +17,8 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
+
+            lblNeedHelp.ToggleUnderline(null);
         }
 
         public override void DidReceiveMemoryWarning()
@@ -33,11 +35,9 @@ namespace Askker.App.iOS
             // transitioning to
 
             var registerContoller = segue.DestinationViewController as RegisterController;
-
-           
         }
 
-        async partial void btnEnter_TouchUpInside(UIButton sender)
+        async partial void btnEnter_TouchUpInside()
         {
             LoginManager loginManager = new LoginManager();
             UserLoginModel userLoginModel = new UserLoginModel("leandrolg21@hotmail.com", "Teste@123");

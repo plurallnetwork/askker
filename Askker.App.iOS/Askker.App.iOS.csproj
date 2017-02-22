@@ -89,6 +89,7 @@
     <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <InterfaceDefinition Include="LoginView.xib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RegisterController.cs" />

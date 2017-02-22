@@ -16,21 +16,52 @@ namespace Askker.App.iOS
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton btnEnter { get; set; }
-		UIKit.UIButton RegisterButton { get; set; }
 
-        [Action ("btnEnter_TouchUpInside:")]
+        [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        partial void btnEnter_TouchUpInside (UIKit.UIButton sender);
+        UIKit.UIButton btnLoginFacebook { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton btnLoginGoogle { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel lblNeedHelp { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton RegisterButton { get; set; }
+
+        [Action ("btnEnter_TouchUpInside")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void btnEnter_TouchUpInside ();
 
         void ReleaseDesignerOutlets ()
         {
-            if (RegisterButton != null) {
-                RegisterButton.Dispose ();
-                RegisterButton = null;
-            }
             if (btnEnter != null) {
                 btnEnter.Dispose ();
                 btnEnter = null;
+            }
+
+            if (btnLoginFacebook != null) {
+                btnLoginFacebook.Dispose ();
+                btnLoginFacebook = null;
+            }
+
+            if (btnLoginGoogle != null) {
+                btnLoginGoogle.Dispose ();
+                btnLoginGoogle = null;
+            }
+
+            if (lblNeedHelp != null) {
+                lblNeedHelp.Dispose ();
+                lblNeedHelp = null;
+            }
+
+            if (RegisterButton != null) {
+                RegisterButton.Dispose ();
+                RegisterButton = null;
             }
         }
     }
