@@ -84,22 +84,21 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="LoginController.cs" />
+    <Compile Include="LoginController.designer.cs">
+      <DependentUpon>LoginController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <InterfaceDefinition Include="LoginView.xib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RegisterController.cs" />
     <Compile Include="RegisterController.designer.cs">
       <DependentUpon>RegisterController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>ViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewController.cs" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
   </ItemGroup>

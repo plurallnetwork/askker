@@ -7,11 +7,12 @@
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
+using UIKit;
 
 namespace Askker.App.iOS
 {
-    [Register ("ViewController")]
-    partial class ViewController
+    [Register ("LoginController")]
+    partial class LoginController
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -33,9 +34,17 @@ namespace Askker.App.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel lblNeedHelp { get; set; }
 
-        [Action("btnEnter_TouchUpInside:")]
-        [GeneratedCode("iOS Designer", "1.0")]
-        partial void btnEnter_TouchUpInside(UIKit.UIButton sender);
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField txtPassword { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField txtUsername { get; set; }
+
+        [Action ("btnEnter_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void btnEnter_TouchUpInside (UIKit.UIButton sender);
 
         void ReleaseDesignerOutlets ()
         {
@@ -62,6 +71,16 @@ namespace Askker.App.iOS
             if (lblNeedHelp != null) {
                 lblNeedHelp.Dispose ();
                 lblNeedHelp = null;
+            }
+
+            if (txtPassword != null) {
+                txtPassword.Dispose ();
+                txtPassword = null;
+            }
+
+            if (txtUsername != null) {
+                txtUsername.Dispose ();
+                txtUsername = null;
             }
         }
     }
