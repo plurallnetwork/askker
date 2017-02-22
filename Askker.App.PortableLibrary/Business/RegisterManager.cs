@@ -1,6 +1,5 @@
 ﻿using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Services;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +8,15 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Business
 {
-    public class LoginManager
+    public class RegisterManager
     {
-        public async Task<TokenModel> GetAuthorizationToken(UserLoginModel userLoginModel)
+        public async Task<string> RegisterUser(UserRegisterModel userRegisterModel)
         {
             try
             {
-                LoginService loginService = new LoginService();
+                RegisterService registerService = new RegisterService();
 
-                var response = await loginService.GetAuthorizationToken(userLoginModel);
-                return JsonConvert.DeserializeObject<TokenModel>(response);
+                return await registerService.RegisterUser(userRegisterModel);
             }
             catch (Exception ex)
             {

@@ -10,7 +10,7 @@ namespace Askker.App.PortableLibrary.Services
 {
     public class LoginService
     {
-        public async Task<string> GetAuthorizationToken(UserLoginModel loginModel)
+        public async Task<string> GetAuthorizationToken(UserLoginModel userLoginModel)
         {
             try
             {
@@ -19,12 +19,11 @@ namespace Askker.App.PortableLibrary.Services
                     var formContent = new FormUrlEncodedContent(new[]
                     {
                         new KeyValuePair<string, string>("grant_type", "password"),
-                        new KeyValuePair<string, string>("username", loginModel.Username),
-                        new KeyValuePair<string, string>("password", loginModel.Password)
+                        new KeyValuePair<string, string>("username", userLoginModel.Username),
+                        new KeyValuePair<string, string>("password", userLoginModel.Password)
                     });
 
                     var postResponse = await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44321/Token", formContent);
-                    //postResponse.EnsureSuccessStatusCode();
 
                     return await postResponse.Content.ReadAsStringAsync();
                 }
