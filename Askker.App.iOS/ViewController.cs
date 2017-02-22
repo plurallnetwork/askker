@@ -17,8 +17,6 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
-
-            lblNeedHelp.ToggleUnderline(null);
         }
 
         public override void DidReceiveMemoryWarning()

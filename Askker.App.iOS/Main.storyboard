@@ -33,20 +33,23 @@
                                 </connections>
                                 <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES"/>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="8" translatesAutoresizingMaskIntoConstraints="NO" image="assets/img/logo_180.png" misplaced="YES">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="8" translatesAutoresizingMaskIntoConstraints="NO" image="assets/img/logo_180.png" fixedFrame="YES">
                                 <rect key="frame" x="67" y="52" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="9" translatesAutoresizingMaskIntoConstraints="NO" placeholder="E-mail adress" borderStyle="line" misplaced="YES">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="9" translatesAutoresizingMaskIntoConstraints="NO" placeholder="E-mail adress" borderStyle="line" fixedFrame="YES">
                                 <rect key="frame" x="20" y="200" width="335" height="46"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="12" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Password" borderStyle="line" misplaced="YES">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="12" translatesAutoresizingMaskIntoConstraints="NO" placeholder="Password" borderStyle="line" fixedFrame="YES">
                                 <rect key="frame" x="20" y="250" width="335" height="46"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="13" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="13" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="20" y="340" width="335" height="54"/>
                                 <color key="backgroundColor" colorSpace="calibratedRGB" red="0.1803921568627451" green="0.60784313725490191" blue="0.50588235294117645" alpha="1"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -57,6 +60,7 @@
                                 <connections>
                                     <action selector="btnEnter_TouchUpInside" destination="BYZ-38-t0r" id="629" eventType="touchUpInside"/>
                                 </connections>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="24" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="20" y="440" width="335" height="54"/>
