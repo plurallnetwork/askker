@@ -35,7 +35,7 @@ namespace Askker.App.iOS
             var registerContoller = segue.DestinationViewController as RegisterController;
         }
 
-        async partial void btnEnter_TouchUpInside()
+        async partial void btnEnter_TouchUpInside(UIKit.UIButton sender)
         {
             LoginManager loginManager = new LoginManager();
             UserLoginModel userLoginModel = new UserLoginModel("leandrolg21@hotmail.com", "Teste@123");

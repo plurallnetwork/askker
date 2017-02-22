@@ -27,9 +27,7 @@
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.4" green="0.4" blue="0.4" alpha="1"/>
                                 </state>
                                 <connections>
-                                    <segue id="699" destination="443" kind="popover" popoverAnchorView="93">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
+                                    <segue id="1265" destination="443" kind="show"/>
                                 </connections>
                                 <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES"/>
                             </button>
@@ -147,7 +145,7 @@
                     </view>
                     <navigationItem title="Askker" id="90" key="navigationItem"/>
                     <connections>
-                        <outlet property="RegisterButton" destination="93" id="name-outlet-93"/>
+                        <outlet property="btnSignUp" destination="93" id="name-outlet-93"/>
                         <outlet property="btnEnter" destination="13" id="name-outlet-13"/>
                         <outlet property="btnLoginFacebook" destination="24" id="name-outlet-24"/>
                         <outlet property="lblNeedHelp" destination="28" id="name-outlet-28"/>

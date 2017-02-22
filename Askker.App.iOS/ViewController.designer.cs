@@ -27,15 +27,15 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel lblNeedHelp { get; set; }
+        UIKit.UIButton btnSignUp { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton RegisterButton { get; set; }
+        UIKit.UILabel lblNeedHelp { get; set; }
 
-        [Action ("btnEnter_TouchUpInside:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void btnEnter_TouchUpInside ();
+        [Action("btnEnter_TouchUpInside:")]
+        [GeneratedCode("iOS Designer", "1.0")]
+        partial void btnEnter_TouchUpInside(UIKit.UIButton sender);
 
         void ReleaseDesignerOutlets ()
         {
@@ -54,14 +54,14 @@ namespace Askker.App.iOS
                 btnLoginGoogle = null;
             }
 
+            if (btnSignUp != null) {
+                btnSignUp.Dispose ();
+                btnSignUp = null;
+            }
+
             if (lblNeedHelp != null) {
                 lblNeedHelp.Dispose ();
                 lblNeedHelp = null;
-            }
-
-            if (RegisterButton != null) {
-                RegisterButton.Dispose ();
-                RegisterButton = null;
             }
         }
     }
