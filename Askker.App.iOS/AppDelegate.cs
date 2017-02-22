@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using System.Net;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -21,6 +22,8 @@ namespace Askker.App.iOS
         {
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
+
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
             return true;
         }

@@ -15,13 +15,22 @@ namespace Askker.App.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton RegisterButton { get; set; }
+        UIKit.UIButton btnEnter { get; set; }
+		UIKit.UIButton RegisterButton { get; set; }
+
+        [Action ("btnEnter_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void btnEnter_TouchUpInside (UIKit.UIButton sender);
 
         void ReleaseDesignerOutlets ()
         {
             if (RegisterButton != null) {
                 RegisterButton.Dispose ();
                 RegisterButton = null;
+            }
+            if (btnEnter != null) {
+                btnEnter.Dispose ();
+                btnEnter = null;
             }
         }
     }
