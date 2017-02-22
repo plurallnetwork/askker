@@ -41,6 +41,9 @@
                                 <state key="normal" title="Enter">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="btnEnter_TouchUpInside:" destination="BYZ-38-t0r" id="632" eventType="touchUpInside"/>
+                                </connections>
                             </button>
                         </subviews>
                         <variation key="default">
