@@ -23,7 +23,7 @@ namespace Askker.App.PortableLibrary.Services
                         new KeyValuePair<string, string>("password", userLoginModel.Password)
                     });
 
-                    var postResponse = await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44321/Token", formContent);
+                    var postResponse = await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/Token", formContent);
 
                     return await postResponse.Content.ReadAsStringAsync();
                 }

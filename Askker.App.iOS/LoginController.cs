@@ -52,7 +52,7 @@ namespace Askker.App.iOS
             else
             {
                 LoginManager loginManager = new LoginManager();
-                UserLoginModel userLoginModel = new UserLoginModel("leandrolg21@hotmail.com", "Teste@123");
+                UserLoginModel userLoginModel = new UserLoginModel(txtUsername.Text, txtPassword.Text);
 
                 TokenModel tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
 

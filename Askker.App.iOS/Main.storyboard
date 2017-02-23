@@ -93,7 +93,7 @@
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.4" green="0.4" blue="0.4" alpha="1"/>
                                 </state>
                                 <connections>
-                                    <segue id="1265" destination="443" kind="show"/>
+                                    <segue id="1319" destination="443" kind="show"/>
                                 </connections>
                                 <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES"/>
                             </button>
@@ -257,7 +257,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Register">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" colorSpace="calibratedRGB" red="0" green="0.52549019607843139" blue="1" alpha="1"/>
                                 </state>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES"/>
                             </button>
                         </subviews>
                         <variation key="default">
@@ -285,6 +287,14 @@
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="btnRegister" destination="454" id="name-outlet-454"/>
+                        <outlet property="txtName" destination="449" id="name-outlet-449"/>
+                        <outlet property="txtEmail" destination="448" id="name-outlet-448"/>
+                        <outlet property="txtPassword" destination="450" id="name-outlet-450"/>
+                        <outlet property="txtConfirmPassword" destination="451" id="name-outlet-451"/>
+                        <outlet property="swAgree" destination="453" id="name-outlet-453"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="445" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

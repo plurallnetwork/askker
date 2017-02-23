@@ -16,58 +16,58 @@ namespace Askker.App.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UISwitch AgreeSwitch { get; set; }
+        UIKit.UIButton btnRegister { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField ConfirmPasswordText { get; set; }
+        UIKit.UISwitch swAgree { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField EmailText { get; set; }
+        UIKit.UITextField txtConfirmPassword { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField NameText { get; set; }
+        UIKit.UITextField txtEmail { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextField PasswordText { get; set; }
+        UIKit.UITextField txtName { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton RegisterButton { get; set; }
+        UIKit.UITextField txtPassword { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
-            if (AgreeSwitch != null) {
-                AgreeSwitch.Dispose ();
-                AgreeSwitch = null;
+            if (btnRegister != null) {
+                btnRegister.Dispose ();
+                btnRegister = null;
             }
 
-            if (ConfirmPasswordText != null) {
-                ConfirmPasswordText.Dispose ();
-                ConfirmPasswordText = null;
+            if (swAgree != null) {
+                swAgree.Dispose ();
+                swAgree = null;
             }
 
-            if (EmailText != null) {
-                EmailText.Dispose ();
-                EmailText = null;
+            if (txtConfirmPassword != null) {
+                txtConfirmPassword.Dispose ();
+                txtConfirmPassword = null;
             }
 
-            if (NameText != null) {
-                NameText.Dispose ();
-                NameText = null;
+            if (txtEmail != null) {
+                txtEmail.Dispose ();
+                txtEmail = null;
             }
 
-            if (PasswordText != null) {
-                PasswordText.Dispose ();
-                PasswordText = null;
+            if (txtName != null) {
+                txtName.Dispose ();
+                txtName = null;
             }
 
-            if (RegisterButton != null) {
-                RegisterButton.Dispose ();
-                RegisterButton = null;
+            if (txtPassword != null) {
+                txtPassword.Dispose ();
+                txtPassword = null;
             }
         }
     }
