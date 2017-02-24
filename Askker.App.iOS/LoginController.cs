@@ -10,14 +10,27 @@ namespace Askker.App.iOS
 {
     public partial class LoginController : UIViewController
     {
+        CredentialsService credentialsService;
+        TokenModel tokenModel;
+
         public LoginController (IntPtr handle) : base (handle)
         {
+            credentialsService = new CredentialsService();
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
+
+            if (credentialsService.DoCredentialsExist())
+            {
+                tokenModel = credentialsService.GetTokenModel();
+
+                var alert = UIAlertController.Create("Already logged in", "OK", UIAlertControllerStyle.Alert);
+                alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
+                PresentViewController(alert, true, null);
+            }
         }
 
         public override void DidReceiveMemoryWarning()
@@ -55,10 +68,16 @@ namespace Askker.App.iOS
                 LoginManager loginManager = new LoginManager();
                 UserLoginModel userLoginModel = new UserLoginModel(txtUsername.Text, txtPassword.Text);
 
-                TokenModel tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
+                tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
 
                 if (tokenModel.access_token != null)
                 {
+                    bool doCredentialsExist = credentialsService.DoCredentialsExist();
+                    if (!doCredentialsExist)
+                    {
+                        credentialsService.SaveCredentials(tokenModel);
+                    }
+
                     FeedManager feedManager = new FeedManager();
 
                     List<SurveyModel> surveys = await feedManager.GetSurveys("4e046d7e-cb49-4bfc-9e2d-3ec8c6f74047", "WVQ-8xwEp4uAbVxjj-_6wF9K9x-N0nDA1-ghQvVXwQV4xyXL-oCHNUrUAO3hYZPIsrp4XmWiOZpt3TeTsRp746N8h_NK6-b8C3PxSnm4mlmxOXwagloCQstmAGvCTaxGOJ5LRvYfaObOPB2X0yDSKpfKFWN-Qj_Fa8cXLCsqGjnOz47hCznItaSs9lhuL0udLZp0Jt9s78y2O0qmWxZpx3yf4X3lG87tFLKpQhTFaIxAMGVlvH6S0TOQ1AfxwS6ti31HoK1hyBOmzIgriSsalMCkE_625VQvePAi-p-Dl0U3B_I0amLlGx6LnbfYaf22744JYoF0loRiviW2JBwqIwF8tc1iRlp-TLz8iyFr9b2X-W9ftO7b_Ey0WRyaqVIyB1j2v7C3P-55jiwukqpQdJTlgIaChlnNrDN8ALjCpxhmNhXYtqjLzUmSzK1H-GI0mbkGFHEBWzZvZm4B8ewIM62jixF0j-BvROIWtdHvHdXyf_NSGvtH3TBGBguAyqFPpeh0y7GEh5AubeG4BoLoqA97_nwQUbpDqb2W9Ak58M4-_SKWCKeYaG15a6hYjxXZ");

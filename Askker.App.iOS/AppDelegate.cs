@@ -11,6 +11,7 @@ namespace Askker.App.iOS
     public class AppDelegate : UIApplicationDelegate
     {
         // class-level declarations
+        public static string AppName { get { return "askker"; } }
 
         public override UIWindow Window
         {
