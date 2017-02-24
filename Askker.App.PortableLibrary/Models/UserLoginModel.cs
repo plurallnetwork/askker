@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Models
 {
-    public sealed class UserLoginModel
+    public class UserLoginModel
     {
-        public readonly string Username;
-        public readonly string Password;
+        public string Username { get; set; }
+
+        public string Password { get; set; }
 
         public UserLoginModel(string username, string password)
         {

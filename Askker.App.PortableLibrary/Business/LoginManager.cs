@@ -1,6 +1,7 @@
 ﻿using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,23 @@ namespace Askker.App.PortableLibrary.Business
                 LoginService loginService = new LoginService();
 
                 var response = await loginService.GetAuthorizationToken(userLoginModel);
-                return JsonConvert.DeserializeObject<TokenModel>(response);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<TokenModel>(json);
+                }
+                else
+                {
+                    if (!json.Equals(""))
+                    {
+                        throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
+                }
             }
             catch (Exception ex)
             {

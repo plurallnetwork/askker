@@ -65,13 +65,13 @@ namespace Askker.App.iOS
             }
             else
             {
-                LoginManager loginManager = new LoginManager();
-                UserLoginModel userLoginModel = new UserLoginModel(txtUsername.Text, txtPassword.Text);
+                try
+                {
+                    LoginManager loginManager = new LoginManager();
+                    UserLoginModel userLoginModel = new UserLoginModel(txtUsername.Text, txtPassword.Text);
 
                 tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
 
-                if (tokenModel.access_token != null)
-                {
                     bool doCredentialsExist = credentialsService.DoCredentialsExist();
                     if (!doCredentialsExist)
                     {
@@ -80,17 +80,57 @@ namespace Askker.App.iOS
 
                     FeedManager feedManager = new FeedManager();
 
-                    List<SurveyModel> surveys = await feedManager.GetSurveys("4e046d7e-cb49-4bfc-9e2d-3ec8c6f74047", "WVQ-8xwEp4uAbVxjj-_6wF9K9x-N0nDA1-ghQvVXwQV4xyXL-oCHNUrUAO3hYZPIsrp4XmWiOZpt3TeTsRp746N8h_NK6-b8C3PxSnm4mlmxOXwagloCQstmAGvCTaxGOJ5LRvYfaObOPB2X0yDSKpfKFWN-Qj_Fa8cXLCsqGjnOz47hCznItaSs9lhuL0udLZp0Jt9s78y2O0qmWxZpx3yf4X3lG87tFLKpQhTFaIxAMGVlvH6S0TOQ1AfxwS6ti31HoK1hyBOmzIgriSsalMCkE_625VQvePAi-p-Dl0U3B_I0amLlGx6LnbfYaf22744JYoF0loRiviW2JBwqIwF8tc1iRlp-TLz8iyFr9b2X-W9ftO7b_Ey0WRyaqVIyB1j2v7C3P-55jiwukqpQdJTlgIaChlnNrDN8ALjCpxhmNhXYtqjLzUmSzK1H-GI0mbkGFHEBWzZvZm4B8ewIM62jixF0j-BvROIWtdHvHdXyf_NSGvtH3TBGBguAyqFPpeh0y7GEh5AubeG4BoLoqA97_nwQUbpDqb2W9Ak58M4-_SKWCKeYaG15a6hYjxXZ");
+                    // Save Survey Example
+                    //SurveyModel surveyTeste = new SurveyModel();
+                    //surveyTeste.UserId = tokenModel.Id;
+                    //surveyTeste.Type = "Text";
+                    //surveyTeste.ChoiceType = "UniqueChoice";
+                    //surveyTeste.Question = new Question() { Text = "Qual a sua cor favorita?", Image = "" };
+
+                    //List<Option> options = new List<Option>();
+                    //options.Add(new Option() { Id = 0, Text = "Verde", Image = "" });
+                    //options.Add(new Option() { Id = 1, Text = "Azul", Image = "" });
+                    //surveyTeste.Options = options;
+
+                    //surveyTeste.ColumnOptions = new List<ColumnOption>();
+                    //surveyTeste.IsArchived = 0;
+                    //surveyTeste.FinishDate = "";
+
+                    //await feedManager.SaveSurvey(surveyTeste, tokenModel.Access_Token);
+
+                    // Get Surveys Example
+                    List<SurveyModel> surveys = await feedManager.GetSurveys(tokenModel.Id, tokenModel.Access_Token);
 
                     var alert = UIAlertController.Create("Surveys", "Total: " + surveys.Count.ToString(), UIAlertControllerStyle.Alert);
                     alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
                     PresentViewController(alert, true, null);
                 }
-                else
+                catch (Exception ex)
                 {
-                    var alert = UIAlertController.Create("Token", tokenModel.error + " - " + tokenModel.error_description, UIAlertControllerStyle.Alert);
-                    alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
-                    PresentViewController(alert, true, null);
+                    if (ex.Message.Equals("901"))
+                    {
+                        var alert = UIAlertController.Create("Login", "The user name or password is incorrect.", UIAlertControllerStyle.Alert);
+                        alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                        PresentViewController(alert, true, null);
+                    }
+                    else if (ex.Message.Equals("903"))
+                    {
+                        var alert = UIAlertController.Create("Login", "An error occurred while sending the e-mail confirmation.", UIAlertControllerStyle.Alert);
+                        alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                        PresentViewController(alert, true, null);
+                    }
+                    else if (ex.Message.Equals("905"))
+                    {
+                        var alert = UIAlertController.Create("Login", "The user e-mail is not confirmed. A new e-mail confirmation has been sent to user.", UIAlertControllerStyle.Alert);
+                        alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                        PresentViewController(alert, true, null);
+                    }
+                    else
+                    {
+                        var alert = UIAlertController.Create("Login", ex.Message, UIAlertControllerStyle.Alert);
+                        alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
+                        PresentViewController(alert, true, null);
+                    }
                 }
             }
         }

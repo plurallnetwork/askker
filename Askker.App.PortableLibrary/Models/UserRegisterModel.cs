@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Models
 {
-    public sealed class UserRegisterModel
+    public class UserRegisterModel
     {
-        public readonly string Name;
-        public readonly string Email;
-        public readonly string Password;
-        public readonly string ConfirmPassword;
-        public readonly bool IsAgreePrivacyPolicy;
+        public string Name { get; set; }
+
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+
+        public string ConfirmPassword { get; set; }
+
+        public bool IsAgreePrivacyPolicy { get; set; }
 
         public UserRegisterModel(string Name, string Email, string Password, string ConfirmPassword, bool IsAgreePrivacyPolicy)
         {

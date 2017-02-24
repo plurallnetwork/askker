@@ -57,42 +57,36 @@ namespace Askker.App.iOS
                 }
                 else
                 {
-                    RegisterManager registerManager = new RegisterManager();
-                    UserRegisterModel userRegisterModel = new UserRegisterModel(txtName.Text, txtEmail.Text, txtPassword.Text, txtConfirmPassword.Text, swAgree.On);
-
-                    var result = await registerManager.RegisterUser(userRegisterModel);
-
-                    if (result.Equals(""))
+                    try
                     {
+                        RegisterManager registerManager = new RegisterManager();
+                        UserRegisterModel userRegisterModel = new UserRegisterModel(txtName.Text, txtEmail.Text, txtPassword.Text, txtConfirmPassword.Text, swAgree.On);
+
+                        await registerManager.RegisterUser(userRegisterModel);
+
                         LoginManager loginManager = new LoginManager();
                         UserLoginModel userLoginModel = new UserLoginModel(txtEmail.Text, txtPassword.Text);
 
                         TokenModel tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
 
-                        if (tokenModel.access_token != null)
+                        var alert = UIAlertController.Create("Register", "Registered and logged user successfully", UIAlertControllerStyle.Alert);
+                        alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                        PresentViewController(alert, true, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.Message.Equals("902"))
                         {
-                            var alert = UIAlertController.Create("Register", "Registered and logged user successfully", UIAlertControllerStyle.Alert);
+                            var alert = UIAlertController.Create("Register", "E-mail already registered", UIAlertControllerStyle.Alert);
                             alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                             PresentViewController(alert, true, null);
                         }
                         else
                         {
-                            var alert = UIAlertController.Create("Error", tokenModel.error + " - " + tokenModel.error_description, UIAlertControllerStyle.Alert);
+                            var alert = UIAlertController.Create("Register", ex.Message, UIAlertControllerStyle.Alert);
                             alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
                             PresentViewController(alert, true, null);
                         }
-                    }
-                    else if (result.Equals("902"))
-                    {
-                        var alert = UIAlertController.Create("Register", "E-mail already registered", UIAlertControllerStyle.Alert);
-                        alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                        PresentViewController(alert, true, null);
-                    }
-                    else
-                    {
-                        var alert = UIAlertController.Create("Register", result, UIAlertControllerStyle.Alert);
-                        alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                        PresentViewController(alert, true, null);
                     }
                 }
             };
