@@ -18,7 +18,35 @@ namespace Askker.App.PortableLibrary.Business
                 FeedService feedService = new FeedService();
 
                 var response = await feedService.GetSurveys(userId, authenticationToken);
-                return JsonConvert.DeserializeObject<List<SurveyModel>>(response);
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<List<SurveyModel>>(json);
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task SaveSurvey(SurveyModel surveyModel, string authenticationToken)
+        {
+            try
+            {
+                FeedService feedService = new FeedService();
+
+                var response = await feedService.SaveSurvey(surveyModel, authenticationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
             }
             catch (Exception ex)
             {

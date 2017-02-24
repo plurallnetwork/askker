@@ -1,5 +1,6 @@
 ﻿using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Services;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,27 @@ namespace Askker.App.PortableLibrary.Business
 {
     public class RegisterManager
     {
-        public async Task<string> RegisterUser(UserRegisterModel userRegisterModel)
+        public async Task RegisterUser(UserRegisterModel userRegisterModel)
         {
             try
             {
                 RegisterService registerService = new RegisterService();
 
-                return await registerService.RegisterUser(userRegisterModel);
+                var response = await registerService.RegisterUser(userRegisterModel);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    if (!json.Equals(""))
+                    {
+                        throw new Exception(json);
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
+                }
             }
             catch (Exception ex)
             {

@@ -11,7 +11,7 @@ namespace Askker.App.PortableLibrary.Services
 {
     public class RegisterService
     {
-        public async Task<string> RegisterUser(UserRegisterModel userRegisterModel)
+        public async Task<HttpResponseMessage> RegisterUser(UserRegisterModel userRegisterModel)
         {
             try
             {
@@ -19,9 +19,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     var formContent = new StringContent(JsonConvert.SerializeObject(userRegisterModel), Encoding.UTF8, "application/json");
 
-                    var postResponse = await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/Account/Register", formContent);
-
-                    return await postResponse.Content.ReadAsStringAsync();
+                    return await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/Account/Register", formContent);
                 }
             }
             catch (Exception ex)

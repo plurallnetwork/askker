@@ -6,45 +6,45 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Models
 {
-    public sealed class SurveyModel
+    public class SurveyModel
     {
-        public string userId { get; set; }
+        public string UserId { get; set; }
 
-        public string creationDate { get; set; }
+        public string CreationDate { get; set; }
 
-        public string type { get; set; }
+        public string Type { get; set; }
 
-        public string choiceType { get; set; }
+        public string ChoiceType { get; set; }
 
-        public bool isArchived { get; set; }
+        public int IsArchived { get; set; }
 
-        public Question question { get; set; }
+        public Question Question { get; set; }
 
-        public List<Option> options { get; set; }
+        public List<Option> Options { get; set; }
 
-        public List<ColumnOption> columnOptions { get; set; }
+        public List<ColumnOption> ColumnOptions { get; set; }
 
-        public DateTime finishDate { get; set; }
+        public string FinishDate { get; set; }
 
-        public int totalVotes { get; set; }
+        public int TotalVotes { get; set; }
     }
 
     public class Question
     {
-        public string text { get; set; }
-        public string image { get; set; }
+        public string Text { get; set; }
+        public string Image { get; set; }
     }
 
     public class Option
     {
-        public int id { get; set; }
-        public string text { get; set; }
-        public string image { get; set; }
+        public int Id { get; set; }
+        public string Text { get; set; }
+        public string Image { get; set; }
     }
 
     public class ColumnOption
     {
-        public int id { get; set; }
-        public string text { get; set; }
+        public int Id { get; set; }
+        public string Text { get; set; }
     }
 }
