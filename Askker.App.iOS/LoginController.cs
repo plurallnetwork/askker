@@ -2,7 +2,6 @@
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Models;
 using System;
-
 using UIKit;
 using System.Collections.Generic;
 
@@ -11,7 +10,7 @@ namespace Askker.App.iOS
     public partial class LoginController : UIViewController
     {
         CredentialsService credentialsService;
-        TokenModel tokenModel;
+        public static TokenModel tokenModel;
 
         public LoginController (IntPtr handle) : base (handle)
         {
@@ -70,15 +69,15 @@ namespace Askker.App.iOS
                     LoginManager loginManager = new LoginManager();
                     UserLoginModel userLoginModel = new UserLoginModel(txtUsername.Text, txtPassword.Text);
 
-                tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
+                    tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
 
-                    bool doCredentialsExist = credentialsService.DoCredentialsExist();
-                    if (!doCredentialsExist)
-                    {
-                        credentialsService.SaveCredentials(tokenModel);
-                    }
+                    //bool doCredentialsExist = credentialsService.DoCredentialsExist();
+                    //if (!doCredentialsExist)
+                    //{
+                    //    credentialsService.SaveCredentials(tokenModel);
+                    //}
 
-                    FeedManager feedManager = new FeedManager();
+                    //FeedManager feedManager = new FeedManager();
 
                     // Save Survey Example
                     //SurveyModel surveyTeste = new SurveyModel();
@@ -98,12 +97,15 @@ namespace Askker.App.iOS
 
                     //await feedManager.SaveSurvey(surveyTeste, tokenModel.Access_Token);
 
-                    // Get Surveys Example
-                    List<SurveyModel> surveys = await feedManager.GetSurveys(tokenModel.Id, tokenModel.Access_Token);
+                    //var alert = UIAlertController.Create("Surveys", "Total: " + surveys.Count.ToString(), UIAlertControllerStyle.Alert);
+                    //alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
+                    //PresentViewController(alert, true, null);
 
-                    var alert = UIAlertController.Create("Surveys", "Total: " + surveys.Count.ToString(), UIAlertControllerStyle.Alert);
-                    alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
-                    PresentViewController(alert, true, null);
+                    var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
+                    if (feedController != null)
+                    {
+                        this.PresentViewController(feedController, true, null);
+                    }
                 }
                 catch (Exception ex)
                 {

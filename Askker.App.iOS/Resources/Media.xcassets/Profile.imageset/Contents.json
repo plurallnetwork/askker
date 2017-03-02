@@ -1,0 +1,29 @@
+{
+  "images": [
+    {
+      "scale": "1x",
+      "idiom": "iphone",
+      "filename": "profile.png"
+    },
+    {
+      "scale": "2x",
+      "idiom": "iphone",
+      "filename": "profile.png"
+    },
+    {
+      "scale": "3x",
+      "idiom": "iphone",
+      "filename": "profile.png"
+    },
+    {
+      "idiom": "iphone"
+    }
+  ],
+  "properties": {
+    "template-rendering-intent": ""
+  },
+  "info": {
+    "version": 1,
+    "author": ""
+  }
+}

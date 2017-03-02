@@ -153,41 +153,40 @@ namespace Askker.App.iOS
         {
             TokenModel model = new TokenModel();
 
-            model.access_token = this.access_token;
-            model.expires = this.expires;
-            model.expires_in = this.expires_in;
-            model.id = this.id;
-            model.isShowingTour = this.isShowingTour;
-            model.issued = this.issued;
-            model.name = this.name;
-            model.profilePicturePath = this.profilePicturePath;
-            model.token_type = this.token_type;
-            model.userName = this.userName;
+            model.Access_Token = this.access_token;
+            model.Expires = this.expires;
+            model.Expires_In = this.expires_in;
+            model.Id = this.id;
+            model.IsShowingTour = this.isShowingTour;
+            model.Issued = this.issued;
+            model.Name = this.name;
+            model.ProfilePicturePath = this.profilePicturePath;
+            model.Token_Type = this.token_type;
+            model.UserName = this.userName;
 
             return model;
         }
 
         public void SaveCredentials(TokenModel model)
         {
-            if (!string.IsNullOrWhiteSpace(model.userName) && !string.IsNullOrWhiteSpace(model.access_token))
+            if (!string.IsNullOrWhiteSpace(model.UserName) && !string.IsNullOrWhiteSpace(model.Access_Token))
             {
                 Account account = new Account
                 {
-                    Username = model.userName
+                    Username = model.UserName
                 };
-                account.Properties.Add("access_token", model.access_token);
-                account.Properties.Add("expires", model.expires.ToString());
-                account.Properties.Add("expires_in", model.expires_in.ToString());
-                account.Properties.Add("id", model.id);
-                account.Properties.Add("isShowingTour", Convert.ToString(model.isShowingTour));
+                account.Properties.Add("access_token", model.Access_Token);
+                account.Properties.Add("expires", model.Expires.ToString());
+                account.Properties.Add("expires_in", model.Expires_In.ToString());
+                account.Properties.Add("id", model.Id);
+                account.Properties.Add("isShowingTour", Convert.ToString(model.IsShowingTour));
                 account.Properties.Add("IsStillValid", Convert.ToString(model.IsStillValid(DateTime.Now)));
-                account.Properties.Add("issued", model.issued.ToString());
-                account.Properties.Add("name", model.name);
-                account.Properties.Add("profilePicturePath", model.profilePicturePath);
-                account.Properties.Add("token_type", model.token_type);
+                account.Properties.Add("issued", model.Issued.ToString());
+                account.Properties.Add("name", model.Name);
+                account.Properties.Add("profilePicturePath", model.ProfilePicturePath);
+                account.Properties.Add("token_type", model.Token_Type);
                 AccountStore.Create().Save(account, AppDelegate.AppName);
             }
-
         }
 
         public void DeleteCredentials()

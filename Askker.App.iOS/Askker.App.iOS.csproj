@@ -21,7 +21,9 @@
     <ConsolePause>false</ConsolePause>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
-    <MtouchDebug>true</MtouchDebug>
+    <MtouchDebug>True</MtouchDebug>
+    <IOSDebugOverWiFi>False</IOSDebugOverWiFi>
+    <IOSDebuggerPort>10000</IOSDebuggerPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -85,6 +87,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CredentialsService.cs" />
+    <Compile Include="FeedController.cs" />
+    <Compile Include="FeedController.designer.cs">
+      <DependentUpon>FeedController.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginController.cs" />
     <Compile Include="LoginController.designer.cs">
       <DependentUpon>LoginController.cs</DependentUpon>
@@ -128,6 +134,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Json" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Validation, Version=2.2.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
@@ -151,6 +158,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Entitlements.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\Profile.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\Profile.imageset\profile.png">
+      <InProject>false</InProject>
+    </ImageAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
