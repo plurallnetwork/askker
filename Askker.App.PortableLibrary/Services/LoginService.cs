@@ -1,9 +1,7 @@
 ﻿using Askker.App.PortableLibrary.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Services
@@ -24,6 +22,23 @@ namespace Askker.App.PortableLibrary.Services
                     });
 
                     return await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/Token", formContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<HttpResponseMessage> GetUserById(TokenModel tokenModel)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + tokenModel.Access_Token);
+
+                    return await client.GetAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/Account/GetUserById");
                 }
             }
             catch (Exception ex)

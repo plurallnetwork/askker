@@ -42,5 +42,29 @@ namespace Askker.App.PortableLibrary.Business
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<TokenModel> GetUserById(TokenModel tokenModel)
+        {
+            LoginService loginService = new LoginService();
+
+            var response = await loginService.GetUserById(tokenModel);
+            var json = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<TokenModel>(json);
+            }
+            else
+            {
+                if (!json.Equals(""))
+                {
+                    throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+        }
     }
 }
