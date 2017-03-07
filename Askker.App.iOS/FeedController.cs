@@ -14,6 +14,7 @@ namespace Askker.App.iOS
     {
         public static List<SurveyModel> surveys { get; set; }
         public static NSCache imageCache = new NSCache();
+        public static VoteManager voteManager = new VoteManager();
 
         public FeedController (IntPtr handle) : base (handle)
         {
@@ -140,12 +141,14 @@ namespace Askker.App.iOS
                 optionsTableView.Layer.MasksToBounds = true;
                 optionsTableView.TranslatesAutoresizingMaskIntoConstraints = false;
                 optionsTableView.ContentInset = new UIEdgeInsets(0, -10, 0, 0);
+                optionsTableView.Tag = indexPath.Row;
 
                 new OptionsTableViewController(optionsTableView, surveys[indexPath.Row].Options);
             }
             else
             {
                 optionsCollectionView.TranslatesAutoresizingMaskIntoConstraints = false;
+                optionsCollectionView.Tag = indexPath.Row;
 
                 new OptionsCollectionViewController(optionsCollectionView, surveys[indexPath.Row].Options);
             }
@@ -219,6 +222,20 @@ namespace Askker.App.iOS
             return button;
         }
 
+        public static async void saveVote(int surveyIndex, int optionId)
+        {
+            VoteModel voteModel = new VoteModel();
+            voteModel.surveyId = surveys[surveyIndex].UserId + surveys[surveyIndex].CreationDate;
+            voteModel.optionId = optionId;
+            voteModel.user = new User();
+            voteModel.user.id = LoginController.tokenModel.Id;
+            voteModel.user.gender = "male";
+            voteModel.user.city = "SP";
+            voteModel.user.country = "BR";
+
+            await voteManager.Vote(voteModel, "");
+        }
+
         class FeedCollectionViewDelegate : UICollectionViewDelegateFlowLayout
         {
             public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
@@ -274,6 +291,7 @@ namespace Askker.App.iOS
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
                 var cell = tableView.DequeueReusableCell(OptionsTableViewController.optionCellId);
+                cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                 cell.Tag = options[indexPath.Row].Id;
 
                 var optionLetterLabel = new UILabel();
@@ -296,6 +314,32 @@ namespace Askker.App.iOS
 
                 return cell;
             }
+
+            public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+            {
+                var optionCell = tableView.CellAt(indexPath);
+
+                if (optionCell.AccessoryView == null)
+                {
+                    var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
+                    optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
+                    optionCell.AccessoryView = optionCheckImage;
+
+                    FeedController.saveVote((int)tableView.Tag, (int)optionCell.Tag);
+                }
+
+                //else
+                //{
+                //    optionCell.AccessoryView = null;
+                //    optionCell.SetSelected(false, false);
+                //}
+            }
+
+            public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
+            {
+                var optionCell = tableView.CellAt(indexPath);
+                optionCell.AccessoryView = null;
+            }
         }
     }
 
@@ -306,7 +350,7 @@ namespace Askker.App.iOS
         public OptionsCollectionViewController(UICollectionView optionsCollectionView, List<Option> options)
         {
             optionsCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
-            optionsCollectionView.RegisterClassForCell(typeof(UICollectionViewCell), optionCellId);
+            optionsCollectionView.RegisterClassForCell(typeof(OptionCell), optionCellId);
             optionsCollectionView.Delegate = new OptionsCollectionViewDelegate();
             optionsCollectionView.DataSource = new OptionsCollectionViewDataSource(options);
         }
@@ -326,15 +370,9 @@ namespace Askker.App.iOS
 
             public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
             {
-                var optionCell = collectionView.DequeueReusableCell(optionCellId, indexPath) as UICollectionViewCell;
+                var optionCell = collectionView.DequeueReusableCell(optionCellId, indexPath) as OptionCell;
                 optionCell.BackgroundColor = UIColor.White;
                 optionCell.Tag = options[indexPath.Row].Id;
-
-                var optionImageView = new UIImageView();
-                optionImageView.Image = null;
-                optionImageView.ContentMode = UIViewContentMode.ScaleToFill;
-                optionImageView.Layer.MasksToBounds = true;
-                optionImageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
                 if (options[indexPath.Row].Image != null)
                 {
@@ -343,7 +381,7 @@ namespace Askker.App.iOS
                     var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
                     if (imageFromCache != null)
                     {
-                        optionImageView.Image = imageFromCache;
+                        optionCell.optionImageView.Image = imageFromCache;
                     }
                     else
                     {
@@ -351,7 +389,7 @@ namespace Askker.App.iOS
                     {
                         if (response == null)
                         {
-                            optionImageView.Image = null;
+                            optionCell.optionImageView.Image = null;
                         }
                         else
                         {
@@ -360,7 +398,7 @@ namespace Askker.App.iOS
                                 DispatchQueue.MainQueue.DispatchAsync(() => {
                                     var imageToCache = UIImage.LoadFromData(data);
 
-                                    optionImageView.Image = imageToCache;
+                                    optionCell.optionImageView.Image = imageToCache;
 
                                     if (imageToCache != null)
                                     {
@@ -378,30 +416,8 @@ namespace Askker.App.iOS
                     }
                 }
 
-                var optionLetterLabel = new UILabel();
-                optionLetterLabel.Text = "  " + OptionsTableViewController.alphabet[indexPath.Row] + "  ";
-                optionLetterLabel.Font = UIFont.BoldSystemFontOfSize(14);
-                optionLetterLabel.TextColor = UIColor.White;
-                optionLetterLabel.BackgroundColor = UIColor.DarkGray;
-                optionLetterLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                var optionLabel = new UILabel();
-                optionLabel.Text = options[indexPath.Row].Text;
-                optionLabel.Font = UIFont.SystemFontOfSize(12);
-                optionLabel.TextColor = UIColor.White;
-                optionLabel.BackgroundColor = UIColor.DarkGray;
-                optionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                optionCell.AddSubview(optionImageView);
-                optionCell.AddSubview(optionLetterLabel);
-                optionCell.AddSubview(optionLabel);
-
-                optionCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
-                optionCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(25)][v1]-8-|", new NSLayoutFormatOptions(), "v0", optionLetterLabel, "v1", optionLabel));
-
-                optionCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
-                optionCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-25-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLetterLabel));
-                optionCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-25-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
+                optionCell.optionLetterLabel.Text = "  " + OptionsTableViewController.alphabet[indexPath.Row] + "  ";
+                optionCell.optionLabel.Text = options[indexPath.Row].Text;
 
                 return optionCell;
             }
@@ -418,6 +434,76 @@ namespace Askker.App.iOS
             {
                 return 0;
             }
+
+            public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
+            {
+                var optionCell = collectionView.CellForItem(indexPath) as OptionCell;
+
+                if (optionCell.optionCheckImageView.Hidden)
+                {
+                    optionCell.optionCheckImageView.Hidden = false;
+                    FeedController.saveVote((int)collectionView.Tag, (int)optionCell.Tag);
+                }
+            }
+
+            public override void ItemDeselected(UICollectionView collectionView, NSIndexPath indexPath)
+            {
+                var optionCell = collectionView.CellForItem(indexPath) as OptionCell;
+                optionCell.optionCheckImageView.Hidden = true;
+            }
+        }
+
+        class OptionCell : UICollectionViewCell
+        {
+            [Export("initWithFrame:")]
+            public OptionCell(CGRect frame) : base(frame)
+            {
+                optionImageView = new UIImageView();
+                optionImageView.Image = null;
+                optionImageView.ContentMode = UIViewContentMode.ScaleToFill;
+                optionImageView.Layer.MasksToBounds = true;
+                optionImageView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+                optionLetterLabel = new UILabel();
+                optionLetterLabel.Font = UIFont.BoldSystemFontOfSize(14);
+                optionLetterLabel.TextColor = UIColor.White;
+                optionLetterLabel.BackgroundColor = UIColor.DarkGray;
+                optionLetterLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+                optionLabel = new UILabel();
+                optionLabel.Font = UIFont.SystemFontOfSize(12);
+                optionLabel.TextColor = UIColor.White;
+                optionLabel.BackgroundColor = UIColor.DarkGray;
+                optionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+                optionCheckImageView = new UIImageView();
+                optionCheckImageView.Image = UIImage.FromBundle("OptionCheck");
+                optionCheckImageView.Frame = new CGRect(0, 0, 50, 50);
+                optionCheckImageView.TranslatesAutoresizingMaskIntoConstraints = false;
+                optionCheckImageView.Hidden = true;
+
+                AddSubview(optionImageView);
+                AddSubview(optionLetterLabel);
+                AddSubview(optionLabel);
+                AddSubview(optionCheckImageView);
+
+                AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
+                AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(25)][v1]-8-|", new NSLayoutFormatOptions(), "v0", optionLetterLabel, "v1", optionLabel));
+                AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterY, "v0", this, "v1", optionCheckImageView));
+
+                AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
+                AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-25-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLetterLabel));
+                AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-25-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
+                AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", this, "v1", optionCheckImageView));
+            }
+
+            public UIImageView optionImageView { get; set; }
+
+            public UILabel optionLetterLabel { get; set; }
+
+            public UILabel optionLabel { get; set; }
+
+            public UIImageView optionCheckImageView { get; set; }
         }
     }
 }

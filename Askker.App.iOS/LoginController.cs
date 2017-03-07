@@ -85,9 +85,13 @@ namespace Askker.App.iOS
         {
             if (string.Empty.Equals(txtUsername.Text))
             {
-                var alert = UIAlertController.Create("E-mail", "Please fill in the E-mail", UIAlertControllerStyle.Alert);
-                alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                PresentViewController(alert, true, null);
+                UIAlertView alert = new UIAlertView()
+                {
+                    Title = "E-mail",
+                    Message = "Please fill in the E-mail"
+                };
+                alert.AddButton("OK");
+                alert.Show();
             }
             else if (string.Empty.Equals(txtPassword.Text))
             {
