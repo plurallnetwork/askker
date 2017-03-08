@@ -86,24 +86,68 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CreateSurveyController.cs" />
+    <Compile Include="CreateSurveyController.designer.cs">
+      <DependentUpon>CreateSurveyController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateSurveyOptionsStep.cs" />
+    <Compile Include="CreateSurveyOptionsStep.designer.cs">
+      <DependentUpon>CreateSurveyOptionsStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateSurveyQuestionStep.cs" />
+    <Compile Include="CreateSurveyQuestionStep.designer.cs">
+      <DependentUpon>CreateSurveyQuestionStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateSurveyShareStep.cs" />
+    <Compile Include="CreateSurveyShareStep.designer.cs">
+      <DependentUpon>CreateSurveyShareStep.cs</DependentUpon>
+    </Compile>
     <Compile Include="CredentialsService.cs" />
+    <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
     <Compile Include="FeedController.cs" />
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>
     </Compile>
+    <Compile Include="HomeController.cs" />
+    <Compile Include="HomeController.designer.cs">
+      <DependentUpon>HomeController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HorizontalSwipe\HorizontalSwipePageControl.cs" />
+    <Compile Include="HorizontalSwipe\MultiStepProcessHorizontal.cs" />
     <Compile Include="LoginController.cs" />
     <Compile Include="LoginController.designer.cs">
       <DependentUpon>LoginController.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="ShareStepView.cs" />
+    <Compile Include="ShareStepView.designer.cs">
+      <DependentUpon>ShareStepView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TableControllers\TableItem.cs" />
+    <Compile Include="TableControllers\TableSource.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />
+    <Compile Include="OptionsStepView.cs" />
+    <Compile Include="OptionsStepView.designer.cs">
+      <DependentUpon>OptionsStepView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PageViewController.cs" />
+    <Compile Include="PageViewController.designer.cs">
+      <DependentUpon>PageViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
+    <InterfaceDefinition Include="Resources\QuestionStepView.xib" />
+    <InterfaceDefinition Include="Resources\OptionsStepView.xib" />
+    <InterfaceDefinition Include="Resources\ShareStepView.xib" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QuestionStepView.cs" />
+    <Compile Include="QuestionStepView.designer.cs">
+      <DependentUpon>QuestionStepView.cs</DependentUpon>
+    </Compile>
     <Compile Include="RegisterController.cs" />
     <Compile Include="RegisterController.designer.cs">
       <DependentUpon>RegisterController.cs</DependentUpon>
@@ -112,6 +156,10 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Cirrious.FluentLayouts.Touch, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cirrious.FluentLayout.2.5.0\lib\Xamarin.iOS10\Cirrious.FluentLayouts.Touch.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PCLCrypto, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d4421c8a4786956c, processorArchitecture=MSIL">
       <HintPath>..\packages\PCLCrypto.2.0.147\lib\xamarinios10\PCLCrypto.dll</HintPath>
       <Private>True</Private>
@@ -157,7 +205,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Entitlements.plist" />
+    <None Include="Entitlements.plist" />
+    <BundleResource Include="images\purple-pip-circle%401x.png" />
+    <BundleResource Include="images\purple-pip-circle%402x.png" />
+    <BundleResource Include="images\purple-pip-circle%403x.png" />
+    <BundleResource Include="images\purple-pip-full%401x.png" />
+    <BundleResource Include="images\purple-pip-full%402x.png" />
+    <BundleResource Include="images\purple-pip-full%403x.png" />
+    <BundleResource Include="images\white-pip-circle%401x.png" />
+    <BundleResource Include="images\white-pip-circle%402x.png" />
+    <BundleResource Include="images\white-pip-circle%403x.png" />
+    <BundleResource Include="images\white-pip-full%401x.png" />
+    <BundleResource Include="images\white-pip-full%402x.png" />
+    <BundleResource Include="images\white-pip-full%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\Contents.json">
@@ -179,5 +239,6 @@
       <InProject>false</InProject>
     </ImageAsset>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
