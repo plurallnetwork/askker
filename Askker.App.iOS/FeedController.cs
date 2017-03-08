@@ -338,6 +338,12 @@ namespace Askker.App.iOS
             public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
             {
                 var optionCell = tableView.CellAt(indexPath);
+
+                if (optionCell == null)
+                {
+                    optionCell = this.GetCell(tableView, indexPath);
+                }
+
                 optionCell.AccessoryView = null;
             }
         }
@@ -349,17 +355,23 @@ namespace Askker.App.iOS
 
         public OptionsCollectionViewController(UICollectionView optionsCollectionView, List<Option> options)
         {
-            optionsCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
-            optionsCollectionView.RegisterClassForCell(typeof(OptionCell), optionCellId);
-            optionsCollectionView.Delegate = new OptionsCollectionViewDelegate();
-            optionsCollectionView.DataSource = new OptionsCollectionViewDataSource(options);
+
+            var optionsCollectionViewSource = new OptionsCollectionViewSource(options);
+            var optionsCollectionViewDelegate = new OptionsCollectionViewDelegate(optionsCollectionViewSource);
+
+            CollectionView = optionsCollectionView;
+
+            CollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
+            CollectionView.RegisterClassForCell(typeof(OptionCell), optionCellId);
+            CollectionView.Source = optionsCollectionViewSource;
+            CollectionView.Delegate = optionsCollectionViewDelegate;
         }
 
-        class OptionsCollectionViewDataSource : UICollectionViewSource
+        class OptionsCollectionViewSource : UICollectionViewSource
         {
             List<Option> options;
 
-            public OptionsCollectionViewDataSource(List<Option> options) {
+            public OptionsCollectionViewSource(List<Option> options) {
                 this.options = options;
             }
 
@@ -421,10 +433,22 @@ namespace Askker.App.iOS
 
                 return optionCell;
             }
+
+            public OptionCell GetCustomCell(UICollectionView collectionView, NSIndexPath indexPath)
+            {
+                return this.GetCell(collectionView, indexPath) as OptionCell;
+            }
         }
 
         class OptionsCollectionViewDelegate : UICollectionViewDelegateFlowLayout
         {
+            OptionsCollectionViewSource optionsCollectionViewSource;
+
+            public OptionsCollectionViewDelegate(OptionsCollectionViewSource optionsCollectionViewSource)
+            {
+                this.optionsCollectionViewSource = optionsCollectionViewSource;
+            }
+
             public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
             {
                 return new CGSize(270, 220);
@@ -449,6 +473,12 @@ namespace Askker.App.iOS
             public override void ItemDeselected(UICollectionView collectionView, NSIndexPath indexPath)
             {
                 var optionCell = collectionView.CellForItem(indexPath) as OptionCell;
+
+                if (optionCell == null)
+                {
+                    optionCell = optionsCollectionViewSource.GetCustomCell(collectionView, indexPath);
+                }
+
                 optionCell.optionCheckImageView.Hidden = true;
             }
         }
