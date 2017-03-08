@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="277">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -185,7 +185,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-283" y="10"/>
+            <point key="canvasLocation" x="-1603" y="-38"/>
         </scene>
         <!--Navigation-->
         <scene sceneID="276">
@@ -201,7 +201,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="280" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-782" y="5"/>
+            <point key="canvasLocation" x="-2102" y="-43"/>
         </scene>
         <!--Register-->
         <scene sceneID="442">
@@ -301,7 +301,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="445" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="237" y="7"/>
+            <point key="canvasLocation" x="-1083" y="-41"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1334">
@@ -318,13 +318,15 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1338" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-807" y="96"/>
+            <point key="canvasLocation" x="-2095" y="748"/>
         </scene>
         <!--Askker Feed-->
         <scene sceneID="1341">
             <objects>
                 <collectionViewController storyboardIdentifier="FeedController" automaticallyAdjustsScrollViewInsets="NO" id="1342" customClass="FeedController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" title="Askker Feed" id="1519"/>
+                    <navigationItem key="navigationItem" title="Askker Feed" id="1519">
+                        <barButtonItem key="backBarButtonItem" title="Home" id="2428"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="feedCollectionView" destination="1557" id="name-outlet-1557"/>
                     </connections>
@@ -353,11 +355,225 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1348" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-312.8" y="67.91604"/>
+            <point key="canvasLocation" x="-1602.8" y="745.916"/>
+        </scene>
+        <scene sceneID="1619">
+            <objects>
+                <navigationController id="1620" sceneMemberID="viewController" storyboardIdentifier="HomeNavController" title="Home">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1622">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue id="2425" destination="1795" kind="relationship" relationship="rootViewController"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1623" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-631" y="-38"/>
+        </scene>
+        <scene sceneID="1646">
+            <objects>
+                <navigationController id="1647" sceneMemberID="viewController" storyboardIdentifier="CreateSurveyNavController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1649">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue id="1790" destination="1656" kind="relationship" relationship="rootViewController"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1650" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1085" y="738"/>
+        </scene>
+        <scene sceneID="1655">
+            <objects>
+                <viewController id="1656" sceneMemberID="viewController" customClass="CreateSurveyController" storyboardIdentifier="CreateSurveyController" title="Create Survey">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1653"/>
+                        <viewControllerLayoutGuide type="bottom" id="1654"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1657">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem title="Make a question" id="1789" key="navigationItem"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1658" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-596" y="733"/>
+        </scene>
+        <scene sceneID="1794">
+            <objects>
+                <viewController id="1795" sceneMemberID="viewController" customClass="HomeController" storyboardIdentifier="HomeController" title="Home">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1792"/>
+                        <viewControllerLayoutGuide type="bottom" id="1793"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="1796">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1801" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="157" y="186" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Feed">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue id="2055" destination="1335" kind="show"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1802" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="157" y="298" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Create">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue id="2305" destination="1647" kind="show"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="1801"/>
+                                <exclude reference="1802"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="1801"/>
+                                <include reference="1802"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem title="Home" id="2424" key="navigationItem"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1797" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-154" y="-41"/>
+        </scene>
+        <scene sceneID="2436">
+            <objects>
+                <viewController id="2437" sceneMemberID="viewController" customClass="CreateSurveyQuestionStep" title="Make a question">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2434"/>
+                        <viewControllerLayoutGuide type="bottom" id="2435"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2438" customClass="QuestionStepView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2461" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="164" y="269" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="2461"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="2461"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2439" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-130" y="730"/>
+        </scene>
+        <scene sceneID="2443">
+            <objects>
+                <viewController id="2444" sceneMemberID="viewController" customClass="CreateSurveyOptionsStep" title="Make a question">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2441"/>
+                        <viewControllerLayoutGuide type="bottom" id="2442"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2445">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2456" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="166" y="294" width="64" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="2456"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="2456"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2446" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="282" y="731"/>
+        </scene>
+        <scene sceneID="2450">
+            <objects>
+                <viewController id="2451" sceneMemberID="viewController" customClass="CreateSurveyShareStep" title="Make a question">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2448"/>
+                        <viewControllerLayoutGuide type="bottom" id="2449"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2452">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2457" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="166" y="283" width="61" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="2457"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="2457"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2453" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="680" y="730"/>
         </scene>
     </scenes>
     <resources>
         <image name="assets/img/logo_180.png" width="180" height="180"/>
+        <image name="Profile" width="210" height="260"/>
+        <image name="images/purple-pip-circle.png" width="8" height="8"/>
+        <image name="images/purple-pip-full.png" width="8" height="8"/>
+        <image name="images/white-pip-circle.png" width="8" height="8"/>
+        <image name="images/white-pip-full.png" width="8" height="8"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>
