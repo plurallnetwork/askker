@@ -48,8 +48,6 @@ namespace Askker.App.iOS
                 _optionsStepView.TextButton.Hidden = false;
                 _optionsStepView.ImageButton.Hidden = false;
                 _optionsStepView.DoneButton.Hidden = true;
-
-                CreateSurveyController.SurveyModel.Type = "Image";
             };
 
         }

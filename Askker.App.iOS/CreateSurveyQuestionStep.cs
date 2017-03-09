@@ -54,8 +54,21 @@ namespace Askker.App.iOS
             StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 
+        public override void ViewWillUnload()
+        {
+            if (_questionStepView.QuestionText.Text.Length <= 0)
+            {
+                new UIAlertView("Question", "Please write a question", null, "OK", null).Show();
+
+                return;
+            }
+
+        }
+
         public override void ViewWillDisappear(bool animated)
         {
+            
+
             base.ViewWillDisappear(animated);
             Question q = new Question();
             q.Text = _questionStepView.QuestionText.Text;
