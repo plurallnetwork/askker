@@ -12,13 +12,13 @@ namespace Askker.App.PortableLibrary.Services
 {
     public class FeedService
     {
-        public async Task<HttpResponseMessage> GetSurveys(string userId, string authenticationToken)
+        public async Task<HttpResponseMessage> GetFeed(string userId, string filter, string authenticationToken)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/survey/getsurveys/{0}", userId));
+                    var uri = new Uri(string.Format("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/survey/getfeed/{0}/{1}", userId, filter));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
