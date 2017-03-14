@@ -67,7 +67,7 @@ namespace Askker.App.iOS
             //    credentialsService.SaveCredentials(tokenModel);
             //}
 
-            var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
+            var feedController = this.Storyboard.InstantiateViewController("HomeNavController");
             if (feedController != null)
             {
                 this.PresentViewController(feedController, true, null);
@@ -136,6 +136,10 @@ namespace Askker.App.iOS
                     //alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
                     //PresentViewController(alert, true, null);
                     var feedController = this.Storyboard.InstantiateViewController("HomeNavController");
+                    if (feedController != null)
+                    {
+                        this.PresentViewController(feedController, true, null);
+                    }
                 }
                 catch (Exception ex)
                 {

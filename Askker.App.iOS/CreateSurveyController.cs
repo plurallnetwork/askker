@@ -1,4 +1,5 @@
 ﻿using Askker.App.iOS.HorizontalSwipe;
+using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Models;
 using Cirrious.FluentLayouts.Touch;
 using System;
@@ -47,6 +48,17 @@ namespace Askker.App.iOS
 
             _pageViewController = new MultiStepProcessHorizontal(new MultiStepProcessDataSource(Steps));
             _pageViewController.WillTransition += _multiStepProcessHorizontal_WillTransition;
+
+            //var subviews = _pageViewController.View.Subviews;
+
+            //for(int x = 0; x < subviews.Count(); x++)
+            //{
+            //    if(subviews.ElementAt(x) is UIScrollView)
+            //    {
+            //        UIScrollView s = subviews.ElementAt(x) as UIScrollView;
+            //        s.ScrollEnabled = false;
+            //    }
+            //}
 
             _pageControl = new HorizontalSwipePageControl
             {
@@ -135,9 +147,25 @@ namespace Askker.App.iOS
             _pageViewController.SetViewControllers(vcs, UIPageViewControllerNavigationDirection.Forward, true, null);
         }
 
-        private void AskTapped(object s, EventArgs e)
+        private async void AskTapped(object s, EventArgs e)
         {
-            //call web api
+            try
+            {
+                await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.Access_Token);
+
+                var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
+                if (feedController != null)
+                {
+                    this.PresentViewController(feedController, true, null);
+                    CreateSurveyController.SurveyModel = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                var alert = UIAlertController.Create("Survey", ex.Message, UIAlertControllerStyle.Alert);
+                alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
+                PresentViewController(alert, true, null);
+            }
         }
 
         private void _multiStepProcessHorizontal_WillTransition(object sender, UIPageViewControllerTransitionEventArgs e)
