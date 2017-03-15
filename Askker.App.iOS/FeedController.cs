@@ -30,12 +30,12 @@ namespace Askker.App.iOS
             feedCollectionView.AlwaysBounceVertical = true;
 
             surveys = new List<SurveyModel>();
-            fetchSurveys();
+            fetchSurveys("nofilter");
         }
 
-        public async void fetchSurveys()
+        public async void fetchSurveys(string filter)
         {
-            surveys = await new FeedManager().GetSurveys(LoginController.tokenModel.Id, LoginController.tokenModel.Access_Token);
+            surveys = await new FeedManager().GetFeed(LoginController.tokenModel.Id, filter, LoginController.tokenModel.Access_Token);
 
             foreach (var survey in surveys)
             {
@@ -122,6 +122,7 @@ namespace Askker.App.iOS
             questionText.Text = surveys[indexPath.Row].question.text;
             questionText.BackgroundColor = UIColor.Clear;
             questionText.ScrollEnabled = false;
+            questionText.Editable = false;
             questionText.TranslatesAutoresizingMaskIntoConstraints = false;
 
             var dividerLineView = new UIView();
@@ -224,11 +225,14 @@ namespace Askker.App.iOS
 
         public static async void saveVote(int surveyIndex, int optionId)
         {
+            surveys[surveyIndex].optionSelected = optionId;
+
             VoteModel voteModel = new VoteModel();
             voteModel.surveyId = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
             voteModel.optionId = optionId;
             voteModel.user = new User();
             voteModel.user.id = LoginController.tokenModel.Id;
+            // TODO: Adjust TokenModel to implement all users informations
             voteModel.user.gender = "male";
             voteModel.user.city = "SP";
             voteModel.user.country = "BR";
@@ -311,6 +315,13 @@ namespace Askker.App.iOS
 
                 cell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLetterLabel));
                 cell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
+
+                if (FeedController.surveys[(int)tableView.Tag].optionSelected == options[indexPath.Row].Id)
+                {
+                    var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
+                    optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
+                    cell.AccessoryView = optionCheckImage;
+                }
 
                 return cell;
             }
@@ -430,6 +441,11 @@ namespace Askker.App.iOS
 
                 optionCell.optionLetterLabel.Text = "  " + OptionsTableViewController.alphabet[indexPath.Row] + "  ";
                 optionCell.optionLabel.Text = options[indexPath.Row].text;
+
+                if (FeedController.surveys[(int)collectionView.Tag].optionSelected == options[indexPath.Row].Id)
+                {
+                    optionCell.optionCheckImageView.Hidden = false;
+                }
 
                 return optionCell;
             }

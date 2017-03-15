@@ -31,6 +31,8 @@ namespace Askker.App.PortableLibrary.Models
         public string finishDate { get; set; }
 
         public int totalVotes { get; set; }
+
+        public int? optionSelected { get; set; }
     }
 
     public class Question
