@@ -4,6 +4,7 @@ using Askker.App.PortableLibrary.Models;
 using Cirrious.FluentLayouts.Touch;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UIKit;
 
@@ -31,6 +32,8 @@ namespace Askker.App.iOS
         public List<IMultiStepProcessStep> Steps => _steps ?? (_steps = GetSteps());
 
         public static SurveyModel SurveyModel { get; set; }
+        public static Stream QuestionImage { get; set; }
+        public static List<KeyValuePair<string, MemoryStream>> OptionImages { get; set; }
 
         public CreateSurveyController (IntPtr handle) : base (handle)
         {
@@ -151,7 +154,7 @@ namespace Askker.App.iOS
         {
             try
             {
-                await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.Access_Token);
+                await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.Access_Token, QuestionImage, OptionImages);
 
                 var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
                 if (feedController != null)

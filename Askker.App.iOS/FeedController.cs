@@ -39,7 +39,7 @@ namespace Askker.App.iOS
 
             foreach (var survey in surveys)
             {
-                survey.Options = Common.Randomize(survey.Options);
+                survey.options = Common.Randomize(survey.options);
             }
             
             feedCollectionView.ReloadData();
@@ -65,7 +65,7 @@ namespace Askker.App.iOS
 
             if (surveys[indexPath.Row].profilePicture != null)
             {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + surveys[indexPath.Row].UserId + "/" + surveys[indexPath.Row].profilePicture);
+                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + surveys[indexPath.Row].userId + "/" + surveys[indexPath.Row].profilePicture);
 
                 var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
                 if (imageFromCache != null)
@@ -107,7 +107,7 @@ namespace Askker.App.iOS
 
             var nameLabel = new UILabel();
             nameLabel.Lines = 2;
-            var attributedText = new NSMutableAttributedString(surveys[indexPath.Row].UserName, UIFont.BoldSystemFontOfSize(14));
+            var attributedText = new NSMutableAttributedString(surveys[indexPath.Row].userName, UIFont.BoldSystemFontOfSize(14));
             attributedText.Append(new NSAttributedString("\nto Public", UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
 
             var paragraphStyle = new NSMutableParagraphStyle();
@@ -119,7 +119,7 @@ namespace Askker.App.iOS
 
             var questionText = new UITextView();
             questionText.Font = UIFont.SystemFontOfSize(14);
-            questionText.Text = surveys[indexPath.Row].Question.Text;
+            questionText.Text = surveys[indexPath.Row].question.text;
             questionText.BackgroundColor = UIColor.Clear;
             questionText.ScrollEnabled = false;
             questionText.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -135,7 +135,7 @@ namespace Askker.App.iOS
                 ScrollDirection = UICollectionViewScrollDirection.Horizontal
             });
 
-            if (surveys[indexPath.Row].Type.Equals("Text"))
+            if (surveys[indexPath.Row].type.Equals("text"))
             {
                 optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
                 optionsTableView.Layer.MasksToBounds = true;
@@ -143,14 +143,14 @@ namespace Askker.App.iOS
                 optionsTableView.ContentInset = new UIEdgeInsets(0, -10, 0, 0);
                 optionsTableView.Tag = indexPath.Row;
 
-                new OptionsTableViewController(optionsTableView, surveys[indexPath.Row].Options);
+                new OptionsTableViewController(optionsTableView, surveys[indexPath.Row].options);
             }
             else
             {
                 optionsCollectionView.TranslatesAutoresizingMaskIntoConstraints = false;
                 optionsCollectionView.Tag = indexPath.Row;
 
-                new OptionsCollectionViewController(optionsCollectionView, surveys[indexPath.Row].Options);
+                new OptionsCollectionViewController(optionsCollectionView, surveys[indexPath.Row].options);
             }
 
             var commentButton = buttonForTitle(title: "Comment", imageName: "comment");
@@ -166,7 +166,7 @@ namespace Askker.App.iOS
             feedCell.AddSubview(questionText);
             feedCell.AddSubview(dividerLineView);
 
-            if (surveys[indexPath.Row].Type.Equals("Text"))
+            if (surveys[indexPath.Row].type.Equals("text"))
             {
                 feedCell.AddSubview(optionsTableView);
             }
@@ -181,7 +181,7 @@ namespace Askker.App.iOS
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
 
-            if (surveys[indexPath.Row].Type.Equals("Text"))
+            if (surveys[indexPath.Row].type.Equals("text"))
             {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionsTableView));
             }
@@ -195,7 +195,7 @@ namespace Askker.App.iOS
 
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
 
-            if (surveys[indexPath.Row].Type.Equals("Text"))
+            if (surveys[indexPath.Row].type.Equals("text"))
             {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)]-4-[v3(<=220)][v4(44)]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", questionText, "v2", dividerLineView, "v3", optionsTableView, "v4", contentViewButtons));
             }
@@ -225,7 +225,7 @@ namespace Askker.App.iOS
         public static async void saveVote(int surveyIndex, int optionId)
         {
             VoteModel voteModel = new VoteModel();
-            voteModel.surveyId = surveys[surveyIndex].UserId + surveys[surveyIndex].CreationDate;
+            voteModel.surveyId = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
             voteModel.optionId = optionId;
             voteModel.user = new User();
             voteModel.user.id = LoginController.tokenModel.Id;
@@ -240,16 +240,16 @@ namespace Askker.App.iOS
         {
             public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
             {
-                var question = FeedController.surveys[indexPath.Row].Question.Text;
+                var question = FeedController.surveys[indexPath.Row].question.text;
                 if (!question.Equals(""))
                 {
                     var rect = new NSString(question).GetBoundingRect(new CGSize(collectionView.Frame.Width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.SystemFontOfSize(14) }, null);
 
                     var optionsHeight = 220;
 
-                    if (FeedController.surveys[indexPath.Row].Options.Count < 5)
+                    if (FeedController.surveys[indexPath.Row].options.Count < 5)
                     {
-                        optionsHeight = FeedController.surveys[indexPath.Row].Options.Count * 44;
+                        optionsHeight = FeedController.surveys[indexPath.Row].options.Count * 44;
                     }
 
                     // Heights of the vertical components to format the cell dinamic height
@@ -292,7 +292,7 @@ namespace Askker.App.iOS
             {
                 var cell = tableView.DequeueReusableCell(OptionsTableViewController.optionCellId);
                 cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-                cell.Tag = options[indexPath.Row].Id;
+                cell.Tag = options[indexPath.Row].id;
 
                 var optionLetterLabel = new UILabel();
                 optionLetterLabel.Text = OptionsTableViewController.alphabet[indexPath.Row];
@@ -300,7 +300,7 @@ namespace Askker.App.iOS
                 optionLetterLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
                 var optionLabel = new UILabel();
-                optionLabel.Text = options[indexPath.Row].Text;
+                optionLabel.Text = options[indexPath.Row].text;
                 optionLabel.Font = UIFont.SystemFontOfSize(14);
                 optionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
@@ -384,11 +384,11 @@ namespace Askker.App.iOS
             {
                 var optionCell = collectionView.DequeueReusableCell(optionCellId, indexPath) as OptionCell;
                 optionCell.BackgroundColor = UIColor.White;
-                optionCell.Tag = options[indexPath.Row].Id;
+                optionCell.Tag = options[indexPath.Row].id;
 
-                if (options[indexPath.Row].Image != null)
+                if (options[indexPath.Row].image != null)
                 {
-                    var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + options[indexPath.Row].Image);
+                    var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + options[indexPath.Row].image);
 
                     var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
                     if (imageFromCache != null)
@@ -429,7 +429,7 @@ namespace Askker.App.iOS
                 }
 
                 optionCell.optionLetterLabel.Text = "  " + OptionsTableViewController.alphabet[indexPath.Row] + "  ";
-                optionCell.optionLabel.Text = options[indexPath.Row].Text;
+                optionCell.optionLabel.Text = options[indexPath.Row].text;
 
                 return optionCell;
             }

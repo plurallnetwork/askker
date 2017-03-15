@@ -116,19 +116,19 @@ namespace Askker.App.iOS
 
                     // Save Survey Example
                     //SurveyModel surveyTeste = new SurveyModel();
-                    //surveyTeste.UserId = tokenModel.Id;
-                    //surveyTeste.Type = "Text";
-                    //surveyTeste.ChoiceType = "UniqueChoice";
-                    //surveyTeste.Question = new Question() { Text = "Qual a sua cor favorita?", Image = "" };
+                    //surveyTeste.userId = tokenModel.id;
+                    //surveyTeste.type = "text";
+                    //surveyTeste.choiceType = "UniqueChoice";
+                    //surveyTeste.question = new question() { text = "Qual a sua cor favorita?", image = "" };
 
                     //List<Option> options = new List<Option>();
-                    //options.Add(new Option() { Id = 0, Text = "Verde", Image = "" });
-                    //options.Add(new Option() { Id = 1, Text = "Azul", Image = "" });
-                    //surveyTeste.Options = options;
+                    //options.Add(new Option() { id = 0, text = "Verde", image = "" });
+                    //options.Add(new Option() { id = 1, text = "Azul", image = "" });
+                    //surveyTeste.options = options;
 
-                    //surveyTeste.ColumnOptions = new List<ColumnOption>();
-                    //surveyTeste.IsArchived = 0;
-                    //surveyTeste.FinishDate = "";
+                    //surveyTeste.columnOptions = new List<ColumnOption>();
+                    //surveyTeste.isArchived = 0;
+                    //surveyTeste.finishDate = "";
 
                     //await feedManager.SaveSurvey(surveyTeste, tokenModel.Access_Token);
 

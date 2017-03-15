@@ -3,6 +3,7 @@ using Askker.App.PortableLibrary.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,13 +36,13 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task SaveSurvey(SurveyModel surveyModel, string authenticationToken)
+        public async Task SaveSurvey(SurveyModel surveyModel, string authenticationToken, Stream questionImage, List<KeyValuePair<string, MemoryStream>> optionImages)
         {
             try
             {
                 FeedService feedService = new FeedService();
 
-                var response = await feedService.SaveSurvey(surveyModel, authenticationToken);
+                var response = await feedService.SaveSurvey(surveyModel, authenticationToken, questionImage, optionImages);
 
                 if (!response.IsSuccessStatusCode)
                 {

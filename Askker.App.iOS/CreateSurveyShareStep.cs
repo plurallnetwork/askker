@@ -31,7 +31,7 @@ namespace Askker.App.iOS
             _shareStepView = ShareStepView.Create();
             View.AddSubview(_shareStepView);
             List<TableItem> tableItems = new List<TableItem>();
-            tableSource = new TableSource(tableItems);
+            tableSource = new TableSource(tableItems, this);
             _shareStepView.ShareTable.Source = tableSource;
 
             //_shareStepView.GroupsButton.TouchUpInside += (sender, e) =>
@@ -66,7 +66,7 @@ namespace Askker.App.iOS
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            _shareStepView.QuestionText.Text = CreateSurveyController.SurveyModel.Question.Text;
+            _shareStepView.QuestionText.Text = CreateSurveyController.SurveyModel.question.text;
             StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 
@@ -76,17 +76,17 @@ namespace Askker.App.iOS
             //List<TableItem> items = tableSource.GetTableItems();
             //if (items.Count > 0)
             //{
-            //    if (CreateSurveyController.SurveyModel.Options == null)
+            //    if (CreateSurveyController.SurveyModel.options == null)
             //    {
-            //        CreateSurveyController.SurveyModel.Options = new List<Option>();
+            //        CreateSurveyController.SurveyModel.options = new List<Option>();
             //    }
             //    int optionId = 0;
             //    items.ForEach(i =>
             //    {
             //        Option o = new Option();
-            //        o.Id = optionId;
-            //        o.Text = i.Heading;
-            //        CreateSurveyController.SurveyModel.Options.Add(o);
+            //        o.id = optionId;
+            //        o.text = i.Heading;
+            //        CreateSurveyController.SurveyModel.options.Add(o);
             //        optionId++;
             //    });
             //}

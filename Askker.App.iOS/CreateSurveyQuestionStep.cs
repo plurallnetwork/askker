@@ -4,6 +4,7 @@ using Askker.App.PortableLibrary.Models;
 using Cirrious.FluentLayouts.Touch;
 using Foundation;
 using System;
+using System.Collections.Generic;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -58,7 +59,7 @@ namespace Askker.App.iOS
         {
             if (_questionStepView.QuestionText.Text.Length <= 0)
             {
-                new UIAlertView("Question", "Please write a question", null, "OK", null).Show();
+                new UIAlertView("question", "Please write a question", null, "OK", null).Show();
 
                 return;
             }
@@ -71,18 +72,21 @@ namespace Askker.App.iOS
 
             base.ViewWillDisappear(animated);
             Question q = new Question();
-            q.Text = _questionStepView.QuestionText.Text;
+            q.text = _questionStepView.QuestionText.Text;
+            q.image = "";
             if(CreateSurveyController.SurveyModel == null)
             {
-                CreateSurveyController.SurveyModel = new SurveyModel();
-                CreateSurveyController.SurveyModel.UserId = LoginController.tokenModel.Id;
-                CreateSurveyController.SurveyModel.UserName = LoginController.tokenModel.UserName;
-                CreateSurveyController.SurveyModel.profilePicture = LoginController.tokenModel.ProfilePicturePath;
-                CreateSurveyController.SurveyModel.IsArchived = 0;
-                CreateSurveyController.SurveyModel.ChoiceType = "UniqueChoice";
-                CreateSurveyController.SurveyModel.TotalVotes = 0;
+                CreateSurveyController.SurveyModel = new SurveyModel();                
             }
-            CreateSurveyController.SurveyModel.Question = q;
+            CreateSurveyController.SurveyModel.userId = LoginController.tokenModel.Id;
+            CreateSurveyController.SurveyModel.userName = LoginController.tokenModel.UserName;
+            CreateSurveyController.SurveyModel.profilePicture = LoginController.tokenModel.ProfilePicturePath;
+            CreateSurveyController.SurveyModel.isArchived = 0;
+            CreateSurveyController.SurveyModel.choiceType = "UniqueChoice";
+            CreateSurveyController.SurveyModel.question = q;
+            CreateSurveyController.SurveyModel.columnOptions = new List<ColumnOption>();
+            CreateSurveyController.SurveyModel.finishDate = "";
+            CreateSurveyController.SurveyModel.creationDate = "";
             StepDeactivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 

@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using AssetsLibrary;
+using Foundation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,11 +10,14 @@ namespace Askker.App.iOS.TableControllers
     public class TableSource : UITableViewSource
     {
         List<TableItem> tableItems;
+        UIViewController viewController;
         string cellIdentifier = "TableCell";
+        UIImagePickerController imagePicker;
 
-        public TableSource(List<TableItem> items)
+        public TableSource(List<TableItem> items, UIViewController viewController)
         {
             tableItems = items;
+            this.viewController = viewController;
         }
 
         public List<TableItem> GetTableItems()
@@ -71,7 +75,11 @@ namespace Askker.App.iOS.TableControllers
 
             // Value2 style doesn't support an image
             if (cellStyle != UITableViewCellStyle.Value2)
-                cell.ImageView.Image = UIImage.FromFile("Images/" + tableItems[indexPath.Row].ImageName);
+            {
+                cell.ImageView.Image = tableItems[indexPath.Row].Image;
+            }
+                
+            //cell.ImageView.image = UIImage.FromFile("Images/" + tableItems[indexPath.Row].ImageName);
 
             return cell;
         }
@@ -91,27 +99,162 @@ namespace Askker.App.iOS.TableControllers
 
                 case UITableViewCellEditingStyle.Insert:
 
-                    UIAlertView alert = new UIAlertView();
-                    alert.Title = "Text Option";
-                    alert.AddButton("Done");
-                    alert.Message = "Please enter an option description:";
-                    alert.AlertViewStyle = UIAlertViewStyle.PlainTextInput;
-                    alert.Clicked += (object s, UIButtonEventArgs ev) => {
-                        // user input will be in alert.GetTextField(0).Text;
-                        //---- create a new item and add it to our underlying data
-                        tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text));
-                        //---- insert a new row in the table
-                        tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-                    };
+                    if ("text".Equals(CreateSurveyController.SurveyModel.type))
+                    {
 
-                    alert.Show();
-                    
+                        UIAlertView alert = new UIAlertView();
+                        alert.Title = "text Option";
+                        alert.AddButton("Done");
+                        alert.Message = "Please enter an option description:";
+                        alert.AlertViewStyle = UIAlertViewStyle.PlainTextInput;
+                        alert.Clicked += (object s, UIButtonEventArgs ev) =>
+                        {
+                            // user input will be in alert.GetTextField(0).text;
+                            //---- create a new item and add it to our underlying data
+                            tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text));
+                            //---- insert a new row in the table
+                            tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+                        };
+
+                        alert.Show();
+                    }
+                    else if ("image".Equals(CreateSurveyController.SurveyModel.type))
+                    {
+                        imagePicker = new UIImagePickerController();
+                        imagePicker.SourceType = UIImagePickerControllerSourceType.PhotoLibrary;
+
+                        imagePicker.MediaTypes = UIImagePickerController.AvailableMediaTypes(UIImagePickerControllerSourceType.PhotoLibrary);
+
+                        //imagePicker.FinishedPickingMedia += Handle_FinishedPickingMedia;
+
+                        imagePicker.FinishedPickingMedia += delegate (object sender, UIImagePickerMediaPickedEventArgs e) { Handle_FinishedPickingMedia(sender, e, tableView, indexPath); };
+
+                        imagePicker.Canceled += Handle_Canceled;
+
+                        var mainWindow = UIApplication.SharedApplication.KeyWindow;
+                        var viewController = mainWindow?.RootViewController;
+                        while (viewController?.PresentedViewController != null)
+                        {
+                            viewController = viewController.PresentedViewController;
+                        }
+                        if (viewController == null)
+                            viewController = this.viewController;
+                        imagePicker.View.Frame = viewController.View.Frame;
+                        viewController.PresentModalViewController(imagePicker, true);
+                    }
+
                     break;
 
                 case UITableViewCellEditingStyle.None:
                     Console.WriteLine("CommitEditingStyle:None called");
                     break;
             }
+        }
+
+        private void Handle_Canceled(object sender, EventArgs e)
+        {
+            imagePicker.DismissModalViewController(true);
+        }
+
+        protected void Handle_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e, UITableView tableView, NSIndexPath indexPath)
+        {
+            // determine what was selected, video or image
+            bool isImage = false;
+            switch (e.Info[UIImagePickerController.MediaType].ToString())
+            {
+                case "public.image":
+                    isImage = true;
+                    break;
+
+                case "public.video":
+                    break;
+            }
+
+            // get common info (shared between images and video)
+            NSUrl referenceURL = e.Info[new NSString("UIImagePickerControllerReferenceURL")] as NSUrl;
+
+            Console.WriteLine("image path :" + referenceURL.Path.ToString());
+            Console.WriteLine("image relative path :" + referenceURL.RelativePath.ToString());
+
+            ALAssetsLibrary assetsLibrary = new ALAssetsLibrary();
+            assetsLibrary.AssetForUrl(referenceURL, delegate (ALAsset asset) 
+            {
+                ALAssetRepresentation representation = asset.DefaultRepresentation;
+                if (representation == null)
+                {
+                    return;
+                }
+                else
+                {
+                    string fileName = representation.Filename;
+                    Console.WriteLine("image Filename :" + fileName);
+                }
+            }, delegate (NSError error) {
+                Console.WriteLine("User denied access to photo Library... {0}", error);
+            });
+
+
+            // if it was an image, get the other image info
+            if (isImage)
+            {
+
+                // get the original image
+                UIImage originalImage = e.Info[UIImagePickerController.OriginalImage] as UIImage;
+                if (originalImage != null)
+                {
+                    // do something with the image
+                    Console.WriteLine("got the original image");
+                    //imageView.image = originalImage;
+
+                    UIAlertView alert = new UIAlertView();
+                    alert.Title = "image Option";
+                    alert.AddButton("Done");
+                    alert.Message = "Please enter an option description:";
+                    alert.AlertViewStyle = UIAlertViewStyle.PlainTextInput;
+                    alert.Clicked += (object s, UIButtonEventArgs ev) =>
+                    {
+                        // user input will be in alert.GetTextField(0).text;
+                        //---- create a new item and add it to our underlying data
+                        tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text, originalImage));
+                        //---- insert a new row in the table
+                        tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+                    };
+
+                    alert.Show();
+                }
+
+                // get the edited image
+                UIImage editedImage = e.Info[UIImagePickerController.EditedImage] as UIImage;
+                if (editedImage != null)
+                {
+                    // do something with the image
+                    Console.WriteLine("got the edited image");
+                    //imageView.image = editedImage;
+                }
+
+                //- get the image metadata
+                NSDictionary imageMetadata = e.Info[UIImagePickerController.MediaMetadata] as NSDictionary;
+                if (imageMetadata != null)
+                {
+                    // do something with the metadata
+                    Console.WriteLine("got image metadata");
+                }
+
+            }
+            // if it's a video
+            else
+            {
+                // get video url
+                NSUrl mediaURL = e.Info[UIImagePickerController.MediaURL] as NSUrl;
+                if (mediaURL != null)
+                {
+                    //
+                    Console.WriteLine(mediaURL.ToString());
+                }
+            }
+
+            // dismiss the picker
+            imagePicker.DismissModalViewController(true);
         }
 
         /// <summary>
@@ -203,7 +346,7 @@ namespace Askker.App.iOS.TableControllers
                     NSIndexPath.FromRowSection (tableView.NumberOfRowsInSection (0), 0)
                 }, UITableViewRowAnimation.Fade);
             //---- create a new item and add it to our underlying data
-            tableItems.Add(new TableItem("Add new option"));
+            tableItems.Add(new TableItem("<- Add new option"));
 
             //---- end animations
             tableView.EndUpdates();
@@ -223,7 +366,6 @@ namespace Askker.App.iOS.TableControllers
             //---- finish animations
             tableView.EndUpdates();
         }
-
         #endregion
     }
 }

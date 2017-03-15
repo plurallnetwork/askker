@@ -4,6 +4,7 @@ using Askker.App.PortableLibrary.Models;
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -23,11 +24,13 @@ namespace Askker.App.iOS
             _optionsStepView = OptionsStepView.Create();            
             View.AddSubview(_optionsStepView);
             List<TableItem> tableItems = new List<TableItem>();
-            tableSource = new TableSource(tableItems);
+            tableSource = new TableSource(tableItems, this);
             _optionsStepView.OptionsTable.Source = tableSource;
 
             _optionsStepView.TextButton.TouchUpInside += (sender, e) =>
             {
+                CreateSurveyController.SurveyModel.type = "text";
+
                 if (_optionsStepView.OptionsTable.Editing)
                     _optionsStepView.OptionsTable.SetEditing(false, true); 
                 tableSource.WillBeginTableEditing(_optionsStepView.OptionsTable);
@@ -35,9 +38,21 @@ namespace Askker.App.iOS
 
                 _optionsStepView.TextButton.Hidden = true;
                 _optionsStepView.ImageButton.Hidden = true;
-                _optionsStepView.DoneButton.Hidden = false;
+                _optionsStepView.DoneButton.Hidden = false;                
+            };
 
-                CreateSurveyController.SurveyModel.Type = "Text";
+            _optionsStepView.ImageButton.TouchUpInside += (sender, e) =>
+            {
+                CreateSurveyController.SurveyModel.type = "image";
+                
+                if (_optionsStepView.OptionsTable.Editing)
+                    _optionsStepView.OptionsTable.SetEditing(false, true);
+                tableSource.WillBeginTableEditing(_optionsStepView.OptionsTable);
+                _optionsStepView.OptionsTable.SetEditing(true, true);
+
+                _optionsStepView.TextButton.Hidden = true;
+                _optionsStepView.ImageButton.Hidden = true;
+                _optionsStepView.DoneButton.Hidden = false;                
             };
 
             _optionsStepView.DoneButton.TouchUpInside += (sender, e) =>
@@ -68,7 +83,7 @@ namespace Askker.App.iOS
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            _optionsStepView.QuestionText.Text = CreateSurveyController.SurveyModel.Question.Text;            
+            _optionsStepView.QuestionText.Text = CreateSurveyController.SurveyModel.question.text;            
             StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 
@@ -78,18 +93,43 @@ namespace Askker.App.iOS
             List<TableItem> items = tableSource.GetTableItems();
             if(items.Count > 0)
             {
-                if(CreateSurveyController.SurveyModel.Options == null)
+                if(CreateSurveyController.SurveyModel.options == null)
                 {
-                    CreateSurveyController.SurveyModel.Options = new List<Option>();
+                    CreateSurveyController.SurveyModel.options = new List<Option>();
                 }
+
+                if ("image".Equals(CreateSurveyController.SurveyModel.type))
+                {
+                    //if (CreateSurveyController.OptionImages == null)
+                    //{
+                    CreateSurveyController.OptionImages = new List<KeyValuePair<string, MemoryStream>>();
+                    //}
+                }
+
                 int optionId = 0;
                 items.ForEach(i =>
                 {
-                    Option o = new Option();
-                    o.Id = optionId;
-                    o.Text = i.Heading;
-                    CreateSurveyController.SurveyModel.Options.Add(o);
-                    optionId++;
+                    if (!"<- Add new option".Equals(i.Heading))
+                    {
+                        Option o = new Option();
+                        o.id = optionId;
+                        o.text = i.Heading;
+                        o.image = "";
+                        if ("image".Equals(CreateSurveyController.SurveyModel.type) && i.Image != null)
+                        {
+                            using (NSData imageData = i.Image.AsPNG())
+                            {
+                                Byte[] myByteArray = new Byte[imageData.Length];
+                                System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
+                                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, MemoryStream>(optionId.ToString(), new MemoryStream(myByteArray)));
+                            }
+                        }
+
+                        CreateSurveyController.SurveyModel.options.Add(o);
+
+
+                        optionId++;
+                    }
                 });
             }
             StepDeactivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });

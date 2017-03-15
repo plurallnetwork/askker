@@ -113,11 +113,11 @@ namespace Askker.App.iOS.CustomViewComponents
         {
             //if (this.AllowWhiteSpace)
             //{
-            //    this.placeholderLabel.Hidden = !string.IsNullOrEmpty(this.Text);
+            //    this.placeholderLabel.Hidden = !string.IsNullOrEmpty(this.text);
             //}
             //else
             //{
-            //    this.placeholderLabel.Hidden = !string.IsNullOrWhiteSpace(this.Text);
+            //    this.placeholderLabel.Hidden = !string.IsNullOrWhiteSpace(this.text);
             //}
 
             this.placeholderLabel.Hidden = this.Text.Length > 0;
