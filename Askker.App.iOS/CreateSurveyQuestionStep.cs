@@ -78,9 +78,9 @@ namespace Askker.App.iOS
             {
                 CreateSurveyController.SurveyModel = new SurveyModel();                
             }
-            CreateSurveyController.SurveyModel.userId = LoginController.tokenModel.Id;
-            CreateSurveyController.SurveyModel.userName = LoginController.tokenModel.UserName;
-            CreateSurveyController.SurveyModel.profilePicture = LoginController.tokenModel.ProfilePicturePath;
+            CreateSurveyController.SurveyModel.userId = LoginController.userModel.id;
+            CreateSurveyController.SurveyModel.userName = LoginController.userModel.userName;
+            CreateSurveyController.SurveyModel.profilePicture = LoginController.userModel.profilePicturePath;
             CreateSurveyController.SurveyModel.isArchived = 0;
             CreateSurveyController.SurveyModel.choiceType = "UniqueChoice";
             CreateSurveyController.SurveyModel.question = q;

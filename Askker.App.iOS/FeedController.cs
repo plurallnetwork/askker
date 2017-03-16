@@ -29,13 +29,25 @@ namespace Askker.App.iOS
             feedCollectionView.Delegate = new FeedCollectionViewDelegate();
             feedCollectionView.AlwaysBounceVertical = true;
 
+            this.NavigationItem.SetLeftBarButtonItem(
+                new UIBarButtonItem("Logout", UIBarButtonItemStyle.Bordered, (sender, args) => {
+                    CredentialsService.DeleteCredentials();
+
+                    var loginController = this.Storyboard.InstantiateViewController("LoginController");
+                    if (loginController != null)
+                    {
+                        this.PresentViewController(loginController, true, null);
+                    }
+                })
+            , true);
+
             surveys = new List<SurveyModel>();
             fetchSurveys("nofilter");
         }
 
         public async void fetchSurveys(string filter)
         {
-            surveys = await new FeedManager().GetFeed(LoginController.tokenModel.Id, filter, LoginController.tokenModel.Access_Token);
+            surveys = await new FeedManager().GetFeed(LoginController.userModel.id, filter, LoginController.tokenModel.access_token);
 
             foreach (var survey in surveys)
             {
@@ -136,7 +148,7 @@ namespace Askker.App.iOS
                 ScrollDirection = UICollectionViewScrollDirection.Horizontal
             });
 
-            if (surveys[indexPath.Row].type.Equals("text"))
+            if (surveys[indexPath.Row].type.Equals("Text"))
             {
                 optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
                 optionsTableView.Layer.MasksToBounds = true;
@@ -167,7 +179,7 @@ namespace Askker.App.iOS
             feedCell.AddSubview(questionText);
             feedCell.AddSubview(dividerLineView);
 
-            if (surveys[indexPath.Row].type.Equals("text"))
+            if (surveys[indexPath.Row].type.Equals("Text"))
             {
                 feedCell.AddSubview(optionsTableView);
             }
@@ -182,7 +194,7 @@ namespace Askker.App.iOS
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
 
-            if (surveys[indexPath.Row].type.Equals("text"))
+            if (surveys[indexPath.Row].type.Equals("Text"))
             {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionsTableView));
             }
@@ -196,7 +208,7 @@ namespace Askker.App.iOS
 
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
 
-            if (surveys[indexPath.Row].type.Equals("text"))
+            if (surveys[indexPath.Row].type.Equals("Text"))
             {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)]-4-[v3(<=220)][v4(44)]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", questionText, "v2", dividerLineView, "v3", optionsTableView, "v4", contentViewButtons));
             }
@@ -231,11 +243,10 @@ namespace Askker.App.iOS
             voteModel.surveyId = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
             voteModel.optionId = optionId;
             voteModel.user = new User();
-            voteModel.user.id = LoginController.tokenModel.Id;
-            // TODO: Adjust TokenModel to implement all users informations
-            voteModel.user.gender = "male";
-            voteModel.user.city = "SP";
-            voteModel.user.country = "BR";
+            voteModel.user.id = LoginController.userModel.id;
+            voteModel.user.gender = LoginController.userModel.gender;
+            voteModel.user.city = LoginController.userModel.city;
+            voteModel.user.country = LoginController.userModel.country;
 
             await voteManager.Vote(voteModel, "");
         }
