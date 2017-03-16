@@ -21,7 +21,7 @@ namespace Askker.App.PortableLibrary.Services
                         new KeyValuePair<string, string>("password", userLoginModel.Password)
                     });
 
-                    return await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/Token", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/Token", formContent);
                 }
             }
             catch (Exception ex)
@@ -38,7 +38,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + tokenModel.Access_Token);
 
-                    return await client.GetAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/Account/GetUserById");
+                    return await client.GetAsync("https://blinq-development.com:44322/api/Account/GetUserById");
                 }
             }
             catch (Exception ex)

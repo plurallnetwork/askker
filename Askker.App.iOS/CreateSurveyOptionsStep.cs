@@ -102,7 +102,7 @@ namespace Askker.App.iOS
                 {
                     //if (CreateSurveyController.OptionImages == null)
                     //{
-                    CreateSurveyController.OptionImages = new List<KeyValuePair<string, MemoryStream>>();
+                    CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
                     //}
                 }
 
@@ -115,14 +115,10 @@ namespace Askker.App.iOS
                         o.id = optionId;
                         o.text = i.Heading;
                         o.image = "";
+                        
                         if ("image".Equals(CreateSurveyController.SurveyModel.type) && i.Image != null)
                         {
-                            using (NSData imageData = i.Image.AsPNG())
-                            {
-                                Byte[] myByteArray = new Byte[imageData.Length];
-                                System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
-                                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, MemoryStream>(optionId.ToString(), new MemoryStream(myByteArray)));
-                            }
+                            CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString()+i.SubHeading, i.Image));                                                            
                         }
 
                         CreateSurveyController.SurveyModel.options.Add(o);

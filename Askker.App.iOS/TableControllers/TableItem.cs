@@ -11,7 +11,7 @@ namespace Askker.App.iOS.TableControllers
 
         public string SubHeading { get; set; }
 
-        public UIImage Image { get; set; }
+        public byte[] Image { get; set; }
 
         public UITableViewCellStyle CellStyle
         {
@@ -32,10 +32,17 @@ namespace Askker.App.iOS.TableControllers
         public TableItem(string heading)
         { Heading = heading; }
 
-        public TableItem(string heading, UIImage image)
+        public TableItem(string heading, byte[] image)
         {
             Heading = heading;
             Image = image;
+        }
+
+        public TableItem(string heading, string subheading, byte[] image)
+        {
+            Heading = heading;
+            Image = image;
+            SubHeading = subheading;
         }
     }
 }

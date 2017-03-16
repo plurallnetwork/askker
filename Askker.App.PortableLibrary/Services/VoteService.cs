@@ -21,7 +21,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     var formContent = new StringContent(JsonConvert.SerializeObject(votes), Encoding.UTF8, "application/json");
 
-                    return await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/survey/vote", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/vote", formContent);
                 }
             }
             catch (Exception ex)

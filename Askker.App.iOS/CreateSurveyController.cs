@@ -33,7 +33,7 @@ namespace Askker.App.iOS
 
         public static SurveyModel SurveyModel { get; set; }
         public static Stream QuestionImage { get; set; }
-        public static List<KeyValuePair<string, MemoryStream>> OptionImages { get; set; }
+        public static List<KeyValuePair<string, byte[]>> OptionImages { get; set; }
 
         public CreateSurveyController (IntPtr handle) : base (handle)
         {

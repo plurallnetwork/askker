@@ -1,4 +1,5 @@
 ﻿using Askker.App.PortableLibrary.Models;
+using Foundation;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using UIKit;
 
 namespace Askker.App.PortableLibrary.Services
 {
@@ -20,7 +22,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/survey/getfeed/{0}/{1}", userId, filter));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getfeed/{0}/{1}", userId, filter));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -32,31 +34,26 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SaveSurvey(SurveyModel surveyModel, string authenticationToken, Stream questionImage, List<KeyValuePair<string, MemoryStream>> optionImages)
+        public async Task<HttpResponseMessage> SaveSurvey(SurveyModel surveyModel, string authenticationToken, Stream questionImage, List<KeyValuePair<string, byte[]>> optionImages)
         {
             try
             {
-                HttpClient client = new HttpClient();
-                //using (var client = new HttpClient(handler, false))
-                //{
+                using (var client = new HttpClient())
+                {
                     string boundary = "---8d0f01e6b3b5dafaaadaad";
                     var content = new MultipartFormDataContent(boundary);
                     content.Add(new StringContent(JsonConvert.SerializeObject(surveyModel), Encoding.UTF8, "application/json"), "model");
                     content.Add(new StreamContent(new MemoryStream()), "questionImg");
-                    //content.Add(new StringContent(System.Text.Encoding.UTF8.GetString(optionImages.ElementAt(0).Value.ToArray(), 0 , optionImages.ElementAt(0).Value.ToArray().Length), Encoding.UTF8, "application/octet-stream"), "0");
-                    content.Add(CreateFileContent(optionImages.ElementAt(0).Value, optionImages.ElementAt(0).Key));
 
-
-
-                    //foreach (var img in optionImages)
-                    //{
-                    //    content.Add(CreateFileContent(img.Value, img.Key));
-                    //    //content.Add(new StreamContent(img.Value), img.Key);
-                    //}
+                    foreach (var img in optionImages)
+                    {
+                        content.Add(CreateFileContent(img.Value, img.Key));
+                    }
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
-                    return await client.PostAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/survey", content);
-                //}
+                
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey", content);
+                }
             }
             catch (Exception ex)
             {
@@ -64,17 +61,19 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        private ByteArrayContent CreateFileContent(MemoryStream stream, string fileName)
+        private ByteArrayContent CreateFileContent(byte[] stream, string fileName)
         {
-            //var fileContent = new StreamContent(stream);
             var fileContent = new ByteArrayContent(stream.ToArray());
-            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-            {
-                Name = "\"" + fileName + "\"",
-                FileName = "\"" + fileName + "\""
-            }; // the extra quotes are key here
-            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+            fileContent.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse("form-data");
+            fileContent.Headers.ContentDisposition.Parameters.Add(new NameValueHeaderValue("name", "optionImage-"+Path.GetFileNameWithoutExtension(fileName)));
+
+            fileContent.Headers.ContentDisposition.Parameters.Add(new NameValueHeaderValue("fileName", "optionImage-" + Path.GetFileNameWithoutExtension(fileName)));
+
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/"+Path.GetExtension(fileName).Replace(".",""));
             return fileContent;
         }
+
+
+        
     }
 }

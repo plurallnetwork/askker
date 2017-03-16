@@ -316,7 +316,7 @@ namespace Askker.App.iOS
                 cell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLetterLabel));
                 cell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
 
-                if (FeedController.surveys[(int)tableView.Tag].optionSelected == options[indexPath.Row].Id)
+                if (FeedController.surveys[(int)tableView.Tag].optionSelected == options[indexPath.Row].id)
                 {
                     var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
                     optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
@@ -442,7 +442,7 @@ namespace Askker.App.iOS
                 optionCell.optionLetterLabel.Text = "  " + OptionsTableViewController.alphabet[indexPath.Row] + "  ";
                 optionCell.optionLabel.Text = options[indexPath.Row].text;
 
-                if (FeedController.surveys[(int)collectionView.Tag].optionSelected == options[indexPath.Row].Id)
+                if (FeedController.surveys[(int)collectionView.Tag].optionSelected == options[indexPath.Row].id)
                 {
                     optionCell.optionCheckImageView.Hidden = false;
                 }

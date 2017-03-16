@@ -200,8 +200,8 @@ namespace Askker.App.iOS
             #endregion
 
             //string returnUrlLogin = "http://www.facebook.com/connect/login_success.html";
-            string returnUrlLogin = "http:%2F%2Fec2-52-27-214-166.us-west-2.compute.amazonaws.com%2Flogin";
-            string externalProviderUrl = "http://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:8090/api/Account/ExternalLogin?provider=" + provider + "&response_type=token&client_id=self&redirect_uri=" + returnUrlLogin + "&isAdmin=1";
+            string returnUrlLogin = "http:%2F%2Fblinq-development.com%2Flogin";
+            string externalProviderUrl = "http://blinq-development.com:8090/api/Account/ExternalLogin?provider=" + provider + "&response_type=token&client_id=self&redirect_uri=" + returnUrlLogin + "&isAdmin=1";
 
             var wkwebview = new WKWebView(UIScreen.MainScreen.Bounds, new WKWebViewConfiguration());
             wkwebview.NavigationDelegate = this;

@@ -2,6 +2,7 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using UIKit;
 
@@ -52,8 +53,8 @@ namespace Askker.App.iOS.TableControllers
             UITableViewCell cell = tableView.DequeueReusableCell(cellIdentifier);
 
             // UNCOMMENT one of these to use that style
-            //			var cellStyle = UITableViewCellStyle.Default;
-            var cellStyle = UITableViewCellStyle.Subtitle;
+            var cellStyle = UITableViewCellStyle.Default;
+            //          var cellStyle = UITableViewCellStyle.Subtitle;
             //			var cellStyle = UITableViewCellStyle.Value1;
             //			var cellStyle = UITableViewCellStyle.Value2;
 
@@ -76,7 +77,10 @@ namespace Askker.App.iOS.TableControllers
             // Value2 style doesn't support an image
             if (cellStyle != UITableViewCellStyle.Value2)
             {
-                cell.ImageView.Image = tableItems[indexPath.Row].Image;
+                if (tableItems[indexPath.Row].Image != null)
+                {
+                    cell.ImageView.Image = UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image));
+                }
             }
                 
             //cell.ImageView.image = UIImage.FromFile("Images/" + tableItems[indexPath.Row].ImageName);
@@ -160,6 +164,7 @@ namespace Askker.App.iOS.TableControllers
         {
             // determine what was selected, video or image
             bool isImage = false;
+            string fileExtension = "";
             switch (e.Info[UIImagePickerController.MediaType].ToString())
             {
                 case "public.image":
@@ -187,6 +192,7 @@ namespace Askker.App.iOS.TableControllers
                 else
                 {
                     string fileName = representation.Filename;
+                    fileExtension = Path.GetExtension(fileName).ToLower();
                     Console.WriteLine("image Filename :" + fileName);
                 }
             }, delegate (NSError error) {
@@ -215,7 +221,12 @@ namespace Askker.App.iOS.TableControllers
                     {
                         // user input will be in alert.GetTextField(0).text;
                         //---- create a new item and add it to our underlying data
-                        tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text, originalImage));
+                        using (NSData imageData = originalImage.AsPNG())
+                        {
+                            byte[] myByteArray = new byte[imageData.Length];
+                            System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
+                            tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text, fileExtension, myByteArray));
+                        }
                         //---- insert a new row in the table
                         tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
                     };
