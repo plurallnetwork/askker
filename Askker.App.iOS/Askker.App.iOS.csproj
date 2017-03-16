@@ -24,6 +24,9 @@
     <MtouchDebug>True</MtouchDebug>
     <IOSDebugOverWiFi>False</IOSDebugOverWiFi>
     <IOSDebuggerPort>10000</IOSDebuggerPort>
+    <CodesignKey>iPhone Developer: leandrobarbieri21@gmail.com (4L5R34Z284)</CodesignKey>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>f37784c0-716c-4122-b5bb-e5100f4a55a9</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>

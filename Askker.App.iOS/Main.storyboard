@@ -11,7 +11,7 @@
         <!--Login-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="LoginController" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="LoginController" sceneMemberID="viewController" storyboardIdentifier="LoginController" useStoryboardIdentifierAsRestorationIdentifier="YES">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -574,6 +574,7 @@
         <image name="images/purple-pip-full.png" width="8" height="8"/>
         <image name="images/white-pip-circle.png" width="8" height="8"/>
         <image name="images/white-pip-full.png" width="8" height="8"/>
+        <image name="OptionCheck" width="220" height="220"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

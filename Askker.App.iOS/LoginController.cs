@@ -9,13 +9,17 @@ namespace Askker.App.iOS
 {
     public partial class LoginController : UIViewController, IWKNavigationDelegate
     {
-        CredentialsService credentialsService;
         public static TokenModel tokenModel;
+        public static UserModel userModel;
         public UIActivityIndicatorView indicator;
+
+        public LoginManager loginManager;
 
         public LoginController (IntPtr handle) : base (handle)
         {
-            credentialsService = new CredentialsService();
+            tokenModel = new TokenModel();
+            userModel = new UserModel();
+            loginManager = new LoginManager();
 
             indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
             indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
@@ -30,16 +34,16 @@ namespace Askker.App.iOS
 
             btnLoginFacebook.TouchUpInside += btnLoginFacebook_TouchUpInside;
             btnLoginGoogle.TouchUpInside += btnLoginGoogle_TouchUpInside;
+        }
 
-            if (credentialsService.DoCredentialsExist())
+        public override async void ViewDidAppear(bool animated)
+        {
+            if (CredentialsService.DoCredentialsExist())
             {
-                tokenModel = credentialsService.GetTokenModel();
+                tokenModel = CredentialsService.GetTokenModel();
+                userModel = await loginManager.GetUserById(CredentialsService.access_token);
 
-                var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
-                if (feedController != null)
-                {
-                    this.PresentViewController(feedController, true, null);
-                }
+                Login();
             }
         }
 
@@ -61,12 +65,6 @@ namespace Askker.App.iOS
 
         public void Login()
         {
-            //bool doCredentialsExist = credentialsService.DoCredentialsExist();
-            //if (!doCredentialsExist)
-            //{
-            //    credentialsService.SaveCredentials(tokenModel);
-            //}
-
             var feedController = this.Storyboard.InstantiateViewController("HomeNavController");
             if (feedController != null)
             {
@@ -74,13 +72,9 @@ namespace Askker.App.iOS
             }
         }
 
-        public async System.Threading.Tasks.Task<TokenModel> GetUser(string accessToken)
+        public async System.Threading.Tasks.Task<UserModel> GetUser(string accessToken)
         {
-            TokenModel accessTokenModel = new TokenModel();
-            accessTokenModel.Access_Token = accessToken;
-
-            LoginManager loginManager = new LoginManager();
-            return await loginManager.GetUserById(accessTokenModel);
+            return await loginManager.GetUserById(accessToken);
         }
 
         async partial void btnEnter_TouchUpInside(UIKit.UIButton sender)
@@ -105,10 +99,12 @@ namespace Askker.App.iOS
             {
                 try
                 {
-                    LoginManager loginManager = new LoginManager();
                     UserLoginModel userLoginModel = new UserLoginModel(txtUsername.Text, txtPassword.Text);
 
                     tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
+                    userModel = await loginManager.GetUserById(tokenModel.access_token);
+
+                    CredentialsService.SaveCredentials(tokenModel, userModel);
 
                     Login();
 
@@ -135,11 +131,12 @@ namespace Askker.App.iOS
                     //var alert = UIAlertController.Create("Surveys", "Total: " + surveys.Count.ToString(), UIAlertControllerStyle.Alert);
                     //alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
                     //PresentViewController(alert, true, null);
-                    var feedController = this.Storyboard.InstantiateViewController("HomeNavController");
-                    if (feedController != null)
-                    {
-                        this.PresentViewController(feedController, true, null);
-                    }
+
+                    //var feedController = this.Storyboard.InstantiateViewController("HomeNavController");
+                    //if (feedController != null)
+                    //{
+                    //    this.PresentViewController(feedController, true, null);
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -289,9 +286,12 @@ namespace Askker.App.iOS
 
                     Console.WriteLine("Access Token = " + accessToken);
 
-                    tokenModel = await GetUser(accessToken);
+                    tokenModel.access_token = accessToken;
+                    userModel = await loginManager.GetUserById(accessToken);
 
-                    Console.WriteLine("User = " + tokenModel.UserName);
+                    CredentialsService.SaveCredentials(tokenModel, userModel);
+
+                    Console.WriteLine("User = " + userModel.userName);
 
                     Login();
 

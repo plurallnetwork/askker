@@ -30,13 +30,13 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> GetUserById(TokenModel tokenModel)
+        public async Task<HttpResponseMessage> GetUserById(string authenticationToken)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + tokenModel.Access_Token);
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
                     return await client.GetAsync("https://ec2-52-27-214-166.us-west-2.compute.amazonaws.com:44322/api/Account/GetUserById");
                 }

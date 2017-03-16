@@ -43,16 +43,16 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task<TokenModel> GetUserById(TokenModel tokenModel)
+        public async Task<UserModel> GetUserById(string authenticationToken)
         {
             LoginService loginService = new LoginService();
 
-            var response = await loginService.GetUserById(tokenModel);
+            var response = await loginService.GetUserById(authenticationToken);
             var json = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<TokenModel>(json);
+                return JsonConvert.DeserializeObject<UserModel>(json);
             }
             else
             {

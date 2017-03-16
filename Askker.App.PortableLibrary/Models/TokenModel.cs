@@ -9,29 +9,29 @@ namespace Askker.App.PortableLibrary.Models
 {
     public class TokenModel
     {
-        public string Access_Token { get; set; }
+        public string access_token { get; set; }
 
-        public string Token_Type { get; set; }
+        public string token_type { get; set; }
 
-        public int Expires_In { get; set; }
+        public int expires_in { get; set; }
 
-        public DateTime Issued { get; set; }
+        public DateTime issued { get; set; }
 
-        public DateTime Expires { get; set; }
+        public DateTime expires { get; set; }
 
-        public string UserName { get; set; }
+        public string userName { get; set; }
 
-        public string Name { get; set; }
+        public string name { get; set; }
 
-        public string Id { get; set; }
+        public string id { get; set; }
 
-        public string ProfilePicturePath { get; set; }
+        public string profilePicturePath { get; set; }
 
-        public bool IsShowingTour { get; set; }
+        public bool isShowingTour { get; set; }
 
-        public bool IsStillValid(DateTime currentDateTime)
+        public bool isStillValid(DateTime currentDateTime)
         {
-            return currentDateTime.CompareTo(this.Expires) == -1;
+            return currentDateTime.CompareTo(this.expires) == -1;
         }
     }
 }

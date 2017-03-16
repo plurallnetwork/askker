@@ -67,7 +67,10 @@ namespace Askker.App.iOS
                         LoginManager loginManager = new LoginManager();
                         UserLoginModel userLoginModel = new UserLoginModel(txtEmail.Text, txtPassword.Text);
 
-                        TokenModel tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
+                        LoginController.tokenModel = await loginManager.GetAuthorizationToken(userLoginModel);
+                        LoginController.userModel = await loginManager.GetUserById(LoginController.tokenModel.access_token);
+
+                        CredentialsService.SaveCredentials(LoginController.tokenModel, LoginController.userModel);
 
                         var alert = UIAlertController.Create("Register", "Registered and logged user successfully", UIAlertControllerStyle.Alert);
                         alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));

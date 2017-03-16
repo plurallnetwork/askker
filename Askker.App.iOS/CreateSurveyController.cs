@@ -154,7 +154,7 @@ namespace Askker.App.iOS
         {
             try
             {
-                await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.Access_Token, QuestionImage, OptionImages);
+                await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.access_token, QuestionImage, OptionImages);
 
                 var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
                 if (feedController != null)
