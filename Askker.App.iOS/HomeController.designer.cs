@@ -14,8 +14,20 @@ namespace Askker.App.iOS
     [Register ("HomeController")]
     partial class HomeController
     {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton btnMenu { get; set; }
+
+        [Action ("BtnMenu_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void BtnMenu_TouchUpInside (UIKit.UIButton sender);
+
         void ReleaseDesignerOutlets ()
         {
+            if (btnMenu != null) {
+                btnMenu.Dispose ();
+                btnMenu = null;
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UIKit;
 
 namespace Askker.App.PortableLibrary.Util
 {
@@ -19,6 +21,15 @@ namespace Askker.App.PortableLibrary.Util
                 list.RemoveAt(index);
             }
             return randomizedList;
+        }
+
+        public static UIImage ResizeImage(UIImage sourceImage, float width, float height)
+        {
+            UIGraphics.BeginImageContext(new SizeF(width, height));
+            sourceImage.Draw(new RectangleF(0, 0, width, height));
+            var resultImage = UIGraphics.GetImageFromCurrentImageContext();
+            UIGraphics.EndImageContext();
+            return resultImage;
         }
     }
 }
