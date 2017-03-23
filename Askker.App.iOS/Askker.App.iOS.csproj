@@ -26,7 +26,7 @@
     <IOSDebuggerPort>10000</IOSDebuggerPort>
     <CodesignKey>iPhone Developer: leandrobarbieri21@gmail.com (4L5R34Z284)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>f37784c0-716c-4122-b5bb-e5100f4a55a9</CodesignProvision>
+    <CodesignProvision>de59b9c6-7bde-4d0d-8dbe-7c1465c353f9</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -129,6 +129,7 @@
     </Compile>
     <Compile Include="TableControllers\TableItem.cs" />
     <Compile Include="TableControllers\TableSource.cs" />
+    <Compile Include="Utils.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />
@@ -243,25 +244,17 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="images\big.jpg" />
+    <BundleResource Include="images\icons\filterToYou.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="images\dog.jpg" />
+    <BundleResource Include="images\icons\friendsiOS.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="images\dog2.jpeg" />
+    <BundleResource Include="images\icons\check.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="images\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="images\big.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="images\small1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="images\small2.jpg" />
+    <BundleResource Include="images\icons\image.png" />
+    <Content Include="images\icons\text.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

@@ -8,7 +8,7 @@ namespace Askker.App.iOS
 {
     public partial class QuestionStepView : UIView
     {
-        public PlaceholderEnabledUITextView QuestionText
+        public UITextView QuestionText
         {
             get { return questionText; }
             set {questionText = value; }
@@ -27,11 +27,11 @@ namespace Askker.App.iOS
             return v;
         }
 
-        public override void AwakeFromNib()
-        {
-            questionText.Placeholder = "Write your question here...";
-            questionText.PlaceholderColor = UIColor.LightGray;
-            questionText.PlaceholderFont = UIFont.SystemFontOfSize(20);
-        }
+        //public override void AwakeFromNib()
+        //{
+        //    questionText.Placeholder = "Write your question here...";
+        //    questionText.PlaceholderColor = UIColor.LightGray;
+        //    questionText.PlaceholderFont = UIFont.SystemFontOfSize(20);
+        //}
     }
 }

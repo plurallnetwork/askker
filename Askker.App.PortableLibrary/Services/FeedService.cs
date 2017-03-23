@@ -45,9 +45,11 @@ namespace Askker.App.PortableLibrary.Services
                     content.Add(new StringContent(JsonConvert.SerializeObject(surveyModel), Encoding.UTF8, "application/json"), "model");
                     content.Add(new StreamContent(new MemoryStream()), "questionImg");
 
-                    foreach (var img in optionImages)
-                    {
-                        content.Add(CreateFileContent(img.Value, img.Key));
+                    if ("image".Equals(surveyModel.type)) {
+                        foreach (var img in optionImages)
+                        {
+                            content.Add(CreateFileContent(img.Value, img.Key));
+                        }
                     }
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
