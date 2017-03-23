@@ -12,7 +12,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="11" translatesAutoresizingMaskIntoConstraints="NO">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="11" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                     <rect key="frame" x="0.0" y="240" width="375" height="427"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -30,31 +30,34 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="17" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" hidden="YES">
                     <rect key="frame" x="0.0" y="366" width="375" height="80"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Done">
+                    <state key="normal" image="images/icons/check.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
                         <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
+                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
                     </variation>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                     <rect key="frame" x="0.0" y="587" width="190" height="80"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Friends">
+                    <state key="normal" image="images/icons/filterToYou.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
                         <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
+                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
                     </variation>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                     <rect key="frame" x="190" y="587" width="185" height="80"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="Groups">
+                    <state key="normal" image="images/icons/friendsiOS.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
                         <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
+                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
                     </variation>
                 </button>
             </subviews>
@@ -92,6 +95,12 @@
         <image name="images/white-pip-full.png" width="8" height="8"/>
         <image name="assets/img/logo_180.png" width="180" height="180"/>
         <image name="Profile" width="210" height="260"/>
+        <image name="OptionCheck" width="220" height="220"/>
+        <image name="images/icons/filterToYou.png" width="42" height="48"/>
+        <image name="images/icons/friendsiOS.png" width="68" height="48"/>
+        <image name="images/icons/check.png" width="48" height="48"/>
+        <image name="images/icons/image.png" width="48" height="48"/>
+        <image name="images/icons/text.gif" width="48" height="48"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

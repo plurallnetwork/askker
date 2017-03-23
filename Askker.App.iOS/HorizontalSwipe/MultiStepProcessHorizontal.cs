@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Foundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UIKit;
@@ -12,6 +13,32 @@ namespace Askker.App.iOS.HorizontalSwipe
             DataSource = dataSource;
             SetViewControllers(new[] { dataSource.Steps.FirstOrDefault() as UIViewController }, UIPageViewControllerNavigationDirection.Forward, false, null);
         }
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            //NSNotificationCenter.DefaultCenter.AddObserver(Self, MultiStepProcessHorizontal.)
+            foreach(UIView view1 in this.View.Subviews)
+            {
+                if (view1.GetType() == typeof(UIScrollView))
+                {
+                    UIScrollView scrollView = (UIScrollView)view1;
+
+                    scrollView.ScrollEnabled = false;
+
+                }
+            }
+        }
+
+        //public void disableSwipe(NSNotification notification)
+        //{
+        //    DataSource = null;
+        //}
+
+        //public void enableSwipe(NSNotification notification)
+        //{
+        //    DataSource = Self;
+        //}
     }
 
 

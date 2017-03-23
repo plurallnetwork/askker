@@ -21,13 +21,14 @@ namespace Askker.App.iOS
         private MultiStepProcessHorizontal _pageViewController;
         private HorizontalSwipePageControl _pageControl;
         private UILabel _pageTitle;
-        private UIButton _nextButton;
-        private UIButton _backButton;
-        private UIButton _askButton;
         private List<IMultiStepProcessStep> _steps;
         private SwipeDirection _swipeDirection;
         private List<string> _pageTitles;
         private int _currentStepIndex;
+
+        public static UIButton _nextButton { get; set; }
+        public static UIButton _backButton { get; set; }
+        public static UIButton _askButton { get; set; }
 
         public List<IMultiStepProcessStep> Steps => _steps ?? (_steps = GetSteps());
 
@@ -51,18 +52,7 @@ namespace Askker.App.iOS
 
             _pageViewController = new MultiStepProcessHorizontal(new MultiStepProcessDataSource(Steps));
             _pageViewController.WillTransition += _multiStepProcessHorizontal_WillTransition;
-
-            //var subviews = _pageViewController.View.Subviews;
-
-            //for(int x = 0; x < subviews.Count(); x++)
-            //{
-            //    if(subviews.ElementAt(x) is UIScrollView)
-            //    {
-            //        UIScrollView s = subviews.ElementAt(x) as UIScrollView;
-            //        s.ScrollEnabled = false;
-            //    }
-            //}
-
+            
             _pageControl = new HorizontalSwipePageControl
             {
                 CurrentPage = 0,
@@ -139,13 +129,54 @@ namespace Askker.App.iOS
         }
 
         private void NextTapped(object s, EventArgs e)
-        {
-            var vcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex + 1) as UIViewController};
-            _pageViewController.SetViewControllers(vcs, UIPageViewControllerNavigationDirection.Forward, true, null);
+        {            
+            if(_currentStepIndex == 0)
+            {
+                if (CreateSurveyController.SurveyModel == null || 
+                    CreateSurveyController.SurveyModel.question == null ||
+                    string.IsNullOrEmpty(CreateSurveyController.SurveyModel.question.text))
+                {
+                    new UIAlertView("Question", "Please write a question", null, "OK", null).Show();
+
+                    return;
+                }
+            }else if (_currentStepIndex == 1)
+            {
+                if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
+                {
+                    new UIAlertView("Options", "Please press \"Done\" button to go to next page", null, "OK", null).Show();
+
+                    return;
+                }
+
+                if (CreateSurveyController.SurveyModel == null ||
+                    CreateSurveyController.SurveyModel.options == null ||
+                    CreateSurveyController.SurveyModel.options.Count < 2)
+                {
+                    new UIAlertView("Options", "Please give at least two options", null, "OK", null).Show();
+
+                    return;
+                }
+
+                
+            }
+
+            var nextVcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex + 1) as UIViewController };
+            _pageViewController.SetViewControllers(nextVcs, UIPageViewControllerNavigationDirection.Forward, true, null);
         }
 
         private void BackTapped(object s, EventArgs e)
         {
+            if (_currentStepIndex == 1)
+            {
+                if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
+                {
+                    new UIAlertView("Options", "Please press \"Done\" button to go back", null, "OK", null).Show();
+
+                    return;
+                }
+            }
+
             var vcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex - 1) as UIViewController };
             _pageViewController.SetViewControllers(vcs, UIPageViewControllerNavigationDirection.Forward, true, null);
         }

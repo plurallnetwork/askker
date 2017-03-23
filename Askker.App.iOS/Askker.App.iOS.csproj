@@ -26,7 +26,7 @@
     <IOSDebuggerPort>10000</IOSDebuggerPort>
     <CodesignKey>iPhone Developer: leandrobarbieri21@gmail.com (4L5R34Z284)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-  </PropertyGroup>
+    <CodesignProvision>de59b9c6-7bde-4d0d-8dbe-7c1465c353f9</CodesignProvision>  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
@@ -137,6 +137,7 @@
     </Compile>
     <Compile Include="TableControllers\TableItem.cs" />
     <Compile Include="TableControllers\TableSource.cs" />
+    <Compile Include="Utils.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
     <None Include="Info.plist" />

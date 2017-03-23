@@ -16,7 +16,7 @@ namespace Askker.App.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        Askker.App.iOS.CustomViewComponents.PlaceholderEnabledUITextView questionText { get; set; }
+        UIKit.UITextView questionText { get; set; }
 
         void ReleaseDesignerOutlets ()
         {

@@ -107,20 +107,28 @@ namespace Askker.App.iOS.TableControllers
                     {
 
                         UIAlertView alert = new UIAlertView();
-                        alert.Title = "text Option";
+                        alert.Title = "Text Option";
                         alert.AddButton("Done");
                         alert.Message = "Please enter an option description:";
                         alert.AlertViewStyle = UIAlertViewStyle.PlainTextInput;
                         alert.Clicked += (object s, UIButtonEventArgs ev) =>
                         {
-                            // user input will be in alert.GetTextField(0).text;
-                            //---- create a new item and add it to our underlying data
-                            tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text));
-                            //---- insert a new row in the table
-                            tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+                            if (!string.IsNullOrWhiteSpace(alert.GetTextField(0).Text)) { 
+                                // user input will be in alert.GetTextField(0).text;
+                                //---- create a new item and add it to our underlying data
+                                tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text));
+                                //---- insert a new row in the table
+                                tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+                            }
+                            else
+                            {
+                                new UIAlertView("Text Option", "Please fill the option description", null, "OK", null).Show();
+
+                                return;
+                            }
                         };
 
-                        alert.Show();
+                        alert.Show();                        
                     }
                     else if ("image".Equals(CreateSurveyController.SurveyModel.type))
                     {
@@ -213,7 +221,7 @@ namespace Askker.App.iOS.TableControllers
                     //imageView.image = originalImage;
 
                     UIAlertView alert = new UIAlertView();
-                    alert.Title = "image Option";
+                    alert.Title = "Image Option";
                     alert.AddButton("Done");
                     alert.Message = "Please enter an option description:";
                     alert.AlertViewStyle = UIAlertViewStyle.PlainTextInput;
@@ -232,6 +240,8 @@ namespace Askker.App.iOS.TableControllers
                     };
 
                     alert.Show();
+
+                    
                 }
 
                 // get the edited image
@@ -374,6 +384,18 @@ namespace Askker.App.iOS.TableControllers
             tableItems.RemoveAt((int)tableView.NumberOfRowsInSection(0) - 1); // zero based :)
                                                                               //---- remove the row from the table
             tableView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(tableView.NumberOfRowsInSection(0) - 1, 0) }, UITableViewRowAnimation.Fade);
+            //---- finish animations
+            tableView.EndUpdates();
+        }
+
+        public void Clear(UITableView tableView)
+        {
+            //---- start animations
+            tableView.BeginUpdates();
+            //---- remove our row from the underlying data
+            tableItems.Clear(); // zero based :)
+                                                                              //---- remove the row from the table
+            tableView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(0, 0) }, UITableViewRowAnimation.Fade);
             //---- finish animations
             tableView.EndUpdates();
         }

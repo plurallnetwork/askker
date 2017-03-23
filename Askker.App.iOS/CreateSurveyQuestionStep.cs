@@ -23,16 +23,26 @@ namespace Askker.App.iOS
             _questionStepView = QuestionStepView.Create();
             View.AddSubview(_questionStepView);
 
-            NSNotificationCenter.DefaultCenter.AddObserver(PlaceholderEnabledUITextView.TextDidChangeNotification, TextChangedEvent);
+            NSNotificationCenter.DefaultCenter.AddObserver(UITextView.TextDidChangeNotification, TextChangedEvent);
         }
 
         private void TextChangedEvent(NSNotification notification)
         {
-            PlaceholderEnabledUITextView field = (PlaceholderEnabledUITextView)notification.Object;
+            UITextView field = (UITextView)notification.Object;
 
             if (field == _questionStepView.QuestionText)
             {
-                field.placeholderLabel.Hidden = field.Text.Length > 0;
+                if (CreateSurveyController.SurveyModel == null)
+                {
+                    CreateSurveyController.SurveyModel = new SurveyModel();
+                }
+
+                if (CreateSurveyController.SurveyModel.question == null)
+                {
+                    CreateSurveyController.SurveyModel.question = new Question();
+                }
+                CreateSurveyController.SurveyModel.question.text = _questionStepView.QuestionText.Text;
+                CreateSurveyController.SurveyModel.question.image = "";                
             }
         }
 
