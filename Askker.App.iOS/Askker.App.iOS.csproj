@@ -26,8 +26,7 @@
     <IOSDebuggerPort>10000</IOSDebuggerPort>
     <CodesignKey>iPhone Developer: leandrobarbieri21@gmail.com (4L5R34Z284)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>de59b9c6-7bde-4d0d-8dbe-7c1465c353f9</CodesignProvision>
-  </PropertyGroup>
+    <CodesignProvision>de59b9c6-7bde-4d0d-8dbe-7c1465c353f9</CodesignProvision>  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
@@ -123,6 +122,15 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="MenuViewController.cs" />
+    <Compile Include="MenuViewController.designer.cs">
+      <DependentUpon>MenuViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="SideMenuController.cs" />
+    <Compile Include="SideMenuController.designer.cs">
+      <DependentUpon>SideMenuController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProfileController.cs" />
     <Compile Include="ProfileController.designer.cs">
       <DependentUpon>ProfileController.cs</DependentUpon>
@@ -197,6 +205,10 @@
       <HintPath>..\packages\Validation.2.2.8\lib\dotnet\Validation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin-Sidebar-Unified, Version=1.0.6186.35166, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SidebarNavigation.1.9.3\lib\Xamarin.iOS10\Xamarin-Sidebar-Unified.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Auth, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Auth.1.3.0\lib\Xamarin.iOS10\Xamarin.Auth.dll</HintPath>
       <Private>True</Private>
@@ -248,20 +260,48 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="images\icons\filterToYou.png" />
+    <BundleResource Include="Resources\assets\img\threelines.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="images\icons\friendsiOS.png" />
+    <BundleResource Include="Resources\assets\img\optionCheck.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="images\icons\check.png" />
+    <BundleResource Include="Resources\assets\img\feediOS.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="Resources\assets\img\filterMine.png" />
     <BundleResource Include="images\icons\image.png" />
     <BundleResource Include="images\icons\editar.png" />
     <BundleResource Include="images\icons\man.png" />
     <Content Include="images\icons\text.gif" />
     <BundleResource Include="images\icons\woman.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\filterPublic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\filterToYou.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\friendsiOS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\menuiOS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\pagesFriends.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\pagesHelp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\pagesLogOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\pagesSettings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\assets\img\pagesFeed.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

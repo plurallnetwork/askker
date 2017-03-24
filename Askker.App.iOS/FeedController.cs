@@ -15,6 +15,7 @@ namespace Askker.App.iOS
         public static List<SurveyModel> surveys { get; set; }
         public static NSCache imageCache = new NSCache();
         public static VoteManager voteManager = new VoteManager();
+        public string filter { get; set; }
 
         public FeedController (IntPtr handle) : base (handle)
         {
@@ -30,7 +31,8 @@ namespace Askker.App.iOS
             feedCollectionView.AlwaysBounceVertical = true;
 
             this.NavigationItem.SetLeftBarButtonItem(
-                new UIBarButtonItem("Logout", UIBarButtonItemStyle.Bordered, (sender, args) => {
+                new UIBarButtonItem("Logout", UIBarButtonItemStyle.Bordered, (sender, args) =>
+                {
                     CredentialsService.DeleteCredentials();
 
                     var loginController = this.Storyboard.InstantiateViewController("LoginController");
@@ -42,7 +44,12 @@ namespace Askker.App.iOS
             , true);
 
             surveys = new List<SurveyModel>();
-            fetchSurveys("nofilter");
+
+            if (filter == null)
+            {
+                filter = "nofilter";
+            }
+            fetchSurveys(filter);
         }
 
         public async void fetchSurveys(string filter)
