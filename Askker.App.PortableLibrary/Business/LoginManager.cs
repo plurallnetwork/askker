@@ -66,5 +66,24 @@ namespace Askker.App.PortableLibrary.Business
                 }
             }
         }
+
+        public async Task Update(string authenticationToken, UserModel userModel, byte[] profileImage, string profileImageName)
+        {
+            try
+            {
+                LoginService loginService = new LoginService();
+
+                var response = await loginService.Update(authenticationToken, userModel, profileImage, profileImageName);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

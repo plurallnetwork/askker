@@ -123,6 +123,10 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="ProfileController.cs" />
+    <Compile Include="ProfileController.designer.cs">
+      <DependentUpon>ProfileController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ShareStepView.cs" />
     <Compile Include="ShareStepView.designer.cs">
       <DependentUpon>ShareStepView.cs</DependentUpon>
@@ -254,7 +258,10 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="images\icons\image.png" />
+    <BundleResource Include="images\icons\editar.png" />
+    <BundleResource Include="images\icons\man.png" />
     <Content Include="images\icons\text.gif" />
+    <BundleResource Include="images\icons\woman.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
