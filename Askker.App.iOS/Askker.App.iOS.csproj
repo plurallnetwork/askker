@@ -127,6 +127,10 @@
       <DependentUpon>MenuViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="ProfileOtherController.cs" />
+    <Compile Include="ProfileOtherController.designer.cs">
+      <DependentUpon>ProfileOtherController.cs</DependentUpon>
+    </Compile>
     <Compile Include="SideMenuController.cs" />
     <Compile Include="SideMenuController.designer.cs">
       <DependentUpon>SideMenuController.cs</DependentUpon>
