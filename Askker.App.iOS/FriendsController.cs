@@ -102,14 +102,12 @@ namespace Askker.App.iOS
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.CellAt(indexPath);
-            UIAlertView alert = new UIAlertView()
+            var profileOtherController = this.Storyboard.InstantiateViewController("ProfileOtherController") as ProfileOtherController;
+            if (profileOtherController != null)
             {
-                Title = "Image View Frame",
-                Message = "Width: " + cell.ImageView.Frame.Width.ToString() + ", " + "Height: " + cell.ImageView.Frame.Height.ToString()
-            };
-            alert.AddButton("OK");
-            alert.Show();
+                profileOtherController.UserId = userFriends[indexPath.Row].id;
+                this.PresentViewController(profileOtherController, true, null);
+            }
         }
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)

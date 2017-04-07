@@ -137,7 +137,7 @@ namespace Askker.App.iOS
 
         public MenuTableViewController(UITableView menuTableView, List<MenuModel> menuItems, MenuViewController menuViewController)
         {
-            menuTableView.RegisterClassForCellReuse(typeof(UITableViewCell), menuCellId);
+            menuTableView.RegisterClassForCellReuse(typeof(MenuTableViewCell), menuCellId);
             menuTableView.Source = new MenuTableViewDataSource(menuItems, menuViewController);
         }
 
@@ -159,20 +159,19 @@ namespace Askker.App.iOS
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
-                var cell = tableView.DequeueReusableCell(MenuTableViewController.menuCellId);
+                var cell = tableView.DequeueReusableCell(MenuTableViewController.menuCellId) as MenuTableViewCell;
                 cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                 cell.BackgroundColor = UIColor.Clear;
                 cell.ContentView.BackgroundColor = UIColor.Clear;
                 cell.SeparatorInset = new UIEdgeInsets(0.0f, -20, 0.0f, cell.Bounds.Size.Width);
 
-                cell.ImageView.Image = Common.ResizeImage(UIImage.FromBundle("assets/img/" + menuItems[indexPath.Row].ImageName), 30, 23);
+                cell.menuImageView.Image = UIImage.FromBundle("assets/img/" + menuItems[indexPath.Row].ImageName);
 
-                cell.TextLabel.Text = menuItems[indexPath.Row].Title;
-                cell.TextLabel.Font = UIFont.SystemFontOfSize(14);
+                cell.menuTitleLabel.Text = menuItems[indexPath.Row].Title;
 
                 if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed || menuItems[indexPath.Row].MenuItem == MenuItem.Public)
                 {
-                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     tableView.SelectRow(indexPath, false, UITableViewScrollPosition.None);
                 }
 
@@ -181,11 +180,11 @@ namespace Askker.App.iOS
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
-                var cell = tableView.CellAt(indexPath);
+                var cell = tableView.CellAt(indexPath) as MenuTableViewCell;
 
                 if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed)
                 {
-                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     var homeNavController = menuViewController.Storyboard.InstantiateViewController("HomeNavController");
                     menuViewController.changeContentView(homeNavController);
                 }
@@ -207,7 +206,7 @@ namespace Askker.App.iOS
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Mine)
                 {
-                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
                     //feedController.filter = "mine";
                     feedController.filter = "nofilter";
@@ -215,7 +214,7 @@ namespace Askker.App.iOS
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.ToYou)
                 {
-                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
                     //feedController.filter = "toyou";
                     feedController.filter = "nofilter";
@@ -223,7 +222,7 @@ namespace Askker.App.iOS
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Public)
                 {
-                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
                     feedController.filter = "nofilter";
                     menuViewController.changeContentView(feedController);
@@ -235,16 +234,42 @@ namespace Askker.App.iOS
                 var menuItem = menuItems[indexPath.Row].MenuItem;
                 if (menuItem == MenuItem.Mine || menuItem == MenuItem.ToYou || menuItem == MenuItem.Public)
                 {
-                    var cell = tableView.CellAt(indexPath);
+                    var cell = tableView.CellAt(indexPath) as MenuTableViewCell;
 
                     if (cell == null)
                     {
-                        cell = this.GetCell(tableView, indexPath);
+                        cell = this.GetCell(tableView, indexPath) as MenuTableViewCell;
                     }
 
-                    cell.TextLabel.TextColor = UIColor.Black;
+                    cell.menuTitleLabel.TextColor = UIColor.Black;
                 }
             }
+        }
+    }
+
+    public partial class MenuTableViewCell : UITableViewCell
+    {
+        public UIImageView menuImageView { get; set; }
+        public UILabel menuTitleLabel { get; set; }
+
+        protected MenuTableViewCell(IntPtr handle) : base(handle)
+        {
+            menuImageView = new UIImageView();
+            menuImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            menuImageView.Layer.MasksToBounds = true;
+            menuImageView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            menuTitleLabel = new UILabel();
+            menuTitleLabel.Font = UIFont.SystemFontOfSize(14);
+            menuTitleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            ContentView.Add(menuImageView);
+            ContentView.Add(menuTitleLabel);
+
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(28)]-20-[v1]-8-|", new NSLayoutFormatOptions(), "v0", menuImageView, "v1", menuTitleLabel));
+
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(28)]", new NSLayoutFormatOptions(), "v0", menuImageView));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-10-[v0(24)]", new NSLayoutFormatOptions(), "v0", menuTitleLabel));
         }
     }
 }
