@@ -1,4 +1,5 @@
-﻿using AssetsLibrary;
+﻿using Askker.App.PortableLibrary.Enums;
+using AssetsLibrary;
 using Foundation;
 using System;
 using System.Collections.Generic;
@@ -103,7 +104,7 @@ namespace Askker.App.iOS.TableControllers
 
                 case UITableViewCellEditingStyle.Insert:
 
-                    if ("text".Equals(CreateSurveyController.SurveyModel.type))
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Text)
                     {
 
                         UIAlertView alert = new UIAlertView();
@@ -130,7 +131,7 @@ namespace Askker.App.iOS.TableControllers
 
                         alert.Show();                        
                     }
-                    else if ("image".Equals(CreateSurveyController.SurveyModel.type))
+                    else if (CreateSurveyController.SurveyModel.type == SurveyType.Image)
                     {
                         imagePicker = new UIImagePickerController();
                         imagePicker.SourceType = UIImagePickerControllerSourceType.PhotoLibrary;

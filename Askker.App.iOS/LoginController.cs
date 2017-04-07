@@ -113,7 +113,7 @@ namespace Askker.App.iOS
                     // Save Survey Example
                     //SurveyModel surveyTeste = new SurveyModel();
                     //surveyTeste.userId = tokenModel.id;
-                    //surveyTeste.type = "text";
+                    //surveyTeste.type = "Text";
                     //surveyTeste.choiceType = "UniqueChoice";
                     //surveyTeste.question = new question() { text = "Qual a sua cor favorita?", image = "" };
 

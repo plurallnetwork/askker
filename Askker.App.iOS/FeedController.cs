@@ -7,6 +7,7 @@ using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Business;
 using CoreFoundation;
 using Askker.App.PortableLibrary.Util;
+using Askker.App.PortableLibrary.Enums;
 
 namespace Askker.App.iOS
 {
@@ -16,9 +17,14 @@ namespace Askker.App.iOS
         public static NSCache imageCache = new NSCache();
         public static VoteManager voteManager = new VoteManager();
         public string filter { get; set; }
+        public UIActivityIndicatorView indicator;
 
         public FeedController (IntPtr handle) : base (handle)
         {
+            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
+            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
+            indicator.Center = this.View.Center;
+            Add(indicator);
         }
 
         public override void ViewDidLoad()
@@ -49,6 +55,8 @@ namespace Askker.App.iOS
             {
                 filter = "nofilter";
             }
+
+            indicator.StartAnimating();
             fetchSurveys(filter);
         }
 
@@ -60,7 +68,8 @@ namespace Askker.App.iOS
             {
                 survey.options = Common.Randomize(survey.options);
             }
-            
+
+            indicator.StopAnimating();
             feedCollectionView.ReloadData();
         }
 
@@ -155,7 +164,7 @@ namespace Askker.App.iOS
                 ScrollDirection = UICollectionViewScrollDirection.Horizontal
             });
 
-            if (surveys[indexPath.Row].type.Equals("Text"))
+            if (surveys[indexPath.Row].type == SurveyType.Text)
             {
                 optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
                 optionsTableView.Layer.MasksToBounds = true;
@@ -186,7 +195,7 @@ namespace Askker.App.iOS
             feedCell.AddSubview(questionText);
             feedCell.AddSubview(dividerLineView);
 
-            if (surveys[indexPath.Row].type.Equals("Text"))
+            if (surveys[indexPath.Row].type == SurveyType.Text)
             {
                 feedCell.AddSubview(optionsTableView);
             }
@@ -201,7 +210,7 @@ namespace Askker.App.iOS
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
 
-            if (surveys[indexPath.Row].type.Equals("Text"))
+            if (surveys[indexPath.Row].type == SurveyType.Text)
             {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionsTableView));
             }
@@ -215,7 +224,7 @@ namespace Askker.App.iOS
 
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
 
-            if (surveys[indexPath.Row].type.Equals("Text"))
+            if (surveys[indexPath.Row].type == SurveyType.Text)
             {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)]-4-[v3(<=220)][v4(44)]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", questionText, "v2", dividerLineView, "v3", optionsTableView, "v4", contentViewButtons));
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Askker.App.PortableLibrary.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Askker.App.PortableLibrary.Models
 
         public string creationDate { get; set; }
 
-        public string type { get; set; }
+        public SurveyType type { get; set; }
 
         public string choiceType { get; set; }
 

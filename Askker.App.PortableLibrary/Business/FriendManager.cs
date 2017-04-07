@@ -1,6 +1,7 @@
 ﻿using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,18 +12,32 @@ namespace Askker.App.PortableLibrary.Business
 {
     public class FriendManager
     {
-        public async Task<UserFriendsModel> GetFriends(string userId, string authenticationToken)
+        public async Task<List<UserFriendModel>> GetFriends(string userId, string authenticationToken)
         {
             try
             {
                 FriendService friendService = new FriendService();
+                var userFriends = new List<UserFriendModel>();
 
                 var response = await friendService.GetFriends(userId, authenticationToken);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<UserFriendsModel>(json);
+                    var json = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+                    if (json.HasValues)
+                    {
+                        var ids = json.SelectToken("$.friends.ids").ToObject<JArray>();
+                        var names = json.SelectToken("$.friends.names").ToObject<JArray>();
+                        var profilePictures = json.SelectToken("$.friends.profilePictures").ToObject<JArray>();
+
+                        for (int i = 0; i < ids.Count; i++)
+                        {
+                            userFriends.Add(new UserFriendModel(ids[i].ToString(), names[i].ToString(), profilePictures[i].ToString()));
+                        }
+                    }
+
+                    return userFriends;
                 }
                 else
                 {

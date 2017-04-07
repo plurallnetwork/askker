@@ -35,12 +35,9 @@ namespace Askker.App.iOS
 
             this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;
 
-            //var image = UIImage.FromBundle("assets/img/threelines");
-            //var button = new UIButton();
-            //button = UIButton.FromType(UIButtonType.Custom);
-            //button.SetBackgroundImage(image, UIControlState.Normal);
-            //button.Frame = new RectangleF(0, 0, (float)image.Size.Width, (float)image.Size.Height);
-            //NavigationItem.LeftBarButtonItem = new UIBarButtonItem(button);
+            this.NavigationItem.BackBarButtonItem = new UIBarButtonItem("", UIBarButtonItemStyle.Plain, null);
+
+            this.NavigationController.NavigationBar.TintColor = UIColor.Black;
         }
 
         public void changeContentView(UIViewController viewController)

@@ -110,6 +110,10 @@
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>
     </Compile>
+    <Compile Include="FriendsController.cs" />
+    <Compile Include="FriendsController.designer.cs">
+      <DependentUpon>FriendsController.cs</DependentUpon>
+    </Compile>
     <Compile Include="HomeController.cs" />
     <Compile Include="HomeController.designer.cs">
       <DependentUpon>HomeController.cs</DependentUpon>
@@ -126,7 +130,6 @@
     <Compile Include="MenuViewController.designer.cs">
       <DependentUpon>MenuViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\MenuModel.cs" />
     <Compile Include="SideMenuController.cs" />
     <Compile Include="SideMenuController.designer.cs">
       <DependentUpon>SideMenuController.cs</DependentUpon>

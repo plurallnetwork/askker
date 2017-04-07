@@ -1,4 +1,5 @@
 ﻿using Askker.App.iOS.Models;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Util;
 using CoreFoundation;
 using CoreGraphics;
@@ -169,7 +170,7 @@ namespace Askker.App.iOS
                 cell.TextLabel.Text = menuItems[indexPath.Row].Title;
                 cell.TextLabel.Font = UIFont.SystemFontOfSize(14);
 
-                if (menuItems[indexPath.Row].Title.Equals("Feed") || menuItems[indexPath.Row].Title.Equals("Public"))
+                if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed || menuItems[indexPath.Row].MenuItem == MenuItem.Public)
                 {
                     cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     tableView.SelectRow(indexPath, false, UITableViewScrollPosition.None);
@@ -182,14 +183,19 @@ namespace Askker.App.iOS
             {
                 var cell = tableView.CellAt(indexPath);
 
-                cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
-
-                if (menuItems[indexPath.Row].Title.Equals("Feed"))
+                if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed)
                 {
+                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     var homeNavController = menuViewController.Storyboard.InstantiateViewController("HomeNavController");
                     menuViewController.changeContentView(homeNavController);
                 }
-                else if (menuItems[indexPath.Row].Title.Equals("Log out"))
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.MyFriends)
+                {
+                    var friendsController = menuViewController.Storyboard.InstantiateViewController("FriendsController");
+                    menuViewController.NavigationController.PushViewController(friendsController, true);
+                    menuViewController.sidebarController.CloseMenu();
+                }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.Logout)
                 {
                     CredentialsService.DeleteCredentials();
 
@@ -199,8 +205,25 @@ namespace Askker.App.iOS
                         menuViewController.PresentViewController(loginController, true, null);
                     }
                 }
-                else if (menuItems[indexPath.Row].Title.Equals("Public"))
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.Mine)
                 {
+                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                    var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
+                    //feedController.filter = "mine";
+                    feedController.filter = "nofilter";
+                    menuViewController.changeContentView(feedController);
+                }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.ToYou)
+                {
+                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                    var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
+                    //feedController.filter = "toyou";
+                    feedController.filter = "nofilter";
+                    menuViewController.changeContentView(feedController);
+                }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.Public)
+                {
+                    cell.TextLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
                     feedController.filter = "nofilter";
                     menuViewController.changeContentView(feedController);
@@ -209,14 +232,18 @@ namespace Askker.App.iOS
 
             public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
             {
-                var cell = tableView.CellAt(indexPath);
-
-                if (cell == null)
+                var menuItem = menuItems[indexPath.Row].MenuItem;
+                if (menuItem == MenuItem.Mine || menuItem == MenuItem.ToYou || menuItem == MenuItem.Public)
                 {
-                    cell = this.GetCell(tableView, indexPath);
-                }
+                    var cell = tableView.CellAt(indexPath);
 
-                cell.TextLabel.TextColor = UIColor.Black;
+                    if (cell == null)
+                    {
+                        cell = this.GetCell(tableView, indexPath);
+                    }
+
+                    cell.TextLabel.TextColor = UIColor.Black;
+                }
             }
         }
     }

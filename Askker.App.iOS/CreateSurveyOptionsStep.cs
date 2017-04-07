@@ -1,5 +1,6 @@
 ﻿using Askker.App.iOS.HorizontalSwipe;
 using Askker.App.iOS.TableControllers;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Foundation;
 using System;
@@ -29,7 +30,7 @@ namespace Askker.App.iOS
 
             _optionsStepView.TextButton.TouchUpInside += async (sender, e) =>
             {
-                if (tableSource.GetTableItems().Count > 0 && !"text".Equals(CreateSurveyController.SurveyModel.type))
+                if (tableSource.GetTableItems().Count > 0 && CreateSurveyController.SurveyModel.type != SurveyType.Text)
                 {
                     nint button = await Utils.ShowAlert("Options", "All image options will be deleted. Continue?", "Ok", "Cancel");
 
@@ -42,7 +43,7 @@ namespace Askker.App.iOS
                     }
                 }
 
-                CreateSurveyController.SurveyModel.type = "text";
+                CreateSurveyController.SurveyModel.type = SurveyType.Text;
                 CreateSurveyController._backButton.Hidden = true;
                 CreateSurveyController._nextButton.Hidden = true;
 
@@ -58,7 +59,7 @@ namespace Askker.App.iOS
 
             _optionsStepView.ImageButton.TouchUpInside += async (sender, e) =>
             {
-                if (tableSource.GetTableItems().Count > 0 && !"image".Equals(CreateSurveyController.SurveyModel.type))
+                if (tableSource.GetTableItems().Count > 0 && CreateSurveyController.SurveyModel.type != SurveyType.Image)
                 {
                     nint button = await Utils.ShowAlert("Options", "All text options will be deleted. Continue?", "Ok", "Cancel");
 
@@ -72,7 +73,7 @@ namespace Askker.App.iOS
                     }
                 }
 
-                CreateSurveyController.SurveyModel.type = "image";
+                CreateSurveyController.SurveyModel.type = SurveyType.Image;
                 CreateSurveyController._backButton.Hidden = true;
                 CreateSurveyController._nextButton.Hidden = true;
 
@@ -99,7 +100,7 @@ namespace Askker.App.iOS
                         CreateSurveyController.SurveyModel.options = new List<Option>();
                     }
 
-                    if ("image".Equals(CreateSurveyController.SurveyModel.type))
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image)
                     {
                         //if (CreateSurveyController.OptionImages == null)
                         //{
@@ -117,7 +118,7 @@ namespace Askker.App.iOS
                             o.text = i.Heading;
                             o.image = "";
 
-                            if ("image".Equals(CreateSurveyController.SurveyModel.type) && i.Image != null)
+                            if (CreateSurveyController.SurveyModel.type == SurveyType.Image && i.Image != null)
                             {
                                 CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + i.SubHeading, i.Image));
                             }
