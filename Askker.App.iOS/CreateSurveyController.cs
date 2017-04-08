@@ -243,10 +243,10 @@ namespace Askker.App.iOS
             this.NavigationItem.SetLeftBarButtonItem(
                 new UIBarButtonItem(UIBarButtonSystemItem.Cancel, (sender, args) =>
                 {
-                    var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
-                    if (feedController != null)
+                    var rootController = this.Storyboard.InstantiateViewController("MenuNavController");
+                    if (rootController != null)
                     {
-                        this.PresentViewController(feedController, true, null);
+                        this.PresentViewController(rootController, true, null);
                         CreateSurveyController.SurveyModel = null;
                     }
                 }

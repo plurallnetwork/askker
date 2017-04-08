@@ -106,7 +106,7 @@ namespace Askker.App.iOS
             if (profileOtherController != null)
             {
                 profileOtherController.UserId = userFriends[indexPath.Row].id;
-                this.PresentViewController(profileOtherController, true, null);
+                this.NavigationController.PushViewController(profileOtherController, true);
             }
         }
 
