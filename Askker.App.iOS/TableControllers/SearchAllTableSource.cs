@@ -1,6 +1,7 @@
 ﻿using Askker.App.iOS.CustomViewComponents;
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Models;
+using CoreFoundation;
 using CoreGraphics;
 using Foundation;
 using System;
@@ -17,6 +18,7 @@ namespace Askker.App.iOS.TableControllers
         private List<SearchAllTableItem> tableItems = new List<SearchAllTableItem>();
         private List<SearchAllTableItem> searchItems = new List<SearchAllTableItem>();
         protected NSString cellIdentifier = new NSString("TableCell");
+        public static NSCache imageCache = new NSCache();
 
         public SearchAllTableSource(List<SearchAllTableItem> items)
         {
@@ -33,7 +35,7 @@ namespace Askker.App.iOS.TableControllers
         {
             // request a recycled cell to save memory
             SearchAllCustomCell cell = tableView.DequeueReusableCell(cellIdentifier) as SearchAllCustomCell;
-            UIImage image; 
+            UIImage image = null;  
 
             var cellStyle = UITableViewCellStyle.Default;
 
@@ -54,7 +56,48 @@ namespace Askker.App.iOS.TableControllers
             }
             else
             {
-                image = UIImage.LoadFromData(NSData.FromUrl(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + searchItems[indexPath.Row].ImageName)));
+                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + searchItems[indexPath.Row].ImageName);
+                var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
+                if (imageFromCache != null)
+                {
+                    image = imageFromCache;
+                }
+                {
+                    //imageFromCache = UIImage.LoadFromData(NSData.FromUrl(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + searchItems[indexPath.Row].ImageName)));
+                    //image = imageFromCache;
+                    //imageCache.SetObjectforKey(imageFromCache, NSString.FromObject(url.AbsoluteString));
+
+                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
+                    {
+                        if (response == null)
+                        {
+                            image = UIImage.FromBundle("Profile");
+                        }
+                        else
+                        {
+                            try
+                            {
+                                DispatchQueue.MainQueue.DispatchAsync(() => {
+                                    var imageToCache = UIImage.LoadFromData(data);
+                                    //var imageToCache = UIImage.LoadFromData(NSData.FromUrl(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + searchItems[indexPath.Row].ImageName)));
+
+                                    image = imageToCache;
+
+                                    if (imageToCache != null)
+                                    {
+                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
+                                    }
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception(ex.Message);
+                            }
+                        }
+                    });
+                    task.Resume();
+                }
+                    
             }
             
 
