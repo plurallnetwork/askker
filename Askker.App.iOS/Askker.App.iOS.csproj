@@ -106,6 +106,7 @@
     </Compile>
     <Compile Include="CredentialsService.cs" />
     <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
+    <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
     <Compile Include="FeedController.cs" />
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>
@@ -133,6 +134,10 @@
     <Compile Include="ProfileOtherController.cs" />
     <Compile Include="ProfileOtherController.designer.cs">
       <DependentUpon>ProfileOtherController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SearchAllController.cs" />
+    <Compile Include="SearchAllController.designer.cs">
+      <DependentUpon>SearchAllController.cs</DependentUpon>
     </Compile>
     <Compile Include="SideMenuController.cs" />
     <Compile Include="SideMenuController.designer.cs">
