@@ -104,7 +104,7 @@ namespace Askker.App.iOS.TableControllers
 
                 case UITableViewCellEditingStyle.Insert:
 
-                    if (CreateSurveyController.SurveyModel.type == SurveyType.Text)
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
                     {
 
                         UIAlertView alert = new UIAlertView();
@@ -131,7 +131,7 @@ namespace Askker.App.iOS.TableControllers
 
                         alert.Show();                        
                     }
-                    else if (CreateSurveyController.SurveyModel.type == SurveyType.Image)
+                    else if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
                     {
                         imagePicker = new UIImagePickerController();
                         imagePicker.SourceType = UIImagePickerControllerSourceType.PhotoLibrary;

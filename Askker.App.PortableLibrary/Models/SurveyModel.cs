@@ -17,7 +17,7 @@ namespace Askker.App.PortableLibrary.Models
 
         public string creationDate { get; set; }
 
-        public SurveyType type { get; set; }
+        public string type { get; set; }
 
         public string choiceType { get; set; }
 

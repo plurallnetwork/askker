@@ -46,7 +46,7 @@ namespace Askker.App.PortableLibrary.Services
                     content.Add(new StringContent(JsonConvert.SerializeObject(surveyModel), Encoding.UTF8, "application/json"), "model");
                     content.Add(new StreamContent(new MemoryStream()), "questionImg");
 
-                    if (surveyModel.type == SurveyType.Image) {
+                    if (surveyModel.type == SurveyType.Image.ToString()) {
                         foreach (var img in optionImages)
                         {
                             content.Add(CreateFileContent(img.Value, img.Key));

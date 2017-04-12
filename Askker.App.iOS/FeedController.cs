@@ -164,7 +164,7 @@ namespace Askker.App.iOS
                 ScrollDirection = UICollectionViewScrollDirection.Horizontal
             });
 
-            if (surveys[indexPath.Row].type == SurveyType.Text)
+            if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
             {
                 optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
                 optionsTableView.Layer.MasksToBounds = true;
@@ -195,7 +195,7 @@ namespace Askker.App.iOS
             feedCell.AddSubview(questionText);
             feedCell.AddSubview(dividerLineView);
 
-            if (surveys[indexPath.Row].type == SurveyType.Text)
+            if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
             {
                 feedCell.AddSubview(optionsTableView);
             }
@@ -210,7 +210,7 @@ namespace Askker.App.iOS
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
 
-            if (surveys[indexPath.Row].type == SurveyType.Text)
+            if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
             {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionsTableView));
             }
@@ -224,7 +224,7 @@ namespace Askker.App.iOS
 
             feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
 
-            if (surveys[indexPath.Row].type == SurveyType.Text)
+            if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
             {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)]-4-[v3(<=220)][v4(44)]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", questionText, "v2", dividerLineView, "v3", optionsTableView, "v4", contentViewButtons));
             }
