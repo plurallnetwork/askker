@@ -10,6 +10,7 @@ namespace Askker.App.PortableLibrary.Enums
     {
         SurveyVote,
         SurveyComment,
+        SurveyTagged,
         FriendRequest,
         FriendAccepted
     }
