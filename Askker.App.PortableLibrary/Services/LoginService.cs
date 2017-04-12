@@ -71,6 +71,25 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
+        public async Task<HttpResponseMessage> SearchUsersByName(string authenticationToken, string name)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/SearchUsersByName/{0}", name));
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+
+                    return await client.GetAsync(uri);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<HttpResponseMessage> Update(string authenticationToken, UserModel userModel, byte[] profileImage, string profileImageName)
         {
             try

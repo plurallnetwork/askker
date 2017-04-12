@@ -146,6 +146,8 @@
     <Compile Include="ShareStepView.designer.cs">
       <DependentUpon>ShareStepView.cs</DependentUpon>
     </Compile>
+    <Compile Include="TableControllers\SearchAllTableItem.cs" />
+    <Compile Include="TableControllers\SearchAllTableSource.cs" />
     <Compile Include="TableControllers\TableItem.cs" />
     <Compile Include="TableControllers\TableSource.cs" />
     <Compile Include="Utils.cs" />
