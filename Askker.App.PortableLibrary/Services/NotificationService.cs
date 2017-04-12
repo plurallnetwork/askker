@@ -30,6 +30,25 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
+        public async Task<HttpResponseMessage> SetUserNotificationDismissed(UserNotificationModel userNotificationModel, string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var formContent = new StringContent(JsonConvert.SerializeObject(userNotificationModel), Encoding.UTF8, "application/json");
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/setusernotificationdismissed", formContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<HttpResponseMessage> GetUserNotifications(string userId, string authenticationToken)
         {
             try
@@ -40,25 +59,6 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<HttpResponseMessage> SetUserNotificatioDismissed(UserNotificationModel userNotificationModel, string authenticationToken)
-        {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var formContent = new StringContent(JsonConvert.SerializeObject(userNotificationModel), Encoding.UTF8, "application/json");
-
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
-
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/setusernotificatiodismissed", formContent);
                 }
             }
             catch (Exception ex)
