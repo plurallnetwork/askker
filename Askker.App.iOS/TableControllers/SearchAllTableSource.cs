@@ -37,19 +37,13 @@ namespace Askker.App.iOS.TableControllers
             SearchAllCustomCell cell = tableView.DequeueReusableCell(cellIdentifier) as SearchAllCustomCell;
             UIImage image = null;  
 
-            var cellStyle = UITableViewCellStyle.Default;
-
             // if there are no cells to reuse, create a new one
             if (cell == null)
             {
                 cell = new SearchAllCustomCell(cellIdentifier);
             }
 
-            //cell.textLabel.Text = searchItems[indexPath.Row].Title;
-            //cell.ImageView.Image = UIImage.FromFile("Images/" + searchItems[indexPath.Row].ImageName);
-
-            
-
+           
             if (string.IsNullOrEmpty(searchItems[indexPath.Row].ImageName))
             {
                 image = UIImage.FromBundle("Profile");
@@ -62,11 +56,8 @@ namespace Askker.App.iOS.TableControllers
                 {
                     image = imageFromCache;
                 }
+                else
                 {
-                    //imageFromCache = UIImage.LoadFromData(NSData.FromUrl(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + searchItems[indexPath.Row].ImageName)));
-                    //image = imageFromCache;
-                    //imageCache.SetObjectforKey(imageFromCache, NSString.FromObject(url.AbsoluteString));
-
                     var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
                     {
                         if (response == null)
@@ -79,8 +70,7 @@ namespace Askker.App.iOS.TableControllers
                             {
                                 DispatchQueue.MainQueue.DispatchAsync(() => {
                                     var imageToCache = UIImage.LoadFromData(data);
-                                    //var imageToCache = UIImage.LoadFromData(NSData.FromUrl(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + searchItems[indexPath.Row].ImageName)));
-
+                    
                                     image = imageToCache;
 
                                     if (imageToCache != null)
