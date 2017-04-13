@@ -30,5 +30,10 @@ namespace Askker.App.iOS.TableControllers
         public SearchAllTableItem(string title)
         { Title = title; }
 
+        public SearchAllTableItem(string title, string imageName)
+        {
+            Title = title;
+            ImageName = imageName;
+        }
     }
 }

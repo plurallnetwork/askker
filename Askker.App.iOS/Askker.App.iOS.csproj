@@ -106,6 +106,7 @@
     </Compile>
     <Compile Include="CredentialsService.cs" />
     <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
+    <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
     <Compile Include="FeedController.cs" />
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>
@@ -134,6 +135,10 @@
     <Compile Include="ProfileOtherController.designer.cs">
       <DependentUpon>ProfileOtherController.cs</DependentUpon>
     </Compile>
+    <Compile Include="SearchAllController.cs" />
+    <Compile Include="SearchAllController.designer.cs">
+      <DependentUpon>SearchAllController.cs</DependentUpon>
+    </Compile>
     <Compile Include="SideMenuController.cs" />
     <Compile Include="SideMenuController.designer.cs">
       <DependentUpon>SideMenuController.cs</DependentUpon>
@@ -148,8 +153,8 @@
     </Compile>
     <Compile Include="TableControllers\SearchAllTableItem.cs" />
     <Compile Include="TableControllers\SearchAllTableSource.cs" />
-    <Compile Include="TableControllers\TableItem.cs" />
-    <Compile Include="TableControllers\TableSource.cs" />
+    <Compile Include="TableControllers\SurveyOptionTableItem.cs" />
+    <Compile Include="TableControllers\SurveyOptionTableSource.cs" />
     <Compile Include="Utils.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />

@@ -9,20 +9,20 @@ using UIKit;
 
 namespace Askker.App.iOS.TableControllers
 {
-    public class TableSource : UITableViewSource
+    public class SurveyOptionTableSource : UITableViewSource
     {
-        List<TableItem> tableItems;
+        List<SurveyOptionTableItem> tableItems;
         UIViewController viewController;
         string cellIdentifier = "TableCell";
         UIImagePickerController imagePicker;
 
-        public TableSource(List<TableItem> items, UIViewController viewController)
+        public SurveyOptionTableSource(List<SurveyOptionTableItem> items, UIViewController viewController)
         {
             tableItems = items;
             this.viewController = viewController;
         }
 
-        public List<TableItem> GetTableItems()
+        public List<SurveyOptionTableItem> GetTableItems()
         {
             return tableItems;
         }
@@ -117,7 +117,7 @@ namespace Askker.App.iOS.TableControllers
                             if (!string.IsNullOrWhiteSpace(alert.GetTextField(0).Text)) { 
                                 // user input will be in alert.GetTextField(0).text;
                                 //---- create a new item and add it to our underlying data
-                                tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text));
+                                tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text));
                                 //---- insert a new row in the table
                                 tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
                             }
@@ -234,7 +234,7 @@ namespace Askker.App.iOS.TableControllers
                         {
                             byte[] myByteArray = new byte[imageData.Length];
                             System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
-                            tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text, fileExtension, myByteArray));
+                            tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text, fileExtension, myByteArray));
                         }
                         //---- insert a new row in the table
                         tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
@@ -368,7 +368,7 @@ namespace Askker.App.iOS.TableControllers
                     NSIndexPath.FromRowSection (tableView.NumberOfRowsInSection (0), 0)
                 }, UITableViewRowAnimation.Fade);
             //---- create a new item and add it to our underlying data
-            tableItems.Add(new TableItem("<- Add new option"));
+            tableItems.Add(new SurveyOptionTableItem("<- Add new option"));
 
             //---- end animations
             tableView.EndUpdates();

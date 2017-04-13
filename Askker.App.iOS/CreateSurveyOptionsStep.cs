@@ -13,7 +13,7 @@ namespace Askker.App.iOS
     public partial class CreateSurveyOptionsStep : UIViewController, IMultiStepProcessStep
     {
         public static OptionsStepView _optionsStepView { get; set; }
-        TableSource tableSource;
+        SurveyOptionTableSource tableSource;
 
         public override void LoadView()
         {
@@ -24,8 +24,8 @@ namespace Askker.App.iOS
         {
             _optionsStepView = OptionsStepView.Create();            
             View.AddSubview(_optionsStepView);
-            List<TableItem> tableItems = new List<TableItem>();
-            tableSource = new TableSource(tableItems, this);
+            List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();
+            tableSource = new SurveyOptionTableSource(tableItems, this);
             _optionsStepView.OptionsTable.Source = tableSource;
 
             _optionsStepView.TextButton.TouchUpInside += async (sender, e) =>
@@ -92,7 +92,7 @@ namespace Askker.App.iOS
                 _optionsStepView.OptionsTable.SetEditing(false, true);
                 tableSource.DidFinishTableEditing(_optionsStepView.OptionsTable);
 
-                List<TableItem> items = tableSource.GetTableItems();
+                List<SurveyOptionTableItem> items = tableSource.GetTableItems();
                 if (items.Count > 0)
                 {
                     if (CreateSurveyController.SurveyModel.options == null)
