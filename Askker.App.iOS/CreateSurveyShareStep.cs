@@ -11,7 +11,7 @@ namespace Askker.App.iOS
     public partial class CreateSurveyShareStep : UIViewController, IMultiStepProcessStep
     {
         private ShareStepView _shareStepView;
-        TableSource tableSource;
+        SurveyOptionTableSource tableSource;
 
         public CreateSurveyShareStep (IntPtr handle) : base (handle)
         {
@@ -30,8 +30,8 @@ namespace Askker.App.iOS
         {
             _shareStepView = ShareStepView.Create();
             View.AddSubview(_shareStepView);
-            List<TableItem> tableItems = new List<TableItem>();
-            tableSource = new TableSource(tableItems, this);
+            List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();
+            tableSource = new SurveyOptionTableSource(tableItems, this);
             _shareStepView.ShareTable.Source = tableSource;
 
             //_shareStepView.GroupsButton.TouchUpInside += (sender, e) =>

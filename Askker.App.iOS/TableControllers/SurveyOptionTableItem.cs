@@ -5,7 +5,7 @@ using UIKit;
 
 namespace Askker.App.iOS.TableControllers
 {
-    public class TableItem
+    public class SurveyOptionTableItem
     {
         public string Heading { get; set; }
 
@@ -27,18 +27,18 @@ namespace Askker.App.iOS.TableControllers
         }
         protected UITableViewCellAccessory cellAccessory = UITableViewCellAccessory.None;
 
-        public TableItem() { }
+        public SurveyOptionTableItem() { }
 
-        public TableItem(string heading)
+        public SurveyOptionTableItem(string heading)
         { Heading = heading; }
 
-        public TableItem(string heading, byte[] image)
+        public SurveyOptionTableItem(string heading, byte[] image)
         {
             Heading = heading;
             Image = image;
         }
 
-        public TableItem(string heading, string subheading, byte[] image)
+        public SurveyOptionTableItem(string heading, string subheading, byte[] image)
         {
             Heading = heading;
             Image = image;

@@ -153,8 +153,8 @@
     </Compile>
     <Compile Include="TableControllers\SearchAllTableItem.cs" />
     <Compile Include="TableControllers\SearchAllTableSource.cs" />
-    <Compile Include="TableControllers\TableItem.cs" />
-    <Compile Include="TableControllers\TableSource.cs" />
+    <Compile Include="TableControllers\SurveyOptionTableItem.cs" />
+    <Compile Include="TableControllers\SurveyOptionTableSource.cs" />
     <Compile Include="Utils.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
