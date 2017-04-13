@@ -133,5 +133,24 @@ namespace Askker.App.PortableLibrary.Business
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task UpdateUserInformation(UserModel userModel, string authenticationToken)
+        {
+            try
+            {
+                LoginService loginService = new LoginService();
+
+                var response = await loginService.UpdateUserInformation(userModel, authenticationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

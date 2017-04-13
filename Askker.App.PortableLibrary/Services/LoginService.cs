@@ -126,5 +126,24 @@ namespace Askker.App.PortableLibrary.Services
             fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/" + Path.GetExtension(fileName).Replace(".", ""));
             return fileContent;
         }
+
+        public async Task<HttpResponseMessage> UpdateUserInformation(UserModel userModel, string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var formContent = new StringContent(JsonConvert.SerializeObject(userModel), Encoding.UTF8, "application/json");
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/updateuserinformation", formContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
