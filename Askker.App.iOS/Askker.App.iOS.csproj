@@ -107,6 +107,7 @@
     <Compile Include="CredentialsService.cs" />
     <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
     <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
+    <Compile Include="CustomViewComponents\SurveyShareCustomCell.cs" />
     <Compile Include="FeedController.cs" />
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>
@@ -155,6 +156,8 @@
     <Compile Include="TableControllers\SearchAllTableSource.cs" />
     <Compile Include="TableControllers\SurveyOptionTableItem.cs" />
     <Compile Include="TableControllers\SurveyOptionTableSource.cs" />
+    <Compile Include="TableControllers\SurveyShareTableItem.cs" />
+    <Compile Include="TableControllers\SurveyShareTableSource.cs" />
     <Compile Include="Utils.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
@@ -287,6 +290,7 @@
     <BundleResource Include="images\icons\image.png" />
     <BundleResource Include="images\icons\editar.png" />
     <BundleResource Include="images\icons\man.png" />
+    <BundleResource Include="images\icons\done.png" />
     <Content Include="images\icons\text.gif" />
     <BundleResource Include="images\icons\woman.png" />
   </ItemGroup>

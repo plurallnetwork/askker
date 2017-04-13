@@ -1,5 +1,6 @@
 ﻿using Askker.App.iOS.HorizontalSwipe;
 using Askker.App.iOS.TableControllers;
+using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Models;
 using Foundation;
 using System;
@@ -11,7 +12,7 @@ namespace Askker.App.iOS
     public partial class CreateSurveyShareStep : UIViewController, IMultiStepProcessStep
     {
         private ShareStepView _shareStepView;
-        SurveyOptionTableSource tableSource;
+        SurveyShareTableSource tableSource;
 
         public CreateSurveyShareStep (IntPtr handle) : base (handle)
         {
@@ -26,13 +27,22 @@ namespace Askker.App.iOS
             View = new UIView();
         }
 
-        public override void ViewDidLoad()
+        public override async void ViewDidLoad()
         {
             _shareStepView = ShareStepView.Create();
             View.AddSubview(_shareStepView);
-            List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();
-            tableSource = new SurveyOptionTableSource(tableItems, this);
+            List<SurveyShareTableItem> tableItems = new List<SurveyShareTableItem>();
+
+            List<UserFriendModel> friends = await new FriendManager().GetFriends(LoginController.userModel.id, LoginController.tokenModel.access_token);
+
+            foreach (var friend in friends)
+            {
+                tableItems.Add(new SurveyShareTableItem(friend.name, friend.profilePicture));
+            }
+
+            tableSource = new SurveyShareTableSource(tableItems);
             _shareStepView.ShareTable.Source = tableSource;
+            _shareStepView.ShareTable.ReloadData();
 
             //_shareStepView.GroupsButton.TouchUpInside += (sender, e) =>
             //{

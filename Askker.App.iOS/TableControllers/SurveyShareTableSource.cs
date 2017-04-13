@@ -2,55 +2,49 @@
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Models;
 using CoreFoundation;
-using CoreGraphics;
 using Foundation;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 using UIKit;
 
 namespace Askker.App.iOS.TableControllers
 {
-    public class SearchAllTableSource : UITableViewSource
+    public class SurveyShareTableSource : UITableViewSource
     {
-        private List<SearchAllTableItem> tableItems = new List<SearchAllTableItem>();
-        private List<SearchAllTableItem> searchItems = new List<SearchAllTableItem>();
+        private List<SurveyShareTableItem> tableItems = new List<SurveyShareTableItem>();
         protected NSString cellIdentifier = new NSString("TableCell");
         public static NSCache imageCache = new NSCache();
 
-        public SearchAllTableSource(List<SearchAllTableItem> items)
+        public SurveyShareTableSource(List<SurveyShareTableItem> items)
         {
-            this.tableItems = items;
-            this.searchItems = items;
+            this.tableItems = items;        
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return searchItems.Count;
+            return tableItems.Count;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             // request a recycled cell to save memory
-            SearchAllCustomCell cell = tableView.DequeueReusableCell(cellIdentifier) as SearchAllCustomCell;
-            UIImage image = null;  
+            SurveyShareCustomCell cell = tableView.DequeueReusableCell(cellIdentifier) as SurveyShareCustomCell;
+            UIImage image = null;
 
             // if there are no cells to reuse, create a new one
             if (cell == null)
             {
-                cell = new SearchAllCustomCell(cellIdentifier);
+                cell = new SurveyShareCustomCell(cellIdentifier);
             }
 
-           
-            if (string.IsNullOrEmpty(searchItems[indexPath.Row].ImageName))
+            if (string.IsNullOrEmpty(tableItems[indexPath.Row].ImageName))
             {
                 image = UIImage.FromBundle("Profile");
             }
             else
             {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + searchItems[indexPath.Row].ImageName);
+                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + tableItems[indexPath.Row].ImageName);
                 var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
                 if (imageFromCache != null)
                 {
@@ -70,7 +64,7 @@ namespace Askker.App.iOS.TableControllers
                             {
                                 DispatchQueue.MainQueue.DispatchAsync(() => {
                                     var imageToCache = UIImage.LoadFromData(data);
-                    
+
                                     image = imageToCache;
 
                                     if (imageToCache != null)
@@ -88,11 +82,11 @@ namespace Askker.App.iOS.TableControllers
                     });
                     task.Resume();
                 }
-                    
-            }
-            
 
-            cell.UpdateCell(searchItems[indexPath.Row].Title, image);
+            }
+
+
+            cell.UpdateCell(tableItems[indexPath.Row].Title, image);
             return cell;
         }
 
@@ -101,32 +95,26 @@ namespace Askker.App.iOS.TableControllers
             return 1;
         }
 
-        public async void PerformSearch(string searchText)
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            searchText = searchText.ToLower();
-            if (!string.IsNullOrEmpty(searchText.Trim()))
+            UITableViewCell cell = tableView.CellAt(indexPath);
+            if (indexPath.Row >= 0)
             {
-                //this.searchItems = tableItems.Where(x => x.Title.ToLower().Contains(searchText)).ToList();
-                List<UserModel> users = await new LoginManager().SearchUsersByName(LoginController.tokenModel.access_token, searchText);
-                //Console.WriteLine(users.Count);
-
-                tableItems = new List<SearchAllTableItem>();
-
-                foreach (var user in users)
+                if (cell.Accessory == UITableViewCellAccessory.Checkmark)
                 {
-                    tableItems.Add(new SearchAllTableItem(user.name, user.profilePicturePath));
+                    cell.Accessory = UITableViewCellAccessory.None;
                 }
-
-                SearchAllController.table.Source = new SearchAllTableSource(tableItems);
-                SearchAllController.table.ReloadData();
+                else
+                {
+                    cell.Accessory = UITableViewCellAccessory.Checkmark;
+                }
             }
             else
             {
-                tableItems = new List<SearchAllTableItem>();
-                
-                SearchAllController.table.Source = new SearchAllTableSource(tableItems);
-                SearchAllController.table.ReloadData();
+                cell.Accessory = UITableViewCellAccessory.None;
             }
+
+            tableView.DeselectRow(indexPath, true);
         }
     }
 }

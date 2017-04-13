@@ -52,7 +52,7 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="17" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" hidden="YES">
                     <rect key="frame" x="0.0" y="366" width="375" height="80"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="images/icons/check.png">
+                    <state key="normal" image="images/icons/done.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </state>
@@ -126,12 +126,27 @@
         <image name="images/white-pip-full.png" width="8" height="8"/>
         <image name="assets/img/logo_180.png" width="180" height="180"/>
         <image name="Profile" width="210" height="260"/>
-        <image name="images/icons/check.png" width="48" height="48"/>
-        <image name="images/icons/filterToYou.png" width="42" height="48"/>
         <image name="images/icons/friendsiOS.png" width="68" height="48"/>
         <image name="OptionCheck" width="220" height="220"/>
         <image name="images/icons/text.gif" width="48" height="48"/>
         <image name="images/icons/image.png" width="48" height="48"/>
+        <image name="images/icons/editar.png" width="59" height="60"/>
+        <image name="images/icons/man.png" width="32" height="32"/>
+        <image name="images/icons/woman.png" width="32" height="32"/>
+        <image name="assets/img/feediOS.png" width="68" height="54"/>
+        <image name="assets/img/filterMine.png" width="48" height="37"/>
+        <image name="assets/img/filterPublic.png" width="41" height="48"/>
+        <image name="assets/img/filterToYou.png" width="42" height="48"/>
+        <image name="assets/img/friendsiOS.png" width="68" height="48"/>
+        <image name="assets/img/menuiOS.png" width="61" height="38"/>
+        <image name="assets/img/optionCheck.png" width="220" height="220"/>
+        <image name="assets/img/pagesFeed.png" width="48" height="38"/>
+        <image name="assets/img/pagesFriends.png" width="48" height="34"/>
+        <image name="assets/img/pagesHelp.png" width="43" height="44"/>
+        <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
+        <image name="assets/img/pagesSettings.png" width="44" height="48"/>
+        <image name="assets/img/threelines.png" width="30" height="30"/>
+        <image name="images/icons/done.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>
