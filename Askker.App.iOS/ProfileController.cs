@@ -175,8 +175,10 @@ namespace Askker.App.iOS
                         byte[] myByteArray = new byte[imageData.Length];
                         System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
                         await new LoginManager().Update(LoginController.tokenModel.access_token, LoginController.userModel, myByteArray, fileName);
-                    }                    
-                }                
+                    }
+                }
+
+                await new LoginManager().UpdateUserInformation(LoginController.userModel, LoginController.tokenModel.access_token);
             }
             catch (Exception e)
             {
