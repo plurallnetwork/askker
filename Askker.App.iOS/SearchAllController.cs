@@ -30,6 +30,7 @@ namespace Askker.App.iOS
             searchBar.SizeToFit();
             searchBar.AutocorrectionType = UITextAutocorrectionType.No;
             searchBar.AutocapitalizationType = UITextAutocapitalizationType.None;
+            searchBar.Placeholder = "Type at least 3 characters";
             searchBar.OnEditingStarted += (sender, e) =>
             {
                 searchBar.ShowsCancelButton = true;
@@ -72,8 +73,11 @@ namespace Askker.App.iOS
         private void searchTable()
         {
             //perform the search, and refresh the table with the results
-            tableSource.PerformSearch(searchBar.Text);
-            table.ReloadData();
+            if(searchBar.Text.Length >= 3)
+            {
+                tableSource.PerformSearch(searchBar.Text);
+                table.ReloadData();
+            }
         }
 
         public override void DidReceiveMemoryWarning()

@@ -5,18 +5,15 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner">
+            <connections/>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="1" customClass="ShareStepView">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="11" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="0.0" y="240" width="375" height="427"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" id="4" translatesAutoresizingMaskIntoConstraints="NO" editable="NO" selectable="NO" fixedFrame="YES">
                     <rect key="frame" x="0.0" y="100" width="375" height="143"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -27,64 +24,179 @@
                         <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
                     </variation>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="17" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" hidden="YES">
-                    <rect key="frame" x="0.0" y="366" width="375" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="images/icons/done.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
-                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
-                    </variation>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="0.0" y="587" width="190" height="80"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="24" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                    <rect key="frame" x="250" y="244" width="125" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="assets/img/filterMine.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </state>
                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
-                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </variation>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="190" y="587" width="185" height="80"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="25" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                    <rect key="frame" x="125" y="244" width="125" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="assets/img/friendsiOS.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </state>
                     <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
-                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </variation>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="26" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                    <rect key="frame" x="0.0" y="244" width="125" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="assets/img/filterPublic.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                    </state>
+                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                    </variation>
+                </button>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="32" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                    <rect key="frame" x="2" y="627" width="373" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+                <view contentMode="scaleToFill" id="33" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                    <rect key="frame" x="2" y="295" width="201" height="106"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="34" translatesAutoresizingMaskIntoConstraints="NO" text="This question will be visible to all your friends! " numberOfLines="2" fixedFrame="YES">
+                            <rect key="frame" x="83" y="42" width="209" height="45"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" id="39" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                            <rect key="frame" x="20" y="429" width="375" height="128"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="40" translatesAutoresizingMaskIntoConstraints="NO" text="This question will be visible to all your friends! " numberOfLines="2" fixedFrame="YES">
+                                    <rect key="frame" x="83" y="42" width="209" height="45"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <variation key="default">
+                                <mask key="subviews">
+                                    <exclude reference="40"/>
+                                </mask>
+                            </variation>
+                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                <mask key="subviews">
+                                    <include reference="40"/>
+                                </mask>
+                            </variation>
+                        </view>
+                    </subviews>
+                    <variation key="default">
+                        <mask key="subviews">
+                            <exclude reference="34"/>
+                            <exclude reference="39"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                        <mask key="subviews">
+                            <include reference="34"/>
+                            <include reference="39"/>
+                        </mask>
+                    </variation>
+                </view>
+                <view contentMode="scaleToFill" id="35" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                    <rect key="frame" x="209" y="295" width="166" height="97"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This question will be visible to everybody!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="36" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2" fixedFrame="YES">
+                            <rect key="frame" x="84" y="43" width="209" height="43"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <variation key="default">
+                        <mask key="subviews">
+                            <exclude reference="36"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                        <mask key="subviews">
+                            <include reference="36"/>
+                        </mask>
+                    </variation>
+                </view>
+                <view contentMode="scaleToFill" id="45" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                    <rect key="frame" x="1" y="558" width="373" height="61"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This question will be visible to the selected friends below:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="46" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2" fixedFrame="YES">
+                            <rect key="frame" x="50" y="8" width="272" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <variation key="default">
+                        <mask key="subviews">
+                            <exclude reference="46"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                        <mask key="subviews">
+                            <include reference="46"/>
+                        </mask>
+                    </variation>
+                </view>
             </subviews>
             <variation key="default">
                 <mask key="subviews">
-                    <exclude reference="11"/>
                     <exclude reference="4"/>
-                    <exclude reference="17"/>
-                    <exclude reference="7"/>
-                    <exclude reference="8"/>
+                    <exclude reference="24"/>
+                    <exclude reference="25"/>
+                    <exclude reference="26"/>
+                    <exclude reference="32"/>
+                    <exclude reference="33"/>
+                    <exclude reference="35"/>
+                    <exclude reference="45"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
                 <mask key="subviews">
-                    <include reference="11"/>
                     <include reference="4"/>
-                    <include reference="17"/>
-                    <include reference="7"/>
-                    <include reference="8"/>
+                    <include reference="24"/>
+                    <include reference="25"/>
+                    <include reference="26"/>
+                    <include reference="32"/>
+                    <include reference="33"/>
+                    <include reference="35"/>
+                    <include reference="45"/>
                 </mask>
             </variation>
             <connections>
-                <outlet property="doneButton" destination="17" id="name-outlet-17"/>
-                <outlet property="friendsButton" destination="7" id="name-outlet-7"/>
-                <outlet property="groupsButton" destination="8" id="name-outlet-8"/>
                 <outlet property="questionText" destination="4" id="name-outlet-4"/>
-                <outlet property="shareTable" destination="11" id="name-outlet-11"/>
+                <outlet property="btnPrivate" destination="24" id="name-outlet-24"/>
+                <outlet property="btnFriends" destination="25" id="name-outlet-25"/>
+                <outlet property="btnPublic" destination="26" id="name-outlet-26"/>
+                <outlet property="shareTable" destination="32" id="name-outlet-32"/>
+                <outlet property="friendsView" destination="33" id="name-outlet-33"/>
+                <outlet property="publicView" destination="35" id="name-outlet-35"/>
+                <outlet property="shareView" destination="45" id="name-outlet-45"/>
             </connections>
         </view>
     </objects>
@@ -96,8 +208,6 @@
         <image name="assets/img/logo_180.png" width="180" height="180"/>
         <image name="Profile" width="210" height="260"/>
         <image name="OptionCheck" width="220" height="220"/>
-        <image name="images/icons/friendsiOS.png" width="68" height="48"/>
-        <image name="images/icons/check.png" width="48" height="48"/>
         <image name="images/icons/image.png" width="48" height="48"/>
         <image name="images/icons/text.gif" width="48" height="48"/>
         <image name="images/icons/done.png" width="32" height="32"/>

@@ -6,8 +6,9 @@ namespace Askker.App.iOS
 {
     public partial class ShareStepView : UIView
     {
-        public ShareStepView (IntPtr handle) : base (handle)
+        public ShareStepView(IntPtr handle) : base(handle)
         {
+            
         }
 
         public UITextView QuestionText
@@ -16,28 +17,46 @@ namespace Askker.App.iOS
             set { questionText = value; }
         }
 
-        public UIButton GroupsButton
+        public UIButton PrivateButton
         {
-            get { return groupsButton; }
-            set { groupsButton = value; }
+            get { return btnPrivate; }
+            set { btnPrivate = value; }
         }
 
         public UIButton FriendsButton
         {
-            get { return friendsButton; }
-            set { friendsButton = value; }
+            get { return btnFriends; }
+            set { btnFriends = value; }
         }
 
-        public UIButton DoneButton
+        public UIButton PublicButton
         {
-            get { return doneButton; }
-            set { doneButton = value; }
+            get { return btnPublic; }
+            set { btnPublic = value; }
         }
 
         public UITableView ShareTable
         {
             get { return shareTable; }
             set { shareTable = value; }
+        }
+        
+        public UIView FriendsView
+        {
+            get { return friendsView; }
+            set { friendsView = value; }
+        }
+
+        public UIView PublicView
+        {
+            get { return publicView; }
+            set { publicView = value; }
+        }
+
+        public UIView ShareView
+        {
+            get { return shareView; }
+            set { shareView = value; }
         }
 
         public static ShareStepView Create()
@@ -49,9 +68,9 @@ namespace Askker.App.iOS
             return v;
         }
 
-        public override void AwakeFromNib()
-        {
-            doneButton.Frame = new CoreGraphics.CGRect(0f, 587f, 375f, 80f);
-        }
+        
+
+       
+
     }
 }

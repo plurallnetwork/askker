@@ -70,7 +70,7 @@ namespace Askker.App.iOS.TableControllers
                                     if (imageToCache != null)
                                     {
                                         imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                        cell.UpdateCell(tableItems[indexPath.Row].Title, image);
+                                        cell.UpdateCell(tableItems[indexPath.Row].Name, image);
                                     }
                                 });
                             }
@@ -86,7 +86,7 @@ namespace Askker.App.iOS.TableControllers
             }
 
 
-            cell.UpdateCell(tableItems[indexPath.Row].Title, image);
+            cell.UpdateCell(tableItems[indexPath.Row].Name, image);
             return cell;
         }
 
@@ -103,10 +103,28 @@ namespace Askker.App.iOS.TableControllers
                 if (cell.Accessory == UITableViewCellAccessory.Checkmark)
                 {
                     cell.Accessory = UITableViewCellAccessory.None;
+
+                    var index = CreateSurveyController.SurveyModel.targetAudienceUsers.ids.IndexOf(tableItems[indexPath.Row].Id);
+
+                    if(index >= 0)
+                    {
+                        CreateSurveyController.SurveyModel.targetAudienceUsers.ids.RemoveAt(index);
+                        CreateSurveyController.SurveyModel.targetAudienceUsers.names.RemoveAt(index);
+                    }                    
                 }
                 else
                 {
                     cell.Accessory = UITableViewCellAccessory.Checkmark;
+
+                    if(CreateSurveyController.SurveyModel.targetAudienceUsers == null)
+                    {
+                        CreateSurveyController.SurveyModel.targetAudienceUsers = new AudienceUsers();
+                        CreateSurveyController.SurveyModel.targetAudienceUsers.ids = new List<string>();
+                        CreateSurveyController.SurveyModel.targetAudienceUsers.names = new List<string>();
+                    }
+
+                    CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Add(tableItems[indexPath.Row].Id);
+                    CreateSurveyController.SurveyModel.targetAudienceUsers.names.Add(tableItems[indexPath.Row].Name);
                 }
             }
             else

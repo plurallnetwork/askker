@@ -34,6 +34,10 @@ namespace Askker.App.PortableLibrary.Models
         public int totalVotes { get; set; }
 
         public int? optionSelected { get; set; }
+
+        public string targetAudience { get; set; }
+
+        public AudienceUsers targetAudienceUsers { get; set; }
     }
 
     public class Question
@@ -53,5 +57,11 @@ namespace Askker.App.PortableLibrary.Models
     {
         public int id { get; set; }
         public string text { get; set; }
+    }
+
+    public class AudienceUsers
+    {
+        public List<string> ids { get; set; }
+        public List<string> names { get; set; }
     }
 }

@@ -7,7 +7,9 @@ namespace Askker.App.iOS.TableControllers
 {
     public class SurveyShareTableItem
     {
-        public string Title { get; set; }
+        public string Name { get; set; }
+
+        public string Id { get; set; }
 
         public string ImageName { get; set; }
 
@@ -27,13 +29,15 @@ namespace Askker.App.iOS.TableControllers
 
         public SurveyShareTableItem() { }
 
-        public SurveyShareTableItem(string title)
-        { Title = title; }
+        public SurveyShareTableItem(string name)
+        { Name = name; }
 
-        public SurveyShareTableItem(string title, string imageName)
+        public SurveyShareTableItem(string name, string imageName, string id)
         {
-            Title = title;
+            Name = name;
             ImageName = imageName;
+            Id = id;
         }
     }
 }
+
