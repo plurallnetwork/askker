@@ -210,7 +210,7 @@ namespace Askker.App.iOS
         protected MyFriendsTableViewCell(IntPtr handle) : base(handle)
         {
             profileImageView = new UIImageView();
-            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             profileImageView.Layer.CornerRadius = 22;
             profileImageView.Layer.MasksToBounds = true;
             profileImageView.TranslatesAutoresizingMaskIntoConstraints = false;

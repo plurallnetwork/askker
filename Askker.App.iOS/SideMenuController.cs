@@ -30,7 +30,7 @@ namespace Askker.App.iOS
             var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
 
             var profileImageView = new UIImageView(new RectangleF(85, 80, 90, 90));
-            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             profileImageView.Image = UIImage.FromBundle("Profile");
             profileImageView.Layer.CornerRadius = (profileImageView.Frame.Width / 2);
             profileImageView.Layer.MasksToBounds = true;
@@ -49,7 +49,8 @@ namespace Askker.App.iOS
                     {
                         try
                         {
-                            DispatchQueue.MainQueue.DispatchAsync(() => {
+                            DispatchQueue.MainQueue.DispatchAsync(() =>
+                            {
                                 profileImageView.Image = UIImage.LoadFromData(data);
                             });
                         }

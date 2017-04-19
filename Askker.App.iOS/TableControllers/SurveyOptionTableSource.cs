@@ -230,11 +230,11 @@ namespace Askker.App.iOS.TableControllers
                     {
                         // user input will be in alert.GetTextField(0).text;
                         //---- create a new item and add it to our underlying data
-                        using (NSData imageData = originalImage.AsPNG())
+                        using (NSData imageData = Utils.CompressImage(originalImage))
                         {
                             byte[] myByteArray = new byte[imageData.Length];
                             System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
-                            tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text, fileExtension, myByteArray));
+                            tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text, ".jpg", myByteArray));
                         }
                         //---- insert a new row in the table
                         tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
