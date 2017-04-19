@@ -134,6 +134,12 @@ namespace Askker.App.iOS
                 feedCell.optionsTableView.Tag = indexPath.Row;
 
                 new OptionsTableViewController(feedCell.optionsTableView, surveys[indexPath.Row].options);
+
+                feedCell.optionsCollectionView.RemoveFromSuperview();
+                feedCell.AddSubview(feedCell.optionsTableView);
+
+                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsTableView));
+                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)]-4-[v3(<=176)][v4(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.contentViewButtons));
             }
             else
             {
@@ -141,34 +147,11 @@ namespace Askker.App.iOS
                 feedCell.optionsCollectionView.Tag = indexPath.Row;
 
                 new OptionsCollectionViewController(feedCell.optionsCollectionView, surveys[indexPath.Row].options);
-            }
 
-            if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
-            {
-                feedCell.optionsCollectionView.RemoveFromSuperview();
-                feedCell.AddSubview(feedCell.optionsTableView);
-            }
-            else
-            {
                 feedCell.optionsTableView.RemoveFromSuperview();
                 feedCell.AddSubview(feedCell.optionsCollectionView);
-            }
 
-            if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
-            {
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsTableView));
-            }
-            else
-            {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsCollectionView));
-            }
-
-            if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
-            {
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)]-4-[v3(<=176)][v4(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.contentViewButtons));
-            }
-            else
-            {
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)][v4(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsCollectionView, "v4", feedCell.contentViewButtons));
             }
 
