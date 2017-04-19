@@ -1,17 +1,14 @@
 ﻿using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
-using Foundation;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using UIKit;
 
 namespace Askker.App.PortableLibrary.Services
 {
