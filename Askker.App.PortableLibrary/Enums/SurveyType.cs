@@ -11,4 +11,11 @@ namespace Askker.App.PortableLibrary.Enums
         Text,
         Image
     }
+
+    public enum TargetAudience
+    {
+        Public,
+        Private,
+        Friends
+    }
 }

@@ -1,10 +1,12 @@
 ﻿using Askker.App.iOS.HorizontalSwipe;
 using Askker.App.iOS.TableControllers;
 using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -37,35 +39,89 @@ namespace Askker.App.iOS
 
             foreach (var friend in friends)
             {
-                tableItems.Add(new SurveyShareTableItem(friend.name, friend.profilePicture));
+                tableItems.Add(new SurveyShareTableItem(friend.name, friend.profilePicture, friend.id));
             }
 
             tableSource = new SurveyShareTableSource(tableItems);
+            _shareStepView.PublicView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 370);
+            _shareStepView.ShareTable.Frame = new RectangleF(0, 0, 0, 0);
+            _shareStepView.FriendsView.Frame = new RectangleF(0, 0, 0, 0);
+            _shareStepView.ShareView.Frame = new RectangleF(0, 0, 0, 0);
+
+            _shareStepView.PublicButton.Enabled = false;
+            _shareStepView.FriendsButton.Enabled = true;
+            _shareStepView.PrivateButton.Enabled = true;
+
+            _shareStepView.PublicView.Hidden = false;
+            _shareStepView.ShareTable.Hidden = true;
+            _shareStepView.FriendsView.Hidden = true;
+            _shareStepView.ShareView.Hidden = true;
+
+            CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Public.ToString();
+
             _shareStepView.ShareTable.Source = tableSource;
             _shareStepView.ShareTable.ReloadData();
 
-            //_shareStepView.GroupsButton.TouchUpInside += (sender, e) =>
-            //{
-            //    if (_shareStepView.ShareTable.Editing)
-            //        _shareStepView.ShareTable.SetEditing(false, true);
-            //    tableSource.WillBeginTableEditing(_shareStepView.ShareTable);
-            //    _shareStepView.ShareTable.SetEditing(true, true);
+            _shareStepView.PublicButton.TouchUpInside += (sender, e) =>
+            {
+                _shareStepView.PublicView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 370);
+                _shareStepView.ShareTable.Frame = new RectangleF(0, 0, 0, 0);
+                _shareStepView.FriendsView.Frame = new RectangleF(0, 0, 0, 0);
+                _shareStepView.ShareView.Frame = new RectangleF(0, 0, 0, 0);
 
-            //    _shareStepView.GroupsButton.Hidden = true;
-            //    _shareStepView.FriendsButton.Hidden = true;
-            //    _shareStepView.DoneButton.Hidden = false;
-            //};
+                _shareStepView.PublicButton.Enabled = false;
+                _shareStepView.FriendsButton.Enabled = true;
+                _shareStepView.PrivateButton.Enabled = true;
 
-            //_shareStepView.DoneButton.TouchUpInside += (sender, e) =>
-            //{
-            //    _shareStepView.ShareTable.SetEditing(false, true);
-            //    tableSource.DidFinishTableEditing(_shareStepView.ShareTable);
+                _shareStepView.PublicView.Hidden = false;
+                _shareStepView.ShareTable.Hidden = true;
+                _shareStepView.FriendsView.Hidden = true;
+                _shareStepView.ShareView.Hidden = true;
 
-            //    _shareStepView.GroupsButton.Hidden = false;
-            //    _shareStepView.FriendsButton.Hidden = false;
-            //    _shareStepView.DoneButton.Hidden = true;
-            //};
+                CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Public.ToString();
 
+            };
+
+            _shareStepView.PrivateButton.TouchUpInside += (sender, e) =>
+            {
+                _shareStepView.PublicView.Frame = new RectangleF(0, 0, 0, 0);
+                _shareStepView.ShareTable.Frame = new RectangleF(0, 355, (float)View.Frame.Width, 310);
+                _shareStepView.FriendsView.Frame = new RectangleF(0, 0, 0, 0);
+                _shareStepView.ShareView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 60);
+
+                _shareStepView.PublicButton.Enabled = true;
+                _shareStepView.FriendsButton.Enabled = true;
+                _shareStepView.PrivateButton.Enabled = false;
+
+                _shareStepView.PublicView.Hidden = true;
+                _shareStepView.ShareTable.Hidden = false;
+                _shareStepView.FriendsView.Hidden = true;
+                _shareStepView.ShareView.Hidden = false;
+
+                CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Private.ToString();
+
+            };
+
+            _shareStepView.FriendsButton.TouchUpInside += (sender, e) =>
+            {
+                _shareStepView.PublicView.Frame = new RectangleF(0, 0, 0, 0);
+                _shareStepView.ShareTable.Frame = new RectangleF(0, 0, 0, 0);
+                _shareStepView.FriendsView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 370);
+                _shareStepView.ShareView.Frame = new RectangleF(0, 0, 0, 0);
+
+                _shareStepView.PublicButton.Enabled = true;
+                _shareStepView.FriendsButton.Enabled = false;
+                _shareStepView.PrivateButton.Enabled = true;
+
+                _shareStepView.PublicView.Hidden = true;
+                _shareStepView.ShareTable.Hidden = true;
+                _shareStepView.FriendsView.Hidden = false
+                ;
+                _shareStepView.ShareView.Hidden = true;
+
+                CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Friends.ToString();
+
+            };
         }
 
         public override void ViewDidLayoutSubviews()
@@ -82,24 +138,7 @@ namespace Askker.App.iOS
 
         public override void ViewWillDisappear(bool animated)
         {
-            base.ViewWillDisappear(animated);
-            //List<TableItem> items = tableSource.GetTableItems();
-            //if (items.Count > 0)
-            //{
-            //    if (CreateSurveyController.SurveyModel.options == null)
-            //    {
-            //        CreateSurveyController.SurveyModel.options = new List<Option>();
-            //    }
-            //    int optionId = 0;
-            //    items.ForEach(i =>
-            //    {
-            //        Option o = new Option();
-            //        o.id = optionId;
-            //        o.text = i.Heading;
-            //        CreateSurveyController.SurveyModel.options.Add(o);
-            //        optionId++;
-            //    });
-            //}
+            base.ViewWillDisappear(animated);            
             StepDeactivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 

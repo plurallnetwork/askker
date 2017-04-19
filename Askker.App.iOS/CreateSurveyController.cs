@@ -1,5 +1,6 @@
 ﻿using Askker.App.iOS.HorizontalSwipe;
 using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Cirrious.FluentLayouts.Touch;
 using System;
@@ -183,11 +184,26 @@ namespace Askker.App.iOS
 
         private async void AskTapped(object s, EventArgs e)
         {
+            if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString() && (CreateSurveyController.SurveyModel == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceUsers == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceUsers.ids == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count < 1))
+            {
+                new UIAlertView("Share", "Please select at least one friend to share this survey", null, "OK", null).Show();
+
+                return;
+            }
+
+            if (CreateSurveyController.SurveyModel.targetAudience != TargetAudience.Private.ToString())
+            {
+                CreateSurveyController.SurveyModel.targetAudienceUsers = null;
+            }
+
             try
             {
                 await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.access_token, QuestionImage, OptionImages);
 
-                var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
+                var feedController = this.Storyboard.InstantiateViewController("MenuNavController");
                 if (feedController != null)
                 {
                     this.PresentViewController(feedController, true, null);

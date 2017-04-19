@@ -16,15 +16,23 @@ namespace Askker.App.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton doneButton { get; set; }
+        UIKit.UIButton btnFriends { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton friendsButton { get; set; }
+        UIKit.UIButton btnPrivate { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton groupsButton { get; set; }
+        UIKit.UIButton btnPublic { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView friendsView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView publicView { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -34,21 +42,35 @@ namespace Askker.App.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITableView shareTable { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView shareView { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
-            if (doneButton != null) {
-                doneButton.Dispose ();
-                doneButton = null;
+            if (btnFriends != null) {
+                btnFriends.Dispose ();
+                btnFriends = null;
             }
 
-            if (friendsButton != null) {
-                friendsButton.Dispose ();
-                friendsButton = null;
+            if (btnPrivate != null) {
+                btnPrivate.Dispose ();
+                btnPrivate = null;
             }
 
-            if (groupsButton != null) {
-                groupsButton.Dispose ();
-                groupsButton = null;
+            if (btnPublic != null) {
+                btnPublic.Dispose ();
+                btnPublic = null;
+            }
+
+            if (friendsView != null) {
+                friendsView.Dispose ();
+                friendsView = null;
+            }
+
+            if (publicView != null) {
+                publicView.Dispose ();
+                publicView = null;
             }
 
             if (questionText != null) {
@@ -59,6 +81,11 @@ namespace Askker.App.iOS
             if (shareTable != null) {
                 shareTable.Dispose ();
                 shareTable = null;
+            }
+
+            if (shareView != null) {
+                shareView.Dispose ();
+                shareView = null;
             }
         }
     }
