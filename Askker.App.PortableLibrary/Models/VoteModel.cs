@@ -25,6 +25,8 @@ namespace Askker.App.PortableLibrary.Models
 
         public string gender { get; set; }
 
+        public int? age { get; set; }
+
         public string city { get; set; }
 
         public string country { get; set; }
