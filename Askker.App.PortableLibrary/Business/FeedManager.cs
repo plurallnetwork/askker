@@ -36,6 +36,30 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
+        public async Task<SurveyModel> GetSurvey(string userId, string creationDate, string authenticationToken)
+        {
+            try
+            {
+                FeedService feedService = new FeedService();
+
+                var response = await feedService.GetSurvey(userId, creationDate, authenticationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<SurveyModel>(json);
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task SaveSurvey(SurveyModel surveyModel, string authenticationToken, Stream questionImage, List<KeyValuePair<string, byte[]>> optionImages)
         {
             try

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Enums
 {
-    public enum SurveyType
+    public enum TargetAudience
     {
-        Text,
-        Image
-    }    
+        Public,
+        Private,
+        Friends
+    }
 }

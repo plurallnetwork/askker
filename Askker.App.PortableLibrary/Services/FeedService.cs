@@ -32,6 +32,24 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
+        public async Task<HttpResponseMessage> GetSurvey(string userId, string creationDate, string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getsurvey/{0}/{1}", userId, creationDate));
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+                    return await client.GetAsync(uri);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<HttpResponseMessage> SaveSurvey(SurveyModel surveyModel, string authenticationToken, Stream questionImage, List<KeyValuePair<string, byte[]>> optionImages)
         {
             try

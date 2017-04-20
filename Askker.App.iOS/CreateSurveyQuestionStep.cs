@@ -1,5 +1,7 @@
 ﻿using Askker.App.iOS.CustomViewComponents;
 using Askker.App.iOS.HorizontalSwipe;
+using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Cirrious.FluentLayouts.Touch;
 using Foundation;
@@ -59,9 +61,15 @@ namespace Askker.App.iOS
         {            
         }
 
-        public override void ViewDidAppear(bool animated)
+        public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
+            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
+            {
+                CreateSurveyController.SurveyModel = await new FeedManager().GetSurvey(CreateSurveyController.UserId, CreateSurveyController.CreationDate, LoginController.tokenModel.access_token);
+
+                _questionStepView.QuestionText.Text = CreateSurveyController.SurveyModel.question.text;
+            }
             StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 

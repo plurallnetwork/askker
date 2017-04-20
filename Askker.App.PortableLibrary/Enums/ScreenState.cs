@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Enums
 {
-    public enum SurveyType
+    public enum ScreenState
     {
-        Text,
-        Image
-    }    
+        Create,
+        Edit
+    }
 }

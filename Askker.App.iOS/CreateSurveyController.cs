@@ -19,6 +19,9 @@ namespace Askker.App.iOS
             Backward
         }
 
+        public static string ScreenState;
+        public static string UserId;
+        public static string CreationDate;
         private MultiStepProcessHorizontal _pageViewController;
         private HorizontalSwipePageControl _pageControl;
         private UILabel _pageTitle;
@@ -46,14 +49,14 @@ namespace Askker.App.iOS
         public override void LoadView()
         {
             View = new UIView();
-            _pageTitles = new List<string> { "Write your question", "Choose your options", "Who do you want to ask to?"};
+            _pageTitles = new List<string> { "Write your question", "Choose your options", "Who do you want to ask to?" };
             _pageTitle = new UILabel();
             _pageTitle.TextColor = UIColor.DarkGray;
             _pageTitle.Font = UIFont.FromName("Arial", 12f);
 
             _pageViewController = new MultiStepProcessHorizontal(new MultiStepProcessDataSource(Steps));
             _pageViewController.WillTransition += _multiStepProcessHorizontal_WillTransition;
-            
+
             _pageControl = new HorizontalSwipePageControl
             {
                 CurrentPage = 0,
@@ -97,7 +100,7 @@ namespace Askker.App.iOS
             View.Add(_askButton);
             View.Add(_backButton);
             View.Add(_pageTitle);
-            
+
 
             View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
             View.AddConstraints(
@@ -125,7 +128,7 @@ namespace Askker.App.iOS
                 _pageTitle.AtTopOf(View, UIScreen.MainScreen.Bounds.Height * 0.11f)
             );
 
-            
+
 
         }
 
@@ -251,11 +254,11 @@ namespace Askker.App.iOS
             return steps;
         }
 
-        public override void ViewDidLoad()
+        public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
             // NavigationController.NavigationBar.Hidden = true;
-
+            
             this.NavigationItem.SetLeftBarButtonItem(
                 new UIBarButtonItem(UIBarButtonSystemItem.Cancel, (sender, args) =>
                 {
