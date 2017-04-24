@@ -26,7 +26,7 @@ namespace Askker.App.iOS.CustomViewComponents
             imageView.Image = image;
             textLabel.Text = caption;
         }
-
+        
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();

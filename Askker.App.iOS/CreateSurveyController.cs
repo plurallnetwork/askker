@@ -254,11 +254,20 @@ namespace Askker.App.iOS
             return steps;
         }
 
-        public override async void ViewDidLoad()
+        public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             // NavigationController.NavigationBar.Hidden = true;
-            
+
+            if(ScreenState == Askker.App.PortableLibrary.Enums.ScreenState.Edit.ToString())
+            {
+                Title = "Edit Survey";
+            }
+            else
+            {
+                Title = "Create Survey";
+            }
+
             this.NavigationItem.SetLeftBarButtonItem(
                 new UIBarButtonItem(UIBarButtonSystemItem.Cancel, (sender, args) =>
                 {

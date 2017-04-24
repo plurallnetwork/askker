@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Enums;
+﻿using Askker.App.iOS.CustomViewComponents;
+using Askker.App.PortableLibrary.Enums;
 using AssetsLibrary;
 using Foundation;
 using System;
@@ -13,7 +14,7 @@ namespace Askker.App.iOS.TableControllers
     {
         List<SurveyOptionTableItem> tableItems;
         UIViewController viewController;
-        string cellIdentifier = "TableCell";
+        protected NSString cellIdentifier = new NSString("TableCell");
         UIImagePickerController imagePicker;
 
         public SurveyOptionTableSource(List<SurveyOptionTableItem> items, UIViewController viewController)
@@ -41,7 +42,7 @@ namespace Askker.App.iOS.TableControllers
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
             new UIAlertView("Row Selected"
-                , tableItems[indexPath.Row].Heading, null, "OK", null).Show();
+                , tableItems[indexPath.Row].Text, null, "OK", null).Show();
             tableView.DeselectRow(indexPath, true);
         }
 
@@ -51,7 +52,7 @@ namespace Askker.App.iOS.TableControllers
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             // request a recycled cell to save memory
-            UITableViewCell cell = tableView.DequeueReusableCell(cellIdentifier);
+            SurveyOptionCustomCell cell = tableView.DequeueReusableCell(cellIdentifier) as SurveyOptionCustomCell;
 
             // UNCOMMENT one of these to use that style
             var cellStyle = UITableViewCellStyle.Default;
@@ -62,30 +63,32 @@ namespace Askker.App.iOS.TableControllers
             // if there are no cells to reuse, create a new one
             if (cell == null)
             {
-                cell = new UITableViewCell(cellStyle, cellIdentifier);
+                cell = new SurveyOptionCustomCell(cellIdentifier);
             }
 
-            cell.TextLabel.Text = tableItems[indexPath.Row].Heading;
+            //cell.textLabel.Text = tableItems[indexPath.Row].Text;
+            cell.UpdateCell(tableItems[indexPath.Row].Text);
 
             // Default style doesn't support Subtitle
-            if (cellStyle == UITableViewCellStyle.Subtitle
-               || cellStyle == UITableViewCellStyle.Value1
-               || cellStyle == UITableViewCellStyle.Value2)
-            {
-                cell.DetailTextLabel.Text = tableItems[indexPath.Row].SubHeading;
-            }
+            //if (cellStyle == UITableViewCellStyle.Subtitle
+            //   || cellStyle == UITableViewCellStyle.Value1
+            //   || cellStyle == UITableViewCellStyle.Value2)
+            //{
+            //    cell.DetailTextLabel.Text = tableItems[indexPath.Row].ImageExtension;
+            //}
 
             // Value2 style doesn't support an image
             if (cellStyle != UITableViewCellStyle.Value2)
             {
                 if (tableItems[indexPath.Row].Image != null)
                 {
-                    cell.ImageView.Image = UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image));
+                    //cell.ImageView.Image = UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image));
+                    cell.UpdateCell(tableItems[indexPath.Row].Text, UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image)));
                 }
             }
-                
-            //cell.ImageView.image = UIImage.FromFile("Images/" + tableItems[indexPath.Row].ImageName);
 
+            //cell.ImageView.image = UIImage.FromFile("Images/" + tableItems[indexPath.Row].ImageName);
+            
             return cell;
         }
 
@@ -391,14 +394,18 @@ namespace Askker.App.iOS.TableControllers
 
         public void Clear(UITableView tableView)
         {
-            //---- start animations
-            tableView.BeginUpdates();
-            //---- remove our row from the underlying data
-            tableItems.Clear(); // zero based :)
-                                                                              //---- remove the row from the table
-            tableView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(0, 0) }, UITableViewRowAnimation.Fade);
-            //---- finish animations
-            tableView.EndUpdates();
+            ////---- start animations
+            //tableView.BeginUpdates();
+            ////---- remove our row from the underlying data
+            //tableItems.Clear(); // zero based :)
+            //                                                                  //---- remove the row from the table
+            //tableView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(0, 0) }, UITableViewRowAnimation.Fade);
+            ////---- finish animations
+            //tableView.EndUpdates();
+
+            tableItems = new List<SurveyOptionTableItem>();
+            tableView.Source = new SurveyOptionTableSource(tableItems, this.viewController);
+            tableView.ReloadData();
         }
         #endregion
     }

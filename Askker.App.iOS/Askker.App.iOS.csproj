@@ -107,6 +107,7 @@
     <Compile Include="CredentialsService.cs" />
     <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
     <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
+    <Compile Include="CustomViewComponents\SurveyOptionCustomCell.cs" />
     <Compile Include="CustomViewComponents\SurveyShareCustomCell.cs" />
     <Compile Include="FeedController.cs" />
     <Compile Include="FeedController.designer.cs">

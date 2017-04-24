@@ -7,9 +7,9 @@ namespace Askker.App.iOS.TableControllers
 {
     public class SurveyOptionTableItem
     {
-        public string Heading { get; set; }
+        public string Text { get; set; }
 
-        public string SubHeading { get; set; }
+        public string ImageExtension { get; set; }
 
         public byte[] Image { get; set; }
 
@@ -29,20 +29,20 @@ namespace Askker.App.iOS.TableControllers
 
         public SurveyOptionTableItem() { }
 
-        public SurveyOptionTableItem(string heading)
-        { Heading = heading; }
+        public SurveyOptionTableItem(string text)
+        { Text = text; }
 
-        public SurveyOptionTableItem(string heading, byte[] image)
+        public SurveyOptionTableItem(string text, byte[] image)
         {
-            Heading = heading;
+            Text = text;
             Image = image;
         }
 
-        public SurveyOptionTableItem(string heading, string subheading, byte[] image)
+        public SurveyOptionTableItem(string text, string imageExtension, byte[] image)
         {
-            Heading = heading;
+            Text = text;
             Image = image;
-            SubHeading = subheading;
+            ImageExtension = imageExtension;
         }
     }
 }
