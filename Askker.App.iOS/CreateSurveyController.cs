@@ -1,4 +1,5 @@
 ﻿using Askker.App.iOS.HorizontalSwipe;
+using Askker.App.iOS.TableControllers;
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
@@ -162,7 +163,41 @@ namespace Askker.App.iOS
                     return;
                 }
 
-                
+                List<SurveyOptionTableItem> items = CreateSurveyOptionsStep.tableSource.GetTableItems();
+                if (items.Count > 0)
+                {
+                    CreateSurveyController.SurveyModel.options = new List<Option>();
+
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                    {
+                        //if (CreateSurveyController.OptionImages == null)
+                        //{
+                        CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
+                        //}
+                    }
+
+                    int optionId = 0;
+                    items.ForEach(i =>
+                    {
+                        if (!"<- Add new option".Equals(i.Text))
+                        {
+                            Option o = new Option();
+                            o.id = optionId;
+                            o.text = i.Text;
+                            o.image = "";
+
+                            if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString() && i.Image != null)
+                            {
+                                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + i.ImageExtension, i.Image));
+                            }
+
+                            CreateSurveyController.SurveyModel.options.Add(o);
+
+
+                            optionId++;
+                        }
+                    });
+                }
             }
 
             var nextVcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex + 1) as UIViewController };

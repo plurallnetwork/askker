@@ -39,25 +39,81 @@ namespace Askker.App.iOS
 
             foreach (var friend in friends)
             {
-                tableItems.Add(new SurveyShareTableItem(friend.name, friend.profilePicture, friend.id));
+                tableItems.Add(new SurveyShareTableItem(friend.name, friend.profilePicture, friend.id));                
             }
 
             tableSource = new SurveyShareTableSource(tableItems);
-            _shareStepView.PublicView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 370);
-            _shareStepView.ShareTable.Frame = new RectangleF(0, 0, 0, 0);
-            _shareStepView.FriendsView.Frame = new RectangleF(0, 0, 0, 0);
-            _shareStepView.ShareView.Frame = new RectangleF(0, 0, 0, 0);
 
-            _shareStepView.PublicButton.Enabled = false;
-            _shareStepView.FriendsButton.Enabled = true;
-            _shareStepView.PrivateButton.Enabled = true;
+            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
+            {
+                if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Public.ToString())
+                {
+                    _shareStepView.PublicView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 370);
+                    _shareStepView.ShareTable.Frame = new RectangleF(0, 0, 0, 0);
+                    _shareStepView.FriendsView.Frame = new RectangleF(0, 0, 0, 0);
+                    _shareStepView.ShareView.Frame = new RectangleF(0, 0, 0, 0);
 
-            _shareStepView.PublicView.Hidden = false;
-            _shareStepView.ShareTable.Hidden = true;
-            _shareStepView.FriendsView.Hidden = true;
-            _shareStepView.ShareView.Hidden = true;
+                    _shareStepView.PublicButton.Enabled = false;
+                    _shareStepView.FriendsButton.Enabled = true;
+                    _shareStepView.PrivateButton.Enabled = true;
 
-            CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Public.ToString();
+                    _shareStepView.PublicView.Hidden = false;
+                    _shareStepView.ShareTable.Hidden = true;
+                    _shareStepView.FriendsView.Hidden = true;
+                    _shareStepView.ShareView.Hidden = true;
+                }
+                else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Friends.ToString())
+                {
+                    _shareStepView.PublicView.Frame = new RectangleF(0, 0, 0, 0);
+                    _shareStepView.ShareTable.Frame = new RectangleF(0, 0, 0, 0);
+                    _shareStepView.FriendsView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 370);
+                    _shareStepView.ShareView.Frame = new RectangleF(0, 0, 0, 0);
+
+                    _shareStepView.PublicButton.Enabled = true;
+                    _shareStepView.FriendsButton.Enabled = false;
+                    _shareStepView.PrivateButton.Enabled = true;
+
+                    _shareStepView.PublicView.Hidden = true;
+                    _shareStepView.ShareTable.Hidden = true;
+                    _shareStepView.FriendsView.Hidden = false;
+                    _shareStepView.ShareView.Hidden = true;
+                }
+                else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
+                {
+                    _shareStepView.PublicView.Frame = new RectangleF(0, 0, 0, 0);
+                    _shareStepView.ShareTable.Frame = new RectangleF(0, 355, (float)View.Frame.Width, 310);
+                    _shareStepView.FriendsView.Frame = new RectangleF(0, 0, 0, 0);
+                    _shareStepView.ShareView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 60);
+
+                    _shareStepView.PublicButton.Enabled = true;
+                    _shareStepView.FriendsButton.Enabled = true;
+                    _shareStepView.PrivateButton.Enabled = false;
+
+                    _shareStepView.PublicView.Hidden = true;
+                    _shareStepView.ShareTable.Hidden = false;
+                    _shareStepView.FriendsView.Hidden = true;
+                    _shareStepView.ShareView.Hidden = false;
+                }
+            }
+            else
+            {
+                _shareStepView.PublicView.Frame = new RectangleF(0, 295, (float)View.Frame.Width, 370);
+                _shareStepView.ShareTable.Frame = new RectangleF(0, 0, 0, 0);
+                _shareStepView.FriendsView.Frame = new RectangleF(0, 0, 0, 0);
+                _shareStepView.ShareView.Frame = new RectangleF(0, 0, 0, 0);
+
+                _shareStepView.PublicButton.Enabled = false;
+                _shareStepView.FriendsButton.Enabled = true;
+                _shareStepView.PrivateButton.Enabled = true;
+
+                _shareStepView.PublicView.Hidden = false;
+                _shareStepView.ShareTable.Hidden = true;
+                _shareStepView.FriendsView.Hidden = true;
+                _shareStepView.ShareView.Hidden = true;
+
+                CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Public.ToString();
+            }
+            
 
             _shareStepView.ShareTable.Source = tableSource;
             _shareStepView.ShareTable.ReloadData();
@@ -115,8 +171,7 @@ namespace Askker.App.iOS
 
                 _shareStepView.PublicView.Hidden = true;
                 _shareStepView.ShareTable.Hidden = true;
-                _shareStepView.FriendsView.Hidden = false
-                ;
+                _shareStepView.FriendsView.Hidden = false;
                 _shareStepView.ShareView.Hidden = true;
 
                 CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Friends.ToString();
