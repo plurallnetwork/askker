@@ -18,7 +18,8 @@ namespace Askker.App.iOS
         public static VoteManager voteManager = new VoteManager();
         public string filter { get; set; }
         public UIActivityIndicatorView indicator;
-        static NSString feedCellId = new NSString("feedCell");
+        public UIRefreshControl refreshControl;
+        public static NSString feedCellId = new NSString("feedCell");
 
         public FeedController (IntPtr handle) : base (handle)
         {
@@ -33,7 +34,7 @@ namespace Askker.App.iOS
             base.ViewDidLoad();
             imageCache.RemoveAllObjects();
 
-            CollectionView.RegisterClassForCell(typeof(FeedCollectionViewCellCell), feedCellId);
+            feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCellCell), feedCellId);
             feedCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             feedCollectionView.Delegate = new FeedCollectionViewDelegate();
             feedCollectionView.AlwaysBounceVertical = true;
@@ -44,6 +45,18 @@ namespace Askker.App.iOS
             {
                 filter = "nofilter";
             }
+
+            refreshControl = new UIRefreshControl();
+            refreshControl.TranslatesAutoresizingMaskIntoConstraints = false;
+            refreshControl.ValueChanged += (sender, e) =>
+            {
+                refreshControl.BeginRefreshing();
+                fetchSurveys(filter);
+            };
+
+            feedCollectionView.Add(refreshControl);
+            feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", feedCollectionView, "v1", refreshControl));
+            feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-35-[v0]|", new NSLayoutFormatOptions(), "v0", refreshControl));
 
             indicator.StartAnimating();
             fetchSurveys(filter);
@@ -59,6 +72,7 @@ namespace Askker.App.iOS
             }
 
             indicator.StopAnimating();
+            refreshControl.EndRefreshing();
             feedCollectionView.ReloadData();
         }
 
@@ -133,7 +147,9 @@ namespace Askker.App.iOS
                 feedCell.optionsTableView.ContentInset = new UIEdgeInsets(0, -10, 0, 0);
                 feedCell.optionsTableView.Tag = indexPath.Row;
 
-                new OptionsTableViewController(feedCell.optionsTableView, surveys[indexPath.Row].options);
+                feedCell.optionsTableViewSource.options = surveys[indexPath.Row].options;
+                feedCell.optionsTableView.Source = feedCell.optionsTableViewSource;
+                feedCell.optionsTableView.ReloadData();
 
                 feedCell.optionsCollectionView.RemoveFromSuperview();
                 feedCell.AddSubview(feedCell.optionsTableView);
@@ -146,7 +162,11 @@ namespace Askker.App.iOS
                 feedCell.optionsCollectionView.TranslatesAutoresizingMaskIntoConstraints = false;
                 feedCell.optionsCollectionView.Tag = indexPath.Row;
 
-                new OptionsCollectionViewController(feedCell.optionsCollectionView, surveys[indexPath.Row].options);
+                feedCell.optionsCollectionViewSource.options = surveys[indexPath.Row].options;
+                feedCell.optionsCollectionView.Source = feedCell.optionsCollectionViewSource;
+                feedCell.optionsCollectionViewDelegate.optionsCollectionViewSource = feedCell.optionsCollectionViewSource;
+                feedCell.optionsCollectionView.Delegate = feedCell.optionsCollectionViewDelegate;
+                feedCell.optionsCollectionView.ReloadData();
 
                 feedCell.optionsTableView.RemoveFromSuperview();
                 feedCell.AddSubview(feedCell.optionsCollectionView);
@@ -156,92 +176,6 @@ namespace Askker.App.iOS
             }
 
             return feedCell;
-        }
-
-        public class FeedCollectionViewCellCell : UICollectionViewCell
-        {
-            public UIImageView profileImageView { get; set; }
-            public UILabel nameLabel { get; set; }
-            public UITextView questionText { get; set; }
-            public UIView dividerLineView { get; set; }
-            public UITableView optionsTableView { get; set; }
-            public UICollectionView optionsCollectionView { get; set; }
-            public UIView contentViewButtons { get; set; }
-
-            [Export("initWithFrame:")]
-            public FeedCollectionViewCellCell(CGRect frame) : base(frame)
-            {
-                ContentView.BackgroundColor = UIColor.White;
-
-                profileImageView = new UIImageView();
-                profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
-                profileImageView.Image = UIImage.FromBundle("Profile");
-                profileImageView.Layer.CornerRadius = 22;
-                profileImageView.Layer.MasksToBounds = true;
-                profileImageView.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                nameLabel = new UILabel();
-                nameLabel.Lines = 2;
-                nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                questionText = new UITextView();
-                questionText.Font = UIFont.SystemFontOfSize(14);
-                questionText.BackgroundColor = UIColor.Clear;
-                questionText.ScrollEnabled = false;
-                questionText.Editable = false;
-                questionText.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                dividerLineView = new UIView();
-                dividerLineView.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
-                dividerLineView.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                optionsTableView = new UITableView();
-
-                optionsCollectionView = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout()
-                {
-                    ScrollDirection = UICollectionViewScrollDirection.Horizontal
-                });
-
-                var commentButton = buttonForTitle(title: "Comment", imageName: "comment");
-                var resultButton = buttonForTitle(title: "Result", imageName: "result");
-                var moreButton = buttonForTitle(title: "More", imageName: "more");
-
-                contentViewButtons = new UIView();
-                contentViewButtons.AddSubviews(commentButton, resultButton, moreButton);
-                contentViewButtons.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                AddSubview(profileImageView);
-                AddSubview(nameLabel);
-                AddSubview(questionText);
-                AddSubview(dividerLineView);
-
-                AddSubview(contentViewButtons);
-
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel));
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
-
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", contentViewButtons));
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(v2)][v1(v2)][v2]|", new NSLayoutFormatOptions(), "v0", commentButton, "v1", resultButton, "v2", moreButton));
-
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
-
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", commentButton));
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", resultButton));
-                AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", moreButton));
-            }
-
-            public UIButton buttonForTitle(string title, string imageName)
-            {
-                var button = new UIButton();
-                button.SetTitle(title, UIControlState.Normal);
-                button.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.56"), nfloat.Parse("0.58"), nfloat.Parse("0.63"), nfloat.Parse("1")), UIControlState.Normal);
-                button.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
-                //button.SetImage(new UIImage(imageName), UIControlState.Normal);
-                button.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
-                button.TranslatesAutoresizingMaskIntoConstraints = false;
-                return button;
-            }
         }
 
         public static async void saveVote(int surveyIndex, int optionId)
@@ -254,118 +188,208 @@ namespace Askker.App.iOS
             voteModel.user = new User();
             voteModel.user.id = LoginController.userModel.id;
             voteModel.user.gender = LoginController.userModel.gender;
+            voteModel.user.age = LoginController.userModel.age;
             voteModel.user.city = LoginController.userModel.city;
             voteModel.user.country = LoginController.userModel.country;
 
             await voteManager.Vote(voteModel, "");
         }
+    }
 
-        class FeedCollectionViewDelegate : UICollectionViewDelegateFlowLayout
+    public class FeedCollectionViewDelegate : UICollectionViewDelegateFlowLayout
+    {
+        public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
-            public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
+            var question = FeedController.surveys[indexPath.Row].question.text;
+            if (!question.Equals(""))
             {
-                var question = FeedController.surveys[indexPath.Row].question.text;
-                if (!question.Equals(""))
+                var rect = new NSString(question).GetBoundingRect(new CGSize(collectionView.Frame.Width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.SystemFontOfSize(14) }, null);
+
+                var optionsHeight = 176;
+
+                if (FeedController.surveys[indexPath.Row].type == SurveyType.Text.ToString() && FeedController.surveys[indexPath.Row].options.Count < 4)
                 {
-                    var rect = new NSString(question).GetBoundingRect(new CGSize(collectionView.Frame.Width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.SystemFontOfSize(14) }, null);
-
-                    var optionsHeight = 176;
-
-                    if (surveys[indexPath.Row].type == SurveyType.Text.ToString() && FeedController.surveys[indexPath.Row].options.Count < 4)
-                    {
-                        optionsHeight = FeedController.surveys[indexPath.Row].options.Count * 44;
-                    }
-
-                    // Heights of the vertical components to format the cell dinamic height
-                    var knownHeight = 8 + 44 + 4 + 4 + optionsHeight + 8 + 44;
-
-                    return new CGSize(collectionView.Frame.Width, rect.Height + knownHeight + 25);
+                    optionsHeight = FeedController.surveys[indexPath.Row].options.Count * 44;
                 }
 
-                return new CGSize(collectionView.Frame.Width, 380);
+                // Heights of the vertical components to format the cell dinamic height
+                var knownHeight = 8 + 44 + 4 + 4 + optionsHeight + 8 + 44;
+
+                return new CGSize(collectionView.Frame.Width, rect.Height + knownHeight + 25);
             }
+
+            return new CGSize(collectionView.Frame.Width, 380);
         }
     }
 
-    public class OptionsTableViewController : UITableViewController
+    public class FeedCollectionViewCellCell : UICollectionViewCell
     {
-        static NSString optionCellId = new NSString("OptionCell");
+        public UIImageView profileImageView { get; set; }
+        public UILabel nameLabel { get; set; }
+        public UITextView questionText { get; set; }
+        public UIView dividerLineView { get; set; }
+        public UITableView optionsTableView { get; set; }
+        public OptionsTableViewSource optionsTableViewSource { get; set; }
+        public UICollectionView optionsCollectionView { get; set; }
+        public OptionsCollectionViewSource optionsCollectionViewSource { get; set; }
+        public OptionsCollectionViewDelegate optionsCollectionViewDelegate { get; set; }
+        public UIView contentViewButtons { get; set; }
+
+        public static NSString optionCellId = new NSString("optionCell");
         public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
-        public OptionsTableViewController(UITableView optionsTableView, List<Option> options)
+        [Export("initWithFrame:")]
+        public FeedCollectionViewCellCell(CGRect frame) : base(frame)
         {
+            ContentView.BackgroundColor = UIColor.White;
+
+            profileImageView = new UIImageView();
+            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+            profileImageView.Image = UIImage.FromBundle("Profile");
+            profileImageView.Layer.CornerRadius = 22;
+            profileImageView.Layer.MasksToBounds = true;
+            profileImageView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            nameLabel = new UILabel();
+            nameLabel.Lines = 2;
+            nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            questionText = new UITextView();
+            questionText.Font = UIFont.SystemFontOfSize(14);
+            questionText.BackgroundColor = UIColor.Clear;
+            questionText.ScrollEnabled = false;
+            questionText.Editable = false;
+            questionText.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            dividerLineView = new UIView();
+            dividerLineView.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
+            dividerLineView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            optionsTableView = new UITableView();
             optionsTableView.RegisterClassForCellReuse(typeof(OptionTableViewCell), optionCellId);
-            optionsTableView.Source = new OptionsTableViewDataSource(options);
+
+            optionsTableViewSource = new OptionsTableViewSource();
+
+            optionsCollectionView = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout()
+            {
+                ScrollDirection = UICollectionViewScrollDirection.Horizontal
+            });
+            optionsCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
+            optionsCollectionView.RegisterClassForCell(typeof(OptionCollectionViewCell), optionCellId);
+
+            optionsCollectionViewSource = new OptionsCollectionViewSource();
+
+            optionsCollectionViewDelegate = new OptionsCollectionViewDelegate();
+
+            var commentButton = buttonForTitle(title: "Comment", imageName: "comment");
+            var resultButton = buttonForTitle(title: "Result", imageName: "result");
+            var moreButton = buttonForTitle(title: "More", imageName: "more");
+
+            contentViewButtons = new UIView();
+            contentViewButtons.AddSubviews(commentButton, resultButton, moreButton);
+            contentViewButtons.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            AddSubview(profileImageView);
+            AddSubview(nameLabel);
+            AddSubview(questionText);
+            AddSubview(dividerLineView);
+
+            AddSubview(contentViewButtons);
+
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
+
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", contentViewButtons));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(v2)][v1(v2)][v2]|", new NSLayoutFormatOptions(), "v0", commentButton, "v1", resultButton, "v2", moreButton));
+
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
+
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", commentButton));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", resultButton));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", moreButton));
         }
 
-        class OptionsTableViewDataSource : UITableViewSource
+        public UIButton buttonForTitle(string title, string imageName)
         {
-            List<Option> options;
+            var button = new UIButton();
+            button.SetTitle(title, UIControlState.Normal);
+            button.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.56"), nfloat.Parse("0.58"), nfloat.Parse("0.63"), nfloat.Parse("1")), UIControlState.Normal);
+            button.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
+            //button.SetImage(new UIImage(imageName), UIControlState.Normal);
+            button.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
+            button.TranslatesAutoresizingMaskIntoConstraints = false;
+            return button;
+        }
+    }
 
-            public OptionsTableViewDataSource(List<Option> options)
+    public class OptionsTableViewSource : UITableViewSource
+    {
+        public List<Option> options { get; set; }
+
+        public OptionsTableViewSource()
+        {
+            options = new List<Option>();
+        }
+
+        public override nint RowsInSection(UITableView tableView, nint section)
+        {
+            return options.Count;
+        }
+
+        public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+        {
+            var cell = tableView.DequeueReusableCell(FeedCollectionViewCellCell.optionCellId, indexPath) as OptionTableViewCell;
+            cell.SelectionStyle = UITableViewCellSelectionStyle.None;
+            cell.Tag = options[indexPath.Row].id;
+
+            cell.optionLetterLabel.Text = FeedCollectionViewCellCell.alphabet[indexPath.Row];
+            cell.optionLabel.Text = options[indexPath.Row].text;
+
+            if (FeedController.surveys[(int)tableView.Tag].optionSelected == options[indexPath.Row].id)
             {
-                this.options = options;
+                var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
+                optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
+                cell.AccessoryView = optionCheckImage;
+            }
+            else
+            {
+                cell.AccessoryView = null;
             }
 
-            public override nint RowsInSection(UITableView tableView, nint section)
+            return cell;
+        }
+
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            var optionCell = tableView.CellAt(indexPath);
+
+            if (optionCell.AccessoryView == null)
             {
-                return options.Count;
+                var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
+                optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
+                optionCell.AccessoryView = optionCheckImage;
+
+                FeedController.saveVote((int)tableView.Tag, (int)optionCell.Tag);
             }
 
-            public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+            //else
+            //{
+            //    optionCell.AccessoryView = null;
+            //    optionCell.SetSelected(false, false);
+            //}
+        }
+
+        public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
+        {
+            var optionCell = tableView.CellAt(indexPath);
+
+            if (optionCell == null)
             {
-                var cell = tableView.DequeueReusableCell(OptionsTableViewController.optionCellId, indexPath) as OptionTableViewCell;
-                cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-                cell.Tag = options[indexPath.Row].id;
-
-                cell.optionLetterLabel.Text = OptionsTableViewController.alphabet[indexPath.Row];
-                cell.optionLabel.Text = options[indexPath.Row].text;
-
-                if (FeedController.surveys[(int)tableView.Tag].optionSelected == options[indexPath.Row].id)
-                {
-                    var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
-                    optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
-                    cell.AccessoryView = optionCheckImage;
-                }
-                else
-                {
-                    cell.AccessoryView = null;
-                }
-
-                return cell;
+                optionCell = this.GetCell(tableView, indexPath);
             }
 
-            public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-            {
-                var optionCell = tableView.CellAt(indexPath);
-
-                if (optionCell.AccessoryView == null)
-                {
-                    var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
-                    optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
-                    optionCell.AccessoryView = optionCheckImage;
-
-                    FeedController.saveVote((int)tableView.Tag, (int)optionCell.Tag);
-                }
-
-                //else
-                //{
-                //    optionCell.AccessoryView = null;
-                //    optionCell.SetSelected(false, false);
-                //}
-            }
-
-            public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
-            {
-                var optionCell = tableView.CellAt(indexPath);
-
-                if (optionCell == null)
-                {
-                    optionCell = this.GetCell(tableView, indexPath);
-                }
-
-                optionCell.AccessoryView = null;
-            }
+            optionCell.AccessoryView = null;
         }
     }
 
@@ -394,55 +418,38 @@ namespace Askker.App.iOS
         }
     }
 
-    public class OptionsCollectionViewController : UICollectionViewController
+    public class OptionsCollectionViewSource : UICollectionViewSource
     {
-        static NSString optionCellId = new NSString("optionCell");
+        public List<Option> options { get; set; }
 
-        public OptionsCollectionViewController(UICollectionView optionsCollectionView, List<Option> options)
+        public OptionsCollectionViewSource()
         {
-
-            var optionsCollectionViewSource = new OptionsCollectionViewSource(options);
-            var optionsCollectionViewDelegate = new OptionsCollectionViewDelegate(optionsCollectionViewSource);
-
-            CollectionView = optionsCollectionView;
-
-            CollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
-            CollectionView.RegisterClassForCell(typeof(OptionCollectionViewCell), optionCellId);
-            CollectionView.Source = optionsCollectionViewSource;
-            CollectionView.Delegate = optionsCollectionViewDelegate;
+            options = new List<Option>();
         }
 
-        class OptionsCollectionViewSource : UICollectionViewSource
+        public override nint GetItemsCount(UICollectionView collectionView, nint section)
         {
-            List<Option> options;
+            return options.Count;
+        }
 
-            public OptionsCollectionViewSource(List<Option> options) {
-                this.options = options;
-            }
+        public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            var optionCell = collectionView.DequeueReusableCell(FeedCollectionViewCellCell.optionCellId, indexPath) as OptionCollectionViewCell;
+            optionCell.BackgroundColor = UIColor.White;
+            optionCell.Tag = options[indexPath.Row].id;
 
-            public override nint GetItemsCount(UICollectionView collectionView, nint section)
+            if (options[indexPath.Row].image != null)
             {
-                return options.Count;
-            }
+                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + options[indexPath.Row].image);
 
-            public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
-            {
-                var optionCell = collectionView.DequeueReusableCell(optionCellId, indexPath) as OptionCollectionViewCell;
-                optionCell.BackgroundColor = UIColor.White;
-                optionCell.Tag = options[indexPath.Row].id;
-
-                if (options[indexPath.Row].image != null)
+                var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
+                if (imageFromCache != null)
                 {
-                    var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + options[indexPath.Row].image);
-
-                    var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-                    if (imageFromCache != null)
-                    {
-                        optionCell.optionImageView.Image = imageFromCache;
-                    }
-                    else
-                    {
-                        var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
+                    optionCell.optionImageView.Image = imageFromCache;
+                }
+                else
+                {
+                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
                     {
                         if (response == null)
                         {
@@ -470,71 +477,70 @@ namespace Askker.App.iOS
                         }
                     });
                     task.Resume();
-                    }
                 }
-
-                optionCell.optionLetterLabel.Text = "  " + OptionsTableViewController.alphabet[indexPath.Row] + "  ";
-                optionCell.optionLabel.Text = options[indexPath.Row].text;
-
-                if (FeedController.surveys[(int)collectionView.Tag].optionSelected == options[indexPath.Row].id)
-                {
-                    optionCell.optionCheckImageView.Hidden = false;
-                }
-                else
-                {
-                    optionCell.optionCheckImageView.Hidden = true;
-                }
-
-                return optionCell;
             }
 
-            public OptionCollectionViewCell GetCustomCell(UICollectionView collectionView, NSIndexPath indexPath)
+            optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCellCell.alphabet[indexPath.Row] + "  ";
+            optionCell.optionLabel.Text = options[indexPath.Row].text;
+
+            if (FeedController.surveys[(int)collectionView.Tag].optionSelected == options[indexPath.Row].id)
             {
-                return this.GetCell(collectionView, indexPath) as OptionCollectionViewCell;
+                optionCell.optionCheckImageView.Hidden = false;
+            }
+            else
+            {
+                optionCell.optionCheckImageView.Hidden = true;
+            }
+
+            return optionCell;
+        }
+
+        public OptionCollectionViewCell GetCustomCell(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            return this.GetCell(collectionView, indexPath) as OptionCollectionViewCell;
+        }
+    }
+
+    public class OptionsCollectionViewDelegate : UICollectionViewDelegateFlowLayout
+    {
+        public OptionsCollectionViewSource optionsCollectionViewSource { get; set; }
+
+        public OptionsCollectionViewDelegate()
+        {
+            optionsCollectionViewSource = new OptionsCollectionViewSource();
+        }
+
+        public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
+        {
+            return new CGSize(270, 220);
+        }
+
+        public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
+        {
+            return 0;
+        }
+
+        public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
+        {
+            var optionCell = collectionView.CellForItem(indexPath) as OptionCollectionViewCell;
+
+            if (optionCell.optionCheckImageView.Hidden)
+            {
+                optionCell.optionCheckImageView.Hidden = false;
+                FeedController.saveVote((int)collectionView.Tag, (int)optionCell.Tag);
             }
         }
 
-        class OptionsCollectionViewDelegate : UICollectionViewDelegateFlowLayout
+        public override void ItemDeselected(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            OptionsCollectionViewSource optionsCollectionViewSource;
+            var optionCell = collectionView.CellForItem(indexPath) as OptionCollectionViewCell;
 
-            public OptionsCollectionViewDelegate(OptionsCollectionViewSource optionsCollectionViewSource)
+            if (optionCell == null)
             {
-                this.optionsCollectionViewSource = optionsCollectionViewSource;
+                optionCell = optionsCollectionViewSource.GetCustomCell(collectionView, indexPath);
             }
 
-            public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
-            {
-                return new CGSize(270, 220);
-            }
-
-            public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
-            {
-                return 0;
-            }
-
-            public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
-            {
-                var optionCell = collectionView.CellForItem(indexPath) as OptionCollectionViewCell;
-
-                if (optionCell.optionCheckImageView.Hidden)
-                {
-                    optionCell.optionCheckImageView.Hidden = false;
-                    FeedController.saveVote((int)collectionView.Tag, (int)optionCell.Tag);
-                }
-            }
-
-            public override void ItemDeselected(UICollectionView collectionView, NSIndexPath indexPath)
-            {
-                var optionCell = collectionView.CellForItem(indexPath) as OptionCollectionViewCell;
-
-                if (optionCell == null)
-                {
-                    optionCell = optionsCollectionViewSource.GetCustomCell(collectionView, indexPath);
-                }
-
-                optionCell.optionCheckImageView.Hidden = true;
-            }
+            optionCell.optionCheckImageView.Hidden = true;
         }
     }
 

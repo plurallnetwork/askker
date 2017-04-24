@@ -58,7 +58,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     string boundary = "---8d0f01e6b3b5dafaaadaad";
                     var content = new MultipartFormDataContent(boundary);
-                    content.Add(new StringContent(JsonConvert.SerializeObject(surveyModel), Encoding.UTF8, "application/json"), "model");
+                    content.Add(new StringContent(JsonConvert.SerializeObject(surveyModel, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json"), "model");
                     content.Add(new StreamContent(new MemoryStream()), "questionImg");
 
                     if (surveyModel.type == SurveyType.Image.ToString()) {
