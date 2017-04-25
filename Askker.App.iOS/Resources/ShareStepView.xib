@@ -14,50 +14,94 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <subviews>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" id="4" translatesAutoresizingMaskIntoConstraints="NO" editable="NO" selectable="NO" fixedFrame="YES">
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" id="4" translatesAutoresizingMaskIntoConstraints="NO" editable="NO" selectable="NO">
                     <rect key="frame" x="0.0" y="100" width="375" height="143"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                    <variation key="heightClass=regular-widthClass=compact">
                         <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
+                        <mask key="constraints">
+                            <include reference="53"/>
+                        </mask>
+                    </variation>
+                    <constraints>
+                        <constraint id="53" firstAttribute="height" constant="143"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="53"/>
+                        </mask>
                     </variation>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="24" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="24" translatesAutoresizingMaskIntoConstraints="NO">
                     <rect key="frame" x="250" y="244" width="125" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="assets/img/filterMine.png">
                         <color key="titleShadowColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </state>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                    <variation key="heightClass=regular-widthClass=compact">
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        <mask key="constraints">
+                            <include reference="84"/>
+                        </mask>
+                    </variation>
+                    <constraints>
+                        <constraint id="84" firstItem="24" firstAttribute="height" constant="37">
+                            <variation key="heightClass=regular-widthClass=compact" constant="50"/>
+                        </constraint>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="84"/>
+                        </mask>
                     </variation>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="25" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="25" translatesAutoresizingMaskIntoConstraints="NO">
                     <rect key="frame" x="125" y="244" width="125" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="assets/img/friendsiOS.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </state>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                    <variation key="heightClass=regular-widthClass=compact">
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        <mask key="constraints">
+                            <include reference="73"/>
+                        </mask>
+                    </variation>
+                    <constraints>
+                        <constraint id="73" firstAttribute="height" constant="50"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="73"/>
+                        </mask>
                     </variation>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="26" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="26" translatesAutoresizingMaskIntoConstraints="NO">
                     <rect key="frame" x="0.0" y="244" width="125" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="assets/img/filterPublic.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </state>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                    <variation key="heightClass=regular-widthClass=compact">
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        <mask key="constraints">
+                            <include reference="66"/>
+                        </mask>
+                    </variation>
+                    <constraints>
+                        <constraint id="58" firstItem="26" firstAttribute="width" constant="125"/>
+                        <constraint id="66" firstAttribute="height" constant="50"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="58"/>
+                            <exclude reference="66"/>
+                        </mask>
                     </variation>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="32" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -139,9 +183,8 @@
                         </mask>
                     </variation>
                 </view>
-                <view contentMode="scaleToFill" id="45" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                <view contentMode="scaleToFill" id="45" translatesAutoresizingMaskIntoConstraints="NO">
                     <rect key="frame" x="1" y="558" width="373" height="61"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This question will be visible to the selected friends below:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="46" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2" fixedFrame="YES">
@@ -157,7 +200,7 @@
                             <exclude reference="46"/>
                         </mask>
                     </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
                         <mask key="subviews">
                             <include reference="46"/>
                         </mask>
@@ -175,6 +218,21 @@
                     <exclude reference="35"/>
                     <exclude reference="45"/>
                 </mask>
+                <mask key="constraints">
+                    <exclude reference="49"/>
+                    <exclude reference="54"/>
+                    <exclude reference="55"/>
+                    <exclude reference="67"/>
+                    <exclude reference="68"/>
+                    <exclude reference="71"/>
+                    <exclude reference="74"/>
+                    <exclude reference="75"/>
+                    <exclude reference="82"/>
+                    <exclude reference="85"/>
+                    <exclude reference="86"/>
+                    <exclude reference="87"/>
+                    <exclude reference="88"/>
+                </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
                 <mask key="subviews">
@@ -187,6 +245,21 @@
                     <include reference="35"/>
                     <include reference="45"/>
                 </mask>
+                <mask key="constraints">
+                    <include reference="49"/>
+                    <include reference="54"/>
+                    <include reference="55"/>
+                    <include reference="67"/>
+                    <include reference="68"/>
+                    <include reference="71"/>
+                    <include reference="74"/>
+                    <include reference="75"/>
+                    <include reference="82"/>
+                    <include reference="85"/>
+                    <include reference="86"/>
+                    <include reference="87"/>
+                    <include reference="88"/>
+                </mask>
             </variation>
             <connections>
                 <outlet property="questionText" destination="4" id="name-outlet-4"/>
@@ -198,6 +271,21 @@
                 <outlet property="publicView" destination="35" id="name-outlet-35"/>
                 <outlet property="shareView" destination="45" id="name-outlet-45"/>
             </connections>
+            <constraints>
+                <constraint id="49" firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100"/>
+                <constraint id="54" firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
+                <constraint id="55" firstItem="4" firstAttribute="trailing" secondItem="1" secondAttribute="trailing"/>
+                <constraint id="67" firstItem="26" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="1"/>
+                <constraint id="68" firstItem="26" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
+                <constraint id="71" firstItem="25" firstAttribute="centerX" secondItem="45" secondAttribute="centerX"/>
+                <constraint id="74" firstItem="25" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="1"/>
+                <constraint id="75" firstItem="26" firstAttribute="trailing" secondItem="25" secondAttribute="leading"/>
+                <constraint id="82" firstItem="24" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="1"/>
+                <constraint id="85" firstItem="25" firstAttribute="trailing" secondItem="24" secondAttribute="leading"/>
+                <constraint id="86" firstItem="24" firstAttribute="trailing" secondItem="1" secondAttribute="trailing"/>
+                <constraint id="87" firstItem="25" firstAttribute="width" secondItem="26" secondAttribute="width"/>
+                <constraint id="88" firstItem="24" firstAttribute="width" secondItem="26" secondAttribute="width"/>
+            </constraints>
         </view>
     </objects>
     <resources>
