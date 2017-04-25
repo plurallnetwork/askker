@@ -1,5 +1,6 @@
 ﻿using Askker.App.iOS.CustomViewComponents;
 using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using CoreFoundation;
 using Foundation;
@@ -85,6 +86,19 @@ namespace Askker.App.iOS.TableControllers
 
             }
 
+            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString() && CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
+            {
+                if(CreateSurveyController.SurveyModel.targetAudienceUsers != null && CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count > 0)
+                {
+                    foreach (var id in CreateSurveyController.SurveyModel.targetAudienceUsers.ids)
+                    {
+                        if (id.Equals(tableItems[indexPath.Row].Id))
+                        {
+                            cell.Accessory = UITableViewCellAccessory.Checkmark;
+                        }
+                    }
+                }                
+            }
 
             cell.UpdateCell(tableItems[indexPath.Row].Name, image);
             return cell;

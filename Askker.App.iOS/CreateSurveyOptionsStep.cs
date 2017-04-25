@@ -14,7 +14,7 @@ namespace Askker.App.iOS
     public partial class CreateSurveyOptionsStep : UIViewController, IMultiStepProcessStep
     {
         public static OptionsStepView _optionsStepView { get; set; }
-        SurveyOptionTableSource tableSource;
+        public static SurveyOptionTableSource tableSource;
 
         public override void LoadView()
         {
@@ -133,41 +133,41 @@ namespace Askker.App.iOS
                 _optionsStepView.OptionsTable.SetEditing(false, true);
                 tableSource.DidFinishTableEditing(_optionsStepView.OptionsTable);
 
-                List<SurveyOptionTableItem> items = tableSource.GetTableItems();
-                if (items.Count > 0)
-                {
-                    CreateSurveyController.SurveyModel.options = new List<Option>();
+                //List<SurveyOptionTableItem> items = tableSource.GetTableItems();
+                //if (items.Count > 0)
+                //{
+                //    CreateSurveyController.SurveyModel.options = new List<Option>();
                     
-                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
-                    {
-                        //if (CreateSurveyController.OptionImages == null)
-                        //{
-                        CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
-                        //}
-                    }
+                //    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                //    {
+                //        //if (CreateSurveyController.OptionImages == null)
+                //        //{
+                //        CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
+                //        //}
+                //    }
 
-                    int optionId = 0;
-                    items.ForEach(i =>
-                    {
-                        if (!"<- Add new option".Equals(i.Text))
-                        {
-                            Option o = new Option();
-                            o.id = optionId;
-                            o.text = i.Text;
-                            o.image = "";
+                //    int optionId = 0;
+                //    items.ForEach(i =>
+                //    {
+                //        if (!"<- Add new option".Equals(i.Text))
+                //        {
+                //            Option o = new Option();
+                //            o.id = optionId;
+                //            o.text = i.Text;
+                //            o.image = "";
 
-                            if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString() && i.Image != null)
-                            {
-                                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + i.ImageExtension, i.Image));
-                            }
+                //            if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString() && i.Image != null)
+                //            {
+                //                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + i.ImageExtension, i.Image));
+                //            }
 
-                            CreateSurveyController.SurveyModel.options.Add(o);
+                //            CreateSurveyController.SurveyModel.options.Add(o);
 
 
-                            optionId++;
-                        }
-                    });
-                }
+                //            optionId++;
+                //        }
+                //    });
+                //}
 
                 _optionsStepView.TextButton.Hidden = false;
                 _optionsStepView.ImageButton.Hidden = false;
@@ -201,7 +201,7 @@ namespace Askker.App.iOS
 
         public override void ViewWillDisappear(bool animated)
         {
-            base.ViewWillDisappear(animated);            
+            base.ViewWillDisappear(animated);
             StepDeactivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 
