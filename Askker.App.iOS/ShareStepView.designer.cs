@@ -28,23 +28,15 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIView friendsView { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIView publicView { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextView questionText { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITableView shareTable { get; set; }
+        UIKit.UILabel shareMessageLabel { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIView shareView { get; set; }
+        UIKit.UITableView shareTable { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -63,29 +55,19 @@ namespace Askker.App.iOS
                 btnPublic = null;
             }
 
-            if (friendsView != null) {
-                friendsView.Dispose ();
-                friendsView = null;
-            }
-
-            if (publicView != null) {
-                publicView.Dispose ();
-                publicView = null;
-            }
-
             if (questionText != null) {
                 questionText.Dispose ();
                 questionText = null;
             }
 
+            if (shareMessageLabel != null) {
+                shareMessageLabel.Dispose ();
+                shareMessageLabel = null;
+            }
+
             if (shareTable != null) {
                 shareTable.Dispose ();
                 shareTable = null;
-            }
-
-            if (shareView != null) {
-                shareView.Dispose ();
-                shareView = null;
             }
         }
     }

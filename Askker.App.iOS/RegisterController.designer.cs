@@ -38,6 +38,10 @@ namespace Askker.App.iOS
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField txtPassword { get; set; }
 
+        [Action ("BtnRegister_TouchUpInside:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void BtnRegister_TouchUpInside (UIKit.UIButton sender);
+
         void ReleaseDesignerOutlets ()
         {
             if (btnRegister != null) {

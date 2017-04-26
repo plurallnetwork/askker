@@ -40,23 +40,11 @@ namespace Askker.App.iOS
             get { return shareTable; }
             set { shareTable = value; }
         }
-        
-        public UIView FriendsView
-        {
-            get { return friendsView; }
-            set { friendsView = value; }
-        }
 
-        public UIView PublicView
+        public UILabel ShareMessageLabel
         {
-            get { return publicView; }
-            set { publicView = value; }
-        }
-
-        public UIView ShareView
-        {
-            get { return shareView; }
-            set { shareView = value; }
+            get { return shareMessageLabel; }
+            set { shareMessageLabel = value; }
         }
 
         public static ShareStepView Create()
@@ -67,10 +55,5 @@ namespace Askker.App.iOS
 
             return v;
         }
-
-        
-
-       
-
     }
 }

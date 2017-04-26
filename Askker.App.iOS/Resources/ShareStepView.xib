@@ -35,7 +35,7 @@
                     </variation>
                 </textView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="24" translatesAutoresizingMaskIntoConstraints="NO">
-                    <rect key="frame" x="250" y="244" width="125" height="50"/>
+                    <rect key="frame" x="250" y="244" width="125" height="37"/>
                     <state key="normal" image="assets/img/filterMine.png">
                         <color key="titleShadowColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -105,107 +105,32 @@
                     </variation>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="32" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="2" y="627" width="373" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="0.0" y="363" width="375" height="304"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <variation key="heightClass=regular-widthClass=compact"/>
                 </tableView>
-                <view contentMode="scaleToFill" id="33" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="2" y="295" width="201" height="106"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="34" translatesAutoresizingMaskIntoConstraints="NO" text="This question will be visible to all your friends! " numberOfLines="2" fixedFrame="YES">
-                            <rect key="frame" x="83" y="42" width="209" height="45"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <view contentMode="scaleToFill" id="39" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                            <rect key="frame" x="20" y="429" width="375" height="128"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="40" translatesAutoresizingMaskIntoConstraints="NO" text="This question will be visible to all your friends! " numberOfLines="2" fixedFrame="YES">
-                                    <rect key="frame" x="83" y="42" width="209" height="45"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <variation key="default">
-                                <mask key="subviews">
-                                    <exclude reference="40"/>
-                                </mask>
-                            </variation>
-                            <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                <mask key="subviews">
-                                    <include reference="40"/>
-                                </mask>
-                            </variation>
-                        </view>
-                    </subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This question will be visible to the selected friends below:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="46" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2" fixedFrame="YES">
+                    <rect key="frame" x="51.5" y="311" width="272" height="44"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                    <constraints>
+                        <constraint id="101" firstAttribute="height" constant="44"/>
+                        <constraint id="106" firstItem="46" firstAttribute="width" constant="272"/>
+                    </constraints>
                     <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="34"/>
-                            <exclude reference="39"/>
+                        <mask key="constraints">
+                            <exclude reference="101"/>
+                            <exclude reference="106"/>
                         </mask>
                     </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <mask key="subviews">
-                            <include reference="34"/>
-                            <include reference="39"/>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="101"/>
+                            <include reference="106"/>
                         </mask>
                     </variation>
-                </view>
-                <view contentMode="scaleToFill" id="35" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="209" y="295" width="166" height="97"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This question will be visible to everybody!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="36" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2" fixedFrame="YES">
-                            <rect key="frame" x="84" y="43" width="209" height="43"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="36"/>
-                        </mask>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <mask key="subviews">
-                            <include reference="36"/>
-                        </mask>
-                    </variation>
-                </view>
-                <view contentMode="scaleToFill" id="45" translatesAutoresizingMaskIntoConstraints="NO">
-                    <rect key="frame" x="1" y="558" width="373" height="61"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This question will be visible to the selected friends below:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="46" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2" fixedFrame="YES">
-                            <rect key="frame" x="50" y="8" width="272" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="46"/>
-                        </mask>
-                    </variation>
-                    <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                        <mask key="subviews">
-                            <include reference="46"/>
-                        </mask>
-                    </variation>
-                </view>
+                </label>
             </subviews>
             <variation key="default">
                 <mask key="subviews">
@@ -214,9 +139,7 @@
                     <exclude reference="25"/>
                     <exclude reference="26"/>
                     <exclude reference="32"/>
-                    <exclude reference="33"/>
-                    <exclude reference="35"/>
-                    <exclude reference="45"/>
+                    <exclude reference="46"/>
                 </mask>
                 <mask key="constraints">
                     <exclude reference="49"/>
@@ -224,7 +147,6 @@
                     <exclude reference="55"/>
                     <exclude reference="67"/>
                     <exclude reference="68"/>
-                    <exclude reference="71"/>
                     <exclude reference="74"/>
                     <exclude reference="75"/>
                     <exclude reference="82"/>
@@ -232,6 +154,12 @@
                     <exclude reference="86"/>
                     <exclude reference="87"/>
                     <exclude reference="88"/>
+                    <exclude reference="103"/>
+                    <exclude reference="107"/>
+                    <exclude reference="108"/>
+                    <exclude reference="111"/>
+                    <exclude reference="112"/>
+                    <exclude reference="113"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -241,9 +169,7 @@
                     <include reference="25"/>
                     <include reference="26"/>
                     <include reference="32"/>
-                    <include reference="33"/>
-                    <include reference="35"/>
-                    <include reference="45"/>
+                    <include reference="46"/>
                 </mask>
                 <mask key="constraints">
                     <include reference="49"/>
@@ -251,7 +177,6 @@
                     <include reference="55"/>
                     <include reference="67"/>
                     <include reference="68"/>
-                    <include reference="71"/>
                     <include reference="74"/>
                     <include reference="75"/>
                     <include reference="82"/>
@@ -259,6 +184,12 @@
                     <include reference="86"/>
                     <include reference="87"/>
                     <include reference="88"/>
+                    <include reference="103"/>
+                    <include reference="107"/>
+                    <include reference="108"/>
+                    <include reference="111"/>
+                    <include reference="112"/>
+                    <include reference="113"/>
                 </mask>
             </variation>
             <connections>
@@ -267,9 +198,7 @@
                 <outlet property="btnFriends" destination="25" id="name-outlet-25"/>
                 <outlet property="btnPublic" destination="26" id="name-outlet-26"/>
                 <outlet property="shareTable" destination="32" id="name-outlet-32"/>
-                <outlet property="friendsView" destination="33" id="name-outlet-33"/>
-                <outlet property="publicView" destination="35" id="name-outlet-35"/>
-                <outlet property="shareView" destination="45" id="name-outlet-45"/>
+                <outlet property="shareMessageLabel" destination="46" id="name-outlet-46"/>
             </connections>
             <constraints>
                 <constraint id="49" firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100"/>
@@ -277,7 +206,6 @@
                 <constraint id="55" firstItem="4" firstAttribute="trailing" secondItem="1" secondAttribute="trailing"/>
                 <constraint id="67" firstItem="26" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="1"/>
                 <constraint id="68" firstItem="26" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
-                <constraint id="71" firstItem="25" firstAttribute="centerX" secondItem="45" secondAttribute="centerX"/>
                 <constraint id="74" firstItem="25" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="1"/>
                 <constraint id="75" firstItem="26" firstAttribute="trailing" secondItem="25" secondAttribute="leading"/>
                 <constraint id="82" firstItem="24" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="1"/>
@@ -285,6 +213,12 @@
                 <constraint id="86" firstItem="24" firstAttribute="trailing" secondItem="1" secondAttribute="trailing"/>
                 <constraint id="87" firstItem="25" firstAttribute="width" secondItem="26" secondAttribute="width"/>
                 <constraint id="88" firstItem="24" firstAttribute="width" secondItem="26" secondAttribute="width"/>
+                <constraint id="103" firstItem="46" firstAttribute="centerX" secondItem="1" secondAttribute="centerX"/>
+                <constraint id="107" firstItem="1" firstAttribute="bottom" secondItem="32" secondAttribute="bottom"/>
+                <constraint id="108" firstItem="1" firstAttribute="trailing" secondItem="32" secondAttribute="trailing"/>
+                <constraint id="111" firstItem="32" firstAttribute="top" secondItem="46" secondAttribute="bottom" constant="8"/>
+                <constraint id="112" firstItem="32" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
+                <constraint id="113" firstItem="46" firstAttribute="top" secondItem="25" secondAttribute="bottom" constant="17"/>
             </constraints>
         </view>
     </objects>
