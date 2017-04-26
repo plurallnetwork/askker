@@ -91,6 +91,25 @@ namespace Askker.App.PortableLibrary.Services
             return fileContent;
         }
 
+        public async Task<HttpResponseMessage> UpdateSurvey(SurveyModel surveyModel, string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var formContent = new StringContent(JsonConvert.SerializeObject(surveyModel), Encoding.UTF8, "application/json");
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/updatesurvey", formContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<HttpResponseMessage> CleanVotes(string surveyId, string authenticationToken)
         {
             try

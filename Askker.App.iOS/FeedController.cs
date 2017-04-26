@@ -177,20 +177,39 @@ namespace Askker.App.iOS
 
             feedCell.moreButton.TouchUpInside += async (sender, e) =>
             {
-                nint button = await Utils.ShowAlert("Clean Votes", "All survey votes will be deleted. Continue?", "Ok", "Cancel");
+                nint optionButton = await Utils.ShowAlert("More Options", "Which option do you desire?", "Clean Votes", "Close Survey", "Cancel");
 
-                if (button == 0)
+                if (optionButton == 0)
                 {
-                    await new FeedManager().CleanVotes(surveys[indexPath.Row].userId + surveys[indexPath.Row].creationDate, LoginController.tokenModel.access_token);
+                    // Clean Votes
+                    nint button = await Utils.ShowAlert("Clean Votes", "All survey votes will be deleted. Continue?", "Ok", "Cancel");
 
-                    surveys[indexPath.Row].optionSelected = null;
-                    if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
+                    if (button == 0)
                     {
-                        feedCell.optionsTableView.ReloadData();
+                        await new FeedManager().CleanVotes(surveys[indexPath.Row].userId + surveys[indexPath.Row].creationDate, LoginController.tokenModel.access_token);
+
+                        surveys[indexPath.Row].optionSelected = null;
+                        if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
+                        {
+                            feedCell.optionsTableView.ReloadData();
+                        }
+                        else
+                        {
+                            feedCell.optionsCollectionView.ReloadData();
+                        }
                     }
-                    else
+                }
+                else if (optionButton == 1)
+                {
+                    // Finish Survey
+                    nint button = await Utils.ShowAlert("Close Survey", "The survey will be closed. Continue?", "Ok", "Cancel");
+
+                    if (button == 0)
                     {
-                        feedCell.optionsCollectionView.ReloadData();
+                        surveys[indexPath.Row].finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        await new FeedManager().UpdateSurvey(surveys[indexPath.Row], LoginController.tokenModel.access_token);
+                        surveys.Remove(surveys[indexPath.Row]);
+                        this.feedCollectionView.ReloadData();
                     }
                 }
             };
