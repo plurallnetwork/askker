@@ -78,5 +78,24 @@ namespace Askker.App.PortableLibrary.Business
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task CleanVotes(string surveyId, string authenticationToken)
+        {
+            try
+            {
+                FeedService feedService = new FeedService();
+
+                var response = await feedService.CleanVotes(surveyId, authenticationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

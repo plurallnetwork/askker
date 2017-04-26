@@ -91,7 +91,22 @@ namespace Askker.App.PortableLibrary.Services
             return fileContent;
         }
 
+        public async Task<HttpResponseMessage> CleanVotes(string surveyId, string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/cleanvotes/{0}", surveyId));
 
-        
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+                    return await client.GetAsync(uri);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

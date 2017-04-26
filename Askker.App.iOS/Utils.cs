@@ -8,7 +8,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    class Utils
+    public class Utils
     {
         public static Task<nint> ShowAlert(string title, string message, params string[] buttons)
         {

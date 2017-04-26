@@ -34,7 +34,7 @@ namespace Askker.App.iOS
             base.ViewDidLoad();
             imageCache.RemoveAllObjects();
 
-            feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCellCell), feedCellId);
+            feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCell), feedCellId);
             feedCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             feedCollectionView.Delegate = new FeedCollectionViewDelegate();
             feedCollectionView.AlwaysBounceVertical = true;
@@ -83,7 +83,7 @@ namespace Askker.App.iOS
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            var feedCell = collectionView.DequeueReusableCell(feedCellId, indexPath) as FeedCollectionViewCellCell;
+            var feedCell = collectionView.DequeueReusableCell(feedCellId, indexPath) as FeedCollectionViewCell;
 
             if (surveys[indexPath.Row].profilePicture != null)
             {
@@ -175,6 +175,26 @@ namespace Askker.App.iOS
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)][v4(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsCollectionView, "v4", feedCell.contentViewButtons));
             }
 
+            feedCell.moreButton.TouchUpInside += async (sender, e) =>
+            {
+                nint button = await Utils.ShowAlert("Clean Votes", "All survey votes will be deleted. Continue?", "Ok", "Cancel");
+
+                if (button == 0)
+                {
+                    await new FeedManager().CleanVotes(surveys[indexPath.Row].userId + surveys[indexPath.Row].creationDate, LoginController.tokenModel.access_token);
+
+                    surveys[indexPath.Row].optionSelected = null;
+                    if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
+                    {
+                        feedCell.optionsTableView.ReloadData();
+                    }
+                    else
+                    {
+                        feedCell.optionsCollectionView.ReloadData();
+                    }
+                }
+            };
+
             return feedCell;
         }
 
@@ -222,7 +242,7 @@ namespace Askker.App.iOS
         }
     }
 
-    public class FeedCollectionViewCellCell : UICollectionViewCell
+    public class FeedCollectionViewCell : UICollectionViewCell
     {
         public UIImageView profileImageView { get; set; }
         public UILabel nameLabel { get; set; }
@@ -233,13 +253,16 @@ namespace Askker.App.iOS
         public UICollectionView optionsCollectionView { get; set; }
         public OptionsCollectionViewSource optionsCollectionViewSource { get; set; }
         public OptionsCollectionViewDelegate optionsCollectionViewDelegate { get; set; }
+        public UIButton commentButton { get; set; }
+        public UIButton resultButton { get; set; }
+        public UIButton moreButton { get; set; }
         public UIView contentViewButtons { get; set; }
 
         public static NSString optionCellId = new NSString("optionCell");
         public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
 
         [Export("initWithFrame:")]
-        public FeedCollectionViewCellCell(CGRect frame) : base(frame)
+        public FeedCollectionViewCell(CGRect frame) : base(frame)
         {
             ContentView.BackgroundColor = UIColor.White;
 
@@ -281,9 +304,9 @@ namespace Askker.App.iOS
 
             optionsCollectionViewDelegate = new OptionsCollectionViewDelegate();
 
-            var commentButton = buttonForTitle(title: "Comment", imageName: "comment");
-            var resultButton = buttonForTitle(title: "Result", imageName: "result");
-            var moreButton = buttonForTitle(title: "More", imageName: "more");
+            commentButton = buttonForTitle(title: "Comment", imageName: "comment");
+            resultButton = buttonForTitle(title: "Result", imageName: "result");
+            moreButton = buttonForTitle(title: "More", imageName: "more");
 
             contentViewButtons = new UIView();
             contentViewButtons.AddSubviews(commentButton, resultButton, moreButton);
@@ -339,11 +362,11 @@ namespace Askker.App.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(FeedCollectionViewCellCell.optionCellId, indexPath) as OptionTableViewCell;
+            var cell = tableView.DequeueReusableCell(FeedCollectionViewCell.optionCellId, indexPath) as OptionTableViewCell;
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             cell.Tag = options[indexPath.Row].id;
 
-            cell.optionLetterLabel.Text = FeedCollectionViewCellCell.alphabet[indexPath.Row];
+            cell.optionLetterLabel.Text = FeedCollectionViewCell.alphabet[indexPath.Row];
             cell.optionLabel.Text = options[indexPath.Row].text;
 
             if (FeedController.surveys[(int)tableView.Tag].optionSelected == options[indexPath.Row].id)
@@ -434,7 +457,7 @@ namespace Askker.App.iOS
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            var optionCell = collectionView.DequeueReusableCell(FeedCollectionViewCellCell.optionCellId, indexPath) as OptionCollectionViewCell;
+            var optionCell = collectionView.DequeueReusableCell(FeedCollectionViewCell.optionCellId, indexPath) as OptionCollectionViewCell;
             optionCell.BackgroundColor = UIColor.White;
             optionCell.Tag = options[indexPath.Row].id;
 
@@ -480,7 +503,7 @@ namespace Askker.App.iOS
                 }
             }
 
-            optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCellCell.alphabet[indexPath.Row] + "  ";
+            optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCell.alphabet[indexPath.Row] + "  ";
             optionCell.optionLabel.Text = options[indexPath.Row].text;
 
             if (FeedController.surveys[(int)collectionView.Tag].optionSelected == options[indexPath.Row].id)
