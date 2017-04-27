@@ -14,13 +14,13 @@ namespace Askker.App.PortableLibrary.Services
 {
     public class FeedService
     {
-        public async Task<HttpResponseMessage> GetFeed(string userId, string filter, string authenticationToken)
+        public async Task<HttpResponseMessage> GetFeed(string userId, bool filterMine, bool filterForMe, bool filterFinished, string authenticationToken)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getfeed/{0}/{1}", userId, filter));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getfeed/{0}/{1}/{2}/{3}", userId, filterMine, filterForMe, filterFinished));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);

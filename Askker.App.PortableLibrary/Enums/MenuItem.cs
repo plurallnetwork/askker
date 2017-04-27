@@ -14,7 +14,7 @@ namespace Askker.App.PortableLibrary.Enums
         Help,
         Logout,
         Mine,
-        ToYou,
-        Public
+        ForMe,
+        Finished
     }
 }

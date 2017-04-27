@@ -12,13 +12,13 @@ namespace Askker.App.PortableLibrary.Business
 {
     public class FeedManager
     {
-        public async Task<List<SurveyModel>> GetFeed(string userId, string filter, string authenticationToken)
+        public async Task<List<SurveyModel>> GetFeed(string userId, bool filterMine, bool filterForMe, bool filterFinished, string authenticationToken)
         {
             try
             {
                 FeedService feedService = new FeedService();
 
-                var response = await feedService.GetFeed(userId, filter, authenticationToken);
+                var response = await feedService.GetFeed(userId, filterMine, filterForMe, filterFinished, authenticationToken);
                 
                 if (response.IsSuccessStatusCode)
                 {

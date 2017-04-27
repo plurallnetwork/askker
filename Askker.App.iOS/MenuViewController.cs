@@ -38,7 +38,9 @@ namespace Askker.App.iOS
             viewController.View.AddSubview(feedMenu);
 
             var content = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
-            content.filter = "nofilter";
+            content.filterMine = false;
+            content.filterForMe = false;
+            content.filterFinished = false;
 
             sidebarController = new SidebarController(this, content, new SideMenuController(this));
             sidebarController.MenuLocation = MenuLocations.Left;

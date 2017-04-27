@@ -16,7 +16,10 @@ namespace Askker.App.iOS
         public static List<SurveyModel> surveys { get; set; }
         public static NSCache imageCache = new NSCache();
         public static VoteManager voteManager = new VoteManager();
-        public string filter { get; set; }
+        //public string filter { get; set; }
+        public bool filterMine { get; set; }
+        public bool filterForMe { get; set; }
+        public bool filterFinished { get; set; }
         public UIActivityIndicatorView indicator;
         public UIRefreshControl refreshControl;
         public static NSString feedCellId = new NSString("feedCell");
@@ -43,17 +46,12 @@ namespace Askker.App.iOS
 
             surveys = new List<SurveyModel>();
 
-            if (filter == null)
-            {
-                filter = "nofilter";
-            }
-
             refreshControl = new UIRefreshControl();
             refreshControl.TranslatesAutoresizingMaskIntoConstraints = false;
             refreshControl.ValueChanged += (sender, e) =>
             {
                 refreshControl.BeginRefreshing();
-                fetchSurveys(filter);
+                fetchSurveys(filterMine, filterForMe, filterFinished);
             };
 
             feedCollectionView.Add(refreshControl);
@@ -61,7 +59,7 @@ namespace Askker.App.iOS
             feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-35-[v0]|", new NSLayoutFormatOptions(), "v0", refreshControl));
 
             indicator.StartAnimating();
-            fetchSurveys(filter);
+            fetchSurveys(filterMine, filterForMe, filterFinished);
 
             MenuViewController.feedMenu.EditButton.TouchUpInside += EditButton_TouchUpInside;
             MenuViewController.feedMenu.CleanButton.TouchUpInside += CleanButton_TouchUpInside;
@@ -119,9 +117,9 @@ namespace Askker.App.iOS
             }
         }
 
-        public async void fetchSurveys(string filter)
+        public async void fetchSurveys(bool filterMine, bool filterForMe, bool filterFinished)
         {
-            surveys = await new FeedManager().GetFeed(LoginController.userModel.id, filter, LoginController.tokenModel.access_token);
+            surveys = await new FeedManager().GetFeed(LoginController.userModel.id, filterMine, filterForMe, filterFinished, LoginController.tokenModel.access_token);
 
             foreach (var survey in surveys)
             {
