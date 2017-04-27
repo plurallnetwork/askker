@@ -20,6 +20,8 @@ namespace Askker.App.iOS
         public UIActivityIndicatorView indicator;
         public UIRefreshControl refreshControl;
         public static NSString feedCellId = new NSString("feedCell");
+        SurveyModel survey;
+        FeedCollectionViewCell surveyCell;
 
         public FeedController (IntPtr handle) : base (handle)
         {
@@ -33,7 +35,7 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             imageCache.RemoveAllObjects();
-
+                        
             feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCell), feedCellId);
             feedCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             feedCollectionView.Delegate = new FeedCollectionViewDelegate();
@@ -60,6 +62,61 @@ namespace Askker.App.iOS
 
             indicator.StartAnimating();
             fetchSurveys(filter);
+
+            MenuViewController.feedMenu.EditButton.TouchUpInside += EditButton_TouchUpInside;
+            MenuViewController.feedMenu.CleanButton.TouchUpInside += CleanButton_TouchUpInside;
+            MenuViewController.feedMenu.FinishButton.TouchUpInside += FinishButton_TouchUpInside;
+        }
+
+        private async void FinishButton_TouchUpInside(object sender, EventArgs e)
+        {
+            nint button = await Utils.ShowAlert("Close Survey", "The survey will be closed. Continue?", "Ok", "Cancel");
+
+            if (button == 0)
+            {
+                survey.finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                await new FeedManager().UpdateSurvey(survey, LoginController.tokenModel.access_token);
+                surveys.Remove(survey);
+                this.feedCollectionView.ReloadData();
+            }
+
+            MenuViewController.feedMenu.Hidden = true;
+            MenuViewController.sidebarController.View.Alpha = 1f;
+        }
+
+        private async void CleanButton_TouchUpInside(object sender, EventArgs e)
+        {
+            nint button = await Utils.ShowAlert("Clean Votes", "All survey votes will be deleted. Continue?", "Ok", "Cancel");
+
+            if (button == 0)
+            {
+                await new FeedManager().CleanVotes(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
+
+                survey.optionSelected = null;
+                if (survey.type == SurveyType.Text.ToString())
+                {
+                    surveyCell.optionsTableView.ReloadData();
+                }
+                else
+                {
+                    surveyCell.optionsCollectionView.ReloadData();
+                }
+            }
+
+            MenuViewController.feedMenu.Hidden = true;
+            MenuViewController.sidebarController.View.Alpha = 1f;
+        }
+
+        private void EditButton_TouchUpInside(object sender, EventArgs e)
+        {
+            var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+            if (CreateSurveyController != null)
+            {
+                CreateSurveyController.ScreenState = ScreenState.Edit.ToString();
+                CreateSurveyController.UserId = survey.userId;
+                CreateSurveyController.CreationDate = survey.creationDate;
+                this.PresentViewController(CreateSurveyController, true, null);
+            }
         }
 
         public async void fetchSurveys(string filter)
@@ -177,40 +234,17 @@ namespace Askker.App.iOS
 
             feedCell.moreButton.TouchUpInside += async (sender, e) =>
             {
-                nint optionButton = await Utils.ShowAlert("More Options", "Which option do you desire?", "Clean Votes", "Close Survey", "Cancel");
-
-                if (optionButton == 0)
+                if (!surveys[indexPath.Row].userId.Equals(LoginController.userModel.id))
                 {
-                    // Clean Votes
-                    nint button = await Utils.ShowAlert("Clean Votes", "All survey votes will be deleted. Continue?", "Ok", "Cancel");
-
-                    if (button == 0)
-                    {
-                        await new FeedManager().CleanVotes(surveys[indexPath.Row].userId + surveys[indexPath.Row].creationDate, LoginController.tokenModel.access_token);
-
-                        surveys[indexPath.Row].optionSelected = null;
-                        if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
-                        {
-                            feedCell.optionsTableView.ReloadData();
-                        }
-                        else
-                        {
-                            feedCell.optionsCollectionView.ReloadData();
-                        }
-                    }
+                    nint optionButton = await Utils.ShowAlert("More Options", "Only the survey owner can access these options", "OK");
                 }
-                else if (optionButton == 1)
+                else
                 {
-                    // Finish Survey
-                    nint button = await Utils.ShowAlert("Close Survey", "The survey will be closed. Continue?", "Ok", "Cancel");
+                    survey = surveys[indexPath.Row];
+                    surveyCell = feedCell;
 
-                    if (button == 0)
-                    {
-                        surveys[indexPath.Row].finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                        await new FeedManager().UpdateSurvey(surveys[indexPath.Row], LoginController.tokenModel.access_token);
-                        surveys.Remove(surveys[indexPath.Row]);
-                        this.feedCollectionView.ReloadData();
-                    }
+                    MenuViewController.feedMenu.Hidden = false;
+                    MenuViewController.sidebarController.View.Alpha = 0.5f;
                 }
             };
 

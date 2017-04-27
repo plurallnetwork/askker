@@ -24,10 +24,6 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton editButton { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton profileOtherButton { get; set; }
 
         [Action ("BtnMenu_TouchUpInside:")]
@@ -44,11 +40,6 @@ namespace Askker.App.iOS
             if (createButton != null) {
                 createButton.Dispose ();
                 createButton = null;
-            }
-
-            if (editButton != null) {
-                editButton.Dispose ();
-                editButton = null;
             }
 
             if (profileOtherButton != null) {

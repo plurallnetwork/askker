@@ -193,7 +193,7 @@ namespace Askker.App.iOS
                 {
                     var friendsController = menuViewController.Storyboard.InstantiateViewController("FriendsController");
                     menuViewController.NavigationController.PushViewController(friendsController, true);
-                    menuViewController.sidebarController.CloseMenu();
+                    MenuViewController.sidebarController.CloseMenu();
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Logout)
                 {

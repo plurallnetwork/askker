@@ -8,21 +8,41 @@ namespace Askker.App.iOS
 {
     public partial class MenuViewController : UIViewController
     {
-        public SidebarController sidebarController { get; private set; }
+        public static SidebarController sidebarController { get; private set; }
+        public static FeedMenuView feedMenu = FeedMenuView.Create();
 
         public MenuViewController(IntPtr handle) : base(handle)
         {
-        }
+        }        
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            feedMenu.Hidden = true;
+            
+            feedMenu.CancelButton.TouchUpInside += (object sender, EventArgs e) =>
+            {
+                feedMenu.Hidden = true;
+                sidebarController.View.Alpha = 1f;
+            };
+
+            var mainWindow = UIApplication.SharedApplication.KeyWindow;
+            var viewController = mainWindow?.RootViewController;
+            while (viewController?.PresentedViewController != null)
+            {
+                viewController = viewController.PresentedViewController;
+            }
+            if (viewController == null)
+                viewController = this;
+            viewController.View.AddSubview(feedMenu);
 
             var content = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
             content.filter = "nofilter";
 
             sidebarController = new SidebarController(this, content, new SideMenuController(this));
             sidebarController.MenuLocation = MenuLocations.Left;
+            
 
             this.NavigationItem.SetLeftBarButtonItem(
                 new UIBarButtonItem(UIImage.FromBundle("assets/img/threelines")
