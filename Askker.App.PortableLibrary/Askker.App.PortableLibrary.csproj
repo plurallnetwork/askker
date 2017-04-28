@@ -40,6 +40,7 @@
     <Compile Include="Business\RegisterManager.cs" />
     <Compile Include="Business\VoteManager.cs" />
     <Compile Include="Enums\MenuItem.cs" />
+    <Compile Include="Enums\RelationshipStatusType.cs" />
     <Compile Include="Enums\SurveyType.cs" />
     <Compile Include="Enums\UserNotificationType.cs" />
     <Compile Include="Models\MenuModel.cs" />
