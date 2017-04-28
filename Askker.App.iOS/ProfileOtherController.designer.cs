@@ -20,6 +20,10 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton btnRelationship { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField emailText { get; set; }
 
         [Outlet]
@@ -39,6 +43,11 @@ namespace Askker.App.iOS
             if (ageText != null) {
                 ageText.Dispose ();
                 ageText = null;
+            }
+
+            if (btnRelationship != null) {
+                btnRelationship.Dispose ();
+                btnRelationship = null;
             }
 
             if (emailText != null) {

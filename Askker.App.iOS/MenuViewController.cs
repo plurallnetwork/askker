@@ -23,6 +23,13 @@ namespace Askker.App.iOS
             
             feedMenu.CancelButton.TouchUpInside += (object sender, EventArgs e) =>
             {
+                feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+                {
+                    Duration = 0.2,
+                    Type = CoreAnimation.CAAnimation.TransitionPush,
+                    Subtype = CoreAnimation.CAAnimation.TransitionFromBottom
+                }, "hideMenu");
+
                 feedMenu.Hidden = true;
                 sidebarController.View.Alpha = 1f;
             };

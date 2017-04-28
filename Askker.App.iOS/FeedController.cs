@@ -58,12 +58,18 @@ namespace Askker.App.iOS
             feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", feedCollectionView, "v1", refreshControl));
             feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-35-[v0]|", new NSLayoutFormatOptions(), "v0", refreshControl));
 
-            indicator.StartAnimating();
-            fetchSurveys(filterMine, filterForMe, filterFinished);
+            //indicator.StartAnimating();
+            //fetchSurveys(filterMine, filterForMe, filterFinished);
 
             MenuViewController.feedMenu.EditButton.TouchUpInside += EditButton_TouchUpInside;
             MenuViewController.feedMenu.CleanButton.TouchUpInside += CleanButton_TouchUpInside;
             MenuViewController.feedMenu.FinishButton.TouchUpInside += FinishButton_TouchUpInside;
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            indicator.StartAnimating();
+            fetchSurveys(filterMine, filterForMe, filterFinished);
         }
 
         private async void FinishButton_TouchUpInside(object sender, EventArgs e)
@@ -240,6 +246,13 @@ namespace Askker.App.iOS
                 {
                     survey = surveys[indexPath.Row];
                     surveyCell = feedCell;
+
+                    MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+                    {
+                        Duration = 0.2,
+                        Type = CoreAnimation.CAAnimation.TransitionPush,
+                        Subtype = CoreAnimation.CAAnimation.TransitionFromTop
+                    }, "showMenu");
 
                     MenuViewController.feedMenu.Hidden = false;
                     MenuViewController.sidebarController.View.Alpha = 0.5f;
