@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -10,128 +13,302 @@
         <view contentMode="scaleToFill" id="1" customClass="OptionsStepView">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <subviews>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" id="4" translatesAutoresizingMaskIntoConstraints="NO" editable="NO" selectable="NO" fixedFrame="YES">
-                    <rect key="frame" x="0.0" y="100" width="375" height="143"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="17">
+                    <rect key="frame" x="0.0" y="587" width="375" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="101">
+                            <variation key="heightClass=regular-widthClass=compact" constant="80"/>
+                        </constraint>
+                    </constraints>
+                    <state key="normal" image="images/icons/done.png">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="101"/>
+                        </mask>
                     </variation>
-                </textView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="11" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="0.0" y="240" width="375" height="427"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="190" y="587" width="185" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <mask key="constraints">
+                            <include reference="101"/>
+                        </mask>
+                    </variation>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8">
+                    <rect key="frame" x="187.5" y="587" width="187.5" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="134">
+                            <variation key="heightClass=regular-widthClass=compact" constant="80"/>
+                        </constraint>
+                    </constraints>
                     <state key="normal" image="images/icons/text.gif">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
-                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="134"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <mask key="constraints">
+                            <include reference="134"/>
+                        </mask>
                     </variation>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="0.0" y="587" width="190" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4">
+                    <rect key="frame" x="0.0" y="100" width="375" height="140"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="140" id="131"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="131"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <mask key="constraints">
+                            <include reference="131"/>
+                        </mask>
+                    </variation>
+                </textView>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="11">
+                    <rect key="frame" x="0.0" y="240" width="375" height="297"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7">
+                    <rect key="frame" x="0.0" y="587" width="187.5" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="91"/>
+                    </constraints>
                     <state key="normal" image="images/icons/image.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
-                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="91"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <mask key="constraints">
+                            <include reference="91"/>
+                        </mask>
                     </variation>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="17" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" hidden="YES">
-                    <rect key="frame" x="0.0" y="366" width="375" height="80"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" image="images/icons/check.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
-                    </state>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1"/>
-                        <color key="tintColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
-                    </variation>
-                </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" ___________________________________________________" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="24" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="0.0" y="521" width="375" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" colorSpace="calibratedRGB" red="0.51372549019607838" green="0.49019607843137253" blue="0.49019607843137253" alpha="1"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Question open to suggestions?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="25">
+                    <rect key="frame" x="10" y="541" width="284" height="45"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="112"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <nil key="highlightedColor"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="112"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <mask key="constraints">
+                            <include reference="112"/>
+                        </mask>
                     </variation>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Question open to suggestions?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="25" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="0.0" y="541" width="375" height="45"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="textColor"/>
-                    <nil key="highlightedColor"/>
-                    <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="26">
+                    <rect key="frame" x="314" y="548" width="53" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="51" id="115"/>
+                        <constraint firstAttribute="height" constant="31" id="119"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="115"/>
+                            <exclude reference="119"/>
+                        </mask>
                     </variation>
-                </label>
-                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="26" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                    <rect key="frame" x="314" y="548" width="51" height="31"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="115"/>
+                            <include reference="119"/>
+                        </mask>
+                    </variation>
                 </switch>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="29">
+                    <rect key="frame" x="0.0" y="538" width="374" height="2"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="2" id="107"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="107"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <mask key="constraints">
+                            <include reference="107"/>
+                        </mask>
+                    </variation>
+                </view>
             </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="4" secondAttribute="trailing" id="30"/>
+                <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100" id="31"/>
+                <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="34"/>
+                <constraint firstItem="4" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="35"/>
+                <constraint firstItem="7" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="88"/>
+                <constraint firstAttribute="bottom" secondItem="7" secondAttribute="bottom" id="89"/>
+                <constraint firstAttribute="trailing" secondItem="17" secondAttribute="trailing" id="98"/>
+                <constraint firstItem="17" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="103"/>
+                <constraint firstItem="29" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="104"/>
+                <constraint firstAttribute="bottom" secondItem="29" secondAttribute="bottom" constant="127" id="105"/>
+                <constraint firstAttribute="trailing" secondItem="29" secondAttribute="trailing" constant="1" id="108"/>
+                <constraint firstItem="25" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="109">
+                    <variation key="heightClass=regular-widthClass=compact" constant="10"/>
+                </constraint>
+                <constraint firstAttribute="bottom" secondItem="25" secondAttribute="bottom" constant="81" id="110"/>
+                <constraint firstAttribute="trailing" secondItem="26" secondAttribute="trailing" constant="20" id="113">
+                    <variation key="heightClass=regular-widthClass=compact" constant="10"/>
+                </constraint>
+                <constraint firstAttribute="bottom" secondItem="26" secondAttribute="bottom" constant="88" id="114"/>
+                <constraint firstItem="26" firstAttribute="leading" secondItem="25" secondAttribute="trailing" constant="20" id="116"/>
+                <constraint firstAttribute="trailing" secondItem="11" secondAttribute="trailing" id="120"/>
+                <constraint firstAttribute="bottom" secondItem="11" secondAttribute="bottom" constant="130" id="121"/>
+                <constraint firstItem="11" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="124"/>
+                <constraint firstItem="11" firstAttribute="top" secondItem="4" secondAttribute="bottom" id="126"/>
+                <constraint firstItem="8" firstAttribute="bottom" secondItem="1" secondAttribute="bottom" id="136"/>
+                <constraint firstItem="17" firstAttribute="bottom" secondItem="1" secondAttribute="bottom" id="138"/>
+                <constraint firstItem="8" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="140"/>
+                <constraint firstItem="8" firstAttribute="leading" secondItem="7" secondAttribute="trailing" id="148"/>
+                <constraint firstItem="8" firstAttribute="width" secondItem="7" secondAttribute="width" id="151"/>
+            </constraints>
             <variation key="default">
                 <mask key="subviews">
-                    <exclude reference="4"/>
-                    <exclude reference="7"/>
-                    <exclude reference="8"/>
-                    <exclude reference="11"/>
                     <exclude reference="17"/>
-                    <exclude reference="24"/>
+                    <exclude reference="8"/>
+                    <exclude reference="4"/>
+                    <exclude reference="11"/>
+                    <exclude reference="7"/>
                     <exclude reference="25"/>
                     <exclude reference="26"/>
+                    <exclude reference="29"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="30"/>
+                    <exclude reference="31"/>
+                    <exclude reference="34"/>
+                    <exclude reference="35"/>
+                    <exclude reference="120"/>
+                    <exclude reference="121"/>
+                    <exclude reference="124"/>
+                    <exclude reference="126"/>
+                    <exclude reference="104"/>
+                    <exclude reference="105"/>
+                    <exclude reference="108"/>
+                    <exclude reference="109"/>
+                    <exclude reference="110"/>
+                    <exclude reference="113"/>
+                    <exclude reference="114"/>
+                    <exclude reference="116"/>
+                    <exclude reference="88"/>
+                    <exclude reference="89"/>
+                    <exclude reference="98"/>
+                    <exclude reference="103"/>
+                    <exclude reference="138"/>
+                    <exclude reference="136"/>
+                    <exclude reference="140"/>
+                    <exclude reference="148"/>
+                    <exclude reference="151"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
                 <mask key="subviews">
-                    <include reference="4"/>
-                    <include reference="7"/>
-                    <include reference="8"/>
-                    <include reference="11"/>
                     <include reference="17"/>
-                    <include reference="24"/>
+                    <include reference="8"/>
+                    <include reference="4"/>
+                    <include reference="11"/>
+                    <include reference="7"/>
                     <include reference="25"/>
                     <include reference="26"/>
+                    <include reference="29"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="30"/>
+                    <include reference="31"/>
+                    <include reference="34"/>
+                    <include reference="35"/>
+                    <include reference="120"/>
+                    <include reference="121"/>
+                    <include reference="124"/>
+                    <include reference="126"/>
+                    <include reference="104"/>
+                    <include reference="105"/>
+                    <include reference="108"/>
+                    <include reference="109"/>
+                    <include reference="110"/>
+                    <include reference="113"/>
+                    <include reference="114"/>
+                    <include reference="116"/>
+                    <include reference="88"/>
+                    <include reference="89"/>
+                    <include reference="98"/>
+                    <include reference="103"/>
+                    <include reference="138"/>
+                    <include reference="136"/>
+                    <include reference="140"/>
+                    <include reference="148"/>
+                    <include reference="151"/>
                 </mask>
             </variation>
             <connections>
-                <outlet property="questionText" destination="4" id="name-outlet-4"/>
-                <outlet property="optionsTable" destination="11" id="name-outlet-11"/>
-                <outlet property="textButton" destination="8" id="name-outlet-8"/>
                 <outlet property="doneButton" destination="17" id="name-outlet-17"/>
                 <outlet property="imageButton" destination="7" id="name-outlet-7"/>
+                <outlet property="optionsTable" destination="11" id="name-outlet-11"/>
+                <outlet property="questionText" destination="4" id="name-outlet-4"/>
+                <outlet property="textButton" destination="8" id="name-outlet-8"/>
             </connections>
         </view>
     </objects>
     <resources>
+        <image name="images/icons/done.png" width="32" height="32"/>
+        <image name="images/icons/image.png" width="48" height="48"/>
+        <image name="images/icons/text.gif" width="48" height="48"/>
+        <image name="images/icons/editar.png" width="59" height="60"/>
+        <image name="images/icons/man.png" width="32" height="32"/>
+        <image name="images/icons/woman.png" width="32" height="32"/>
         <image name="images/purple-pip-circle.png" width="8" height="8"/>
         <image name="images/purple-pip-full.png" width="8" height="8"/>
         <image name="images/white-pip-circle.png" width="8" height="8"/>
         <image name="images/white-pip-full.png" width="8" height="8"/>
+        <image name="assets/img/feediOS.png" width="68" height="54"/>
+        <image name="assets/img/filterMine.png" width="48" height="37"/>
+        <image name="assets/img/filterPublic.png" width="41" height="48"/>
+        <image name="assets/img/filterToYou.png" width="42" height="48"/>
+        <image name="assets/img/friendsiOS.png" width="68" height="48"/>
         <image name="assets/img/logo_180.png" width="180" height="180"/>
-        <image name="Profile" width="210" height="260"/>
-        <image name="images/icons/check.png" width="48" height="48"/>
-        <image name="images/icons/filterToYou.png" width="42" height="48"/>
-        <image name="images/icons/friendsiOS.png" width="68" height="48"/>
+        <image name="assets/img/menuiOS.png" width="61" height="38"/>
+        <image name="assets/img/optionCheck.png" width="220" height="220"/>
+        <image name="assets/img/pagesFeed.png" width="48" height="38"/>
+        <image name="assets/img/pagesFriends.png" width="48" height="34"/>
+        <image name="assets/img/pagesHelp.png" width="43" height="44"/>
+        <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
+        <image name="assets/img/pagesSettings.png" width="44" height="48"/>
+        <image name="assets/img/threelines.png" width="30" height="30"/>
         <image name="OptionCheck" width="220" height="220"/>
-        <image name="images/icons/text.gif" width="48" height="48"/>
-        <image name="images/icons/image.png" width="48" height="48"/>
+        <image name="Profile" width="210" height="260"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

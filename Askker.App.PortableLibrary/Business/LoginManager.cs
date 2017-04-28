@@ -91,6 +91,30 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
+        public async Task<List<UserModel>> SearchUsersByName(string authenticationToken, string name)
+        {
+            LoginService loginService = new LoginService();
+
+            var response = await loginService.SearchUsersByName(authenticationToken, name);
+            var json = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<List<UserModel>>(json);
+            }
+            else
+            {
+                if (!json.Equals(""))
+                {
+                    throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task Update(string authenticationToken, UserModel userModel, byte[] profileImage, string profileImageName)
         {
             try
@@ -98,6 +122,25 @@ namespace Askker.App.PortableLibrary.Business
                 LoginService loginService = new LoginService();
 
                 var response = await loginService.Update(authenticationToken, userModel, profileImage, profileImageName);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task UpdateUserInformation(UserModel userModel, string authenticationToken)
+        {
+            try
+            {
+                LoginService loginService = new LoginService();
+
+                var response = await loginService.UpdateUserInformation(userModel, authenticationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {

@@ -16,15 +16,15 @@ namespace Askker.App.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton doneButton { get; set; }
+        UIKit.UIButton btnFriends { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton friendsButton { get; set; }
+        UIKit.UIButton btnPrivate { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton groupsButton { get; set; }
+        UIKit.UIButton btnPublic { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -32,28 +32,37 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel shareMessageLabel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITableView shareTable { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
-            if (doneButton != null) {
-                doneButton.Dispose ();
-                doneButton = null;
+            if (btnFriends != null) {
+                btnFriends.Dispose ();
+                btnFriends = null;
             }
 
-            if (friendsButton != null) {
-                friendsButton.Dispose ();
-                friendsButton = null;
+            if (btnPrivate != null) {
+                btnPrivate.Dispose ();
+                btnPrivate = null;
             }
 
-            if (groupsButton != null) {
-                groupsButton.Dispose ();
-                groupsButton = null;
+            if (btnPublic != null) {
+                btnPublic.Dispose ();
+                btnPublic = null;
             }
 
             if (questionText != null) {
                 questionText.Dispose ();
                 questionText = null;
+            }
+
+            if (shareMessageLabel != null) {
+                shareMessageLabel.Dispose ();
+                shareMessageLabel = null;
             }
 
             if (shareTable != null) {

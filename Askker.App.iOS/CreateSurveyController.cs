@@ -1,5 +1,7 @@
 ﻿using Askker.App.iOS.HorizontalSwipe;
+using Askker.App.iOS.TableControllers;
 using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Cirrious.FluentLayouts.Touch;
 using System;
@@ -18,6 +20,9 @@ namespace Askker.App.iOS
             Backward
         }
 
+        public static string ScreenState;
+        public static string UserId;
+        public static string CreationDate;
         private MultiStepProcessHorizontal _pageViewController;
         private HorizontalSwipePageControl _pageControl;
         private UILabel _pageTitle;
@@ -45,14 +50,14 @@ namespace Askker.App.iOS
         public override void LoadView()
         {
             View = new UIView();
-            _pageTitles = new List<string> { "Write your question", "Choose your options", "Who do you want to ask to?"};
+            _pageTitles = new List<string> { "Write your question", "Choose your options", "Who do you want to ask to?" };
             _pageTitle = new UILabel();
             _pageTitle.TextColor = UIColor.DarkGray;
             _pageTitle.Font = UIFont.FromName("Arial", 12f);
 
             _pageViewController = new MultiStepProcessHorizontal(new MultiStepProcessDataSource(Steps));
             _pageViewController.WillTransition += _multiStepProcessHorizontal_WillTransition;
-            
+
             _pageControl = new HorizontalSwipePageControl
             {
                 CurrentPage = 0,
@@ -96,7 +101,7 @@ namespace Askker.App.iOS
             View.Add(_askButton);
             View.Add(_backButton);
             View.Add(_pageTitle);
-            
+
 
             View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
             View.AddConstraints(
@@ -124,7 +129,7 @@ namespace Askker.App.iOS
                 _pageTitle.AtTopOf(View, UIScreen.MainScreen.Bounds.Height * 0.11f)
             );
 
-            
+
 
         }
 
@@ -158,7 +163,41 @@ namespace Askker.App.iOS
                     return;
                 }
 
-                
+                List<SurveyOptionTableItem> items = CreateSurveyOptionsStep.tableSource.GetTableItems();
+                if (items.Count > 0)
+                {
+                    CreateSurveyController.SurveyModel.options = new List<Option>();
+
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                    {
+                        //if (CreateSurveyController.OptionImages == null)
+                        //{
+                        CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
+                        //}
+                    }
+
+                    int optionId = 0;
+                    items.ForEach(i =>
+                    {
+                        if (!"<- Add new option".Equals(i.Text))
+                        {
+                            Option o = new Option();
+                            o.id = optionId;
+                            o.text = i.Text;
+                            o.image = "";
+
+                            if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString() && i.Image != null)
+                            {
+                                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + i.ImageExtension, i.Image));
+                            }
+
+                            CreateSurveyController.SurveyModel.options.Add(o);
+
+
+                            optionId++;
+                        }
+                    });
+                }
             }
 
             var nextVcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex + 1) as UIViewController };
@@ -183,11 +222,26 @@ namespace Askker.App.iOS
 
         private async void AskTapped(object s, EventArgs e)
         {
+            if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString() && (CreateSurveyController.SurveyModel == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceUsers == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceUsers.ids == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count < 1))
+            {
+                new UIAlertView("Share", "Please select at least one friend to share this survey", null, "OK", null).Show();
+
+                return;
+            }
+
+            if (CreateSurveyController.SurveyModel.targetAudience != TargetAudience.Private.ToString())
+            {
+                CreateSurveyController.SurveyModel.targetAudienceUsers = null;
+            }
+
             try
             {
                 await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.access_token, QuestionImage, OptionImages);
 
-                var feedController = this.Storyboard.InstantiateViewController("FeedNavController");
+                var feedController = this.Storyboard.InstantiateViewController("MenuNavController");
                 if (feedController != null)
                 {
                     this.PresentViewController(feedController, true, null);
@@ -239,6 +293,15 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             // NavigationController.NavigationBar.Hidden = true;
+
+            if(ScreenState == Askker.App.PortableLibrary.Enums.ScreenState.Edit.ToString())
+            {
+                Title = "Edit Survey";
+            }
+            else
+            {
+                Title = "Create Survey";
+            }
 
             this.NavigationItem.SetLeftBarButtonItem(
                 new UIBarButtonItem(UIBarButtonSystemItem.Cancel, (sender, args) =>

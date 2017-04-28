@@ -36,8 +36,8 @@ namespace Askker.App.iOS.Models
         {
             MenuItems = new List<MenuModel>();
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Mine, Title = "Mine", ImageName = "filterMine" });
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.ToYou, Title = "To You", ImageName = "filterToYou" });
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Public, Title = "Public", ImageName = "filterPublic" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.ForMe, Title = "For Me", ImageName = "filterToYou" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Finished, Title = "Finished", ImageName = "filterPublic" });
         }
     }
 }

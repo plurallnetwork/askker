@@ -6,15 +6,10 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Enums
 {
-    public enum MenuItem
+    public enum TargetAudience
     {
-        Feed,
-        MyFriends,
-        Settings,
-        Help,
-        Logout,
-        Mine,
-        ForMe,
-        Finished
+        Public,
+        Private,
+        Friends
     }
 }

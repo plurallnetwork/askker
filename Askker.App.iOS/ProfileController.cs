@@ -2,8 +2,10 @@
 using Askker.App.PortableLibrary.Models;
 using AssetsLibrary;
 using CoreFoundation;
+using CoreGraphics;
 using Foundation;
 using System;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using UIKit;
 
@@ -170,13 +172,15 @@ namespace Askker.App.iOS
                 }
                 else
                 {
-                    using (NSData imageData = profileImageView.Image.AsPNG())
+                    using (NSData imageData = Utils.CompressImage(profileImageView.Image))
                     {
                         byte[] myByteArray = new byte[imageData.Length];
                         System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
-                        await new LoginManager().Update(LoginController.tokenModel.access_token, LoginController.userModel, myByteArray, fileName);
-                    }                    
-                }                
+                        await new LoginManager().Update(LoginController.tokenModel.access_token, LoginController.userModel, myByteArray, "profile-picture.jpg");
+                    }
+                }
+
+                await new LoginManager().UpdateUserInformation(LoginController.userModel, LoginController.tokenModel.access_token);
             }
             catch (Exception e)
             {
@@ -336,6 +340,11 @@ namespace Askker.App.iOS
         void Handle_Canceled(object sender, EventArgs e)
         {
             imagePicker.DismissModalViewController(true);
+        }
+
+        private static object CGRect(double v1, double v2, nfloat actualWidth, nfloat actualHeight)
+        {
+            throw new NotImplementedException();
         }
     }
 }

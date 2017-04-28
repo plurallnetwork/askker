@@ -106,9 +106,16 @@
     </Compile>
     <Compile Include="CredentialsService.cs" />
     <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
+    <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
+    <Compile Include="CustomViewComponents\SurveyOptionCustomCell.cs" />
+    <Compile Include="CustomViewComponents\SurveyShareCustomCell.cs" />
     <Compile Include="FeedController.cs" />
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FeedMenuView.cs" />
+    <Compile Include="FeedMenuView.designer.cs">
+      <DependentUpon>FeedMenuView.cs</DependentUpon>
     </Compile>
     <Compile Include="FriendsController.cs" />
     <Compile Include="FriendsController.designer.cs">
@@ -134,6 +141,10 @@
     <Compile Include="ProfileOtherController.designer.cs">
       <DependentUpon>ProfileOtherController.cs</DependentUpon>
     </Compile>
+    <Compile Include="SearchAllController.cs" />
+    <Compile Include="SearchAllController.designer.cs">
+      <DependentUpon>SearchAllController.cs</DependentUpon>
+    </Compile>
     <Compile Include="SideMenuController.cs" />
     <Compile Include="SideMenuController.designer.cs">
       <DependentUpon>SideMenuController.cs</DependentUpon>
@@ -146,8 +157,12 @@
     <Compile Include="ShareStepView.designer.cs">
       <DependentUpon>ShareStepView.cs</DependentUpon>
     </Compile>
-    <Compile Include="TableControllers\TableItem.cs" />
-    <Compile Include="TableControllers\TableSource.cs" />
+    <Compile Include="TableControllers\SearchAllTableItem.cs" />
+    <Compile Include="TableControllers\SearchAllTableSource.cs" />
+    <Compile Include="TableControllers\SurveyOptionTableItem.cs" />
+    <Compile Include="TableControllers\SurveyOptionTableSource.cs" />
+    <Compile Include="TableControllers\SurveyShareTableItem.cs" />
+    <Compile Include="TableControllers\SurveyShareTableSource.cs" />
     <Compile Include="Utils.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
@@ -165,6 +180,7 @@
     <InterfaceDefinition Include="Resources\QuestionStepView.xib" />
     <InterfaceDefinition Include="Resources\OptionsStepView.xib" />
     <InterfaceDefinition Include="Resources\ShareStepView.xib" />
+    <InterfaceDefinition Include="Resources\FeedMenuView.xib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="QuestionStepView.cs" />
@@ -205,7 +221,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Json" />
-    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Validation, Version=2.2.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
@@ -280,6 +295,7 @@
     <BundleResource Include="images\icons\image.png" />
     <BundleResource Include="images\icons\editar.png" />
     <BundleResource Include="images\icons\man.png" />
+    <BundleResource Include="images\icons\done.png" />
     <Content Include="images\icons\text.gif" />
     <BundleResource Include="images\icons\woman.png" />
   </ItemGroup>

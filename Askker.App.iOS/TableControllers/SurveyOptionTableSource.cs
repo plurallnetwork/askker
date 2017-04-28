@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Enums;
+﻿using Askker.App.iOS.CustomViewComponents;
+using Askker.App.PortableLibrary.Enums;
 using AssetsLibrary;
 using Foundation;
 using System;
@@ -9,20 +10,20 @@ using UIKit;
 
 namespace Askker.App.iOS.TableControllers
 {
-    public class TableSource : UITableViewSource
+    public class SurveyOptionTableSource : UITableViewSource
     {
-        List<TableItem> tableItems;
+        List<SurveyOptionTableItem> tableItems;
         UIViewController viewController;
-        string cellIdentifier = "TableCell";
+        protected NSString cellIdentifier = new NSString("TableCell");
         UIImagePickerController imagePicker;
 
-        public TableSource(List<TableItem> items, UIViewController viewController)
+        public SurveyOptionTableSource(List<SurveyOptionTableItem> items, UIViewController viewController)
         {
             tableItems = items;
             this.viewController = viewController;
         }
 
-        public List<TableItem> GetTableItems()
+        public List<SurveyOptionTableItem> GetTableItems()
         {
             return tableItems;
         }
@@ -41,7 +42,7 @@ namespace Askker.App.iOS.TableControllers
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
             new UIAlertView("Row Selected"
-                , tableItems[indexPath.Row].Heading, null, "OK", null).Show();
+                , tableItems[indexPath.Row].Text, null, "OK", null).Show();
             tableView.DeselectRow(indexPath, true);
         }
 
@@ -51,7 +52,7 @@ namespace Askker.App.iOS.TableControllers
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             // request a recycled cell to save memory
-            UITableViewCell cell = tableView.DequeueReusableCell(cellIdentifier);
+            SurveyOptionCustomCell cell = tableView.DequeueReusableCell(cellIdentifier) as SurveyOptionCustomCell;
 
             // UNCOMMENT one of these to use that style
             var cellStyle = UITableViewCellStyle.Default;
@@ -62,30 +63,32 @@ namespace Askker.App.iOS.TableControllers
             // if there are no cells to reuse, create a new one
             if (cell == null)
             {
-                cell = new UITableViewCell(cellStyle, cellIdentifier);
+                cell = new SurveyOptionCustomCell(cellIdentifier);
             }
 
-            cell.TextLabel.Text = tableItems[indexPath.Row].Heading;
+            //cell.textLabel.Text = tableItems[indexPath.Row].Text;
+            cell.UpdateCell(tableItems[indexPath.Row].Text);
 
             // Default style doesn't support Subtitle
-            if (cellStyle == UITableViewCellStyle.Subtitle
-               || cellStyle == UITableViewCellStyle.Value1
-               || cellStyle == UITableViewCellStyle.Value2)
-            {
-                cell.DetailTextLabel.Text = tableItems[indexPath.Row].SubHeading;
-            }
+            //if (cellStyle == UITableViewCellStyle.Subtitle
+            //   || cellStyle == UITableViewCellStyle.Value1
+            //   || cellStyle == UITableViewCellStyle.Value2)
+            //{
+            //    cell.DetailTextLabel.Text = tableItems[indexPath.Row].ImageExtension;
+            //}
 
             // Value2 style doesn't support an image
             if (cellStyle != UITableViewCellStyle.Value2)
             {
                 if (tableItems[indexPath.Row].Image != null)
                 {
-                    cell.ImageView.Image = UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image));
+                    //cell.ImageView.Image = UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image));
+                    cell.UpdateCell(tableItems[indexPath.Row].Text, UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image)));
                 }
             }
-                
-            //cell.ImageView.image = UIImage.FromFile("Images/" + tableItems[indexPath.Row].ImageName);
 
+            //cell.ImageView.image = UIImage.FromFile("Images/" + tableItems[indexPath.Row].ImageName);
+            
             return cell;
         }
 
@@ -117,7 +120,7 @@ namespace Askker.App.iOS.TableControllers
                             if (!string.IsNullOrWhiteSpace(alert.GetTextField(0).Text)) { 
                                 // user input will be in alert.GetTextField(0).text;
                                 //---- create a new item and add it to our underlying data
-                                tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text));
+                                tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text));
                                 //---- insert a new row in the table
                                 tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
                             }
@@ -230,11 +233,11 @@ namespace Askker.App.iOS.TableControllers
                     {
                         // user input will be in alert.GetTextField(0).text;
                         //---- create a new item and add it to our underlying data
-                        using (NSData imageData = originalImage.AsPNG())
+                        using (NSData imageData = Utils.CompressImage(originalImage))
                         {
                             byte[] myByteArray = new byte[imageData.Length];
                             System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
-                            tableItems.Insert(indexPath.Row, new TableItem(alert.GetTextField(0).Text, fileExtension, myByteArray));
+                            tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text, ".jpg", myByteArray));
                         }
                         //---- insert a new row in the table
                         tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
@@ -368,7 +371,7 @@ namespace Askker.App.iOS.TableControllers
                     NSIndexPath.FromRowSection (tableView.NumberOfRowsInSection (0), 0)
                 }, UITableViewRowAnimation.Fade);
             //---- create a new item and add it to our underlying data
-            tableItems.Add(new TableItem("<- Add new option"));
+            tableItems.Add(new SurveyOptionTableItem("<- Add new option"));
 
             //---- end animations
             tableView.EndUpdates();
@@ -391,14 +394,18 @@ namespace Askker.App.iOS.TableControllers
 
         public void Clear(UITableView tableView)
         {
-            //---- start animations
-            tableView.BeginUpdates();
-            //---- remove our row from the underlying data
-            tableItems.Clear(); // zero based :)
-                                                                              //---- remove the row from the table
-            tableView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(0, 0) }, UITableViewRowAnimation.Fade);
-            //---- finish animations
-            tableView.EndUpdates();
+            ////---- start animations
+            //tableView.BeginUpdates();
+            ////---- remove our row from the underlying data
+            //tableItems.Clear(); // zero based :)
+            //                                                                  //---- remove the row from the table
+            //tableView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(0, 0) }, UITableViewRowAnimation.Fade);
+            ////---- finish animations
+            //tableView.EndUpdates();
+
+            tableItems = new List<SurveyOptionTableItem>();
+            tableView.Source = new SurveyOptionTableSource(tableItems, this.viewController);
+            tableView.ReloadData();
         }
         #endregion
     }

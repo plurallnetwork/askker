@@ -30,6 +30,25 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
+        public async Task SetUserNotificationDismissed(UserNotificationModel userNotificationModel, string authenticationToken)
+        {
+            try
+            {
+                NotificationService notificationService = new NotificationService();
+
+                var response = await notificationService.SetUserNotificationDismissed(userNotificationModel, authenticationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<List<UserNotificationModel>> GetUserNotifications(string userId, string authenticationToken)
         {
             try
@@ -44,25 +63,6 @@ namespace Askker.App.PortableLibrary.Business
                     return JsonConvert.DeserializeObject<List<UserNotificationModel>>(json);
                 }
                 else
-                {
-                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task SetUserNotificatioDismissed(UserNotificationModel userNotificationModel, string authenticationToken)
-        {
-            try
-            {
-                NotificationService notificationService = new NotificationService();
-
-                var response = await notificationService.SetUserNotificatioDismissed(userNotificationModel, authenticationToken);
-
-                if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
                 }

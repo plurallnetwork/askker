@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using Askker.App.PortableLibrary.Enums;
+using Foundation;
 using System;
 using UIKit;
 
@@ -21,8 +22,18 @@ namespace Askker.App.iOS
                     this.PresentViewController(profileOtherController, true, null);
                 }
             };
-        }
 
+            createButton.TouchUpInside += (object sender, EventArgs e) =>
+            {
+                var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                if (CreateSurveyController != null)
+                {
+                    CreateSurveyController.ScreenState = ScreenState.Create.ToString();
+                    this.PresentViewController(CreateSurveyController, true, null);
+                }
+            };
+        }
+        
         private void ProfileOtherButton_TouchUpInside(object sender, EventArgs e)
         {
             throw new NotImplementedException();

@@ -71,6 +71,25 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
+        public async Task<HttpResponseMessage> SearchUsersByName(string authenticationToken, string name)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/SearchUsersByName/{0}", name));
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+
+                    return await client.GetAsync(uri);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<HttpResponseMessage> Update(string authenticationToken, UserModel userModel, byte[] profileImage, string profileImageName)
         {
             try
@@ -106,6 +125,25 @@ namespace Askker.App.PortableLibrary.Services
 
             fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/" + Path.GetExtension(fileName).Replace(".", ""));
             return fileContent;
+        }
+
+        public async Task<HttpResponseMessage> UpdateUserInformation(UserModel userModel, string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var formContent = new StringContent(JsonConvert.SerializeObject(userModel), Encoding.UTF8, "application/json");
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/updateuserinformation", formContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

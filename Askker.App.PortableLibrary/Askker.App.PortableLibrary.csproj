@@ -40,9 +40,11 @@
     <Compile Include="Business\RegisterManager.cs" />
     <Compile Include="Business\VoteManager.cs" />
     <Compile Include="Enums\MenuItem.cs" />
-    <Compile Include="Enums\RelationshipStatusType.cs" />
+    <Compile Include="Enums\ScreenState.cs" />
     <Compile Include="Enums\SurveyType.cs" />
+    <Compile Include="Enums\TargetAudience.cs" />
     <Compile Include="Enums\UserNotificationType.cs" />
+    <Compile Include="Enums\RelationshipStatusType.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\SurveyModel.cs" />
     <Compile Include="Models\TokenModel.cs" />
@@ -77,9 +79,6 @@
     <Reference Include="System.Net.Http.Primitives, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Xamarin.iOS">
-      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Xamarin.iOS\v1.0\Xamarin.iOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

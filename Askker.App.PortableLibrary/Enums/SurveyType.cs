@@ -10,5 +10,5 @@ namespace Askker.App.PortableLibrary.Enums
     {
         Text,
         Image
-    }
+    }    
 }

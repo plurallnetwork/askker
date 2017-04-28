@@ -5,13 +5,13 @@ using UIKit;
 
 namespace Askker.App.iOS.TableControllers
 {
-    public class TableItem
+    public class SurveyShareTableItem
     {
-        public string Heading { get; set; }
+        public string Name { get; set; }
 
-        public string SubHeading { get; set; }
+        public string Id { get; set; }
 
-        public byte[] Image { get; set; }
+        public string ImageName { get; set; }
 
         public UITableViewCellStyle CellStyle
         {
@@ -27,22 +27,17 @@ namespace Askker.App.iOS.TableControllers
         }
         protected UITableViewCellAccessory cellAccessory = UITableViewCellAccessory.None;
 
-        public TableItem() { }
+        public SurveyShareTableItem() { }
 
-        public TableItem(string heading)
-        { Heading = heading; }
+        public SurveyShareTableItem(string name)
+        { Name = name; }
 
-        public TableItem(string heading, byte[] image)
+        public SurveyShareTableItem(string name, string imageName, string id)
         {
-            Heading = heading;
-            Image = image;
-        }
-
-        public TableItem(string heading, string subheading, byte[] image)
-        {
-            Heading = heading;
-            Image = image;
-            SubHeading = subheading;
+            Name = name;
+            ImageName = imageName;
+            Id = id;
         }
     }
 }
+

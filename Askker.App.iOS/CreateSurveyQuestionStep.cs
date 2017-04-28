@@ -1,5 +1,7 @@
 ﻿using Askker.App.iOS.CustomViewComponents;
 using Askker.App.iOS.HorizontalSwipe;
+using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Cirrious.FluentLayouts.Touch;
 using Foundation;
@@ -59,9 +61,15 @@ namespace Askker.App.iOS
         {            
         }
 
-        public override void ViewDidAppear(bool animated)
+        public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
+            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
+            {
+                CreateSurveyController.SurveyModel = await new FeedManager().GetSurvey(CreateSurveyController.UserId, CreateSurveyController.CreationDate, LoginController.tokenModel.access_token);
+
+                _questionStepView.QuestionText.Text = CreateSurveyController.SurveyModel.question.text;
+            }
             StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 
@@ -78,25 +86,31 @@ namespace Askker.App.iOS
 
         public override void ViewWillDisappear(bool animated)
         {
-            
-
             base.ViewWillDisappear(animated);
-            Question q = new Question();
-            q.text = _questionStepView.QuestionText.Text;
-            q.image = "";
-            if(CreateSurveyController.SurveyModel == null)
+
+            if (CreateSurveyController.ScreenState == ScreenState.Create.ToString())
             {
-                CreateSurveyController.SurveyModel = new SurveyModel();                
+                Question q = new Question();
+                q.text = _questionStepView.QuestionText.Text;
+                q.image = "";
+                if (CreateSurveyController.SurveyModel == null)
+                {
+                    CreateSurveyController.SurveyModel = new SurveyModel();
+                }
+                CreateSurveyController.SurveyModel.userId = LoginController.userModel.id;
+                CreateSurveyController.SurveyModel.userName = LoginController.userModel.name;
+                CreateSurveyController.SurveyModel.profilePicture = LoginController.userModel.profilePicturePath;
+                CreateSurveyController.SurveyModel.isArchived = 0;
+                CreateSurveyController.SurveyModel.choiceType = "UniqueChoice";
+                CreateSurveyController.SurveyModel.question = q;
+                CreateSurveyController.SurveyModel.columnOptions = new List<ColumnOption>();
+                CreateSurveyController.SurveyModel.finishDate = "";
+                CreateSurveyController.SurveyModel.creationDate = "";
             }
-            CreateSurveyController.SurveyModel.userId = LoginController.userModel.id;
-            CreateSurveyController.SurveyModel.userName = LoginController.userModel.userName;
-            CreateSurveyController.SurveyModel.profilePicture = LoginController.userModel.profilePicturePath;
-            CreateSurveyController.SurveyModel.isArchived = 0;
-            CreateSurveyController.SurveyModel.choiceType = "UniqueChoice";
-            CreateSurveyController.SurveyModel.question = q;
-            CreateSurveyController.SurveyModel.columnOptions = new List<ColumnOption>();
-            CreateSurveyController.SurveyModel.finishDate = "";
-            CreateSurveyController.SurveyModel.creationDate = "";
+            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
+            {
+                CreateSurveyController.SurveyModel.question.text = _questionStepView.QuestionText.Text;
+            }
             StepDeactivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 

@@ -6,15 +6,9 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Enums
 {
-    public enum MenuItem
+    public enum ScreenState
     {
-        Feed,
-        MyFriends,
-        Settings,
-        Help,
-        Logout,
-        Mine,
-        ForMe,
-        Finished
+        Create,
+        Edit
     }
 }

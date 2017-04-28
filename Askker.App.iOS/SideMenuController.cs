@@ -15,7 +15,7 @@ namespace Askker.App.iOS
     public partial class SideMenuController : UIViewController
     {
         MenuViewController menuViewController;
-
+        
         public SideMenuController(MenuViewController menuViewController)
         {
             this.menuViewController = menuViewController;
@@ -30,7 +30,7 @@ namespace Askker.App.iOS
             var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
 
             var profileImageView = new UIImageView(new RectangleF(85, 80, 90, 90));
-            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             profileImageView.Image = UIImage.FromBundle("Profile");
             profileImageView.Layer.CornerRadius = (profileImageView.Frame.Width / 2);
             profileImageView.Layer.MasksToBounds = true;
@@ -49,7 +49,8 @@ namespace Askker.App.iOS
                     {
                         try
                         {
-                            DispatchQueue.MainQueue.DispatchAsync(() => {
+                            DispatchQueue.MainQueue.DispatchAsync(() =>
+                            {
                                 profileImageView.Image = UIImage.LoadFromData(data);
                             });
                         }
@@ -135,6 +136,7 @@ namespace Askker.App.iOS
     {
         static NSString menuCellId = new NSString("MenuCell");
 
+
         public MenuTableViewController(UITableView menuTableView, List<MenuModel> menuItems, MenuViewController menuViewController)
         {
             menuTableView.RegisterClassForCellReuse(typeof(MenuTableViewCell), menuCellId);
@@ -145,6 +147,9 @@ namespace Askker.App.iOS
         {
             List<MenuModel> menuItems;
             MenuViewController menuViewController;
+            bool filterMine = false;
+            bool filterForMe = false;
+            bool filterFinished = false;
 
             public MenuTableViewDataSource(List<MenuModel> menuItems, MenuViewController menuViewController)
             {
@@ -169,7 +174,7 @@ namespace Askker.App.iOS
 
                 cell.menuTitleLabel.Text = menuItems[indexPath.Row].Title;
 
-                if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed || menuItems[indexPath.Row].MenuItem == MenuItem.Public)
+                if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed)
                 {
                     cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
                     tableView.SelectRow(indexPath, false, UITableViewScrollPosition.None);
@@ -192,7 +197,7 @@ namespace Askker.App.iOS
                 {
                     var friendsController = menuViewController.Storyboard.InstantiateViewController("FriendsController");
                     menuViewController.NavigationController.PushViewController(friendsController, true);
-                    menuViewController.sidebarController.CloseMenu();
+                    MenuViewController.sidebarController.CloseMenu();
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Logout)
                 {
@@ -206,44 +211,79 @@ namespace Askker.App.iOS
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Mine)
                 {
-                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
-                    var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
-                    //feedController.filter = "mine";
-                    feedController.filter = "nofilter";
-                    menuViewController.changeContentView(feedController);
-                }
-                else if (menuItems[indexPath.Row].MenuItem == MenuItem.ToYou)
-                {
-                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
-                    var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
-                    //feedController.filter = "toyou";
-                    feedController.filter = "nofilter";
-                    menuViewController.changeContentView(feedController);
-                }
-                else if (menuItems[indexPath.Row].MenuItem == MenuItem.Public)
-                {
-                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
-                    var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
-                    feedController.filter = "nofilter";
-                    menuViewController.changeContentView(feedController);
-                }
-            }
-
-            public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
-            {
-                var menuItem = menuItems[indexPath.Row].MenuItem;
-                if (menuItem == MenuItem.Mine || menuItem == MenuItem.ToYou || menuItem == MenuItem.Public)
-                {
-                    var cell = tableView.CellAt(indexPath) as MenuTableViewCell;
-
-                    if (cell == null)
+                    if (filterMine)
                     {
-                        cell = this.GetCell(tableView, indexPath) as MenuTableViewCell;
+                        cell.menuTitleLabel.TextColor = UIColor.Black;
+                        filterMine = false;
+                    }
+                    else
+                    {
+                        cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                        filterMine = true;
                     }
 
-                    cell.menuTitleLabel.TextColor = UIColor.Black;
+                    var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
+                    feedController.filterMine = filterMine;
+                    feedController.filterForMe = filterForMe;
+                    feedController.filterFinished = filterFinished;
+                    menuViewController.changeContentView(feedController);
+
+                }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.ForMe)
+                {
+                    if (filterForMe)
+                    {
+                        cell.menuTitleLabel.TextColor = UIColor.Black;
+                        filterForMe = false;
+                    }
+                    else
+                    {
+                        cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                        filterForMe = true;
+                    }
+
+                    var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
+                    feedController.filterMine = filterMine;
+                    feedController.filterForMe = filterForMe;
+                    feedController.filterFinished = filterFinished;
+                    menuViewController.changeContentView(feedController);
+                }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.Finished)
+                {
+                    if (filterFinished)
+                    {
+                        cell.menuTitleLabel.TextColor = UIColor.Black;
+                        filterFinished = false;
+                    }
+                    else
+                    {
+                        cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                        filterFinished = true;
+                    }
+
+                    var feedController = menuViewController.Storyboard.InstantiateViewController("FeedController") as FeedController;
+                    feedController.filterMine = filterMine;
+                    feedController.filterForMe = filterForMe;
+                    feedController.filterFinished = filterFinished;
+                    menuViewController.changeContentView(feedController);
                 }
             }
+
+            //public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
+            //{
+            //    var menuItem = menuItems[indexPath.Row].MenuItem;
+            //    if (menuItem == MenuItem.Mine || menuItem == MenuItem.ToYou || menuItem == MenuItem.Public)
+            //    {
+            //        var cell = tableView.CellAt(indexPath) as MenuTableViewCell;
+
+            //        if (cell == null)
+            //        {
+            //            cell = this.GetCell(tableView, indexPath) as MenuTableViewCell;
+            //        }
+
+            //        cell.menuTitleLabel.TextColor = UIColor.Black;
+            //    }
+            //}
         }
     }
 

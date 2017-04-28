@@ -12,18 +12,42 @@ namespace Askker.App.PortableLibrary.Business
 {
     public class FeedManager
     {
-        public async Task<List<SurveyModel>> GetFeed(string userId, string filter, string authenticationToken)
+        public async Task<List<SurveyModel>> GetFeed(string userId, bool filterMine, bool filterForMe, bool filterFinished, string authenticationToken)
         {
             try
             {
                 FeedService feedService = new FeedService();
 
-                var response = await feedService.GetFeed(userId, filter, authenticationToken);
+                var response = await feedService.GetFeed(userId, filterMine, filterForMe, filterFinished, authenticationToken);
                 
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
                     return JsonConvert.DeserializeObject<List<SurveyModel>>(json);
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<SurveyModel> GetSurvey(string userId, string creationDate, string authenticationToken)
+        {
+            try
+            {
+                FeedService feedService = new FeedService();
+
+                var response = await feedService.GetSurvey(userId, creationDate, authenticationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<SurveyModel>(json);
                 }
                 else
                 {
@@ -43,6 +67,44 @@ namespace Askker.App.PortableLibrary.Business
                 FeedService feedService = new FeedService();
 
                 var response = await feedService.SaveSurvey(surveyModel, authenticationToken, questionImage, optionImages);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task UpdateSurvey(SurveyModel surveyModel, string authenticationToken)
+        {
+            try
+            {
+                FeedService feedService = new FeedService();
+
+                var response = await feedService.UpdateSurvey(surveyModel, authenticationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task CleanVotes(string surveyId, string authenticationToken)
+        {
+            try
+            {
+                FeedService feedService = new FeedService();
+
+                var response = await feedService.CleanVotes(surveyId, authenticationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {
