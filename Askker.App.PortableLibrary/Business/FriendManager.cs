@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Models;
+﻿using Askker.App.PortableLibrary.Enums;
+using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -40,6 +41,79 @@ namespace Askker.App.PortableLibrary.Business
                     return userFriends;
                 }
                 else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<RelationshipStatusType> GetUserRelationshipStatus(string authenticationToken, string friendId)
+        {
+            try
+            {
+                FriendService friendService = new FriendService();
+                RelationshipStatusType relationshipStatus = new RelationshipStatusType();
+
+                var response = await friendService.GetUserRelationshipStatus(authenticationToken, friendId);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        Enum.TryParse(result, out relationshipStatus);
+
+                        return relationshipStatus;
+                    }
+                    else
+                    {
+                        return RelationshipStatusType.NotFriends;
+                    }
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task AddFriend(string authenticationToken, string friendId)
+        {
+            try
+            {
+                FriendService friendService = new FriendService();
+
+                var response = await friendService.AddFriend(authenticationToken, friendId);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatusType status)
+        {
+            try
+            {
+                FriendService friendService = new FriendService();
+
+                var response = await friendService.UpdateUserRelationshipStatus(authenticationToken, friendId, status);
+
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
                 }
