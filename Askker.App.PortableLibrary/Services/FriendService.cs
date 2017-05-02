@@ -64,7 +64,7 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatusType status)
+        public async Task<HttpResponseMessage> UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatus status)
         {
             try
             {

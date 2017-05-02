@@ -1,6 +1,6 @@
 ﻿namespace Askker.App.PortableLibrary.Enums
 {
-    public enum RelationshipStatusType
+    public enum RelationshipStatus
     {
         NotFriends,
         Friend,

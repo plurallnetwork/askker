@@ -51,12 +51,12 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task<RelationshipStatusType> GetUserRelationshipStatus(string authenticationToken, string friendId)
+        public async Task<RelationshipStatus> GetUserRelationshipStatus(string authenticationToken, string friendId)
         {
             try
             {
                 FriendService friendService = new FriendService();
-                RelationshipStatusType relationshipStatus = new RelationshipStatusType();
+                RelationshipStatus relationshipStatus = new RelationshipStatus();
 
                 var response = await friendService.GetUserRelationshipStatus(authenticationToken, friendId);
 
@@ -72,7 +72,7 @@ namespace Askker.App.PortableLibrary.Business
                     }
                     else
                     {
-                        return RelationshipStatusType.NotFriends;
+                        return RelationshipStatus.NotFriends;
                     }
                 }
                 else
@@ -105,7 +105,7 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatusType status)
+        public async Task UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatus status)
         {
             try
             {

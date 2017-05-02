@@ -44,7 +44,7 @@
     <Compile Include="Enums\SurveyType.cs" />
     <Compile Include="Enums\TargetAudience.cs" />
     <Compile Include="Enums\UserNotificationType.cs" />
-    <Compile Include="Enums\RelationshipStatusType.cs" />
+    <Compile Include="Enums\RelationshipStatus.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\SurveyModel.cs" />
     <Compile Include="Models\TokenModel.cs" />
