@@ -19,7 +19,7 @@ namespace Askker.App.PortableLibrary.Services
                     List<VoteModel> votes = new List<VoteModel>();
                     votes.Add(voteModel);
 
-                    var formContent = new StringContent(JsonConvert.SerializeObject(votes), Encoding.UTF8, "application/json");
+                    var formContent = new StringContent(JsonConvert.SerializeObject(votes, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
 
                     return await client.PostAsync("https://blinq-development.com:44322/api/survey/vote", formContent);
                 }
