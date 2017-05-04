@@ -17,5 +17,21 @@ namespace Askker.App.PortableLibrary.Util
             }
             return randomizedList;
         }
+
+        public static string FormatNumberAbbreviation(long number)
+        {
+            // Ensure number has max 3 significant digits (no rounding up can happen)
+            long i = (long)Math.Pow(10, (int)Math.Max(0, Math.Log10(number) - 2));
+            number = number / i * i;
+
+            if (number >= 1000000000)
+                return (number / 1000000000D).ToString("0.##") + "B";
+            if (number >= 1000000)
+                return (number / 1000000D).ToString("0.##") + "M";
+            if (number >= 1000)
+                return (number / 1000D).ToString("0.##") + "K";
+
+            return number.ToString("#,0");
+        }
     }
 }

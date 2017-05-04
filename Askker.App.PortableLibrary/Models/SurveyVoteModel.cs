@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Models
 {
-    public class VoteModel
+    public class SurveyVoteModel
     {
         public string surveyId { get; set; }
 

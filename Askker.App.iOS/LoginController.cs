@@ -107,36 +107,6 @@ namespace Askker.App.iOS
                     CredentialsService.SaveCredentials(tokenModel, userModel);
 
                     Login();
-
-                    //FeedManager feedManager = new FeedManager();
-
-                    // Save Survey Example
-                    //SurveyModel surveyTeste = new SurveyModel();
-                    //surveyTeste.userId = tokenModel.id;
-                    //surveyTeste.type = "Text";
-                    //surveyTeste.choiceType = "UniqueChoice";
-                    //surveyTeste.question = new question() { text = "Qual a sua cor favorita?", image = "" };
-
-                    //List<Option> options = new List<Option>();
-                    //options.Add(new Option() { id = 0, text = "Verde", image = "" });
-                    //options.Add(new Option() { id = 1, text = "Azul", image = "" });
-                    //surveyTeste.options = options;
-
-                    //surveyTeste.columnOptions = new List<ColumnOption>();
-                    //surveyTeste.isArchived = 0;
-                    //surveyTeste.finishDate = "";
-
-                    //await feedManager.SaveSurvey(surveyTeste, tokenModel.Access_Token);
-
-                    //var alert = UIAlertController.Create("Surveys", "Total: " + surveys.Count.ToString(), UIAlertControllerStyle.Alert);
-                    //alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
-                    //PresentViewController(alert, true, null);
-
-                    //var feedController = this.Storyboard.InstantiateViewController("HomeNavController");
-                    //if (feedController != null)
-                    //{
-                    //    this.PresentViewController(feedController, true, null);
-                    //}
                 }
                 catch (Exception ex)
                 {
@@ -183,16 +153,16 @@ namespace Askker.App.iOS
             #region Vote Sample
             /*
             VoteManager voteManager = new VoteManager();
-            VoteModel voteModel = new VoteModel();
-            voteModel.surveyId = "ea462cb6-ca13-45bf-b680-e689e314c9d920170301T120549";
-            voteModel.optionId = 3;
-            voteModel.user = new User();
-            voteModel.user.id = "ea462cb6-ca13-45bf-b680-e689e314c9d9";
-            voteModel.user.gender = "male";
-            voteModel.user.city = "SP";
-            voteModel.user.country = "BR";
+            SurveyVoteModel surveyVoteModel = new SurveyVoteModel();
+            surveyVoteModel.surveyId = "ea462cb6-ca13-45bf-b680-e689e314c9d920170301T120549";
+            surveyVoteModel.optionId = 3;
+            surveyVoteModel.user = new User();
+            surveyVoteModel.user.id = "ea462cb6-ca13-45bf-b680-e689e314c9d9";
+            surveyVoteModel.user.gender = "male";
+            surveyVoteModel.user.city = "SP";
+            surveyVoteModel.user.country = "BR";
 
-            await voteManager.Vote(voteModel, "");
+            await voteManager.Vote(surveyVoteModel, "");
             */
             #endregion
 

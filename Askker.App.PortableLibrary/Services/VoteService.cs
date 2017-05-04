@@ -10,16 +10,16 @@ namespace Askker.App.PortableLibrary.Services
 {
     public class VoteService
     {
-        public async Task<HttpResponseMessage> Vote(VoteModel voteModel, string authenticationToken)
+        public async Task<HttpResponseMessage> Vote(SurveyVoteModel surveyVoteModel, string authenticationToken)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    List<VoteModel> votes = new List<VoteModel>();
-                    votes.Add(voteModel);
+                    List<SurveyVoteModel> surveyVotes = new List<SurveyVoteModel>();
+                    surveyVotes.Add(surveyVoteModel);
 
-                    var formContent = new StringContent(JsonConvert.SerializeObject(votes, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
+                    var formContent = new StringContent(JsonConvert.SerializeObject(surveyVotes, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
 
                     return await client.PostAsync("https://blinq-development.com:44322/api/survey/vote", formContent);
                 }
