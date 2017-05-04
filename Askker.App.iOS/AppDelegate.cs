@@ -26,6 +26,11 @@ namespace Askker.App.iOS
 
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
+            if (CredentialsService.DoCredentialsExist() && !CredentialsService.GetTokenModel().isStillValid(System.DateTime.Now))
+            {
+                CredentialsService.DeleteCredentials();
+            }
+
             return true;
         }
 
@@ -47,6 +52,18 @@ namespace Askker.App.iOS
         {
             // Called as part of the transiton from background to active state.
             // Here you can undo many of the changes made on entering the background.
+
+            if (CredentialsService.DoCredentialsExist() && !CredentialsService.GetTokenModel().isStillValid(System.DateTime.Now))
+            {
+                CredentialsService.DeleteCredentials();
+
+                var loginController = this.Window.RootViewController.Storyboard.InstantiateViewController("LoginController") as LoginController;
+
+                if (loginController != null)
+                {
+                    this.Window.RootViewController = loginController;
+                }
+            }
         }
 
         public override void OnActivated(UIApplication application)

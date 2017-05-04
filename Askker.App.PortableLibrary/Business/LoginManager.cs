@@ -23,7 +23,13 @@ namespace Askker.App.PortableLibrary.Business
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<TokenModel>(json);
+                    TokenModel token = JsonConvert.DeserializeObject<TokenModel>(json);
+
+                    // Set the expiration date locally, because of the difference between the timezone of the client and server
+                    // Removed 10 seconds of the expiration time to avoid communication delay problems
+                    token.expires = DateTime.Now.AddSeconds(token.expires_in - 10);
+
+                    return token;
                 }
                 else
                 {
