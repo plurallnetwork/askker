@@ -298,6 +298,7 @@
     <BundleResource Include="images\icons\done.png" />
     <Content Include="images\icons\text.gif" />
     <BundleResource Include="images\icons\woman.png" />
+    <BundleResource Include="Resources\assets\img\plus.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\assets\img\filterPublic.png" />

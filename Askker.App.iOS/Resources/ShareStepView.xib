@@ -15,7 +15,7 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" id="4" translatesAutoresizingMaskIntoConstraints="NO" editable="NO" selectable="NO">
-                    <rect key="frame" x="0.0" y="100" width="375" height="143"/>
+                    <rect key="frame" x="0.0" y="114" width="375" height="143"/>
                     <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -35,7 +35,7 @@
                     </variation>
                 </textView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="24" translatesAutoresizingMaskIntoConstraints="NO">
-                    <rect key="frame" x="250" y="244" width="125" height="37"/>
+                    <rect key="frame" x="250" y="258" width="125" height="50"/>
                     <state key="normal" image="assets/img/filterMine.png">
                         <color key="titleShadowColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -59,7 +59,7 @@
                     </variation>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="25" translatesAutoresizingMaskIntoConstraints="NO">
-                    <rect key="frame" x="125" y="244" width="125" height="50"/>
+                    <rect key="frame" x="125" y="258" width="125" height="50"/>
                     <state key="normal" image="assets/img/friendsiOS.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -81,7 +81,7 @@
                     </variation>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="26" translatesAutoresizingMaskIntoConstraints="NO">
-                    <rect key="frame" x="0.0" y="244" width="125" height="50"/>
+                    <rect key="frame" x="0.0" y="258" width="125" height="50"/>
                     <state key="normal" image="assets/img/filterPublic.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -105,12 +105,12 @@
                     </variation>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="32" translatesAutoresizingMaskIntoConstraints="NO">
-                    <rect key="frame" x="0.0" y="363" width="375" height="304"/>
+                    <rect key="frame" x="0.0" y="377" width="375" height="290"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <variation key="heightClass=regular-widthClass=compact"/>
                 </tableView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This question will be visible to the selected friends below:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="46" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2">
-                    <rect key="frame" x="51.5" y="311" width="272" height="44"/>
+                    <rect key="frame" x="52" y="325" width="272" height="44"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -201,7 +201,9 @@
                 <outlet property="shareMessageLabel" destination="46" id="name-outlet-46"/>
             </connections>
             <constraints>
-                <constraint id="49" firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100"/>
+                <constraint id="49" firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100">
+                    <variation key="heightClass=regular-widthClass=compact" constant="114"/>
+                </constraint>
                 <constraint id="54" firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
                 <constraint id="55" firstItem="4" firstAttribute="trailing" secondItem="1" secondAttribute="trailing"/>
                 <constraint id="67" firstItem="26" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="1"/>
@@ -249,6 +251,7 @@
         <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="assets/img/threelines.png" width="30" height="30"/>
+        <image name="assets/img/plus.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

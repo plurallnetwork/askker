@@ -62,7 +62,7 @@
                     </variation>
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4">
-                    <rect key="frame" x="0.0" y="100" width="375" height="140"/>
+                    <rect key="frame" x="0.0" y="114" width="375" height="140"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="140" id="131"/>
@@ -82,7 +82,7 @@
                     </variation>
                 </textView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="11">
-                    <rect key="frame" x="0.0" y="240" width="375" height="297"/>
+                    <rect key="frame" x="0.0" y="254" width="375" height="283"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7">
@@ -166,7 +166,9 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="4" secondAttribute="trailing" id="30"/>
-                <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100" id="31"/>
+                <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100" id="31">
+                    <variation key="heightClass=regular-widthClass=compact" constant="114"/>
+                </constraint>
                 <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="34"/>
                 <constraint firstItem="4" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="35"/>
                 <constraint firstItem="7" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="88"/>
@@ -309,6 +311,7 @@
         <image name="assets/img/threelines.png" width="30" height="30"/>
         <image name="OptionCheck" width="220" height="220"/>
         <image name="Profile" width="210" height="260"/>
+        <image name="assets/img/plus.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

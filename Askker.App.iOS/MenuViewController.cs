@@ -62,7 +62,19 @@ namespace Askker.App.iOS
                         })
             , true);
 
+            this.NavigationItem.SetRightBarButtonItem(
+                new UIBarButtonItem(UIBarButtonSystemItem.Add, (sender, args) =>
+                {
+                    var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                    if (rootController != null)
+                    {
+                        this.PresentViewController(rootController, true, null);
+                    }
+                })
+            , true);
+
             this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;
+            this.NavigationItem.RightBarButtonItem.TintColor = UIColor.Black;
 
             this.NavigationItem.BackBarButtonItem = new UIBarButtonItem("", UIBarButtonItemStyle.Plain, null);
 
