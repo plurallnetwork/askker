@@ -24,6 +24,7 @@ namespace Askker.App.iOS
         public static NSString feedCellId = new NSString("feedCell");
         SurveyModel survey;
         FeedCollectionViewCell surveyCell;
+        public MenuViewController menuViewController { get; set; }
 
         public FeedController (IntPtr handle) : base (handle)
         {
@@ -255,6 +256,20 @@ namespace Askker.App.iOS
             {
                 feedCell.commentsLabel.Text = Common.FormatNumberAbbreviation(surveys[indexPath.Row].totalComments) + " Comments";
             }
+
+            feedCell.commentButton.TouchUpInside += (sender, e) =>
+            {
+                var commentController = menuViewController.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
+                commentController.feedHead = feedCollectionView;
+                commentController.headHeight = (float)feedCell.Frame.Height + 64;
+
+                survey = surveys[indexPath.Row];
+                surveys.Clear();
+                surveys.Add(survey);
+
+                menuViewController.NavigationController.PushViewController(commentController, true);
+                MenuViewController.sidebarController.CloseMenu();
+            };
 
             feedCell.moreButton.TouchUpInside += async (sender, e) =>
             {

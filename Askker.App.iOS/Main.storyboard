@@ -17,7 +17,7 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="assets/img/logo_180.png" translatesAutoresizingMaskIntoConstraints="NO" id="8">
@@ -470,7 +470,7 @@
             <objects>
                 <navigationController title="Navigation" id="277" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="279">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -490,7 +490,7 @@
                         <viewControllerLayoutGuide type="bottom" id="441"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="444">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="447">
@@ -699,7 +699,7 @@
             <objects>
                 <navigationController id="1335" sceneMemberID="viewController" storyboardIdentifier="FeedNavController" useStoryboardIdentifierAsRestorationIdentifier="YES">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1337">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                     </navigationBar>
@@ -722,7 +722,7 @@
                         <outlet property="feedCollectionView" destination="1557" id="name-outlet-1557"/>
                     </connections>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="1557" key="view">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1559">
                             <size key="itemSize" width="375" height="50"/>
@@ -752,7 +752,7 @@
             <objects>
                 <navigationController id="1620" sceneMemberID="viewController" storyboardIdentifier="HomeNavController" title="Home">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1622">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -767,7 +767,7 @@
             <objects>
                 <navigationController id="1647" sceneMemberID="viewController" storyboardIdentifier="CreateSurveyNavController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1649">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -786,7 +786,7 @@
                         <viewControllerLayoutGuide type="bottom" id="1654"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1657">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -804,7 +804,7 @@
                         <viewControllerLayoutGuide type="bottom" id="1793"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1796">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <subviews>
@@ -900,115 +900,6 @@
             </objects>
             <point key="canvasLocation" x="-154" y="-41"/>
         </scene>
-        <scene sceneID="2436">
-            <objects>
-                <viewController id="2437" sceneMemberID="viewController" customClass="CreateSurveyQuestionStep" title="Make a question">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="2434"/>
-                        <viewControllerLayoutGuide type="bottom" id="2435"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="2438" customClass="QuestionStepView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2461" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="164" y="269" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                        </subviews>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="2461"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="subviews">
-                                <include reference="2461"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <connections/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2439" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-130" y="730"/>
-        </scene>
-        <scene sceneID="2443">
-            <objects>
-                <viewController id="2444" sceneMemberID="viewController" customClass="CreateSurveyOptionsStep" title="Make a question">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="2441"/>
-                        <viewControllerLayoutGuide type="bottom" id="2442"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="2445">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2456" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="166" y="294" width="64" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="2456"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="subviews">
-                                <include reference="2456"/>
-                            </mask>
-                        </variation>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2446" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="282" y="731"/>
-        </scene>
-        <scene sceneID="2450">
-            <objects>
-                <viewController id="2451" sceneMemberID="viewController" customClass="CreateSurveyShareStep" title="Make a question">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="2448"/>
-                        <viewControllerLayoutGuide type="bottom" id="2449"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="2452">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step 3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2457" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="166" y="283" width="61" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="2457"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="subviews">
-                                <include reference="2457"/>
-                            </mask>
-                        </variation>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2453" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="680" y="730"/>
-        </scene>
         <scene sceneID="2478">
             <objects>
                 <viewController id="2479" sceneMemberID="viewController" storyboardIdentifier="MenuViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" customClass="MenuViewController">
@@ -1017,7 +908,7 @@
                         <viewControllerLayoutGuide type="bottom" id="2477"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2480">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1031,7 +922,7 @@
             <objects>
                 <navigationController id="3007" sceneMemberID="viewController" storyboardIdentifier="MenuNavController" useStoryboardIdentifierAsRestorationIdentifier="YES">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3009">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1046,7 +937,7 @@
             <objects>
                 <navigationController id="2486" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="2488">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1065,7 +956,7 @@
                         <viewControllerLayoutGuide type="bottom" id="2596"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2599">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <subviews>
@@ -1670,7 +1561,7 @@
             <objects>
                 <navigationController id="3090" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3092">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1689,7 +1580,7 @@
                         <viewControllerLayoutGuide type="bottom" id="3097"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3100">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <subviews>
@@ -2128,7 +2019,7 @@
             <objects>
                 <tableViewController id="3314" sceneMemberID="viewController" customClass="FriendsController" storyboardIdentifier="FriendsController" useStoryboardIdentifierAsRestorationIdentifier="YES">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3315">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes/>
@@ -2147,7 +2038,7 @@
             <objects>
                 <navigationController id="3332" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3334">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -2162,7 +2053,7 @@
             <objects>
                 <navigationController id="3489" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3491">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -2181,7 +2072,7 @@
                         <viewControllerLayoutGuide type="bottom" id="3496"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3499">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -2190,6 +2081,39 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3500" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1882" y="-848"/>
+        </scene>
+        <scene sceneID="4872">
+            <objects>
+                <viewController id="4873" sceneMemberID="viewController" customClass="CommentViewController" storyboardIdentifier="CommentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4870"/>
+                        <viewControllerLayoutGuide type="bottom" id="4871"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4874">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem title="Comments" id="5015" key="navigationItem"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4875" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="404" y="720"/>
+        </scene>
+        <scene sceneID="4907">
+            <objects>
+                <navigationController id="4908" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4910">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue id="5016" destination="4873" kind="relationship" relationship="rootViewController"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4911" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-57" y="721"/>
         </scene>
     </scenes>
     <resources>
@@ -2219,7 +2143,6 @@
         <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="images/icons/done.png" width="32" height="32"/>
-        <image name="assets/img/plus.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

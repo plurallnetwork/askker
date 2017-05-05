@@ -88,6 +88,10 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CommentViewController.cs" />
+    <Compile Include="CommentViewController.designer.cs">
+      <DependentUpon>CommentViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="CreateSurveyController.cs" />
     <Compile Include="CreateSurveyController.designer.cs">
       <DependentUpon>CreateSurveyController.cs</DependentUpon>
@@ -298,7 +302,6 @@
     <BundleResource Include="images\icons\done.png" />
     <Content Include="images\icons\text.gif" />
     <BundleResource Include="images\icons\woman.png" />
-    <BundleResource Include="Resources\assets\img\plus.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\assets\img\filterPublic.png" />
