@@ -7,6 +7,7 @@
         PendingFriendApproval,
         PendingYourApproval,
         RejectedByYou,
-        RejectedByFriend
+        RejectedByFriend,
+        Unfriended
     }
 }

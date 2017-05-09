@@ -98,14 +98,17 @@ namespace Askker.App.iOS
             {
                 switch (relationshipStatus)
                 {
-                    case RelationshipStatus.NotFriends:
-                        relationshipStatus = RelationshipStatus.PendingFriendApproval;
-                        break;
                     case RelationshipStatus.PendingYourApproval:
                         relationshipStatus = RelationshipStatus.Friend;
                         break;
                     case RelationshipStatus.RejectedByYou:
                         relationshipStatus = RelationshipStatus.Friend;
+                        break;
+                    case RelationshipStatus.Unfriended:
+                        relationshipStatus = RelationshipStatus.Friend;
+                        break;
+                    case RelationshipStatus.Friend:
+                        relationshipStatus = RelationshipStatus.Unfriended;
                         break;
                     default:
                         relationshipStatus = RelationshipStatus.PendingFriendApproval;
@@ -127,8 +130,8 @@ namespace Askker.App.iOS
                     btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.Friend:
-                    btnRelationship.SetTitle("Friend", UIControlState.Disabled);
-                    btnRelationship.Enabled = false;
+                    btnRelationship.SetTitle("Unfriend", UIControlState.Normal);
+                    btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.PendingFriendApproval:
                     btnRelationship.SetTitle("Pending Approval", UIControlState.Disabled);
@@ -139,12 +142,16 @@ namespace Askker.App.iOS
                     btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.RejectedByYou:
-                    btnRelationship.SetTitle("Rejected by You", UIControlState.Normal);
+                    btnRelationship.SetTitle("Add Friend", UIControlState.Normal);
                     btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.RejectedByFriend:
                     btnRelationship.SetTitle("Pending Approval", UIControlState.Disabled);
                     btnRelationship.Enabled = false;
+                    break;
+                case RelationshipStatus.Unfriended:
+                    btnRelationship.SetTitle("Add Friend", UIControlState.Normal);
+                    btnRelationship.Enabled = true;
                     break;
                 default:
                     btnRelationship.Enabled = true;
