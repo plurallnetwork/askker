@@ -88,6 +88,10 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CommentAreaView.cs" />
+    <Compile Include="CommentAreaView.designer.cs">
+      <DependentUpon>CommentAreaView.cs</DependentUpon>
+    </Compile>
     <Compile Include="CommentViewController.cs" />
     <Compile Include="CommentViewController.designer.cs">
       <DependentUpon>CommentViewController.cs</DependentUpon>
@@ -145,6 +149,10 @@
     <Compile Include="ProfileOtherController.designer.cs">
       <DependentUpon>ProfileOtherController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CustomViewComponents\CommentCell.cs" />
+    <Compile Include="CustomViewComponents\CommentCell.designer.cs">
+      <DependentUpon>CommentCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="SearchAllController.cs" />
     <Compile Include="SearchAllController.designer.cs">
       <DependentUpon>SearchAllController.cs</DependentUpon>
@@ -185,6 +193,8 @@
     <InterfaceDefinition Include="Resources\OptionsStepView.xib" />
     <InterfaceDefinition Include="Resources\ShareStepView.xib" />
     <InterfaceDefinition Include="Resources\FeedMenuView.xib" />
+    <InterfaceDefinition Include="Resources\CommentCell.xib" />
+    <InterfaceDefinition Include="Resources\CommentAreaView.xib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="QuestionStepView.cs" />
