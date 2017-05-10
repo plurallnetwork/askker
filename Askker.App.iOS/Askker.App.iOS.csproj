@@ -153,6 +153,10 @@
     <Compile Include="CustomViewComponents\CommentCell.designer.cs">
       <DependentUpon>CommentCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="ResultViewController.cs" />
+    <Compile Include="ResultViewController.designer.cs">
+      <DependentUpon>ResultViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="SearchAllController.cs" />
     <Compile Include="SearchAllController.designer.cs">
       <DependentUpon>SearchAllController.cs</DependentUpon>

@@ -268,7 +268,20 @@ namespace Askker.App.iOS
                 surveys.Add(survey);
 
                 menuViewController.NavigationController.PushViewController(commentController, true);
-                MenuViewController.sidebarController.CloseMenu();
+            };
+
+            feedCell.resultButton.TouchUpInside += (sender, e) =>
+            {
+                var resultController = menuViewController.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
+                resultController.feedHead = feedCollectionView;
+                resultController.headHeight = (float)feedCell.Frame.Height + 64;
+                resultController.feedCellIndexPath = indexPath;
+
+                survey = surveys[indexPath.Row];
+                surveys.Clear();
+                surveys.Add(survey);
+
+                menuViewController.NavigationController.PushViewController(resultController, true);
             };
 
             feedCell.moreButton.TouchUpInside += async (sender, e) =>
