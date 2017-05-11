@@ -1,6 +1,7 @@
 ﻿using Askker.App.PortableLibrary.Enums;
 using CoreGraphics;
 using Foundation;
+using iOSCharts;
 using System;
 using System.Collections.Generic;
 using UIKit;
@@ -91,7 +92,107 @@ namespace Askker.App.iOS
             var resultCell = collectionView.DequeueReusableCell(ResultViewController.resultCellId, indexPath) as ResultCollectionViewCell;
             resultCell.BackgroundColor = UIColor.White;
 
-            resultCell.sectionLabel.Text = reports[indexPath.Row].ToString();
+            string[] months = new string[] { "Janeiro", "Fevereiro", "Março", "Abril", "Maio" };
+
+            double[] values = new double[] { 50, 25, 30, 40, 41 };
+
+            double[] unitsSold = new double[] { 20.0, 4.0, 6.0, 3.0, 12.0 };
+            double[] unitsBought = new double[] { 10.0, 14.0, 60.0, 13.0, 2.0 };
+
+            if (ReportType.Overall.Equals(reports[indexPath.Row]))
+            {
+                resultCell.sectionLabel.Text = reports[indexPath.Row].ToString();
+
+                var dataEntries = new List<PieChartDataEntry>();
+                for (int i = 0; i < values.Length; i++)
+                {
+                    dataEntries.Add(new PieChartDataEntry(values[i], months[i]));
+                }
+
+                var dataSet = new PieChartDataSet(dataEntries.ToArray(), "");
+                dataSet.SliceSpace = 2;
+
+                dataSet.Colors = ChartColorTemplates.Joyful;
+                dataSet.ValueTextColor = UIColor.Black;
+                dataSet.XValuePosition = PieChartValuePosition.OutsideSlice;
+                dataSet.YValuePosition = PieChartValuePosition.OutsideSlice;
+
+                resultCell.pieChartView.Data = new PieChartData(new PieChartDataSet[] { dataSet });
+                resultCell.pieChartView.AnimateWithXAxisDuration(1.4, ChartEasingOption.EaseOutBack);
+                resultCell.pieChartView.DescriptionText = "Total 196 votes";
+                resultCell.pieChartView.Legend.Enabled = false;
+
+                resultCell.AddSubview(resultCell.pieChartView);
+
+                resultCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", resultCell.pieChartView));
+                resultCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(24)][v1]|", new NSLayoutFormatOptions(), "v0", resultCell.sectionLabel, "v1", resultCell.pieChartView));
+            }
+            else
+            {
+                resultCell.sectionLabel.Text = "By " + reports[indexPath.Row].ToString();
+
+                resultCell.barChartView.Legend.Enabled = true;
+                resultCell.barChartView.Legend.HorizontalAlignment = ChartLegendHorizontalAlignment.Right;
+                resultCell.barChartView.Legend.VerticalAlignment = ChartLegendVerticalAlignment.Top;
+                resultCell.barChartView.Legend.Orientation = ChartLegendOrientation.Vertical;
+                resultCell.barChartView.Legend.DrawInside = true;
+                resultCell.barChartView.Legend.YOffset = 10.0f;
+                resultCell.barChartView.Legend.XOffset = 10.0f;
+                resultCell.barChartView.Legend.YEntrySpace = 0.0f;
+
+                resultCell.barChartView.XAxis.DrawGridLinesEnabled = true;
+                resultCell.barChartView.XAxis.LabelPosition = XAxisLabelPosition.Bottom;
+                resultCell.barChartView.XAxis.CenterAxisLabelsEnabled = true;
+                resultCell.barChartView.XAxis.ValueFormatter = new ChartIndexAxisValueFormatter(months);
+                resultCell.barChartView.XAxis.Granularity = 1;
+
+                resultCell.barChartView.LeftAxis.SpaceTop = 0.35f;
+                resultCell.barChartView.LeftAxis.AxisMinimum = 0;
+                resultCell.barChartView.LeftAxis.DrawGridLinesEnabled = false;
+
+                resultCell.barChartView.RightAxis.Enabled = false;
+
+                var dataEntries = new List<BarChartDataEntry>();
+                var dataEntries1 = new List<BarChartDataEntry>();
+
+                for (int i = 0; i < months.Length; i++)
+                {
+                    dataEntries.Add(new BarChartDataEntry(i, unitsSold[i]));
+                    dataEntries1.Add(new BarChartDataEntry(i, unitsBought[i]));
+                }
+
+                var chartDataSet = new BarChartDataSet(dataEntries.ToArray(), "Unit sold");
+                var chartDataSet1 = new BarChartDataSet(dataEntries1.ToArray(), "Unit Bought");
+
+                var dataSets = new BarChartDataSet[] { chartDataSet, chartDataSet1 };
+                chartDataSet.SetColor(UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1")));
+
+                var chartData = new BarChartData(dataSets);
+
+                var groupSpace = 0.3;
+                var barSpace = 0.05;
+                var barWidth = 0.3;
+                // (0.3 + 0.05) * 2 + 0.3 = 1.00 -> interval per "group" 
+
+                var groupCount = months.Length;
+                var startYear = 0;
+
+                chartData.BarWidth = barWidth;
+                resultCell.barChartView.XAxis.AxisMinimum = startYear;
+
+                resultCell.barChartView.XAxis.AxisMaximum = startYear + chartData.GroupWidthWithGroupSpace(groupSpace, barSpace) * groupCount;
+
+                chartData.GroupBarsFromX(startYear, groupSpace, barSpace);
+
+                resultCell.barChartView.Data = chartData;
+                resultCell.barChartView.AnimateWithXAxisDuration(1.4, ChartEasingOption.Linear);
+                resultCell.barChartView.DescriptionText = "";
+
+                resultCell.AddSubview(resultCell.barChartView);
+
+                resultCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", resultCell.barChartView));
+                resultCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(24)][v1]|", new NSLayoutFormatOptions(), "v0", resultCell.sectionLabel, "v1", resultCell.barChartView));
+            }
 
             return resultCell;
         }
@@ -127,7 +228,7 @@ namespace Askker.App.iOS
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
-            return new CGSize(collectionView.Frame.Width, 200);
+            return new CGSize(collectionView.Frame.Width, 300);
         }
 
         public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
@@ -139,7 +240,8 @@ namespace Askker.App.iOS
     public class ResultCollectionViewCell : UICollectionViewCell
     {
         public UILabel sectionLabel { get; set; }
-        public UIView chartArea { get; set; }
+        public PieChartView pieChartView { get; set; }
+        public BarChartView barChartView { get; set; }
 
         [Export("initWithFrame:")]
         public ResultCollectionViewCell(CGRect frame) : base(frame)
@@ -151,17 +253,15 @@ namespace Askker.App.iOS
             sectionLabel.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             sectionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            chartArea = new UIView();
-            chartArea.BackgroundColor = UIColor.Green;
-            chartArea.TranslatesAutoresizingMaskIntoConstraints = false;
+            pieChartView = new PieChartView();
+            pieChartView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            barChartView = new BarChartView();
+            barChartView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             AddSubview(sectionLabel);
-            AddSubview(chartArea);
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", sectionLabel));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", chartArea));
-
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(24)][v1]|", new NSLayoutFormatOptions(), "v0", sectionLabel, "v1", chartArea));
         }
     }
 }
