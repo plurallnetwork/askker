@@ -17,6 +17,7 @@ namespace Askker.App.iOS
         public UICollectionView feedHead { get; set; }
         public static List<SurveyCommentModel> comments { get; set; }
         public float headHeight { get; set; }
+        public SurveyModel survey { get; set; }
         NSLayoutConstraint toolbarHeightConstraint;
         NSLayoutConstraint toolbarBottomConstraint;
         CommentAreaView commentArea = CommentAreaView.Create();
@@ -51,6 +52,7 @@ namespace Askker.App.iOS
 
             commentArea.CommentText.Started += CommentText_Started;
             commentArea.CommentText.Changed += CommentText_Changed;
+            commentArea.CommentButton.TouchUpInside += CommentButton_TouchUpInside;
 
             feed = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout() {
                 HeaderReferenceSize = new System.Drawing.SizeF((float)View.Frame.Width, headHeight)
@@ -77,7 +79,7 @@ namespace Askker.App.iOS
             var pinTop = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Top, NSLayoutRelation.Equal, TopLayoutGuide, NSLayoutAttribute.Bottom, 1f, -64f);
             View.AddConstraint(pinTop);
 
-            var pinBottom = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, View, NSLayoutAttribute.Bottom, 1f, 0f);
+            var pinBottom = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, View, NSLayoutAttribute.Bottom, 1f, -46f);
             View.AddConstraint(pinBottom);
 
 
@@ -112,9 +114,27 @@ namespace Askker.App.iOS
             View.AddGestureRecognizer(g);
         }
 
+        private async void CommentButton_TouchUpInside(object sender, EventArgs e)
+        {
+            SurveyCommentModel model = new SurveyCommentModel();
+            model.text = commentArea.CommentText.Text;
+            model.surveyId = survey.userId + survey.creationDate;
+            model.profilePicture = LoginController.userModel.profilePicturePath;
+            model.userId = LoginController.userModel.id;
+            model.userName = LoginController.userModel.name;
+
+            await new CommentManager().CreateSurveyComment(model, LoginController.tokenModel.access_token);
+            fetchSurveyComments(true);
+            
+            commentArea.CommentText.Text = null;
+            commentArea.CommentButton.Enabled = false;
+            View.EndEditing(true);
+            ScrollTheView(false);            
+        }
+
         public override void ViewWillAppear(bool animated)
         {
-            fetchSurveyComments();
+            fetchSurveyComments(false);
         }
 
         public override void ViewDidAppear(bool animated)
@@ -123,13 +143,21 @@ namespace Askker.App.iOS
             AddObservers();
         }
 
-        public async void fetchSurveyComments()
+        public async void fetchSurveyComments(bool scrollToLastItem)
         {
             feedHead.ReloadData();
-            comments = await new CommentManager().GetSurveyComments("75e4441c-4414-4fb2-8966-62c53d8ef85420170201T120657", LoginController.tokenModel.access_token);
+            comments = await new CommentManager().GetSurveyComments(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
             feed.Source = new CommentsCollectionViewSource(comments, feedHead);
             feed.Delegate = new CommentsCollectionViewDelegate();
             feed.ReloadData();
+
+            if (scrollToLastItem)
+            {
+                var section = (int)feed.NumberOfSections() - 1;
+                var item = (int)feed.NumberOfItemsInSection(section) - 1;
+                NSIndexPath index = NSIndexPath.FromRowSection(item, section);
+                feed.ScrollToItem(index, UICollectionViewScrollPosition.Bottom, true);
+            }
         }
 
         private void KeyBoardUpNotification(NSNotification notification)
@@ -248,7 +276,7 @@ namespace Askker.App.iOS
             if (newY < TopLayoutGuide.Length)
                 dy = oldY - TopLayoutGuide.Length;
 
-            AdjustInputToolbar(dy);
+            AdjustInputToolbar(dy + 2);
         }
 
         void AdjustInputToolbar(nfloat change)
