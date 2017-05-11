@@ -59,6 +59,7 @@ namespace Askker.App.iOS
             commentText.Layer.CornerRadius = CornerRadius;
 
             commentButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            commentButton.Enabled = false;
 
             var c1 = NSLayoutConstraint.FromVisualFormat("H:|-[input]-[button]-|",
                 0,

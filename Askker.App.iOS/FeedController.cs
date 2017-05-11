@@ -262,10 +262,12 @@ namespace Askker.App.iOS
                 var commentController = menuViewController.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
                 commentController.feedHead = feedCollectionView;
                 commentController.headHeight = (float)feedCell.Frame.Height + 64;
-
+                
                 survey = surveys[indexPath.Row];
                 surveys.Clear();
                 surveys.Add(survey);
+
+                commentController.survey = survey;
 
                 menuViewController.NavigationController.PushViewController(commentController, true);
             };
