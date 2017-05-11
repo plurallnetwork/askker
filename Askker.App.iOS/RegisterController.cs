@@ -86,10 +86,9 @@ namespace Askker.App.iOS
                         }
                         else
                         {
-                            var alert = UIAlertController.Create("Register", ex.Message, UIAlertControllerStyle.Alert);
-                            alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
-                            PresentViewController(alert, true, null);
+                            Utils.HandleException(ex);
                         }
+
                     }
                 }
             };

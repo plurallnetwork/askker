@@ -64,13 +64,22 @@ namespace Askker.App.iOS
         public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
-            {
-                CreateSurveyController.SurveyModel = await new FeedManager().GetSurvey(CreateSurveyController.UserId, CreateSurveyController.CreationDate, LoginController.tokenModel.access_token);
 
-                _questionStepView.QuestionText.Text = CreateSurveyController.SurveyModel.question.text;
+            try
+            {
+                if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
+                {
+                    CreateSurveyController.SurveyModel = await new FeedManager().GetSurvey(CreateSurveyController.UserId, CreateSurveyController.CreationDate, LoginController.tokenModel.access_token);
+
+                    _questionStepView.QuestionText.Text = CreateSurveyController.SurveyModel.question.text;
+                }
+
+                StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
             }
-            StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         public override void ViewWillUnload()

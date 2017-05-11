@@ -76,39 +76,53 @@ namespace Askker.App.iOS
         {
             nint button = await Utils.ShowAlert("Close Survey", "The survey will be closed. Continue?", "Ok", "Cancel");
 
-            if (button == 0)
+            try
             {
-                survey.finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                await new FeedManager().UpdateSurvey(survey, LoginController.tokenModel.access_token);
-                surveys.Remove(survey);
-                this.feedCollectionView.ReloadData();
-            }
+                if (button == 0)
+                {
+                    survey.finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    await new FeedManager().UpdateSurvey(survey, LoginController.tokenModel.access_token);
+                    surveys.Remove(survey);
+                    this.feedCollectionView.ReloadData();
+                }
 
-            MenuViewController.feedMenu.Hidden = true;
-            MenuViewController.sidebarController.View.Alpha = 1f;
+                MenuViewController.feedMenu.Hidden = true;
+                MenuViewController.sidebarController.View.Alpha = 1f;
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private async void CleanButton_TouchUpInside(object sender, EventArgs e)
         {
             nint button = await Utils.ShowAlert("Clean Votes", "All survey votes will be deleted. Continue?", "Ok", "Cancel");
 
-            if (button == 0)
+            try
             {
-                await new FeedManager().CleanVotes(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
+                if (button == 0)
+                {
+                    await new FeedManager().CleanVotes(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
 
-                survey.optionSelected = null;
-                if (survey.type == SurveyType.Text.ToString())
-                {
-                    surveyCell.optionsTableView.ReloadData();
+                    survey.optionSelected = null;
+                    if (survey.type == SurveyType.Text.ToString())
+                    {
+                        surveyCell.optionsTableView.ReloadData();
+                    }
+                    else
+                    {
+                        surveyCell.optionsCollectionView.ReloadData();
+                    }
                 }
-                else
-                {
-                    surveyCell.optionsCollectionView.ReloadData();
-                }
+
+                MenuViewController.feedMenu.Hidden = true;
+                MenuViewController.sidebarController.View.Alpha = 1f;
             }
-
-            MenuViewController.feedMenu.Hidden = true;
-            MenuViewController.sidebarController.View.Alpha = 1f;
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private void EditButton_TouchUpInside(object sender, EventArgs e)
@@ -125,11 +139,18 @@ namespace Askker.App.iOS
 
         public async void fetchSurveys(bool filterMine, bool filterForMe, bool filterFinished)
         {
-            surveys = await new FeedManager().GetFeed(LoginController.userModel.id, filterMine, filterForMe, filterFinished, LoginController.tokenModel.access_token);
-
-            foreach (var survey in surveys)
+            try
             {
-                survey.options = Common.Randomize(survey.options);
+                surveys = await new FeedManager().GetFeed(LoginController.userModel.id, filterMine, filterForMe, filterFinished, LoginController.tokenModel.access_token);
+
+                foreach (var survey in surveys)
+                {
+                    survey.options = Common.Randomize(survey.options);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
             }
 
             indicator.StopAnimating();
@@ -181,7 +202,7 @@ namespace Askker.App.iOS
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(ex.Message);
+                                Utils.HandleException(ex);
                             }
                         }
                     });
@@ -264,19 +285,26 @@ namespace Askker.App.iOS
 
         public static async void saveVote(int surveyIndex, int optionId)
         {
-            surveys[surveyIndex].optionSelected = optionId;
+            try
+            {
+                surveys[surveyIndex].optionSelected = optionId;
 
-            VoteModel voteModel = new VoteModel();
-            voteModel.surveyId = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
-            voteModel.optionId = optionId;
-            voteModel.user = new User();
-            voteModel.user.id = LoginController.userModel.id;
-            voteModel.user.gender = LoginController.userModel.gender;
-            voteModel.user.age = LoginController.userModel.age;
-            voteModel.user.city = LoginController.userModel.city;
-            voteModel.user.country = LoginController.userModel.country;
+                VoteModel voteModel = new VoteModel();
+                voteModel.surveyId = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
+                voteModel.optionId = optionId;
+                voteModel.user = new User();
+                voteModel.user.id = LoginController.userModel.id;
+                voteModel.user.gender = LoginController.userModel.gender;
+                voteModel.user.age = LoginController.userModel.age;
+                voteModel.user.city = LoginController.userModel.city;
+                voteModel.user.country = LoginController.userModel.country;
 
-            await voteManager.Vote(voteModel, "");
+                await voteManager.Vote(voteModel, "");
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
     }
 
@@ -559,7 +587,7 @@ namespace Askker.App.iOS
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(ex.Message);
+                                Utils.HandleException(ex);
                             }
                         }
                     });

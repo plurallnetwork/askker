@@ -33,47 +33,55 @@ namespace Askker.App.iOS
         {
             _shareStepView = ShareStepView.Create();
             View.AddSubview(_shareStepView);
-            List<SurveyShareTableItem> tableItems = new List<SurveyShareTableItem>();
 
-            List<UserFriendModel> friends = await new FriendManager().GetFriends(LoginController.userModel.id, LoginController.tokenModel.access_token);
-
-            foreach (var friend in friends)
+            try
             {
-                tableItems.Add(new SurveyShareTableItem(friend.name, friend.profilePicture, friend.id));                
+                List<SurveyShareTableItem> tableItems = new List<SurveyShareTableItem>();
+
+                List<UserFriendModel> friends = await new FriendManager().GetFriends(LoginController.userModel.id, LoginController.tokenModel.access_token);
+
+                foreach (var friend in friends)
+                {
+                    tableItems.Add(new SurveyShareTableItem(friend.name, friend.profilePicture, friend.id));
+                }
+
+                tableSource = new SurveyShareTableSource(tableItems);
+
+                if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
+                {
+                    if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Public.ToString())
+                    {
+                        publicButtonLogic();
+                    }
+                    else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Friends.ToString())
+                    {
+                        friendsButtonLogic();
+                    }
+                    else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
+                    {
+                        privateButtonLogic();
+                    }
+                }
+                else
+                {
+                    _shareStepView.PublicButton.Enabled = false;
+                    _shareStepView.FriendsButton.Enabled = true;
+                    _shareStepView.PrivateButton.Enabled = true;
+
+                    _shareStepView.ShareMessageLabel.Text = "This question will be visible to everybody!";
+                    _shareStepView.ShareTable.Hidden = true;
+
+                    CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Public.ToString();
+                }
+
+
+                _shareStepView.ShareTable.Source = tableSource;
+                _shareStepView.ShareTable.ReloadData();
             }
-
-            tableSource = new SurveyShareTableSource(tableItems);
-
-            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
+            catch (Exception ex)
             {
-                if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Public.ToString())
-                {
-                    publicButtonLogic();
-                }
-                else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Friends.ToString())
-                {
-                    friendsButtonLogic();
-                }
-                else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
-                {
-                    privateButtonLogic();
-                }
+                Utils.HandleException(ex);
             }
-            else
-            {
-                _shareStepView.PublicButton.Enabled = false;
-                _shareStepView.FriendsButton.Enabled = true;
-                _shareStepView.PrivateButton.Enabled = true;
-
-                _shareStepView.ShareMessageLabel.Text = "This question will be visible to everybody!";
-                _shareStepView.ShareTable.Hidden = true;
-
-                CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Public.ToString();
-            }
-            
-
-            _shareStepView.ShareTable.Source = tableSource;
-            _shareStepView.ShareTable.ReloadData();
 
             _shareStepView.PublicButton.TouchUpInside += (sender, e) =>
             {

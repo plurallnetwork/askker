@@ -24,101 +24,116 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
 
-            profileImageView.ClipsToBounds = true;
-
-            UserModel userModel = await new LoginManager().GetUserById(LoginController.tokenModel.access_token, UserId);
-
-            nameText.Text = userModel.name;
-            emailText.Text = userModel.userName;
-            ageText.Text = userModel.age.ToString();
-            if ("male".Equals(userModel.gender) || "female".Equals(userModel.gender))
+            try
             {
-                genderText.Text = userModel.gender;
-            }
+                profileImageView.ClipsToBounds = true;
 
-            if (userModel.profilePicturePath != null)
-            {
-                fileName = userModel.profilePicturePath;
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + userModel.profilePicturePath);
+                UserModel userModel = await new LoginManager().GetUserById(LoginController.tokenModel.access_token, UserId);
 
-                var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-                if (imageFromCache != null)
+                nameText.Text = userModel.name;
+                emailText.Text = userModel.userName;
+                ageText.Text = userModel.age.ToString();
+                if ("male".Equals(userModel.gender) || "female".Equals(userModel.gender))
                 {
-                    profileImageView.Image = imageFromCache;
+                    genderText.Text = userModel.gender;
                 }
-                else
+
+                if (userModel.profilePicturePath != null)
                 {
-                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
+                    fileName = userModel.profilePicturePath;
+                    var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + userModel.profilePicturePath);
+
+                    var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
+                    if (imageFromCache != null)
                     {
-                        if (response == null)
+                        profileImageView.Image = imageFromCache;
+                    }
+                    else
+                    {
+                        var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
                         {
-                            profileImageView.Image = UIImage.FromBundle("Profile");
-                        }
-                        else
-                        {
-                            try
+                            if (response == null)
                             {
-                                DispatchQueue.MainQueue.DispatchAsync(() => {
-                                    var imageToCache = UIImage.LoadFromData(data);
-
-                                    profileImageView.Image = imageToCache;
-
-                                    if (imageToCache != null)
+                                profileImageView.Image = UIImage.FromBundle("Profile");
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    DispatchQueue.MainQueue.DispatchAsync(() =>
                                     {
-                                        FeedController.imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                    }
-                                });
+                                        var imageToCache = UIImage.LoadFromData(data);
+
+                                        profileImageView.Image = imageToCache;
+
+                                        if (imageToCache != null)
+                                        {
+                                            FeedController.imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
+                                        }
+                                    });
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw new Exception(ex.Message);
+                                }
                             }
-                            catch (Exception ex)
-                            {
-                                throw new Exception(ex.Message);
-                            }
-                        }
-                    });
-                    task.Resume();
+                        });
+                        task.Resume();
+                    }
                 }
+
+                relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, UserId);
+
+                LoadRelationshipButton();
             }
-
-            relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, UserId);
-
-            LoadRelationshipButton();
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
 
             btnRelationship.TouchUpInside += BtnRelationship_TouchUpInside;
         }
 
         private async void BtnRelationship_TouchUpInside(object sender, EventArgs e)
         {
-            if (relationshipStatus == RelationshipStatus.NotFriends)
+            try
             {
-                relationshipStatus = RelationshipStatus.PendingFriendApproval;
-
-                await new FriendManager().AddFriend(LoginController.tokenModel.access_token, UserId);
-            }
-            else
-            {
-                switch (relationshipStatus)
+                if (relationshipStatus == RelationshipStatus.NotFriends)
                 {
-                    case RelationshipStatus.PendingYourApproval:
-                        relationshipStatus = RelationshipStatus.Friend;
-                        break;
-                    case RelationshipStatus.RejectedByYou:
-                        relationshipStatus = RelationshipStatus.Friend;
-                        break;
-                    case RelationshipStatus.Unfriended:
-                        relationshipStatus = RelationshipStatus.Friend;
-                        break;
-                    case RelationshipStatus.Friend:
-                        relationshipStatus = RelationshipStatus.Unfriended;
-                        break;
-                    default:
-                        relationshipStatus = RelationshipStatus.PendingFriendApproval;
-                        break;
+                    relationshipStatus = RelationshipStatus.PendingFriendApproval;
+
+                    await new FriendManager().AddFriend(LoginController.tokenModel.access_token, UserId);
+                }
+                else
+                {
+                    switch (relationshipStatus)
+                    {
+                        case RelationshipStatus.PendingYourApproval:
+                            relationshipStatus = RelationshipStatus.Friend;
+                            break;
+                        case RelationshipStatus.RejectedByYou:
+                            relationshipStatus = RelationshipStatus.Friend;
+                            break;
+                        case RelationshipStatus.Unfriended:
+                            relationshipStatus = RelationshipStatus.Friend;
+                            break;
+                        case RelationshipStatus.Friend:
+                            relationshipStatus = RelationshipStatus.Unfriended;
+                            break;
+                        default:
+                            relationshipStatus = RelationshipStatus.PendingFriendApproval;
+                            break;
+                    }
+
+                    await new FriendManager().UpdateUserRelationshipStatus(LoginController.tokenModel.access_token, UserId, relationshipStatus);
                 }
 
-                await new FriendManager().UpdateUserRelationshipStatus(LoginController.tokenModel.access_token, UserId, relationshipStatus);
+                LoadRelationshipButton();
             }
-
-            LoadRelationshipButton();
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private void LoadRelationshipButton()

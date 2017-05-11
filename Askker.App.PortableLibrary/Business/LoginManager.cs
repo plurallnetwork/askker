@@ -35,7 +35,15 @@ namespace Askker.App.PortableLibrary.Business
                 {
                     if (!json.Equals(""))
                     {
-                        throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                        {
+                            throw new Exception("Unauthorized");
+                        }
+                        else
+                        {
+                            //JObject.Parse(json).SelectToken("$.error") != null
+                            throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                        }
                     }
                     else
                     {
@@ -64,7 +72,15 @@ namespace Askker.App.PortableLibrary.Business
             {
                 if (!json.Equals(""))
                 {
-                    throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        //JObject.Parse(json).SelectToken("$.error") != null
+                        throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    }
                 }
                 else
                 {
@@ -88,7 +104,15 @@ namespace Askker.App.PortableLibrary.Business
             {
                 if (!json.Equals(""))
                 {
-                    throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        //JObject.Parse(json).SelectToken("$.error") != null
+                        throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    }
                 }
                 else
                 {
@@ -112,7 +136,15 @@ namespace Askker.App.PortableLibrary.Business
             {
                 if (!json.Equals(""))
                 {
-                    throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        //JObject.Parse(json).SelectToken("$.error") != null
+                        throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    }
                 }
                 else
                 {
@@ -131,7 +163,14 @@ namespace Askker.App.PortableLibrary.Business
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
                 }
             }
             catch (Exception ex)
@@ -150,7 +189,14 @@ namespace Askker.App.PortableLibrary.Business
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
                 }
             }
             catch (Exception ex)

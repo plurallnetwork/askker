@@ -182,9 +182,9 @@ namespace Askker.App.iOS
 
                 await new LoginManager().UpdateUserInformation(LoginController.userModel, LoginController.tokenModel.access_token);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                new UIAlertView("Error", e.Message, null, "OK", null).Show();
+                Utils.HandleException(ex);
             }
         }
 

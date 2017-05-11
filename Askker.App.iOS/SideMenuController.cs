@@ -56,7 +56,7 @@ namespace Askker.App.iOS
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception(ex.Message);
+                            Utils.HandleException(ex);
                         }
                     }
                 });

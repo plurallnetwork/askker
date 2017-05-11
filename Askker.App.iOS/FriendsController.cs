@@ -73,7 +73,14 @@ namespace Askker.App.iOS
 
         public async void fetchFriends()
         {
-            userFriends = await new FriendManager().GetFriends(LoginController.userModel.id, LoginController.tokenModel.access_token);
+            try
+            {
+                userFriends = await new FriendManager().GetFriends(LoginController.userModel.id, LoginController.tokenModel.access_token);
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
 
             indicator.StopAnimating();
 

@@ -38,12 +38,20 @@ namespace Askker.App.iOS
 
         public override async void ViewDidAppear(bool animated)
         {
+            //TODO: Remove this if the AppDelegate code works as expected
             if (CredentialsService.DoCredentialsExist())
             {
-                tokenModel = CredentialsService.GetTokenModel();
-                userModel = await loginManager.GetUserById(CredentialsService.access_token);
+                try
+                {
+                    tokenModel = CredentialsService.GetTokenModel();
+                    //userModel = await loginManager.GetUserById(CredentialsService.access_token);
 
-                Login();
+                    Login();
+                }
+                catch (Exception ex)
+                {
+                    Utils.HandleException(ex);
+                }
             }
         }
 
@@ -72,10 +80,10 @@ namespace Askker.App.iOS
             }
         }
 
-        public async System.Threading.Tasks.Task<UserModel> GetUser(string accessToken)
-        {
-            return await loginManager.GetUserById(accessToken);
-        }
+        //public async System.Threading.Tasks.Task<UserModel> GetUser(string accessToken)
+        //{
+        //    return await loginManager.GetUserById(accessToken);
+        //}
 
         async partial void btnEnter_TouchUpInside(UIKit.UIButton sender)
         {
@@ -160,9 +168,7 @@ namespace Askker.App.iOS
                     }
                     else
                     {
-                        var alert = UIAlertController.Create("Login", ex.Message, UIAlertControllerStyle.Alert);
-                        alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
-                        PresentViewController(alert, true, null);
+                        Utils.HandleException(ex);
                     }
                 }
             }
@@ -300,9 +306,7 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
-                var alert = UIAlertController.Create("Social Login Error", ex.Message, UIAlertControllerStyle.Alert);
-                alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
-                PresentViewController(alert, true, null);
+                Utils.HandleException(ex);
 
                 indicator.StopAnimating();
             }

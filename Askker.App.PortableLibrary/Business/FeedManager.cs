@@ -27,7 +27,14 @@ namespace Askker.App.PortableLibrary.Business
                 }
                 else
                 {
-                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
                 }
             }
             catch (Exception ex)
@@ -51,7 +58,14 @@ namespace Askker.App.PortableLibrary.Business
                 }
                 else
                 {
-                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
                 }
             }
             catch (Exception ex)
@@ -70,7 +84,14 @@ namespace Askker.App.PortableLibrary.Business
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
                 }
             }
             catch (Exception ex)
@@ -89,7 +110,14 @@ namespace Askker.App.PortableLibrary.Business
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
                 }
             }
             catch (Exception ex)
@@ -108,7 +136,14 @@ namespace Askker.App.PortableLibrary.Business
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
                 }
             }
             catch (Exception ex)

@@ -26,9 +26,16 @@ namespace Askker.App.iOS
 
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
-            if (CredentialsService.DoCredentialsExist() && !CredentialsService.GetTokenModel().isStillValid(System.DateTime.Now))
+            if (CredentialsService.DoCredentialsExist())
             {
-                CredentialsService.DeleteCredentials();
+                if (!CredentialsService.GetTokenModel().isStillValid(System.DateTime.Now))
+                {
+                    CredentialsService.DeleteCredentials();
+                }
+                else
+                {
+                    //Login();
+                }
             }
 
             return true;
@@ -75,6 +82,19 @@ namespace Askker.App.iOS
         public override void WillTerminate(UIApplication application)
         {
             // Called when the application is about to terminate. Save data, if needed. See also DidEnterBackground.
+        }
+
+        public void Login()
+        {
+            //TODO: Try to update this attribute with a broadcast message
+            LoginController.tokenModel = CredentialsService.GetTokenModel();
+
+            var feedController = this.Window.RootViewController.Storyboard.InstantiateViewController("HomeNavController");
+
+            if (feedController != null)
+            {
+                this.Window.RootViewController = feedController;
+            }
         }
     }
 }

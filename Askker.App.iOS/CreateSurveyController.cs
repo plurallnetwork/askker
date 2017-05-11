@@ -250,9 +250,7 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
-                var alert = UIAlertController.Create("Survey", ex.Message, UIAlertControllerStyle.Alert);
-                alert.AddAction(UIAlertAction.Create("Ok", UIAlertActionStyle.Default, null));
-                PresentViewController(alert, true, null);
+                Utils.HandleException(ex);
             }
         }
 

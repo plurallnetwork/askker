@@ -66,5 +66,48 @@ namespace Askker.App.iOS
             UIGraphics.EndImageContext();
             return imageData;
         }
+
+        public static void HandleException(Exception ex)
+        {
+            if (ex.Message.Equals("Unauthorized"))
+            {
+                if (CredentialsService.DoCredentialsExist())
+                {
+                    CredentialsService.DeleteCredentials();
+                }
+
+                if (UIApplication.SharedApplication.KeyWindow.RootViewController.GetType() != typeof(LoginController))
+                {
+                    UIStoryboard Storyboard = UIStoryboard.FromName("Main", null);
+
+                    var initialController = Storyboard.InstantiateInitialViewController() as UIViewController;
+
+                    if (initialController != null)
+                    {
+                        UIApplication.SharedApplication.KeyWindow.RootViewController = initialController;
+                    }
+                }
+
+                var alert = new UIAlertView
+                {
+                    Title = "Session expired",
+                    Message = "Your session has expired. Please login again."
+                };
+
+                alert.AddButton("OK");
+                alert.Show();
+            }
+            else
+            {
+                var alert = new UIAlertView
+                {
+                    Title = "Something went wrong",
+                    Message = ex.Message
+                };
+
+                alert.AddButton("OK");
+                alert.Show();
+            }
+        }
     }
 }

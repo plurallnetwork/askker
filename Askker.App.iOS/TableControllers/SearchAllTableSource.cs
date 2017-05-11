@@ -106,19 +106,31 @@ namespace Askker.App.iOS.TableControllers
             searchText = searchText.ToLower();
             if (!string.IsNullOrEmpty(searchText.Trim()))
             {
-                //this.searchItems = tableItems.Where(x => x.Title.ToLower().Contains(searchText)).ToList();
-                List<UserModel> users = await new LoginManager().SearchUsersByName(LoginController.tokenModel.access_token, searchText);
-                //Console.WriteLine(users.Count);
-
-                tableItems = new List<SearchAllTableItem>();
-
-                foreach (var user in users)
+                try
                 {
-                    tableItems.Add(new SearchAllTableItem(user.name, user.profilePicturePath));
-                }
+                    //this.searchItems = tableItems.Where(x => x.Title.ToLower().Contains(searchText)).ToList();
+                    List<UserModel> users = await new LoginManager().SearchUsersByName(LoginController.tokenModel.access_token, searchText);
+                    //Console.WriteLine(users.Count);
 
-                SearchAllController.table.Source = new SearchAllTableSource(tableItems);
-                SearchAllController.table.ReloadData();
+                    tableItems = new List<SearchAllTableItem>();
+
+                    foreach (var user in users)
+                    {
+                        tableItems.Add(new SearchAllTableItem(user.name, user.profilePicturePath));
+                    }
+
+                    SearchAllController.table.Source = new SearchAllTableSource(tableItems);
+                    SearchAllController.table.ReloadData();
+                }
+                catch (Exception ex)
+                {
+                    tableItems = new List<SearchAllTableItem>();
+
+                    SearchAllController.table.Source = new SearchAllTableSource(tableItems);
+                    SearchAllController.table.ReloadData();
+
+                    Utils.HandleException(ex);
+                }
             }
             else
             {
