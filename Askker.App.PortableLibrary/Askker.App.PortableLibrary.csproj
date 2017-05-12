@@ -33,6 +33,7 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Business\ReportManager.cs" />
     <Compile Include="Business\FeedManager.cs" />
     <Compile Include="Business\FriendManager.cs" />
     <Compile Include="Business\LoginManager.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="Enums\UserNotificationType.cs" />
     <Compile Include="Enums\RelationshipStatus.cs" />
     <Compile Include="Models\MenuModel.cs" />
+    <Compile Include="Models\ReportModel.cs" />
     <Compile Include="Models\SurveyModel.cs" />
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\UserFriendModel.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="Models\UserRegisterModel.cs" />
     <Compile Include="Models\VoteModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\FeedService.cs" />
     <Compile Include="Services\FriendService.cs" />
     <Compile Include="Services\LoginService.cs" />
