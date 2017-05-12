@@ -136,7 +136,6 @@ namespace Askker.App.iOS
     {
         static NSString menuCellId = new NSString("MenuCell");
 
-
         public MenuTableViewController(UITableView menuTableView, List<MenuModel> menuItems, MenuViewController menuViewController)
         {
             menuTableView.RegisterClassForCellReuse(typeof(MenuTableViewCell), menuCellId);
@@ -197,7 +196,7 @@ namespace Askker.App.iOS
                 {
                     var friendsController = menuViewController.Storyboard.InstantiateViewController("FriendsController");
                     menuViewController.NavigationController.PushViewController(friendsController, true);
-                    MenuViewController.sidebarController.CloseMenu();
+                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Logout)
                 {

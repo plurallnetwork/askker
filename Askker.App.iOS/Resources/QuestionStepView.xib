@@ -12,12 +12,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <subviews>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES" customClass="UITextView">
-                    <rect key="frame" x="0.0" y="100" width="375" height="567"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4" translatesAutoresizingMaskIntoConstraints="NO" customClass="UITextView">
+                    <rect key="frame" x="0.0" y="114" width="375" height="553"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                    <variation key="heightClass=regular-widthClass=compact"/>
                 </textView>
             </subviews>
             <variation key="default">
@@ -25,10 +26,10 @@
                     <exclude reference="4"/>
                 </mask>
                 <mask key="constraints">
-                    <exclude reference="7"/>
-                    <exclude reference="8"/>
-                    <exclude reference="11"/>
-                    <exclude reference="12"/>
+                    <exclude reference="15"/>
+                    <exclude reference="16"/>
+                    <exclude reference="19"/>
+                    <exclude reference="20"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -36,20 +37,20 @@
                     <include reference="4"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="7"/>
-                    <include reference="8"/>
-                    <include reference="11"/>
-                    <include reference="12"/>
+                    <include reference="15"/>
+                    <include reference="16"/>
+                    <include reference="19"/>
+                    <include reference="20"/>
                 </mask>
             </variation>
             <connections>
                 <outlet property="questionText" destination="4" id="name-outlet-4"/>
             </connections>
             <constraints>
-                <constraint id="7" firstItem="1" firstAttribute="trailing" secondItem="4" secondAttribute="trailing"/>
-                <constraint id="8" firstItem="1" firstAttribute="bottom" secondItem="4" secondAttribute="bottom"/>
-                <constraint id="11" firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
-                <constraint id="12" firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100"/>
+                <constraint id="15" firstItem="1" firstAttribute="bottom" secondItem="4" secondAttribute="bottom"/>
+                <constraint id="16" firstItem="1" firstAttribute="trailing" secondItem="4" secondAttribute="trailing"/>
+                <constraint id="19" firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="114"/>
+                <constraint id="20" firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
             </constraints>
         </view>
     </objects>
@@ -60,7 +61,6 @@
         <image name="images/white-pip-full.png" width="8" height="8"/>
         <image name="assets/img/logo_180.png" width="180" height="180"/>
         <image name="Profile" width="210" height="260"/>
-        <image name="images/icons/filterToYou.png" width="42" height="48"/>
         <image name="images/icons/friendsiOS.png" width="68" height="48"/>
         <image name="images/icons/image.png" width="48" height="48"/>
         <image name="images/icons/text.gif" width="48" height="48"/>
@@ -82,6 +82,7 @@
         <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="assets/img/threelines.png" width="30" height="30"/>
+        <image name="assets/img/plus.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

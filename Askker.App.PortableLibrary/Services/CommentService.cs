@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Services
 {
-    public class NotificationService
+    public class CommentService
     {
-        public async Task<HttpResponseMessage> SetUserNotification(UserNotificationModel userNotificationModel, string authenticationToken)
+        public async Task<HttpResponseMessage> CreateSurveyComment(SurveyCommentModel surveyCommentModel, string authenticationToken)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var formContent = new StringContent(JsonConvert.SerializeObject(userNotificationModel, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
+                    var formContent = new StringContent(JsonConvert.SerializeObject(surveyCommentModel, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/setusernotification", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/createsurveycomment", formContent);
                 }
             }
             catch (Exception ex)
@@ -30,17 +30,17 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SetUserNotificationDismissed(UserNotificationModel userNotificationModel, string authenticationToken)
+        public async Task<HttpResponseMessage> DeleteSurveyComment(SurveyCommentModel surveyCommentModel, string authenticationToken)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var formContent = new StringContent(JsonConvert.SerializeObject(userNotificationModel, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
+                    var formContent = new StringContent(JsonConvert.SerializeObject(surveyCommentModel, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/setusernotificationdismissed", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/deletesurveycomment", formContent);
                 }
             }
             catch (Exception ex)
@@ -49,13 +49,13 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> GetUserNotifications(string userId, string authenticationToken)
+        public async Task<HttpResponseMessage> GetSurveyComments(string surveyId, string authenticationToken)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getusernotifications/{0}", userId));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getsurveycomments/{0}", surveyId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);

@@ -97,7 +97,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var formContent = new StringContent(JsonConvert.SerializeObject(surveyModel), Encoding.UTF8, "application/json");
+                    var formContent = new StringContent(JsonConvert.SerializeObject(surveyModel, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 

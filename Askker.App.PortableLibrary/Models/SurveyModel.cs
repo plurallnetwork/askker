@@ -33,6 +33,8 @@ namespace Askker.App.PortableLibrary.Models
 
         public int totalVotes { get; set; }
 
+        public int totalComments { get; set; }
+
         public int? optionSelected { get; set; }
 
         public string targetAudience { get; set; }

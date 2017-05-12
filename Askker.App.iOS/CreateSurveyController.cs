@@ -113,8 +113,8 @@ namespace Askker.App.iOS
                 _pageControl.WithSameCenterX(_pageViewController.View),
                 _pageControl.AtLeftOf(View),
                 _pageControl.AtRightOf(View),
-                _pageControl.AtTopOf(View, UIScreen.MainScreen.Bounds.Height * 0.06f),
-                _pageControl.AtBottomOf(View, UIScreen.MainScreen.Bounds.Height * 0.85f),
+                _pageControl.AtTopOf(View, 64),
+                _pageControl.Height().EqualTo(50),
 
                 _nextButton.AtRightOf(View, 22),
                 _nextButton.WithSameCenterY(_pageControl),
@@ -126,7 +126,7 @@ namespace Askker.App.iOS
                 _askButton.WithSameCenterY(_pageControl),
 
                 _pageTitle.WithSameCenterX(_pageControl),
-                _pageTitle.AtTopOf(View, UIScreen.MainScreen.Bounds.Height * 0.11f)
+                _pageTitle.AtTopOf(View, 93)
             );
 
 
@@ -287,12 +287,16 @@ namespace Askker.App.iOS
             return steps;
         }
 
+        public override bool PrefersStatusBarHidden()
+        {
+            return false;
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            // NavigationController.NavigationBar.Hidden = true;
-
-            if(ScreenState == Askker.App.PortableLibrary.Enums.ScreenState.Edit.ToString())
+            
+            if (ScreenState == Askker.App.PortableLibrary.Enums.ScreenState.Edit.ToString())
             {
                 Title = "Edit Survey";
             }
@@ -317,11 +321,6 @@ namespace Askker.App.iOS
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-        }
-
-        public override bool PrefersStatusBarHidden()
-        {
-            return true;
         }
 
         private void HandleStepActivated(object sender, MultiStepProcessStepEventArgs args)

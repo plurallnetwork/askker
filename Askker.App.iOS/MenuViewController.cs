@@ -10,14 +10,29 @@ namespace Askker.App.iOS
     {
         public static SidebarController sidebarController { get; private set; }
         public static FeedMenuView feedMenu = FeedMenuView.Create();
+        private NSObject closeMenuObserver;
+
+        FeedController content;
 
         public MenuViewController(IntPtr handle) : base(handle)
         {
-        }        
+        }
+
+        public override void ViewDidUnload()
+        {
+            base.ViewDidUnload();
+            if(closeMenuObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(closeMenuObserver);
+            }
+        }
 
         public override void ViewDidLoad()
         {
+
             base.ViewDidLoad();
+
+            closeMenuObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("CloseSideMenu"), CloseMessageRecieved);
 
             feedMenu.Hidden = true;
             
@@ -44,7 +59,8 @@ namespace Askker.App.iOS
                 viewController = this;
             viewController.View.AddSubview(feedMenu);
 
-            var content = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
+            content = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
+            content.menuViewController = this;
             content.filterMine = false;
             content.filterForMe = false;
             content.filterFinished = false;
@@ -62,11 +78,28 @@ namespace Askker.App.iOS
                         })
             , true);
 
+            this.NavigationItem.SetRightBarButtonItem(
+                new UIBarButtonItem(UIBarButtonSystemItem.Add, (sender, args) =>
+                {
+                    var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                    if (rootController != null)
+                    {
+                        this.PresentViewController(rootController, true, null);
+                    }
+                })
+            , true);
+
             this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;
+            this.NavigationItem.RightBarButtonItem.TintColor = UIColor.Black;
 
             this.NavigationItem.BackBarButtonItem = new UIBarButtonItem("", UIBarButtonItemStyle.Plain, null);
 
             this.NavigationController.NavigationBar.TintColor = UIColor.Black;
+        }
+
+        private void CloseMessageRecieved(NSNotification notification)
+        {
+            sidebarController.CloseMenu();
         }
 
         public void changeContentView(UIViewController viewController)

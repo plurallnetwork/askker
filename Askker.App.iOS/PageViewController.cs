@@ -9,5 +9,10 @@ namespace Askker.App.iOS
         public PageViewController (IntPtr handle) : base (handle)
         {
         }
+
+        public override bool PrefersStatusBarHidden()
+        {
+            return false;
+        }
     }
 }

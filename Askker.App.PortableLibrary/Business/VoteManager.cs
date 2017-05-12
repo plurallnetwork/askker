@@ -8,16 +8,16 @@ namespace Askker.App.PortableLibrary.Business
 {
     public class VoteManager
     {
-        public async Task Vote(VoteModel voteModel, string authenticationToken)
+        public async Task Vote(SurveyVoteModel surveyVoteModel, string authenticationToken)
         {
             try
             {
                 VoteService voteService = new VoteService();
 
-                voteModel.voteDate = "";
-                voteModel.active = 1;
+                surveyVoteModel.voteDate = "";
+                surveyVoteModel.active = 1;
 
-                var response = await voteService.Vote(voteModel, authenticationToken).ConfigureAwait(false);
+                var response = await voteService.Vote(surveyVoteModel, authenticationToken).ConfigureAwait(false);
 
                 if (!response.IsSuccessStatusCode)
                 {
