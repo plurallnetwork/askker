@@ -295,7 +295,7 @@ namespace Askker.App.iOS
 
             feedCell.resultButton.TouchUpInside += (sender, e) =>
             {
-                var resultController = menuViewController.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
+                var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
                 resultController.feedHead = feedCollectionView;
                 resultController.headHeight = (float)feedCell.Frame.Height + 64;
                 resultController.feedCellIndexPath = indexPath;
@@ -304,7 +304,7 @@ namespace Askker.App.iOS
                 surveys.Clear();
                 surveys.Add(survey);
 
-                menuViewController.NavigationController.PushViewController(resultController, true);
+                this.NavigationController.PushViewController(resultController, true);
             };
 
             feedCell.moreButton.TouchUpInside += async (sender, e) =>
@@ -339,17 +339,17 @@ namespace Askker.App.iOS
             {
                 surveys[surveyIndex].optionSelected = optionId;
 
-            SurveyVoteModel surveyVoteModel = new SurveyVoteModel();
-            surveyVoteModel.surveyId = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
-            surveyVoteModel.optionId = optionId;
-            surveyVoteModel.user = new User();
-            surveyVoteModel.user.id = LoginController.userModel.id;
-            surveyVoteModel.user.gender = LoginController.userModel.gender;
-            surveyVoteModel.user.age = LoginController.userModel.age;
-            surveyVoteModel.user.city = LoginController.userModel.city;
-            surveyVoteModel.user.country = LoginController.userModel.country;
+                SurveyVoteModel surveyVoteModel = new SurveyVoteModel();
+                surveyVoteModel.surveyId = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
+                surveyVoteModel.optionId = optionId;
+                surveyVoteModel.user = new User();
+                surveyVoteModel.user.id = LoginController.userModel.id;
+                surveyVoteModel.user.gender = LoginController.userModel.gender;
+                surveyVoteModel.user.age = LoginController.userModel.age;
+                surveyVoteModel.user.city = LoginController.userModel.city;
+                surveyVoteModel.user.country = LoginController.userModel.country;
 
-            await voteManager.Vote(surveyVoteModel, "");
+                await voteManager.Vote(surveyVoteModel, "");
             }
             catch (Exception ex)
             {

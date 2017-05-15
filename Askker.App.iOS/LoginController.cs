@@ -44,7 +44,7 @@ namespace Askker.App.iOS
                 try
                 {
                     tokenModel = CredentialsService.GetTokenModel();
-                    //userModel = await loginManager.GetUserById(CredentialsService.access_token);
+                    userModel = await loginManager.GetUserById(CredentialsService.access_token);
 
                     Login();
                 }

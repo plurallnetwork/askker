@@ -59,7 +59,6 @@ namespace Askker.App.iOS
         {
             // Called as part of the transiton from background to active state.
             // Here you can undo many of the changes made on entering the background.
-
             if (CredentialsService.DoCredentialsExist() && !CredentialsService.GetTokenModel().isStillValid(System.DateTime.Now))
             {
                 CredentialsService.DeleteCredentials();
