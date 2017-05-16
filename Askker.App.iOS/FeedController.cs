@@ -122,21 +122,28 @@ namespace Askker.App.iOS
             }
         }
 
-        private void EditButton_TouchUpInside(object sender, EventArgs e)
+        private async void EditButton_TouchUpInside(object sender, EventArgs e)
         {
-            var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
-            if (CreateSurveyController != null)
+            if (survey.totalVotes > 0)
             {
-                CreateSurveyController.ScreenState = ScreenState.Edit.ToString();
-                CreateSurveyController.UserId = survey.userId;
-                CreateSurveyController.CreationDate = survey.creationDate;
-
-                var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                if (rootController != null)
+                nint optionButton = await Utils.ShowAlert("Edit", "The survey have votes. Please clean the votes to edit the survey.", "OK");
+            }
+            else
+            {
+                var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                if (CreateSurveyController != null)
                 {
-                    this.PresentViewController(rootController, true, null);
+                    CreateSurveyController.ScreenState = ScreenState.Edit.ToString();
+                    CreateSurveyController.UserId = survey.userId;
+                    CreateSurveyController.CreationDate = survey.creationDate;
+
+                    var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                    if (rootController != null)
+                    {
+                        this.PresentViewController(rootController, true, null);
+                    }
+                    //this.PresentViewController(CreateSurveyController.NavigationController, true, null);
                 }
-                //this.PresentViewController(CreateSurveyController.NavigationController, true, null);
             }
         }
 
@@ -222,32 +229,38 @@ namespace Askker.App.iOS
 
             feedCell.nameLabel.AttributedText = attributedText;
 
-            if (surveys[indexPath.Row].finishDate != null) {
-                DateTime outputDateTimeValue;
-                if (DateTime.TryParseExact(surveys[indexPath.Row].finishDate, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue))
-                {
-                    if(outputDateTimeValue < DateTime.Now)
-                    {
-                        feedCell.finishedLabel.Text = "Finished";
-                    }else
-                    {
-                        feedCell.finishedLabel.Text = "";
-                    }                    
-                }
-                else
-                {
-                    feedCell.finishedLabel.Text = "";
-                }
+            DateTime outputDateTimeValue;
+            if (surveys[indexPath.Row].finishDate != null &&
+                DateTime.TryParseExact(surveys[indexPath.Row].finishDate, "yyyy-MM-dd HH:mm:ss", 
+                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue) &&
+                outputDateTimeValue < DateTime.Now) {
+                
+                feedCell.finishedLabel.Text = "Finished";
+                feedCell.moreButton.Hidden = true;
+                feedCell.optionsTableView.AllowsSelection = false;
+                feedCell.optionsCollectionView.AllowsSelection = false;                
             }
             else
             {
                 feedCell.finishedLabel.Text = "";
+                feedCell.moreButton.Hidden = false;
+                feedCell.optionsTableView.AllowsSelection = true;
+                feedCell.optionsCollectionView.AllowsSelection = true;
             }
 
-            feedCell.questionText.Text = surveys[indexPath.Row].question.text;
+            if (!surveys[indexPath.Row].userId.Equals(LoginController.userModel.id))
+            {
+                feedCell.moreButton.Hidden = true;
+            }
+            else
+            {
+                feedCell.moreButton.Hidden = false;
+            }
+
+                feedCell.questionText.Text = surveys[indexPath.Row].question.text;
 
             if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
-            {
+            {                
                 feedCell.optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
                 feedCell.optionsTableView.Layer.MasksToBounds = true;
                 feedCell.optionsTableView.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -353,27 +366,20 @@ namespace Askker.App.iOS
         }
 
         [Export("MoreSelector:")]
-        private async void MoreSelector(UIFeedButton button)
+        private void MoreSelector(UIFeedButton button)
         {
-            if (!surveys[(int)button.Params.ToArray()[0]].userId.Equals(LoginController.userModel.id))
-            {
-                nint optionButton = await Utils.ShowAlert("More Options", "Only the survey owner can access these options", "OK");
-            }
-            else
-            {
-                survey = surveys[(int)button.Params.ToArray()[0]];
-                surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
+            survey = surveys[(int)button.Params.ToArray()[0]];
+            surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
 
-                MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
-                {
-                    Duration = 0.2,
-                    Type = CoreAnimation.CAAnimation.TransitionPush,
-                    Subtype = CoreAnimation.CAAnimation.TransitionFromTop
-                }, "showMenu");
+            MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+            {
+                Duration = 0.2,
+                Type = CoreAnimation.CAAnimation.TransitionPush,
+                Subtype = CoreAnimation.CAAnimation.TransitionFromTop
+            }, "showMenu");
 
-                MenuViewController.feedMenu.Hidden = false;
-                MenuViewController.sidebarController.View.Alpha = 0.5f;
-            }
+            MenuViewController.feedMenu.Hidden = false;
+            MenuViewController.sidebarController.View.Alpha = 0.5f;
         }
 
         public static async void saveVote(int surveyIndex, int optionId)
