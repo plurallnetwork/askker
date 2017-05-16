@@ -278,59 +278,80 @@ namespace Askker.App.iOS
                 feedCell.commentsLabel.Text = Common.FormatNumberAbbreviation(surveys[indexPath.Row].totalComments) + " Comments";
             }
 
-            feedCell.commentButton.TouchUpInside += (sender, e) =>
-            {
-                var commentController = menuViewController.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
-                commentController.feedHead = feedCollectionView;
-                commentController.headHeight = (float)feedCell.Frame.Height + 64;
-                
-                survey = surveys[indexPath.Row];
-                surveys.Clear();
-                surveys.Add(survey);
+            feedCell.commentButton.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> commentValues = new List<Object>();
+            commentValues.Add(indexPath.Row);
+            commentValues.Add((float)feedCell.Frame.Height + 64);
+            feedCell.commentButton.Params = commentValues;
 
-                commentController.survey = survey;
+            feedCell.resultButton.AddTarget(this, new ObjCRuntime.Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> resultValues = new List<Object>();
+            resultValues.Add(indexPath);
+            resultValues.Add((float)feedCell.Frame.Height + 64);
+            feedCell.resultButton.Params = resultValues;
 
-                menuViewController.NavigationController.PushViewController(commentController, true);
-            };
-
-            feedCell.resultButton.TouchUpInside += (sender, e) =>
-            {
-                var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
-                resultController.feedHead = feedCollectionView;
-                resultController.headHeight = (float)feedCell.Frame.Height + 64;
-                resultController.feedCellIndexPath = indexPath;
-
-                survey = surveys[indexPath.Row];
-                surveys.Clear();
-                surveys.Add(survey);
-
-                this.NavigationController.PushViewController(resultController, true);
-            };
-
-            feedCell.moreButton.TouchUpInside += async (sender, e) =>
-            {
-                if (!surveys[indexPath.Row].userId.Equals(LoginController.userModel.id))
-                {
-                    nint optionButton = await Utils.ShowAlert("More Options", "Only the survey owner can access these options", "OK");
-                }
-                else
-                {
-                    survey = surveys[indexPath.Row];
-                    surveyCell = feedCell;
-
-                    MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
-                    {
-                        Duration = 0.2,
-                        Type = CoreAnimation.CAAnimation.TransitionPush,
-                        Subtype = CoreAnimation.CAAnimation.TransitionFromTop
-                    }, "showMenu");
-
-                    MenuViewController.feedMenu.Hidden = false;
-                    MenuViewController.sidebarController.View.Alpha = 0.5f;
-                }
-            };
-
+            feedCell.moreButton.AddTarget(this, new ObjCRuntime.Selector("MoreSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> moreValues = new List<Object>();
+            moreValues.Add(indexPath.Row);
+            moreValues.Add(feedCell);
+            feedCell.moreButton.Params = moreValues;
+            
             return feedCell;
+        }
+
+        [Export("CommentSelector:")]
+        private void CommentSelector(UIFeedButton button)
+        {
+            var commentController = menuViewController.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
+            commentController.feedHead = feedCollectionView;
+            commentController.headHeight = (float)button.Params.ToArray()[1];
+
+            survey = surveys[(int)button.Params.ToArray()[0]];
+            surveys.Clear();
+            surveys.Add(survey);
+
+            commentController.survey = survey;
+
+            menuViewController.NavigationController.PushViewController(commentController, true);
+        }
+
+        [Export("ResultSelector:")]
+        private void ResultSelector(UIFeedButton button)
+        {
+            var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
+            resultController.feedHead = feedCollectionView;
+            resultController.headHeight = (float)button.Params.ToArray()[1];
+            resultController.feedCellIndexPath = (NSIndexPath)button.Params.ToArray()[0];
+
+            survey = surveys[((NSIndexPath)button.Params.ToArray()[0]).Row];
+            surveys.Clear();
+            surveys.Add(survey);
+
+            this.NavigationController.PushViewController(resultController, true);
+        }
+
+        [Export("MoreSelector:")]
+        private async void MoreSelector(UIFeedButton button)
+        {
+            if (!surveys[(int)button.Params.ToArray()[0]].userId.Equals(LoginController.userModel.id))
+            {
+                nint optionButton = await Utils.ShowAlert("More Options", "Only the survey owner can access these options", "OK");
+            }
+            else
+            {
+                survey = surveys[(int)button.Params.ToArray()[0]];
+                surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
+
+                MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+                {
+                    Duration = 0.2,
+                    Type = CoreAnimation.CAAnimation.TransitionPush,
+                    Subtype = CoreAnimation.CAAnimation.TransitionFromTop
+                }, "showMenu");
+
+                MenuViewController.feedMenu.Hidden = false;
+                MenuViewController.sidebarController.View.Alpha = 0.5f;
+            }
         }
 
         public static async void saveVote(int surveyIndex, int optionId)
@@ -398,9 +419,9 @@ namespace Askker.App.iOS
         public UILabel totalVotesLabel { get; set; }
         public UILabel commentsLabel { get; set; }
         public UIView dividerLineView2 { get; set; }
-        public UIButton commentButton { get; set; }
-        public UIButton resultButton { get; set; }
-        public UIButton moreButton { get; set; }
+        public UIFeedButton commentButton { get; set; }
+        public UIFeedButton resultButton { get; set; }
+        public UIFeedButton moreButton { get; set; }
         public UIView contentViewButtons { get; set; }
 
         public static NSString optionCellId = new NSString("optionCell");
@@ -498,9 +519,9 @@ namespace Askker.App.iOS
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", moreButton));
         }
 
-        public UIButton buttonForTitle(string title, string imageName)
+        public UIFeedButton buttonForTitle(string title, string imageName)
         {
-            var button = new UIButton();
+            var button = new UIFeedButton();
             button.SetTitle(title, UIControlState.Normal);
             button.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.56"), nfloat.Parse("0.58"), nfloat.Parse("0.63"), nfloat.Parse("1")), UIControlState.Normal);
             button.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
@@ -776,5 +797,10 @@ namespace Askker.App.iOS
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-25-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", this, "v1", optionCheckImageView));
         }
+    }
+
+    public class UIFeedButton : UIButton
+    {
+        public List<Object> Params { get; set; }
     }
 }
