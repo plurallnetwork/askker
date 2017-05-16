@@ -222,6 +222,28 @@ namespace Askker.App.iOS
 
             feedCell.nameLabel.AttributedText = attributedText;
 
+            if (surveys[indexPath.Row].finishDate != null) {
+                DateTime outputDateTimeValue;
+                if (DateTime.TryParseExact(surveys[indexPath.Row].finishDate, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue))
+                {
+                    if(outputDateTimeValue < DateTime.Now)
+                    {
+                        feedCell.finishedLabel.Text = "Finished";
+                    }else
+                    {
+                        feedCell.finishedLabel.Text = "";
+                    }                    
+                }
+                else
+                {
+                    feedCell.finishedLabel.Text = "";
+                }
+            }
+            else
+            {
+                feedCell.finishedLabel.Text = "";
+            }
+
             feedCell.questionText.Text = surveys[indexPath.Row].question.text;
 
             if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
@@ -409,6 +431,7 @@ namespace Askker.App.iOS
     {
         public UIImageView profileImageView { get; set; }
         public UILabel nameLabel { get; set; }
+        public UILabel finishedLabel { get; set; }
         public UITextView questionText { get; set; }
         public UIView dividerLineView { get; set; }
         public UITableView optionsTableView { get; set; }
@@ -442,6 +465,10 @@ namespace Askker.App.iOS
             nameLabel = new UILabel();
             nameLabel.Lines = 2;
             nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            finishedLabel = new UILabel();
+            finishedLabel.TextColor = UIColor.Red;
+            finishedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             questionText = new UITextView();
             questionText.Font = UIFont.SystemFontOfSize(14);
@@ -496,6 +523,7 @@ namespace Askker.App.iOS
 
             AddSubview(profileImageView);
             AddSubview(nameLabel);
+            AddSubview(finishedLabel);
             AddSubview(questionText);
             AddSubview(dividerLineView);
             AddSubview(totalVotesLabel);
@@ -503,7 +531,7 @@ namespace Askker.App.iOS
             AddSubview(dividerLineView2);
             AddSubview(contentViewButtons);
 
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]-[v2]-12-|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel, "v2", finishedLabel));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-12-[v0(v1)]-[v1]-12-|", NSLayoutFormatOptions.AlignAllCenterY, "v0", totalVotesLabel, "v1", commentsLabel));
@@ -513,6 +541,7 @@ namespace Askker.App.iOS
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(v2)][v1(v2)][v2]|", new NSLayoutFormatOptions(), "v0", commentButton, "v1", resultButton, "v2", moreButton));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", finishedLabel));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", commentButton));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", resultButton));
