@@ -17,8 +17,6 @@ namespace Askker.App.iOS
 
         public LoginController (IntPtr handle) : base (handle)
         {
-            tokenModel = new TokenModel();
-            userModel = new UserModel();
             loginManager = new LoginManager();
 
             indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
@@ -36,24 +34,24 @@ namespace Askker.App.iOS
             btnLoginGoogle.TouchUpInside += btnLoginGoogle_TouchUpInside;
         }
 
-        public override async void ViewDidAppear(bool animated)
-        {
-            //TODO: Remove this if the AppDelegate code works as expected
-            if (CredentialsService.DoCredentialsExist())
-            {
-                try
-                {
-                    tokenModel = CredentialsService.GetTokenModel();
-                    userModel = await loginManager.GetUserById(CredentialsService.access_token);
+        //public override async void ViewDidAppear(bool animated)
+        //{
+        //    //TODO: Remove this if the AppDelegate code works as expected
+        //    if (CredentialsService.DoCredentialsExist())
+        //    {
+        //        try
+        //        {
+        //            tokenModel = CredentialsService.GetTokenModel();
+        //            userModel = await loginManager.GetUserById(CredentialsService.access_token);
 
-                    Login();
-                }
-                catch (Exception ex)
-                {
-                    Utils.HandleException(ex);
-                }
-            }
-        }
+        //            Login();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Utils.HandleException(ex);
+        //        }
+        //    }
+        //}
 
         public override void DidReceiveMemoryWarning()
         {
@@ -73,10 +71,10 @@ namespace Askker.App.iOS
 
         public void Login()
         {
-            var feedController = this.Storyboard.InstantiateViewController("HomeNavController");
-            if (feedController != null)
+            var menuController = this.Storyboard.InstantiateViewController("MenuNavController");
+            if (menuController != null)
             {
-                this.PresentViewController(feedController, true, null);
+                this.PresentViewController(menuController, true, null);
             }
         }
 

@@ -189,8 +189,8 @@ namespace Askker.App.iOS
                 if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed)
                 {
                     cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
-                    var homeNavController = menuViewController.Storyboard.InstantiateViewController("HomeNavController");
-                    menuViewController.changeContentView(homeNavController);
+                    var menuController = menuViewController.Storyboard.InstantiateViewController("MenuNavController");
+                    menuViewController.PresentViewController(menuController, true, null);
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.MyFriends)
                 {

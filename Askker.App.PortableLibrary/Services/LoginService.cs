@@ -35,6 +35,23 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
+        public HttpResponseMessage GetUserByTokenSync(string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+
+                    return client.GetAsync("https://blinq-development.com:44322/api/Account/GetUserById").Result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<HttpResponseMessage> GetUserById(string authenticationToken)
         {
             try
