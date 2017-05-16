@@ -131,10 +131,6 @@
     <Compile Include="FriendsController.designer.cs">
       <DependentUpon>FriendsController.cs</DependentUpon>
     </Compile>
-    <Compile Include="HomeController.cs" />
-    <Compile Include="HomeController.designer.cs">
-      <DependentUpon>HomeController.cs</DependentUpon>
-    </Compile>
     <Compile Include="HorizontalSwipe\HorizontalSwipePageControl.cs" />
     <Compile Include="HorizontalSwipe\MultiStepProcessHorizontal.cs" />
     <Compile Include="LoginController.cs" />

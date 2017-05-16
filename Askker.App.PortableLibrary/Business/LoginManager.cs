@@ -57,6 +57,37 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
+        public UserModel GetUserByTokenSync(string authenticationToken)
+        {
+            LoginService loginService = new LoginService();
+
+            var response = loginService.GetUserByTokenSync(authenticationToken);
+            var json = response.Content.ReadAsStringAsync().Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<UserModel>(json);
+            }
+            else
+            {
+                if (!json.Equals(""))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    }
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task<UserModel> GetUserById(string authenticationToken)
         {
             LoginService loginService = new LoginService();

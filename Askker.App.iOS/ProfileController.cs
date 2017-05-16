@@ -172,6 +172,7 @@ namespace Askker.App.iOS
                 }
                 else
                 {
+                    LoginController.userModel.profilePicturePath = LoginController.userModel.id + "/profile-picture.jpg";
                     using (NSData imageData = Utils.CompressImage(profileImageView.Image))
                     {
                         byte[] myByteArray = new byte[imageData.Length];
