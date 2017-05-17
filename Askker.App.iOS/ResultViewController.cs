@@ -145,7 +145,10 @@ namespace Askker.App.iOS
                 var dataEntries = new List<PieChartDataEntry>();
                 for (int i = 0; i < reportDataSet.dataSets[0].Count; i++)
                 {
-                    dataEntries.Add(new PieChartDataEntry(reportDataSet.dataSets[0][i], reportDataSet.labels[i]));
+                    if (Convert.ToInt32(reportDataSet.dataSets[0][i]) > 0)
+                    {
+                        dataEntries.Add(new PieChartDataEntry(reportDataSet.dataSets[0][i], reportDataSet.labels[i]));
+                    }
                 }
 
                 var dataSet = new PieChartDataSet(dataEntries.ToArray(), "");
