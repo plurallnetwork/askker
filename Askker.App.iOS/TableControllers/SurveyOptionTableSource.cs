@@ -41,9 +41,9 @@ namespace Askker.App.iOS.TableControllers
         /// </summary>
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            new UIAlertView("Row Selected"
-                , tableItems[indexPath.Row].Text, null, "OK", null).Show();
-            tableView.DeselectRow(indexPath, true);
+            //new UIAlertView("Row Selected"
+            //    , tableItems[indexPath.Row].Text, null, "OK", null).Show();
+            //tableView.DeselectRow(indexPath, true);
         }
 
         /// <summary>
