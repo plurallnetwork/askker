@@ -63,6 +63,16 @@ namespace Askker.App.iOS
             MenuViewController.feedMenu.FinishButton.TouchUpInside += FinishButton_TouchUpInside;
         }
 
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+
+
+            MenuViewController.feedMenu.EditButton.TouchUpInside -= EditButton_TouchUpInside;
+            MenuViewController.feedMenu.CleanButton.TouchUpInside -= CleanButton_TouchUpInside;
+            MenuViewController.feedMenu.FinishButton.TouchUpInside -= FinishButton_TouchUpInside;
+        }
+
         public override void ViewWillAppear(bool animated)
         {
             indicator.StartAnimating();
