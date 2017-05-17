@@ -57,6 +57,8 @@ namespace Askker.App.iOS
             }
             if (viewController == null)
                 viewController = this;
+
+            feedMenu.Frame = viewController.View.Frame;
             viewController.View.AddSubview(feedMenu);
 
             content = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
