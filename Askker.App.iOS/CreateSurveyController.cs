@@ -154,15 +154,6 @@ namespace Askker.App.iOS
                     return;
                 }
 
-                if (CreateSurveyController.SurveyModel == null ||
-                    CreateSurveyController.SurveyModel.options == null ||
-                    CreateSurveyController.SurveyModel.options.Count < 2)
-                {
-                    new UIAlertView("Options", "Please give at least two options", null, "OK", null).Show();
-
-                    return;
-                }
-
                 List<SurveyOptionTableItem> items = CreateSurveyOptionsStep.tableSource.GetTableItems();
                 if (items.Count > 0)
                 {
@@ -197,6 +188,15 @@ namespace Askker.App.iOS
                             optionId++;
                         }
                     });
+                }
+
+                if (CreateSurveyController.SurveyModel == null ||
+                    CreateSurveyController.SurveyModel.options == null ||
+                    CreateSurveyController.SurveyModel.options.Count < 2)
+                {
+                    new UIAlertView("Options", "Please give at least two options", null, "OK", null).Show();
+
+                    return;
                 }
             }
 

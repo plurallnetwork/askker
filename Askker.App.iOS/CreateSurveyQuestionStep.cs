@@ -118,7 +118,10 @@ namespace Askker.App.iOS
             }
             if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
             {
-                CreateSurveyController.SurveyModel.question.text = _questionStepView.QuestionText.Text;
+                if(CreateSurveyController.SurveyModel != null) //When Cancel button is clicked the SurveyModel become null
+                {
+                    CreateSurveyController.SurveyModel.question.text = _questionStepView.QuestionText.Text;
+                }                
             }
             StepDeactivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
