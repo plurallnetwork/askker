@@ -230,6 +230,7 @@ namespace Askker.App.iOS
             feedCell.nameLabel.AttributedText = attributedText;
 
             DateTime outputDateTimeValue;
+            bool finished = false;
             if (surveys[indexPath.Row].finishDate != null &&
                 DateTime.TryParseExact(surveys[indexPath.Row].finishDate, "yyyy-MM-dd HH:mm:ss", 
                                        System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue) &&
@@ -238,7 +239,8 @@ namespace Askker.App.iOS
                 feedCell.finishedLabel.Text = "Finished";
                 feedCell.moreButton.Hidden = true;
                 feedCell.optionsTableView.AllowsSelection = false;
-                feedCell.optionsCollectionView.AllowsSelection = false;                
+                feedCell.optionsCollectionView.AllowsSelection = false;
+                finished = true;
             }
             else
             {
@@ -246,6 +248,7 @@ namespace Askker.App.iOS
                 feedCell.moreButton.Hidden = false;
                 feedCell.optionsTableView.AllowsSelection = true;
                 feedCell.optionsCollectionView.AllowsSelection = true;
+                finished = false;
             }
 
             if (!surveys[indexPath.Row].userId.Equals(LoginController.userModel.id))
@@ -254,10 +257,17 @@ namespace Askker.App.iOS
             }
             else
             {
-                feedCell.moreButton.Hidden = false;
+                if (finished)
+                {
+                    feedCell.moreButton.Hidden = true;
+                }
+                else
+                {
+                    feedCell.moreButton.Hidden = false;
+                }                
             }
 
-                feedCell.questionText.Text = surveys[indexPath.Row].question.text;
+            feedCell.questionText.Text = surveys[indexPath.Row].question.text;
 
             if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
             {                
