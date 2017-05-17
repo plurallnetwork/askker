@@ -189,13 +189,19 @@ namespace Askker.App.iOS
                 if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed)
                 {
                     cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
-                    var homeNavController = menuViewController.Storyboard.InstantiateViewController("HomeNavController");
-                    menuViewController.changeContentView(homeNavController);
+                    var menuController = menuViewController.Storyboard.InstantiateViewController("MenuNavController");
+                    menuViewController.PresentViewController(menuController, true, null);
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.MyFriends)
                 {
                     var friendsController = menuViewController.Storyboard.InstantiateViewController("FriendsController");
                     menuViewController.NavigationController.PushViewController(friendsController, true);
+                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
+                }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.SearchFriends)
+                {
+                    var searchAllController = menuViewController.Storyboard.InstantiateViewController("SearchAllController");
+                    menuViewController.NavigationController.PushViewController(searchAllController, true);
                     NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Logout)

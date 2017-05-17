@@ -34,7 +34,7 @@ namespace Askker.App.iOS
                 }
                 else
                 {
-                    //Login();
+                    Login();
                 }
             }
 
@@ -86,13 +86,21 @@ namespace Askker.App.iOS
         public void Login()
         {
             //TODO: Try to update this attribute with a broadcast message
-            LoginController.tokenModel = CredentialsService.GetTokenModel();
-
-            var feedController = this.Window.RootViewController.Storyboard.InstantiateViewController("HomeNavController");
-
-            if (feedController != null)
+            try
             {
-                this.Window.RootViewController = feedController;
+                LoginController.tokenModel = CredentialsService.GetTokenModel();
+                LoginController.userModel = new PortableLibrary.Business.LoginManager().GetUserByTokenSync(CredentialsService.access_token);
+
+                var menuController = this.Window.RootViewController.Storyboard.InstantiateViewController("MenuNavController");
+
+                if (menuController != null)
+                {
+                    this.Window.RootViewController = menuController;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Utils.HandleException(ex);
             }
         }
     }

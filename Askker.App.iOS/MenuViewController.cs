@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using Askker.App.PortableLibrary.Enums;
+using Foundation;
 using SidebarNavigation;
 using System;
 using System.Drawing;
@@ -57,6 +58,8 @@ namespace Askker.App.iOS
             }
             if (viewController == null)
                 viewController = this;
+
+            feedMenu.Frame = viewController.View.Frame;
             viewController.View.AddSubview(feedMenu);
 
             content = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
@@ -81,10 +84,16 @@ namespace Askker.App.iOS
             this.NavigationItem.SetRightBarButtonItem(
                 new UIBarButtonItem(UIBarButtonSystemItem.Add, (sender, args) =>
                 {
-                    var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                    if (rootController != null)
+                    var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                    if (CreateSurveyController != null)
                     {
-                        this.PresentViewController(rootController, true, null);
+                        CreateSurveyController.ScreenState = ScreenState.Create.ToString();
+                        
+                        var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                        if (rootController != null)
+                        {
+                            this.PresentViewController(rootController, true, null);
+                        }
                     }
                 })
             , true);

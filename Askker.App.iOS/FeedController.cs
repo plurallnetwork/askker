@@ -122,21 +122,28 @@ namespace Askker.App.iOS
             }
         }
 
-        private void EditButton_TouchUpInside(object sender, EventArgs e)
+        private async void EditButton_TouchUpInside(object sender, EventArgs e)
         {
-            var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
-            if (CreateSurveyController != null)
+            if (survey.totalVotes > 0)
             {
-                CreateSurveyController.ScreenState = ScreenState.Edit.ToString();
-                CreateSurveyController.UserId = survey.userId;
-                CreateSurveyController.CreationDate = survey.creationDate;
-
-                var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                if (rootController != null)
+                nint optionButton = await Utils.ShowAlert("Edit", "The survey have votes. Please clean the votes to edit the survey.", "OK");
+            }
+            else
+            {
+                var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                if (CreateSurveyController != null)
                 {
-                    this.PresentViewController(rootController, true, null);
+                    CreateSurveyController.ScreenState = ScreenState.Edit.ToString();
+                    CreateSurveyController.UserId = survey.userId;
+                    CreateSurveyController.CreationDate = survey.creationDate;
+
+                    var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                    if (rootController != null)
+                    {
+                        this.PresentViewController(rootController, true, null);
+                    }
+                    //this.PresentViewController(CreateSurveyController.NavigationController, true, null);
                 }
-                //this.PresentViewController(CreateSurveyController.NavigationController, true, null);
             }
         }
 
@@ -222,10 +229,48 @@ namespace Askker.App.iOS
 
             feedCell.nameLabel.AttributedText = attributedText;
 
+            DateTime outputDateTimeValue;
+            bool finished = false;
+            if (surveys[indexPath.Row].finishDate != null &&
+                DateTime.TryParseExact(surveys[indexPath.Row].finishDate, "yyyy-MM-dd HH:mm:ss", 
+                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue) &&
+                outputDateTimeValue < DateTime.Now) {
+                
+                feedCell.finishedLabel.Text = "Finished";
+                feedCell.moreButton.Hidden = true;
+                feedCell.optionsTableView.AllowsSelection = false;
+                feedCell.optionsCollectionView.AllowsSelection = false;
+                finished = true;
+            }
+            else
+            {
+                feedCell.finishedLabel.Text = "";
+                feedCell.moreButton.Hidden = false;
+                feedCell.optionsTableView.AllowsSelection = true;
+                feedCell.optionsCollectionView.AllowsSelection = true;
+                finished = false;
+            }
+
+            if (!surveys[indexPath.Row].userId.Equals(LoginController.userModel.id))
+            {
+                feedCell.moreButton.Hidden = true;
+            }
+            else
+            {
+                if (finished)
+                {
+                    feedCell.moreButton.Hidden = true;
+                }
+                else
+                {
+                    feedCell.moreButton.Hidden = false;
+                }                
+            }
+
             feedCell.questionText.Text = surveys[indexPath.Row].question.text;
 
             if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
-            {
+            {                
                 feedCell.optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
                 feedCell.optionsTableView.Layer.MasksToBounds = true;
                 feedCell.optionsTableView.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -278,59 +323,73 @@ namespace Askker.App.iOS
                 feedCell.commentsLabel.Text = Common.FormatNumberAbbreviation(surveys[indexPath.Row].totalComments) + " Comments";
             }
 
-            feedCell.commentButton.TouchUpInside += (sender, e) =>
-            {
-                var commentController = menuViewController.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
-                commentController.feedHead = feedCollectionView;
-                commentController.headHeight = (float)feedCell.Frame.Height + 64;
-                
-                survey = surveys[indexPath.Row];
-                surveys.Clear();
-                surveys.Add(survey);
+            feedCell.commentButton.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> commentValues = new List<Object>();
+            commentValues.Add(indexPath.Row);
+            commentValues.Add((float)feedCell.Frame.Height + 64);
+            feedCell.commentButton.Params = commentValues;
 
-                commentController.survey = survey;
+            feedCell.resultButton.AddTarget(this, new ObjCRuntime.Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> resultValues = new List<Object>();
+            resultValues.Add(indexPath);
+            resultValues.Add((float)feedCell.Frame.Height + 64);
+            feedCell.resultButton.Params = resultValues;
 
-                menuViewController.NavigationController.PushViewController(commentController, true);
-            };
-
-            feedCell.resultButton.TouchUpInside += (sender, e) =>
-            {
-                var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
-                resultController.feedHead = feedCollectionView;
-                resultController.headHeight = (float)feedCell.Frame.Height + 64;
-                resultController.feedCellIndexPath = indexPath;
-
-                survey = surveys[indexPath.Row];
-                surveys.Clear();
-                surveys.Add(survey);
-
-                this.NavigationController.PushViewController(resultController, true);
-            };
-
-            feedCell.moreButton.TouchUpInside += async (sender, e) =>
-            {
-                if (!surveys[indexPath.Row].userId.Equals(LoginController.userModel.id))
-                {
-                    nint optionButton = await Utils.ShowAlert("More Options", "Only the survey owner can access these options", "OK");
-                }
-                else
-                {
-                    survey = surveys[indexPath.Row];
-                    surveyCell = feedCell;
-
-                    MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
-                    {
-                        Duration = 0.2,
-                        Type = CoreAnimation.CAAnimation.TransitionPush,
-                        Subtype = CoreAnimation.CAAnimation.TransitionFromTop
-                    }, "showMenu");
-
-                    MenuViewController.feedMenu.Hidden = false;
-                    MenuViewController.sidebarController.View.Alpha = 0.5f;
-                }
-            };
-
+            feedCell.moreButton.AddTarget(this, new ObjCRuntime.Selector("MoreSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> moreValues = new List<Object>();
+            moreValues.Add(indexPath.Row);
+            moreValues.Add(feedCell);
+            feedCell.moreButton.Params = moreValues;
+            
             return feedCell;
+        }
+
+        [Export("CommentSelector:")]
+        private void CommentSelector(UIFeedButton button)
+        {
+            var commentController = menuViewController.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
+            commentController.feedHead = feedCollectionView;
+            commentController.headHeight = (float)button.Params.ToArray()[1];
+
+            survey = surveys[(int)button.Params.ToArray()[0]];
+            surveys.Clear();
+            surveys.Add(survey);
+
+            commentController.survey = survey;
+
+            menuViewController.NavigationController.PushViewController(commentController, true);
+        }
+
+        [Export("ResultSelector:")]
+        private void ResultSelector(UIFeedButton button)
+        {
+            var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
+            resultController.feedHead = feedCollectionView;
+            resultController.headHeight = (float)button.Params.ToArray()[1];
+            resultController.feedCellIndexPath = (NSIndexPath)button.Params.ToArray()[0];
+
+            survey = surveys[((NSIndexPath)button.Params.ToArray()[0]).Row];
+            surveys.Clear();
+            surveys.Add(survey);
+
+            this.NavigationController.PushViewController(resultController, true);
+        }
+
+        [Export("MoreSelector:")]
+        private void MoreSelector(UIFeedButton button)
+        {
+            survey = surveys[(int)button.Params.ToArray()[0]];
+            surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
+
+            MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+            {
+                Duration = 0.2,
+                Type = CoreAnimation.CAAnimation.TransitionPush,
+                Subtype = CoreAnimation.CAAnimation.TransitionFromTop
+            }, "showMenu");
+
+            MenuViewController.feedMenu.Hidden = false;
+            MenuViewController.sidebarController.View.Alpha = 0.5f;
         }
 
         public static async void saveVote(int surveyIndex, int optionId)
@@ -388,6 +447,7 @@ namespace Askker.App.iOS
     {
         public UIImageView profileImageView { get; set; }
         public UILabel nameLabel { get; set; }
+        public UILabel finishedLabel { get; set; }
         public UITextView questionText { get; set; }
         public UIView dividerLineView { get; set; }
         public UITableView optionsTableView { get; set; }
@@ -398,9 +458,9 @@ namespace Askker.App.iOS
         public UILabel totalVotesLabel { get; set; }
         public UILabel commentsLabel { get; set; }
         public UIView dividerLineView2 { get; set; }
-        public UIButton commentButton { get; set; }
-        public UIButton resultButton { get; set; }
-        public UIButton moreButton { get; set; }
+        public UIFeedButton commentButton { get; set; }
+        public UIFeedButton resultButton { get; set; }
+        public UIFeedButton moreButton { get; set; }
         public UIView contentViewButtons { get; set; }
 
         public static NSString optionCellId = new NSString("optionCell");
@@ -421,6 +481,10 @@ namespace Askker.App.iOS
             nameLabel = new UILabel();
             nameLabel.Lines = 2;
             nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            finishedLabel = new UILabel();
+            finishedLabel.TextColor = UIColor.Red;
+            finishedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             questionText = new UITextView();
             questionText.Font = UIFont.SystemFontOfSize(14);
@@ -475,6 +539,7 @@ namespace Askker.App.iOS
 
             AddSubview(profileImageView);
             AddSubview(nameLabel);
+            AddSubview(finishedLabel);
             AddSubview(questionText);
             AddSubview(dividerLineView);
             AddSubview(totalVotesLabel);
@@ -482,7 +547,7 @@ namespace Askker.App.iOS
             AddSubview(dividerLineView2);
             AddSubview(contentViewButtons);
 
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]-[v2]-12-|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel, "v2", finishedLabel));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-12-[v0(v1)]-[v1]-12-|", NSLayoutFormatOptions.AlignAllCenterY, "v0", totalVotesLabel, "v1", commentsLabel));
@@ -492,15 +557,16 @@ namespace Askker.App.iOS
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(v2)][v1(v2)][v2]|", new NSLayoutFormatOptions(), "v0", commentButton, "v1", resultButton, "v2", moreButton));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", finishedLabel));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", commentButton));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", resultButton));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", moreButton));
         }
 
-        public UIButton buttonForTitle(string title, string imageName)
+        public UIFeedButton buttonForTitle(string title, string imageName)
         {
-            var button = new UIButton();
+            var button = new UIFeedButton();
             button.SetTitle(title, UIControlState.Normal);
             button.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.56"), nfloat.Parse("0.58"), nfloat.Parse("0.63"), nfloat.Parse("1")), UIControlState.Normal);
             button.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
@@ -776,5 +842,10 @@ namespace Askker.App.iOS
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-25-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", this, "v1", optionCheckImageView));
         }
+    }
+
+    public class UIFeedButton : UIButton
+    {
+        public List<Object> Params { get; set; }
     }
 }

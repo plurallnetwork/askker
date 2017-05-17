@@ -52,7 +52,7 @@ namespace Askker.App.iOS
                 searchTable();
             };
 
-            table = new UITableView(new CGRect(0, 20, View.Bounds.Width, View.Bounds.Height - 20));
+            table = new UITableView(new CGRect(0, 0, View.Bounds.Width, View.Bounds.Height - 20));
             //table.AutoresizingMask = UIViewAutoresizing.All;
             tableItems = new List<SearchAllTableItem>();
             
