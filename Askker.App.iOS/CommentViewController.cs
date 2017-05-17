@@ -2,6 +2,7 @@
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
+using Askker.App.PortableLibrary.Util;
 using CoreFoundation;
 using CoreGraphics;
 using Foundation;
@@ -22,6 +23,7 @@ namespace Askker.App.iOS
         NSLayoutConstraint toolbarBottomConstraint;
         CommentAreaView commentArea = CommentAreaView.Create();
 
+        public NSIndexPath feedCellIndexPath { get; set; }
         public static NSString feedHeadId = new NSString("feedHeadId");
         public static NSString commentCellId = new NSString("commentCellId");
 
@@ -123,13 +125,50 @@ namespace Askker.App.iOS
             model.userId = LoginController.userModel.id;
             model.userName = LoginController.userModel.name;
 
-            await new CommentManager().CreateSurveyComment(model, LoginController.tokenModel.access_token);
-            fetchSurveyComments(true);
-            
-            commentArea.CommentText.Text = null;
-            commentArea.CommentButton.Enabled = false;
-            View.EndEditing(true);
-            ScrollTheView(false);            
+            var feedCell = feedHead.DequeueReusableCell(feedHeadId, feedCellIndexPath) as FeedCollectionViewCell;
+            //var feedCell = feedHead.CellForItem(feedCellIndexPath) as FeedCollectionViewCell;
+
+            if (feedCell != null)
+            {
+                string[] totalCommentsLabelParts = feedCell.totalVotesLabel.Text.Split(' ');
+                int totalComments = Int32.Parse(totalCommentsLabelParts[0]) + 1;
+
+                if (totalComments == 1)
+                {
+                    feedCell.commentsLabel.Text = "1 Comment";
+                }
+                else
+                {
+                    feedCell.commentsLabel.Text = Common.FormatNumberAbbreviation(totalComments) + " Comments";
+                }
+            }
+
+            try
+            {
+                await new CommentManager().CreateSurveyComment(model, LoginController.tokenModel.access_token);
+
+                fetchSurveyComments(true);
+                commentArea.CommentText.Text = null;
+                commentArea.CommentButton.Enabled = false;
+                View.EndEditing(true);
+                ScrollTheView(false);
+            }
+            catch (Exception ex)
+            {
+                string[] totalCommentsLabelParts = feedCell.totalVotesLabel.Text.Split(' ');
+                int totalComments = Int32.Parse(totalCommentsLabelParts[0]) - 1;
+
+                if (totalComments == 1)
+                {
+                    feedCell.commentsLabel.Text = "1 Comment";
+                }
+                else
+                {
+                    feedCell.commentsLabel.Text = Common.FormatNumberAbbreviation(totalComments) + " Comments";
+                }
+
+                Utils.HandleException(ex);
+            }   
         }
 
         public override void ViewWillAppear(bool animated)
