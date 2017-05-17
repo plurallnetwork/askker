@@ -198,6 +198,12 @@ namespace Askker.App.iOS
                     menuViewController.NavigationController.PushViewController(friendsController, true);
                     NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
                 }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.SearchFriends)
+                {
+                    var searchAllController = menuViewController.Storyboard.InstantiateViewController("SearchAllController");
+                    menuViewController.NavigationController.PushViewController(searchAllController, true);
+                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
+                }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Logout)
                 {
                     CredentialsService.DeleteCredentials();

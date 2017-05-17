@@ -10,6 +10,7 @@ namespace Askker.App.PortableLibrary.Enums
     {
         Feed,
         MyFriends,
+        SearchFriends,
         Settings,
         Help,
         Logout,

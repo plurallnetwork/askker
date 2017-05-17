@@ -1945,7 +1945,7 @@
         </scene>
         <scene sceneID="3497">
             <objects>
-                <viewController id="3498" sceneMemberID="viewController" customClass="SearchAllController" title="Search">
+                <viewController id="3498" sceneMemberID="viewController" customClass="SearchAllController" title="Search" storyboardIdentifier="SearchAllController" useStoryboardIdentifierAsRestorationIdentifier="YES">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3495"/>
                         <viewControllerLayoutGuide type="bottom" id="3496"/>
