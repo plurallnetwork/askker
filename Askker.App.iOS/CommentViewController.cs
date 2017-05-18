@@ -276,12 +276,15 @@ namespace Askker.App.iOS
             if (newY < TopLayoutGuide.Length)
                 dy = oldY - TopLayoutGuide.Length;
 
-            AdjustInputToolbar(dy + 2);
+            AdjustInputToolbar(dy);
         }
 
         void AdjustInputToolbar(nfloat change)
         {
             toolbarHeightConstraint.Constant += change;
+
+            var topCorrect = commentArea.CommentText.ContentSize.Height - commentArea.CommentText.Bounds.Size.Height;
+            commentArea.CommentText.ContentOffset = new CGPoint(0, topCorrect);
 
             if (toolbarHeightConstraint.Constant < 46f)
                 toolbarHeightConstraint.Constant = 46f;
