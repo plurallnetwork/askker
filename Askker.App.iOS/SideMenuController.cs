@@ -35,6 +35,10 @@ namespace Askker.App.iOS
             profileImageView.Layer.CornerRadius = (profileImageView.Frame.Width / 2);
             profileImageView.Layer.MasksToBounds = true;
 
+            var tapGestureRecognizer = new UITapGestureRecognizer(this, new ObjCRuntime.Selector("TapProfilePictureSelector:"));
+            profileImageView.AddGestureRecognizer(tapGestureRecognizer);
+            profileImageView.UserInteractionEnabled = true;
+
             if (LoginController.userModel.profilePicturePath != null)
             {
                 var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + LoginController.userModel.profilePicturePath);
@@ -129,6 +133,13 @@ namespace Askker.App.iOS
             scrollView.ContentSize = new CGSize(View.Frame.Width, 1000);
 
             View.AddSubview(scrollView);
+        }
+
+        [Export("TapProfilePictureSelector:")]
+        public void TapProfilePictureSelector(UITapGestureRecognizer tapGesture)
+        {
+            Utils.OpenUserProfile(menuViewController.NavigationController, LoginController.userModel.id);
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
         }
     }
 

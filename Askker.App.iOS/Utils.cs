@@ -109,5 +109,28 @@ namespace Askker.App.iOS
                 alert.Show();
             }
         }
+
+        public static void OpenUserProfile(UINavigationController navigationController, string userId)
+        {
+            UIStoryboard Storyboard = UIStoryboard.FromName("Main", null);
+
+            if (userId.Equals(LoginController.userModel.id))
+            {
+                var profileController = Storyboard.InstantiateViewController("ProfileController") as ProfileController;
+                if (profileController != null)
+                {
+                    navigationController.PushViewController(profileController, true);
+                }
+            }
+            else
+            {
+                var profileOtherController = Storyboard.InstantiateViewController("ProfileOtherController") as ProfileOtherController;
+                if (profileOtherController != null)
+                {
+                    profileOtherController.UserId = userId;
+                    navigationController.PushViewController(profileOtherController, true);
+                }
+            }
+        }
     }
 }

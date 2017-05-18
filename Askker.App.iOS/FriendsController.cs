@@ -109,12 +109,7 @@ namespace Askker.App.iOS
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            var profileOtherController = this.Storyboard.InstantiateViewController("ProfileOtherController") as ProfileOtherController;
-            if (profileOtherController != null)
-            {
-                profileOtherController.UserId = userFriends[indexPath.Row].id;
-                this.NavigationController.PushViewController(profileOtherController, true);
-            }
+            Utils.OpenUserProfile(this.NavigationController, userFriends[indexPath.Row].id);
         }
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)

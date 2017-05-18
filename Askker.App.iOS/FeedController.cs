@@ -8,6 +8,7 @@ using Askker.App.PortableLibrary.Business;
 using CoreFoundation;
 using Askker.App.PortableLibrary.Util;
 using Askker.App.PortableLibrary.Enums;
+using ObjCRuntime;
 
 namespace Askker.App.iOS
 {
@@ -340,7 +341,13 @@ namespace Askker.App.iOS
             moreValues.Add(indexPath.Row);
             moreValues.Add(feedCell);
             feedCell.moreButton.Params = moreValues;
-            
+
+            var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
+            List<Object> tapProfilePictureValues = new List<Object>();
+            tapProfilePictureValues.Add(surveys[indexPath.Row].userId);
+            feedTapGestureRecognizer.Params = tapProfilePictureValues;
+            feedCell.profileImageView.AddGestureRecognizer(feedTapGestureRecognizer);
+
             return feedCell;
         }
 
@@ -392,6 +399,12 @@ namespace Askker.App.iOS
             MenuViewController.sidebarController.View.Alpha = 0.5f;
         }
 
+        [Export("TapProfilePictureSelector:")]
+        public void TapProfilePictureSelector(UIFeedTapGestureRecognizer tapGesture)
+        {
+            Utils.OpenUserProfile(menuViewController.NavigationController, (string)tapGesture.Params.ToArray()[0]);
+        }
+
         public static async void saveVote(int surveyIndex, int optionId)
         {
             try
@@ -409,6 +422,29 @@ namespace Askker.App.iOS
                 surveyVoteModel.user.country = LoginController.userModel.country;
 
                 await voteManager.Vote(surveyVoteModel, "");
+
+                if (LoginController.userModel.id != surveys[surveyIndex].userId)
+                {
+                    UserNotificationModel userNotificationModel = new UserNotificationModel();
+                    userNotificationModel.notificationDate = "";
+                    userNotificationModel.userId = surveys[surveyIndex].userId;
+                    userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
+                    userNotificationModel.type = UserNotificationType.SurveyVote.ToString();
+
+                    if (surveys[surveyIndex].question.text.Length > 25)
+                    {
+                        userNotificationModel.text = LoginController.userModel.name + " voted on \"" + surveys[surveyIndex].question.text.Substring(0, 25) + "...\"";
+                    }
+                    else
+                    {
+                        userNotificationModel.text = LoginController.userModel.name + " voted on \"" + surveys[surveyIndex].question.text + "\"";
+                    }
+
+                    userNotificationModel.link = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
+                    userNotificationModel.isDismissed = 0;
+
+                    await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
+                }
             }
             catch (Exception ex)
             {
@@ -476,6 +512,7 @@ namespace Askker.App.iOS
             profileImageView.Image = UIImage.FromBundle("Profile");
             profileImageView.Layer.CornerRadius = 22;
             profileImageView.Layer.MasksToBounds = true;
+            profileImageView.UserInteractionEnabled = true;
             profileImageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             nameLabel = new UILabel();
@@ -484,6 +521,7 @@ namespace Askker.App.iOS
 
             finishedLabel = new UILabel();
             finishedLabel.TextColor = UIColor.Red;
+            finishedLabel.Font = UIFont.SystemFontOfSize(14);
             finishedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             questionText = new UITextView();
@@ -847,5 +885,14 @@ namespace Askker.App.iOS
     public class UIFeedButton : UIButton
     {
         public List<Object> Params { get; set; }
+    }
+
+    public class UIFeedTapGestureRecognizer : UITapGestureRecognizer
+    {
+        public List<Object> Params { get; set; }
+
+        public UIFeedTapGestureRecognizer(NSObject target, Selector action) : base(target, action)
+        {
+        }
     }
 }

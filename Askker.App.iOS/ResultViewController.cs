@@ -257,7 +257,7 @@ namespace Askker.App.iOS
 
                 if (feedCell != null)
                 {
-                    feedCell.resultButton.Enabled = false;
+                    feedCell.resultButton.Hidden = true;
                 }
             }
 

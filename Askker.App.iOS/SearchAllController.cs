@@ -56,7 +56,7 @@ namespace Askker.App.iOS
             //table.AutoresizingMask = UIViewAutoresizing.All;
             tableItems = new List<SearchAllTableItem>();
             
-            tableSource = new SearchAllTableSource(tableItems);
+            tableSource = new SearchAllTableSource(tableItems, this.NavigationController);
             table.Source = tableSource;
             table.TableHeaderView = searchBar;
             Add(table);
@@ -66,7 +66,7 @@ namespace Askker.App.iOS
         {
             tableItems = new List<SearchAllTableItem>();
 
-            table.Source = new SearchAllTableSource(tableItems);
+            table.Source = new SearchAllTableSource(tableItems, this.NavigationController);
             table.ReloadData();
         }
 

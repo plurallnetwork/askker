@@ -19,11 +19,13 @@ namespace Askker.App.iOS.TableControllers
         private List<SearchAllTableItem> searchItems = new List<SearchAllTableItem>();
         protected NSString cellIdentifier = new NSString("TableCell");
         public static NSCache imageCache = new NSCache();
+        public UINavigationController navigationController = new UINavigationController();
 
-        public SearchAllTableSource(List<SearchAllTableItem> items)
+        public SearchAllTableSource(List<SearchAllTableItem> items, UINavigationController navigationController)
         {
             this.tableItems = items;
             this.searchItems = items;
+            this.navigationController = navigationController;
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)
@@ -116,17 +118,17 @@ namespace Askker.App.iOS.TableControllers
 
                     foreach (var user in users)
                     {
-                        tableItems.Add(new SearchAllTableItem(user.name, user.profilePicturePath));
+                        tableItems.Add(new SearchAllTableItem(user.id, user.name, user.profilePicturePath));
                     }
 
-                    SearchAllController.table.Source = new SearchAllTableSource(tableItems);
+                    SearchAllController.table.Source = new SearchAllTableSource(tableItems, this.navigationController);
                     SearchAllController.table.ReloadData();
                 }
                 catch (Exception ex)
                 {
                     tableItems = new List<SearchAllTableItem>();
 
-                    SearchAllController.table.Source = new SearchAllTableSource(tableItems);
+                    SearchAllController.table.Source = new SearchAllTableSource(tableItems, this.navigationController);
                     SearchAllController.table.ReloadData();
 
                     Utils.HandleException(ex);
@@ -136,9 +138,14 @@ namespace Askker.App.iOS.TableControllers
             {
                 tableItems = new List<SearchAllTableItem>();
                 
-                SearchAllController.table.Source = new SearchAllTableSource(tableItems);
+                SearchAllController.table.Source = new SearchAllTableSource(tableItems, this.navigationController);
                 SearchAllController.table.ReloadData();
             }
+        }
+
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            Utils.OpenUserProfile(this.navigationController, this.tableItems[indexPath.Row].Id);
         }
     }
 }

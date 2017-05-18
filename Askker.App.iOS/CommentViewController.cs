@@ -147,7 +147,7 @@ namespace Askker.App.iOS
         {
             feedHead.ReloadData();
             comments = await new CommentManager().GetSurveyComments(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
-            feed.Source = new CommentsCollectionViewSource(comments, feedHead);
+            feed.Source = new CommentsCollectionViewSource(comments, feedHead, this.NavigationController);
             feed.Delegate = new CommentsCollectionViewDelegate();
             feed.ReloadData();
 
@@ -325,11 +325,13 @@ namespace Askker.App.iOS
         public List<SurveyCommentModel> comments { get; set; }
         public UICollectionView feedHead { get; set; }
         public static NSCache imageCache = new NSCache();
+        public UINavigationController navigationController = new UINavigationController();
 
-        public CommentsCollectionViewSource(List<SurveyCommentModel> comments, UICollectionView feedHead)
+        public CommentsCollectionViewSource(List<SurveyCommentModel> comments, UICollectionView feedHead, UINavigationController navigationController)
         {
             this.comments = comments;
             this.feedHead = feedHead;
+            this.navigationController = navigationController;
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
@@ -374,7 +376,7 @@ namespace Askker.App.iOS
                                     if (imageToCache != null)
                                     {
                                         imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                        commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image);
+                                        commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image, this.navigationController, comments[indexPath.Row].userId);
                                     }
                                 });
                             }
@@ -389,7 +391,7 @@ namespace Askker.App.iOS
 
             }
 
-            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image);
+            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image, this.navigationController, comments[indexPath.Row].userId);
 
             return commentCell;
         }
