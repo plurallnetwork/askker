@@ -287,6 +287,7 @@ namespace Askker.App.iOS
                 feedCell.optionsTableView.TranslatesAutoresizingMaskIntoConstraints = false;
                 feedCell.optionsTableView.ContentInset = new UIEdgeInsets(0, -10, 0, 0);
                 feedCell.optionsTableView.Tag = indexPath.Row;
+                feedCell.optionsTableView.FeedCell = feedCell;
 
                 feedCell.optionsTableViewSource.options = surveys[indexPath.Row].options;
                 feedCell.optionsTableView.Source = feedCell.optionsTableViewSource;
@@ -302,6 +303,7 @@ namespace Askker.App.iOS
             {
                 feedCell.optionsCollectionView.TranslatesAutoresizingMaskIntoConstraints = false;
                 feedCell.optionsCollectionView.Tag = indexPath.Row;
+                feedCell.optionsCollectionView.FeedCell = feedCell;
 
                 feedCell.optionsCollectionViewSource.options = surveys[indexPath.Row].options;
                 feedCell.optionsCollectionView.Source = feedCell.optionsCollectionViewSource;
@@ -496,9 +498,9 @@ namespace Askker.App.iOS
         public UILabel finishedLabel { get; set; }
         public UITextView questionText { get; set; }
         public UIView dividerLineView { get; set; }
-        public UITableView optionsTableView { get; set; }
+        public UIOptionsTableView optionsTableView { get; set; }
         public OptionsTableViewSource optionsTableViewSource { get; set; }
-        public UICollectionView optionsCollectionView { get; set; }
+        public UIOptionsCollectionView optionsCollectionView { get; set; }
         public OptionsCollectionViewSource optionsCollectionViewSource { get; set; }
         public OptionsCollectionViewDelegate optionsCollectionViewDelegate { get; set; }
         public UILabel totalVotesLabel { get; set; }
@@ -545,12 +547,12 @@ namespace Askker.App.iOS
             dividerLineView.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
             dividerLineView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            optionsTableView = new UITableView();
+            optionsTableView = new UIOptionsTableView();
             optionsTableView.RegisterClassForCellReuse(typeof(OptionTableViewCell), optionCellId);
 
             optionsTableViewSource = new OptionsTableViewSource();
 
-            optionsCollectionView = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout()
+            optionsCollectionView = new UIOptionsCollectionView(new CGRect(), new UICollectionViewFlowLayout()
             {
                 ScrollDirection = UICollectionViewScrollDirection.Horizontal
             });
@@ -673,6 +675,19 @@ namespace Askker.App.iOS
                 optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
                 optionCell.AccessoryView = optionCheckImage;
 
+                int totalVotes = GetNumberFromLabel(((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text);
+
+                totalVotes++;
+
+                if (totalVotes == 1)
+                {
+                    ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = "1 Vote";
+                }
+                else
+                {
+                    ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
+                }
+
                 FeedController.saveVote((int)tableView.Tag, (int)optionCell.Tag);
             }
         }
@@ -686,7 +701,34 @@ namespace Askker.App.iOS
                 optionCell = this.GetCell(tableView, indexPath);
             }
 
+            int totalVotes = GetNumberFromLabel(((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text);
+
+            totalVotes--;
+
+            if (totalVotes == 1)
+            {
+                ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = "1 Vote";
+            }
+            else
+            {
+                ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
+            }
+
             optionCell.AccessoryView = null;
+        }
+
+        private int GetNumberFromLabel(string label)
+        {
+            var num = label.Substring(0, label.IndexOf(" "));
+
+            int result;
+
+            if(Int32.TryParse(num.Trim(), out result))
+            {
+                return result;
+            }
+
+            return 0;
         }
     }
 
@@ -825,6 +867,20 @@ namespace Askker.App.iOS
             if (optionCell.optionCheckImageView.Hidden)
             {
                 optionCell.optionCheckImageView.Hidden = false;
+
+                int totalVotes = GetNumberFromLabel(((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text);
+
+                totalVotes++;
+
+                if (totalVotes == 1)
+                {
+                    ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = "1 Vote";
+                }
+                else
+                {
+                    ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
+                }
+
                 FeedController.saveVote((int)collectionView.Tag, (int)optionCell.Tag);
             }
         }
@@ -839,6 +895,33 @@ namespace Askker.App.iOS
             }
 
             optionCell.optionCheckImageView.Hidden = true;
+
+            int totalVotes = GetNumberFromLabel(((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text);
+
+            totalVotes--;
+
+            if (totalVotes == 1)
+            {
+                ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = "1 Vote";
+            }
+            else
+            {
+                ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
+            }
+        }
+
+        private int GetNumberFromLabel(string label)
+        {
+            var num = label.Substring(0, label.IndexOf(" "));
+
+            int result;
+
+            if (Int32.TryParse(num.Trim(), out result))
+            {
+                return result;
+            }
+
+            return 0;
         }
     }
 
@@ -904,5 +987,23 @@ namespace Askker.App.iOS
         public UIFeedTapGestureRecognizer(NSObject target, Selector action) : base(target, action)
         {
         }
+    }
+
+    public class UIOptionsTableView : UITableView
+    {
+        public FeedCollectionViewCell FeedCell { get; set; }
+    }
+
+    public class UIOptionsCollectionView : UICollectionView
+    {
+        public UIOptionsCollectionView(NSCoder coder) : base(coder) { }
+
+        public UIOptionsCollectionView(CGRect frame, UICollectionViewLayout layout) : base(frame, layout) { }
+
+        protected UIOptionsCollectionView(NSObjectFlag t) : base(t) { }
+
+        protected internal UIOptionsCollectionView(IntPtr handle) : base(handle) { }
+
+        public FeedCollectionViewCell FeedCell { get; set; }
     }
 }
