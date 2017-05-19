@@ -123,7 +123,31 @@ namespace Askker.App.iOS
             model.userId = LoginController.userModel.id;
             model.userName = LoginController.userModel.name;
 
-            await new CommentManager().CreateSurveyComment(model, LoginController.tokenModel.access_token);
+            model = await new CommentManager().CreateSurveyComment(model, LoginController.tokenModel.access_token);
+
+            if (LoginController.userModel.id != survey.userId)
+            {
+                UserNotificationModel userNotificationModel = new UserNotificationModel();
+                userNotificationModel.notificationDate = "";
+                userNotificationModel.userId = survey.userId;
+                userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
+                userNotificationModel.type = UserNotificationType.SurveyVote.ToString();
+
+                if (survey.question.text.Length > 25)
+                {
+                    userNotificationModel.text = LoginController.userModel.name + " commented on \"" + survey.question.text.Substring(0, 25) + "...\"";
+                }
+                else
+                {
+                    userNotificationModel.text = LoginController.userModel.name + " commented on \"" + survey.question.text + "\"";
+                }
+
+                userNotificationModel.link = model.surveyId + ";" + model.commentDate;
+                userNotificationModel.isDismissed = 0;
+
+                await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
+            }
+
             fetchSurveyComments(true);
             
             commentArea.CommentText.Text = null;
