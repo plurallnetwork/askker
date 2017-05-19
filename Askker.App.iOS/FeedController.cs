@@ -177,7 +177,9 @@ namespace Askker.App.iOS
         {
             var feedCell = collectionView.DequeueReusableCell(feedCellId, indexPath) as FeedCollectionViewCell;
 
-            if (surveys[indexPath.Row].profilePicture != null)
+            BindFeedCell(feedCell, surveys[indexPath.Row], indexPath);
+
+            /*if (surveys[indexPath.Row].profilePicture != null)
             {
                 var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + surveys[indexPath.Row].profilePicture);
 
@@ -327,19 +329,21 @@ namespace Askker.App.iOS
             List<Object> commentValues = new List<Object>();
             commentValues.Add(indexPath.Row);
             commentValues.Add((float)feedCell.Frame.Height + 64);
+            commentValues.Add(feedCell);
             feedCell.commentButton.Params = commentValues;
 
             feedCell.resultButton.AddTarget(this, new ObjCRuntime.Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
             List<Object> resultValues = new List<Object>();
             resultValues.Add(indexPath);
             resultValues.Add((float)feedCell.Frame.Height + 64);
+            resultValues.Add(feedCell);
             feedCell.resultButton.Params = resultValues;
 
             feedCell.moreButton.AddTarget(this, new ObjCRuntime.Selector("MoreSelector:"), UIControlEvent.TouchUpInside);
             List<Object> moreValues = new List<Object>();
             moreValues.Add(indexPath.Row);
             moreValues.Add(feedCell);
-            feedCell.moreButton.Params = moreValues;
+            feedCell.moreButton.Params = moreValues;*/
             
             return feedCell;
         }
@@ -347,15 +351,17 @@ namespace Askker.App.iOS
         [Export("CommentSelector:")]
         private void CommentSelector(UIFeedButton button)
         {
+            var buttonParams = button.Params.ToArray();
+
             var commentController = menuViewController.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
-            commentController.feedHead = feedCollectionView;
-            commentController.headHeight = (float)button.Params.ToArray()[1];
 
-            survey = surveys[(int)button.Params.ToArray()[0]];
-            surveys.Clear();
-            surveys.Add(survey);
+            commentController.survey = surveys[((NSIndexPath) buttonParams[0]).Row];
 
-            commentController.survey = survey;
+            var feedCell = new FeedCollectionViewCell(((FeedCollectionViewCell) buttonParams[1]).Frame);
+
+            BindFeedCell(feedCell, commentController.survey, (NSIndexPath) buttonParams[0]);
+
+            commentController.feedCell = feedCell;
 
             menuViewController.NavigationController.PushViewController(commentController, true);
         }
@@ -363,14 +369,18 @@ namespace Askker.App.iOS
         [Export("ResultSelector:")]
         private void ResultSelector(UIFeedButton button)
         {
-            var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
-            resultController.feedHead = feedCollectionView;
-            resultController.headHeight = (float)button.Params.ToArray()[1];
-            resultController.feedCellIndexPath = (NSIndexPath)button.Params.ToArray()[0];
+            var buttonParams = button.Params.ToArray();
 
-            survey = surveys[((NSIndexPath)button.Params.ToArray()[0]).Row];
-            surveys.Clear();
-            surveys.Add(survey);
+            var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
+
+            var survey = surveys[((NSIndexPath) buttonParams[0]).Row];
+
+            resultController.userId = survey.userId;
+            resultController.creationDate = survey.creationDate;
+
+            var feedCell = new FeedCollectionViewCell(((FeedCollectionViewCell) buttonParams[1]).Frame);
+            BindFeedCell(feedCell, survey, (NSIndexPath) buttonParams[0]);
+            resultController.feedCell = feedCell;
 
             this.NavigationController.PushViewController(resultController, true);
         }
@@ -414,6 +424,168 @@ namespace Askker.App.iOS
             {
                 Utils.HandleException(ex);
             }
+        }
+
+        public void BindFeedCell(FeedCollectionViewCell feedCell, SurveyModel survey, NSIndexPath indexPath)
+        {
+            if (survey.profilePicture != null)
+            {
+                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + survey.profilePicture);
+
+                var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
+                if (imageFromCache != null)
+                {
+                    feedCell.profileImageView.Image = imageFromCache;
+                }
+                else
+                {
+                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
+                    {
+                        if (response == null)
+                        {
+                            feedCell.profileImageView.Image = UIImage.FromBundle("Profile");
+                        }
+                        else
+                        {
+                            try
+                            {
+                                DispatchQueue.MainQueue.DispatchAsync(() =>
+                                {
+                                    var imageToCache = UIImage.LoadFromData(data);
+
+                                    feedCell.profileImageView.Image = imageToCache;
+
+                                    if (imageToCache != null)
+                                    {
+                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
+                                    }
+                                });
+                            }
+                            catch (Exception ex)
+                            {
+                                Utils.HandleException(ex);
+                            }
+                        }
+                    });
+                    task.Resume();
+                }
+            }
+
+            var attributedText = new NSMutableAttributedString(survey.userName, UIFont.BoldSystemFontOfSize(14));
+            attributedText.Append(new NSAttributedString("\nto Public", UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
+
+            var paragraphStyle = new NSMutableParagraphStyle();
+            paragraphStyle.LineSpacing = 4;
+            attributedText.AddAttribute(new NSString("ParagraphStyle"), paragraphStyle, new NSRange(0, attributedText.Length));
+
+            feedCell.nameLabel.AttributedText = attributedText;
+
+            DateTime outputDateTimeValue;
+            bool finished = false;
+            if (survey.finishDate != null &&
+                DateTime.TryParseExact(survey.finishDate, "yyyy-MM-dd HH:mm:ss",
+                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue) &&
+                outputDateTimeValue < DateTime.Now)
+            {
+
+                feedCell.finishedLabel.Text = "Finished";
+                feedCell.moreButton.Hidden = true;
+                feedCell.optionsTableView.AllowsSelection = false;
+                feedCell.optionsCollectionView.AllowsSelection = false;
+                finished = true;
+            }
+            else
+            {
+                feedCell.finishedLabel.Text = "";
+                feedCell.moreButton.Hidden = false;
+                feedCell.optionsTableView.AllowsSelection = true;
+                feedCell.optionsCollectionView.AllowsSelection = true;
+                finished = false;
+            }
+
+            if (!survey.userId.Equals(LoginController.userModel.id))
+            {
+                feedCell.moreButton.Hidden = true;
+            }
+            else
+            {
+                if (finished)
+                {
+                    feedCell.moreButton.Hidden = true;
+                }
+                else
+                {
+                    feedCell.moreButton.Hidden = false;
+                }
+            }
+
+            feedCell.questionText.Text = survey.question.text;
+
+            if (survey.type == SurveyType.Text.ToString())
+            {
+                feedCell.optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
+                feedCell.optionsTableView.Layer.MasksToBounds = true;
+                feedCell.optionsTableView.TranslatesAutoresizingMaskIntoConstraints = false;
+                feedCell.optionsTableView.ContentInset = new UIEdgeInsets(0, -10, 0, 0);
+                feedCell.optionsTableView.Tag = indexPath.Row;
+
+                feedCell.optionsTableViewSource.options = survey.options;
+                feedCell.optionsTableView.Source = feedCell.optionsTableViewSource;
+                feedCell.optionsTableView.ReloadData();
+
+                feedCell.optionsCollectionView.RemoveFromSuperview();
+                feedCell.AddSubview(feedCell.optionsTableView);
+
+                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsTableView));
+                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
+            }
+            else
+            {
+                feedCell.optionsCollectionView.TranslatesAutoresizingMaskIntoConstraints = false;
+                feedCell.optionsCollectionView.Tag = indexPath.Row;
+
+                feedCell.optionsCollectionViewSource.options = survey.options;
+                feedCell.optionsCollectionView.Source = feedCell.optionsCollectionViewSource;
+                feedCell.optionsCollectionViewDelegate.optionsCollectionViewSource = feedCell.optionsCollectionViewSource;
+                feedCell.optionsCollectionView.Delegate = feedCell.optionsCollectionViewDelegate;
+                feedCell.optionsCollectionView.ReloadData();
+
+                feedCell.optionsTableView.RemoveFromSuperview();
+                feedCell.AddSubview(feedCell.optionsCollectionView);
+
+                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsCollectionView));
+                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsCollectionView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
+            }
+
+            if (survey.totalVotes == 1)
+            {
+                feedCell.totalVotesLabel.Text = "1 Vote";
+            }
+            else
+            {
+                feedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(survey.totalVotes) + " Votes";
+            }
+
+
+            feedCell.updateTotalComments(survey.totalComments);
+
+            feedCell.commentButton.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> commentValues = new List<Object>();
+            commentValues.Add(indexPath);
+            commentValues.Add(feedCell);
+            feedCell.commentButton.Params = commentValues;
+
+            feedCell.resultButton.AddTarget(this, new ObjCRuntime.Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> resultValues = new List<Object>();
+            resultValues.Add(indexPath);
+            resultValues.Add(feedCell);
+            feedCell.resultButton.Params = resultValues;
+
+            feedCell.moreButton.AddTarget(this, new ObjCRuntime.Selector("MoreSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> moreValues = new List<Object>();
+            moreValues.Add(indexPath.Row);
+            moreValues.Add(feedCell);
+            feedCell.moreButton.Params = moreValues;
         }
     }
 
@@ -574,6 +746,18 @@ namespace Askker.App.iOS
             button.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
             button.TranslatesAutoresizingMaskIntoConstraints = false;
             return button;
+        }
+
+        public void updateTotalComments(int totalVotes)
+        {
+            if (totalVotes == 1)
+            {
+                this.commentsLabel.Text = "1 Comment";
+            }
+            else
+            {
+                this.commentsLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Comments";
+            }
         }
     }
 

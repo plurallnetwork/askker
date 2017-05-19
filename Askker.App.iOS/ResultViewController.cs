@@ -14,11 +14,12 @@ namespace Askker.App.iOS
     public partial class ResultViewController : UIViewController
     {
         public UICollectionView feed { get; set; }
-        public UICollectionView feedHead { get; set; }
-        public float headHeight { get; set; }
-        public NSIndexPath feedCellIndexPath { get; set; }
+        public FeedCollectionViewCell feedCell { get; set; }
 
         public List<ReportType> reports { get; set; }
+
+        public string userId { get; set; }
+        public string creationDate { get; set; }
 
         public static NSString feedHeadId = new NSString("feedHeadId");
         public static NSString resultCellId = new NSString("resultCellId");
@@ -30,7 +31,6 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            AutomaticallyAdjustsScrollViewInsets = false;
 
             reports = new List<ReportType>();
             reports.Add(ReportType.Overall);
@@ -39,17 +39,13 @@ namespace Askker.App.iOS
 
             feed = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout()
             {
-                HeaderReferenceSize = new System.Drawing.SizeF((float)View.Frame.Width, headHeight)
+                HeaderReferenceSize = new System.Drawing.SizeF((float)View.Frame.Width, (float)feedCell.Frame.Height) //headHeight
             });
             feed.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             feed.RegisterClassForCell(typeof(ResultCollectionViewCell), resultCellId);
             feed.RegisterClassForSupplementaryView(typeof(UICollectionReusableView), UICollectionElementKindSection.Header, feedHeadId);
             feed.AlwaysBounceVertical = true;
             feed.TranslatesAutoresizingMaskIntoConstraints = false;
-
-            feedHead.AlwaysBounceVertical = false;
-            feedHead.ScrollEnabled = false;
-            feedHead.TranslatesAutoresizingMaskIntoConstraints = false;
 
             View.AddSubview(feed);
 
@@ -64,15 +60,13 @@ namespace Askker.App.iOS
 
         public async void fetchSurveyDetail()
         {
-            feedHead.ReloadData();
-
             ReportManager reportManager = new ReportManager();
             List<ReportModel> reportsDatasets = new List<ReportModel>();
-            reportsDatasets.Add(await reportManager.GetOverallResults("75e4441c-4414-4fb2-8966-62c53d8ef854", "20170303T120657", LoginController.tokenModel.access_token));
-            reportsDatasets.Add(await reportManager.GetResultsByGender("75e4441c-4414-4fb2-8966-62c53d8ef854", "20170303T120657", LoginController.tokenModel.access_token));
-            reportsDatasets.Add(await reportManager.GetResultsByAge("75e4441c-4414-4fb2-8966-62c53d8ef854", "20170303T120657", LoginController.tokenModel.access_token));
+            reportsDatasets.Add(await reportManager.GetOverallResults(this.userId, this.creationDate, LoginController.tokenModel.access_token));
+            reportsDatasets.Add(await reportManager.GetResultsByGender(this.userId, this.creationDate, LoginController.tokenModel.access_token));
+            reportsDatasets.Add(await reportManager.GetResultsByAge(this.userId, this.creationDate, LoginController.tokenModel.access_token));
 
-            feed.Source = new ResultsCollectionViewSource(feedHead, feedCellIndexPath, reports, reportsDatasets);
+            feed.Source = new ResultsCollectionViewSource(reports, reportsDatasets, feedCell);
             feed.Delegate = new ResultsCollectionViewDelegate();
             feed.ReloadData();
         }
@@ -80,19 +74,17 @@ namespace Askker.App.iOS
 
     public class ResultsCollectionViewSource : UICollectionViewSource
     {
-        public UICollectionView feedHead { get; set; }
-        public NSIndexPath feedCellIndexPath { get; set; }
         public List<ReportType> reports { get; set; }
         public List<ReportModel> reportsDatasets { get; set; }
         public List<UIColor> chartColors { get; set; }
+        public FeedCollectionViewCell feedCell { get; set; }
 
-        public ResultsCollectionViewSource(UICollectionView feedHead, NSIndexPath feedCellIndexPath, List<ReportType> reports, List<ReportModel> reportsDatasets)
+        public ResultsCollectionViewSource(List<ReportType> reports, List<ReportModel> reportsDatasets, FeedCollectionViewCell feedCell)
         {
-            this.feedHead = feedHead;
-            this.feedCellIndexPath = feedCellIndexPath;
             this.reports = reports;
+            this.feedCell = feedCell;
 
-            this.reportsDatasets = reportsDatasets; //GetReports();
+            this.reportsDatasets = reportsDatasets;
 
             this.chartColors = new List<UIColor>();
             this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.97"), nfloat.Parse("0.65"), nfloat.Parse("0.14"), nfloat.Parse("1")));
@@ -102,22 +94,6 @@ namespace Askker.App.iOS
             this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.57"), nfloat.Parse("0.49"), nfloat.Parse("0.36"), nfloat.Parse("1")));
             this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.72"), nfloat.Parse("0.0"), nfloat.Parse("0.48"), nfloat.Parse("1"))); 
         }
-
-        //public void GetReports()
-        //{
-        //    try
-        //    {
-        //        ReportManager reportManager = new ReportManager();
-
-        //        this.reportsDatasets.Add(await reportManager.GetOverallResults("75e4441c-4414-4fb2-8966-62c53d8ef854", "20170303T120657", LoginController.tokenModel.access_token));
-        //        this.reportsDatasets.Add(await reportManager.GetResultsByGender("75e4441c-4414-4fb2-8966-62c53d8ef854", "20170303T120657", LoginController.tokenModel.access_token));
-        //        this.reportsDatasets.Add(await reportManager.GetResultsByAge("75e4441c-4414-4fb2-8966-62c53d8ef854", "20170303T120657", LoginController.tokenModel.access_token));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Utils.HandleException(ex);
-        //    }
-        //}
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
         {
@@ -254,20 +230,10 @@ namespace Askker.App.iOS
         {
             var headerView = collectionView.DequeueReusableSupplementaryView(elementKind, ResultViewController.feedHeadId, indexPath);
 
-            if (feedCellIndexPath != null)
-            {
-                var feedCell = feedHead.CellForItem(feedCellIndexPath) as FeedCollectionViewCell;
+            feedCell.Frame = headerView.Frame;
+            feedCell.resultButton.Hidden = true;
 
-                if (feedCell != null)
-                {
-                    feedCell.resultButton.Enabled = false;
-                }
-            }
-
-            headerView.AddSubview(feedHead);
-
-            headerView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedHead));
-            headerView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", feedHead));
+            headerView.AddSubview(feedCell);
 
             return headerView;
         }
