@@ -11,7 +11,7 @@ namespace Askker.App.PortableLibrary.Business
 {
     public class CommentManager
     {
-        public async Task CreateSurveyComment(SurveyCommentModel surveyCommentModel, string authenticationToken)
+        public async Task<SurveyCommentModel> CreateSurveyComment(SurveyCommentModel surveyCommentModel, string authenticationToken)
         {
             try
             {
@@ -19,7 +19,12 @@ namespace Askker.App.PortableLibrary.Business
 
                 var response = await commentService.CreateSurveyComment(surveyCommentModel, authenticationToken);
 
-                if (!response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<SurveyCommentModel>(json);
+                }
+                else
                 {
                     throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
                 }
