@@ -116,16 +116,35 @@ namespace Askker.App.iOS
             model.userId = LoginController.userModel.id;
             model.userName = LoginController.userModel.name;
 
-            if (feedCell != null)
-            {
-                survey.totalComments += 1;
+			survey.totalComments += 1;
+			feedCell.updateTotalComments(survey.totalComments);
 
-                feedCell.updateTotalComments(survey.totalComments);
-            }
-
-            try
+			try
             {
                 await new CommentManager().CreateSurveyComment(model, LoginController.tokenModel.access_token);
+
+				if (LoginController.userModel.id != survey.userId)
+            	{
+	                UserNotificationModel userNotificationModel = new UserNotificationModel();
+	                userNotificationModel.notificationDate = "";
+	                userNotificationModel.userId = survey.userId;
+	                userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
+	                userNotificationModel.type = UserNotificationType.SurveyVote.ToString();
+
+	                if (survey.question.text.Length > 25)
+	                {
+	                    userNotificationModel.text = LoginController.userModel.name + " commented on \"" + survey.question.text.Substring(0, 25) + "...\"";
+	                }
+	                else
+	                {
+	                    userNotificationModel.text = LoginController.userModel.name + " commented on \"" + survey.question.text + "\"";
+	                }
+
+	                userNotificationModel.link = model.surveyId + ";" + model.commentDate;
+	                userNotificationModel.isDismissed = 0;
+
+                	await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
+            	}
 
                 fetchSurveyComments(true);
                 commentArea.CommentText.Text = null;
@@ -136,11 +155,10 @@ namespace Askker.App.iOS
             catch (Exception ex)
             {
                 survey.totalComments -= 1;
-
                 feedCell.updateTotalComments(survey.totalComments);
 
                 Utils.HandleException(ex);
-            }   
+            }
         }
 
         public override void ViewWillAppear(bool animated)
@@ -157,7 +175,7 @@ namespace Askker.App.iOS
         public async void fetchSurveyComments(bool scrollToLastItem)
         {
             comments = await new CommentManager().GetSurveyComments(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
-            feed.Source = new CommentsCollectionViewSource(comments, feedCell);
+            feed.Source = new CommentsCollectionViewSource(comments, feedCell, this.NavigationController);
             feed.Delegate = new CommentsCollectionViewDelegate();
             feed.ReloadData();
 
@@ -206,7 +224,6 @@ namespace Askker.App.iOS
             {
                 moveViewUp = false;
             }
-
         }
 
         private void KeyBoardDownNotification(NSNotification notification)
@@ -286,12 +303,15 @@ namespace Askker.App.iOS
             if (newY < TopLayoutGuide.Length)
                 dy = oldY - TopLayoutGuide.Length;
 
-            AdjustInputToolbar(dy + 2);
+            AdjustInputToolbar(dy);
         }
 
         void AdjustInputToolbar(nfloat change)
         {
             toolbarHeightConstraint.Constant += change;
+
+            var topCorrect = commentArea.CommentText.ContentSize.Height - commentArea.CommentText.Bounds.Size.Height;
+            commentArea.CommentText.ContentOffset = new CGPoint(0, topCorrect);
 
             if (toolbarHeightConstraint.Constant < 46f)
                 toolbarHeightConstraint.Constant = 46f;
@@ -335,11 +355,13 @@ namespace Askker.App.iOS
         public List<SurveyCommentModel> comments { get; set; }
         public FeedCollectionViewCell feedCell { get; set; }
         public static NSCache imageCache = new NSCache();
+        public UINavigationController navigationController = new UINavigationController();
 
-        public CommentsCollectionViewSource(List<SurveyCommentModel> comments, FeedCollectionViewCell feedCell)
+        public CommentsCollectionViewSource(List<SurveyCommentModel> comments, FeedCollectionViewCell feedCell, UINavigationController navigationController)
         {
             this.comments = comments;
             this.feedCell = feedCell;
+            this.navigationController = navigationController;
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
@@ -384,7 +406,7 @@ namespace Askker.App.iOS
                                     if (imageToCache != null)
                                     {
                                         imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                        commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image);
+                                        commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image, this.navigationController, comments[indexPath.Row].userId);
                                     }
                                 });
                             }
@@ -399,7 +421,7 @@ namespace Askker.App.iOS
 
             }
 
-            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image);
+            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image, this.navigationController, comments[indexPath.Row].userId);
 
             return commentCell;
         }

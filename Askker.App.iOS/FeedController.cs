@@ -8,6 +8,7 @@ using Askker.App.PortableLibrary.Business;
 using CoreFoundation;
 using Askker.App.PortableLibrary.Util;
 using Askker.App.PortableLibrary.Enums;
+using ObjCRuntime;
 
 namespace Askker.App.iOS
 {
@@ -61,6 +62,16 @@ namespace Askker.App.iOS
             MenuViewController.feedMenu.EditButton.TouchUpInside += EditButton_TouchUpInside;
             MenuViewController.feedMenu.CleanButton.TouchUpInside += CleanButton_TouchUpInside;
             MenuViewController.feedMenu.FinishButton.TouchUpInside += FinishButton_TouchUpInside;
+        }
+
+        public override void ViewWillDisappear(bool animated)
+        {
+            base.ViewWillDisappear(animated);
+
+
+            MenuViewController.feedMenu.EditButton.TouchUpInside -= EditButton_TouchUpInside;
+            MenuViewController.feedMenu.CleanButton.TouchUpInside -= CleanButton_TouchUpInside;
+            MenuViewController.feedMenu.FinishButton.TouchUpInside -= FinishButton_TouchUpInside;
         }
 
         public override void ViewWillAppear(bool animated)
@@ -179,172 +190,6 @@ namespace Askker.App.iOS
 
             BindFeedCell(feedCell, surveys[indexPath.Row], indexPath);
 
-            /*if (surveys[indexPath.Row].profilePicture != null)
-            {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + surveys[indexPath.Row].profilePicture);
-
-                var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-                if (imageFromCache != null)
-                {
-                    feedCell.profileImageView.Image = imageFromCache;
-                }
-                else
-                {
-                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                    {
-                        if (response == null)
-                        {
-                            feedCell.profileImageView.Image = UIImage.FromBundle("Profile");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                DispatchQueue.MainQueue.DispatchAsync(() =>
-                                {
-                                    var imageToCache = UIImage.LoadFromData(data);
-
-                                    feedCell.profileImageView.Image = imageToCache;
-
-                                    if (imageToCache != null)
-                                    {
-                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                    }
-                                });
-                            }
-                            catch (Exception ex)
-                            {
-                                Utils.HandleException(ex);
-                            }
-                        }
-                    });
-                    task.Resume();
-                }
-            }
-
-            var attributedText = new NSMutableAttributedString(surveys[indexPath.Row].userName, UIFont.BoldSystemFontOfSize(14));
-            attributedText.Append(new NSAttributedString("\nto Public", UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
-
-            var paragraphStyle = new NSMutableParagraphStyle();
-            paragraphStyle.LineSpacing = 4;
-            attributedText.AddAttribute(new NSString("ParagraphStyle"), paragraphStyle, new NSRange(0, attributedText.Length));
-
-            feedCell.nameLabel.AttributedText = attributedText;
-
-            DateTime outputDateTimeValue;
-            bool finished = false;
-            if (surveys[indexPath.Row].finishDate != null &&
-                DateTime.TryParseExact(surveys[indexPath.Row].finishDate, "yyyy-MM-dd HH:mm:ss", 
-                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue) &&
-                outputDateTimeValue < DateTime.Now) {
-                
-                feedCell.finishedLabel.Text = "Finished";
-                feedCell.moreButton.Hidden = true;
-                feedCell.optionsTableView.AllowsSelection = false;
-                feedCell.optionsCollectionView.AllowsSelection = false;
-                finished = true;
-            }
-            else
-            {
-                feedCell.finishedLabel.Text = "";
-                feedCell.moreButton.Hidden = false;
-                feedCell.optionsTableView.AllowsSelection = true;
-                feedCell.optionsCollectionView.AllowsSelection = true;
-                finished = false;
-            }
-
-            if (!surveys[indexPath.Row].userId.Equals(LoginController.userModel.id))
-            {
-                feedCell.moreButton.Hidden = true;
-            }
-            else
-            {
-                if (finished)
-                {
-                    feedCell.moreButton.Hidden = true;
-                }
-                else
-                {
-                    feedCell.moreButton.Hidden = false;
-                }                
-            }
-
-            feedCell.questionText.Text = surveys[indexPath.Row].question.text;
-
-            if (surveys[indexPath.Row].type == SurveyType.Text.ToString())
-            {                
-                feedCell.optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
-                feedCell.optionsTableView.Layer.MasksToBounds = true;
-                feedCell.optionsTableView.TranslatesAutoresizingMaskIntoConstraints = false;
-                feedCell.optionsTableView.ContentInset = new UIEdgeInsets(0, -10, 0, 0);
-                feedCell.optionsTableView.Tag = indexPath.Row;
-
-                feedCell.optionsTableViewSource.options = surveys[indexPath.Row].options;
-                feedCell.optionsTableView.Source = feedCell.optionsTableViewSource;
-                feedCell.optionsTableView.ReloadData();
-
-                feedCell.optionsCollectionView.RemoveFromSuperview();
-                feedCell.AddSubview(feedCell.optionsTableView);
-
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsTableView));
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
-            }
-            else
-            {
-                feedCell.optionsCollectionView.TranslatesAutoresizingMaskIntoConstraints = false;
-                feedCell.optionsCollectionView.Tag = indexPath.Row;
-
-                feedCell.optionsCollectionViewSource.options = surveys[indexPath.Row].options;
-                feedCell.optionsCollectionView.Source = feedCell.optionsCollectionViewSource;
-                feedCell.optionsCollectionViewDelegate.optionsCollectionViewSource = feedCell.optionsCollectionViewSource;
-                feedCell.optionsCollectionView.Delegate = feedCell.optionsCollectionViewDelegate;
-                feedCell.optionsCollectionView.ReloadData();
-
-                feedCell.optionsTableView.RemoveFromSuperview();
-                feedCell.AddSubview(feedCell.optionsCollectionView);
-
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsCollectionView));
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsCollectionView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
-            }
-
-            if (surveys[indexPath.Row].totalVotes == 1)
-            {
-                feedCell.totalVotesLabel.Text = "1 Vote";
-            }
-            else
-            {
-                feedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(surveys[indexPath.Row].totalVotes) + " Votes";
-            }
-
-            if (surveys[indexPath.Row].totalComments == 1)
-            {
-                feedCell.commentsLabel.Text = "1 Comment";
-            }
-            else
-            {
-                feedCell.commentsLabel.Text = Common.FormatNumberAbbreviation(surveys[indexPath.Row].totalComments) + " Comments";
-            }
-
-            feedCell.commentButton.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
-            List<Object> commentValues = new List<Object>();
-            commentValues.Add(indexPath.Row);
-            commentValues.Add((float)feedCell.Frame.Height + 64);
-            commentValues.Add(feedCell);
-            feedCell.commentButton.Params = commentValues;
-
-            feedCell.resultButton.AddTarget(this, new ObjCRuntime.Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
-            List<Object> resultValues = new List<Object>();
-            resultValues.Add(indexPath);
-            resultValues.Add((float)feedCell.Frame.Height + 64);
-            resultValues.Add(feedCell);
-            feedCell.resultButton.Params = resultValues;
-
-            feedCell.moreButton.AddTarget(this, new ObjCRuntime.Selector("MoreSelector:"), UIControlEvent.TouchUpInside);
-            List<Object> moreValues = new List<Object>();
-            moreValues.Add(indexPath.Row);
-            moreValues.Add(feedCell);
-            feedCell.moreButton.Params = moreValues;*/
-            
             return feedCell;
         }
 
@@ -402,6 +247,12 @@ namespace Askker.App.iOS
             MenuViewController.sidebarController.View.Alpha = 0.5f;
         }
 
+        [Export("TapProfilePictureSelector:")]
+        public void TapProfilePictureSelector(UIFeedTapGestureRecognizer tapGesture)
+        {
+            Utils.OpenUserProfile(menuViewController.NavigationController, (string)tapGesture.Params.ToArray()[0]);
+        }
+
         public static async void saveVote(int surveyIndex, int optionId)
         {
             try
@@ -419,6 +270,29 @@ namespace Askker.App.iOS
                 surveyVoteModel.user.country = LoginController.userModel.country;
 
                 await voteManager.Vote(surveyVoteModel, "");
+
+                if (LoginController.userModel.id != surveys[surveyIndex].userId)
+                {
+                    UserNotificationModel userNotificationModel = new UserNotificationModel();
+                    userNotificationModel.notificationDate = "";
+                    userNotificationModel.userId = surveys[surveyIndex].userId;
+                    userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
+                    userNotificationModel.type = UserNotificationType.SurveyVote.ToString();
+
+                    if (surveys[surveyIndex].question.text.Length > 25)
+                    {
+                        userNotificationModel.text = LoginController.userModel.name + " voted on \"" + surveys[surveyIndex].question.text.Substring(0, 25) + "...\"";
+                    }
+                    else
+                    {
+                        userNotificationModel.text = LoginController.userModel.name + " voted on \"" + surveys[surveyIndex].question.text + "\"";
+                    }
+
+                    userNotificationModel.link = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
+                    userNotificationModel.isDismissed = 0;
+
+                    await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
+                }
             }
             catch (Exception ex)
             {
@@ -586,6 +460,12 @@ namespace Askker.App.iOS
             moreValues.Add(indexPath.Row);
             moreValues.Add(feedCell);
             feedCell.moreButton.Params = moreValues;
+
+            var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
+            List<Object> tapProfilePictureValues = new List<Object>();
+            tapProfilePictureValues.Add(survey.userId);
+            feedTapGestureRecognizer.Params = tapProfilePictureValues;
+            feedCell.profileImageView.AddGestureRecognizer(feedTapGestureRecognizer);
         }
     }
 
@@ -648,6 +528,7 @@ namespace Askker.App.iOS
             profileImageView.Image = UIImage.FromBundle("Profile");
             profileImageView.Layer.CornerRadius = 22;
             profileImageView.Layer.MasksToBounds = true;
+            profileImageView.UserInteractionEnabled = true;
             profileImageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             nameLabel = new UILabel();
@@ -656,6 +537,7 @@ namespace Askker.App.iOS
 
             finishedLabel = new UILabel();
             finishedLabel.TextColor = UIColor.Red;
+            finishedLabel.Font = UIFont.SystemFontOfSize(14);
             finishedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             questionText = new UITextView();
@@ -1031,5 +913,14 @@ namespace Askker.App.iOS
     public class UIFeedButton : UIButton
     {
         public List<Object> Params { get; set; }
+    }
+
+    public class UIFeedTapGestureRecognizer : UITapGestureRecognizer
+    {
+        public List<Object> Params { get; set; }
+
+        public UIFeedTapGestureRecognizer(NSObject target, Selector action) : base(target, action)
+        {
+        }
     }
 }

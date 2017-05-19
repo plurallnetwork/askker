@@ -7,6 +7,8 @@ namespace Askker.App.iOS.TableControllers
 {
     public class SearchAllTableItem
     {
+        public string Id { get; set; }
+
         public string Title { get; set; }
 
         public string ImageName { get; set; }
@@ -32,6 +34,13 @@ namespace Askker.App.iOS.TableControllers
 
         public SearchAllTableItem(string title, string imageName)
         {
+            Title = title;
+            ImageName = imageName;
+        }
+
+        public SearchAllTableItem(string id, string title, string imageName)
+        {
+            Id = id;
             Title = title;
             ImageName = imageName;
         }
