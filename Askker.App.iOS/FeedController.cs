@@ -57,30 +57,19 @@ namespace Askker.App.iOS
 
             feedCollectionView.Add(refreshControl);
             feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", feedCollectionView, "v1", refreshControl));
-            feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-35-[v0]|", new NSLayoutFormatOptions(), "v0", refreshControl));
-
-            MenuViewController.feedMenu.EditButton.TouchUpInside += EditButton_TouchUpInside;
-            MenuViewController.feedMenu.CleanButton.TouchUpInside += CleanButton_TouchUpInside;
-            MenuViewController.feedMenu.FinishButton.TouchUpInside += FinishButton_TouchUpInside;
-        }
-
-        public override void ViewWillDisappear(bool animated)
-        {
-            base.ViewWillDisappear(animated);
-
-
-            MenuViewController.feedMenu.EditButton.TouchUpInside -= EditButton_TouchUpInside;
-            MenuViewController.feedMenu.CleanButton.TouchUpInside -= CleanButton_TouchUpInside;
-            MenuViewController.feedMenu.FinishButton.TouchUpInside -= FinishButton_TouchUpInside;
+            feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-35-[v0]|", new NSLayoutFormatOptions(), "v0", refreshControl));            
         }
 
         public override void ViewWillAppear(bool animated)
         {
+            base.ViewWillAppear(animated);
+
             indicator.StartAnimating();
             fetchSurveys(filterMine, filterForMe, filterFinished);
         }
 
-        private async void FinishButton_TouchUpInside(object sender, EventArgs e)
+        [Export("FinishSelector:")]
+        private async void FinishSelector(UIFeedButton but)
         {
             nint button = await Utils.ShowAlert("Close Survey", "The survey will be closed. Continue?", "Ok", "Cancel");
 
@@ -103,7 +92,8 @@ namespace Askker.App.iOS
             }
         }
 
-        private async void CleanButton_TouchUpInside(object sender, EventArgs e)
+        [Export("CleanSelector:")]
+        private async void CleanSelector(UIFeedButton but)
         {
             nint button = await Utils.ShowAlert("Clean Votes", "All survey votes will be deleted. Continue?", "Ok", "Cancel");
 
@@ -133,7 +123,8 @@ namespace Askker.App.iOS
             }
         }
 
-        private async void EditButton_TouchUpInside(object sender, EventArgs e)
+        [Export("EditSelector:")]
+        private async void EditSelector(UIFeedButton but)
         {
             if (survey.totalVotes > 0)
             {
@@ -468,6 +459,21 @@ namespace Askker.App.iOS
             tapProfilePictureValues.Add(survey.userId);
             feedTapGestureRecognizer.Params = tapProfilePictureValues;
             feedCell.profileImageView.AddGestureRecognizer(feedTapGestureRecognizer);
+
+            if(MenuViewController.feedMenu.CleanButton.AllTargets.Count <= 0)
+            {
+                MenuViewController.feedMenu.CleanButton.AddTarget(this, new ObjCRuntime.Selector("CleanSelector:"), UIControlEvent.TouchUpInside);
+            }
+
+            if (MenuViewController.feedMenu.EditButton.AllTargets.Count <= 0)
+            {
+                MenuViewController.feedMenu.EditButton.AddTarget(this, new ObjCRuntime.Selector("EditSelector:"), UIControlEvent.TouchUpInside);
+            }
+
+            if (MenuViewController.feedMenu.FinishButton.AllTargets.Count <= 0)
+            {
+                MenuViewController.feedMenu.FinishButton.AddTarget(this, new ObjCRuntime.Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
+            }
         }
     }
 
