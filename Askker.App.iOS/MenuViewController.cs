@@ -81,21 +81,27 @@ namespace Askker.App.iOS
                         })
             , true);
 
-            this.NavigationItem.SetRightBarButtonItem(
-                new UIBarButtonItem(UIBarButtonSystemItem.Add, (sender, args) =>
-                {
-                    var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
-                    if (CreateSurveyController != null)
+            this.NavigationItem.SetRightBarButtonItems(
+                new UIBarButtonItem[] {
+                    new UIBarButtonItem(UIBarButtonSystemItem.Organize, (sender, args) =>
                     {
-                        CreateSurveyController.ScreenState = ScreenState.Create.ToString();
-                        
-                        var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                        if (rootController != null)
+                        var notificationsController = this.Storyboard.InstantiateViewController("NotificationsController") as NotificationsController;
+                        this.NavigationController.PushViewController(notificationsController, true);
+                    }),
+                    new UIBarButtonItem(UIBarButtonSystemItem.Add, (sender, args) =>
+                    {
+                        var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                        if (CreateSurveyController != null)
                         {
-                            this.PresentViewController(rootController, true, null);
+                            CreateSurveyController.ScreenState = ScreenState.Create.ToString();
+
+                            var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                            if (rootController != null)
+                            {
+                                this.PresentViewController(rootController, true, null);
+                            }
                         }
-                    }
-                })
+                    }) }
             , true);
 
             this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;

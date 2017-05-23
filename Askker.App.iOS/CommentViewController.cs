@@ -133,11 +133,11 @@ namespace Askker.App.iOS
 
 	                if (survey.question.text.Length > 25)
 	                {
-	                    userNotificationModel.text = LoginController.userModel.name + " commented on \"" + survey.question.text.Substring(0, 25) + "...\"";
+	                    userNotificationModel.text = "commented on \"" + survey.question.text.Substring(0, 25) + "...\"";
 	                }
 	                else
 	                {
-	                    userNotificationModel.text = LoginController.userModel.name + " commented on \"" + survey.question.text + "\"";
+	                    userNotificationModel.text = "commented on \"" + survey.question.text + "\"";
 	                }
 
 	                userNotificationModel.link = model.surveyId + ";" + model.commentDate;
