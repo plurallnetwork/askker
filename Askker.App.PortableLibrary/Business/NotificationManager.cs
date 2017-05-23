@@ -93,5 +93,36 @@ namespace Askker.App.PortableLibrary.Business
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<int> GetUserUnreadNotificationsCount(string userId, string authenticationToken)
+        {
+            try
+            {
+                NotificationService notificationService = new NotificationService();
+
+                var response = await notificationService.GetUserUnreadNotificationsCount(userId, authenticationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return Int32.Parse(json);
+                }
+                else
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

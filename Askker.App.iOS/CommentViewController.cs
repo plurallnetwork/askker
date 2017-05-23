@@ -142,8 +142,9 @@ namespace Askker.App.iOS
 
 	                userNotificationModel.link = model.surveyId + ";" + model.commentDate;
 	                userNotificationModel.isDismissed = 0;
+                    userNotificationModel.isRead = 0;
 
-                	await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
+                    await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
             	}
 
                 fetchSurveyComments(true);

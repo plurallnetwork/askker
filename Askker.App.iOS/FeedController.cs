@@ -281,6 +281,7 @@ namespace Askker.App.iOS
 
                     userNotificationModel.link = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
                     userNotificationModel.isDismissed = 0;
+                    userNotificationModel.isRead = 0;
 
                     await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
                 }

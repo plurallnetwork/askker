@@ -21,6 +21,8 @@ namespace Askker.App.PortableLibrary.Models
 
         public string link { get; set; }
 
+        public int isRead { get; set; }
+
         public int isDismissed { get; set; }
     }
 }
