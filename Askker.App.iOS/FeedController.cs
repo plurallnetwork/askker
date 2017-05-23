@@ -272,11 +272,11 @@ namespace Askker.App.iOS
 
                     if (surveys[surveyIndex].question.text.Length > 25)
                     {
-                        userNotificationModel.text = LoginController.userModel.name + " voted on \"" + surveys[surveyIndex].question.text.Substring(0, 25) + "...\"";
+                        userNotificationModel.text = "voted on \"" + surveys[surveyIndex].question.text.Substring(0, 25) + "...\"";
                     }
                     else
                     {
-                        userNotificationModel.text = LoginController.userModel.name + " voted on \"" + surveys[surveyIndex].question.text + "\"";
+                        userNotificationModel.text = "voted on \"" + surveys[surveyIndex].question.text + "\"";
                     }
 
                     userNotificationModel.link = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
