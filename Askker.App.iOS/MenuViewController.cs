@@ -63,7 +63,6 @@ namespace Askker.App.iOS
             viewController.View.AddSubview(feedMenu);
 
             content = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
-            content.menuViewController = this;
             content.filterMine = false;
             content.filterForMe = false;
             content.filterFinished = false;

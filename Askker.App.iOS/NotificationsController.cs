@@ -6,6 +6,8 @@ using Askker.App.PortableLibrary.Models;
 using System.Collections.Generic;
 using System.Linq;
 using CoreFoundation;
+using CoreGraphics;
+using Askker.App.PortableLibrary.Enums;
 
 namespace Askker.App.iOS
 {
@@ -128,22 +130,19 @@ namespace Askker.App.iOS
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            setNotificationDismissed(notifications[indexPath.Row]);
-
-            var notificationCell = tableView.CellAt(indexPath) as NotificationsTableViewCell;
-            if (notificationCell != null)
+            if (notifications[indexPath.Row].isDismissed == 0)
             {
-                notificationCell.BackgroundColor = UIColor.White;
-                notificationCell.notificationLabel.BackgroundColor = UIColor.White;
+                setNotificationDismissed(notifications[indexPath.Row]);
+
+                var notificationCell = tableView.CellAt(indexPath) as NotificationsTableViewCell;
+                if (notificationCell != null)
+                {
+                    notificationCell.BackgroundColor = UIColor.White;
+                    notificationCell.notificationLabel.BackgroundColor = UIColor.White;
+                }
             }
 
-            UIAlertView alert = new UIAlertView()
-            {
-                Title = "Notification",
-                Message = "Notification Dismissed !"
-            };
-            alert.AddButton("OK");
-            alert.Show();
+            openNotification(notifications[indexPath.Row]);
         }
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
@@ -154,6 +153,44 @@ namespace Askker.App.iOS
         private async void setNotificationDismissed(UserNotificationModel userNotificationModel)
         {
             await new NotificationManager().SetUserNotificationDismissed(userNotificationModel, LoginController.tokenModel.access_token);
+        }
+
+        private void openNotification(UserNotificationModel userNotificationModel)
+        {
+            if (UserNotificationType.FriendAccepted.ToString().Equals(userNotificationModel.type) || UserNotificationType.FriendRequest.ToString().Equals(userNotificationModel.type))
+            {
+                Utils.OpenUserProfile(this.NavigationController, userNotificationModel.notificationUser.id);
+            }
+            else if (UserNotificationType.SurveyComment.ToString().Equals(userNotificationModel.type) || UserNotificationType.SurveyTagged.ToString().Equals(userNotificationModel.type))
+            {
+                var commentController = this.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
+                var feedController = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
+
+                var notificationParams = userNotificationModel.link.Split(';');
+
+                commentController.feedController = feedController;
+                commentController.userId = notificationParams[0].ToString().Substring(0, 36);
+                commentController.creationDate = notificationParams[0].ToString().Substring(36, 15);
+
+                if (notificationParams.Count() > 1)
+                {
+                    commentController.commentDate = notificationParams[1].ToString();
+                }
+
+                this.NavigationController.PushViewController(commentController, true);
+            }
+            else if (UserNotificationType.SurveyVote.ToString().Equals(userNotificationModel.type))
+            {
+                var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
+                var feedController = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
+
+                resultController.feedController = feedController;
+                resultController.userId = userNotificationModel.link.ToString().Substring(0, 36);
+                resultController.creationDate = userNotificationModel.link.ToString().Substring(36, 15);
+                resultController.indexPathRow = 0;
+
+                this.NavigationController.PushViewController(resultController, true);
+            }
         }
     }
 

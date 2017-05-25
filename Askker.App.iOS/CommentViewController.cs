@@ -21,8 +21,13 @@ namespace Askker.App.iOS
         NSLayoutConstraint toolbarBottomConstraint;
         CommentAreaView commentArea = CommentAreaView.Create();
 
-        public NSIndexPath feedCellIndexPath { get; set; }
         public FeedCollectionViewCell feedCell { get; set; }
+        public FeedController feedController { get; set; }
+        public string userId { get; set; }
+        public string creationDate { get; set; }
+        public int indexPathRow { get; set; }
+        public string commentDate { get; set; }
+
         public static NSString feedHeadId = new NSString("feedHeadId");
         public static NSString commentCellId = new NSString("commentCellId");
 
@@ -36,8 +41,14 @@ namespace Askker.App.iOS
         //Variables used to resize the comment textView
         private UIView activeviewarea;         // CommentArea
 
+        public UIActivityIndicatorView indicator;
+
         public CommentViewController (IntPtr handle) : base (handle)
         {
+            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
+            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
+            indicator.Center = this.View.Center;
+            Add(indicator);
         }
 
         public override void ViewDidLoad()
@@ -54,9 +65,7 @@ namespace Askker.App.iOS
             commentArea.CommentText.Changed += CommentText_Changed;
             commentArea.CommentButton.TouchUpInside += CommentButton_TouchUpInside;
 
-            feed = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout() {
-                HeaderReferenceSize = new System.Drawing.SizeF((float) View.Frame.Width, (float) feedCell.Frame.Height)
-            });
+            feed = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout());
             feed.BackgroundColor = UIColor.White;
             //feed.RegisterClassForCell(typeof(UICollectionViewCell), commentCellId);
             feed.RegisterNibForCell(UINib.FromName("CommentCell", NSBundle.MainBundle), commentCellId);
@@ -129,7 +138,7 @@ namespace Askker.App.iOS
 	                userNotificationModel.notificationDate = "";
 	                userNotificationModel.userId = survey.userId;
 	                userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
-	                userNotificationModel.type = UserNotificationType.SurveyVote.ToString();
+	                userNotificationModel.type = UserNotificationType.SurveyComment.ToString();
 
 	                if (survey.question.text.Length > 25)
 	                {
@@ -163,6 +172,7 @@ namespace Askker.App.iOS
 
         public override void ViewWillAppear(bool animated)
         {
+            indicator.StartAnimating();
             fetchSurveyComments(false);
         }
 
@@ -174,18 +184,67 @@ namespace Askker.App.iOS
 
         public async void fetchSurveyComments(bool scrollToLastItem)
         {
-            comments = await new CommentManager().GetSurveyComments(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
-            feed.Source = new CommentsCollectionViewSource(comments, feedCell, this.NavigationController);
-            feed.Delegate = new CommentsCollectionViewDelegate();
-            feed.ReloadData();
-
-            if (scrollToLastItem)
+            try
             {
-                var section = (int)feed.NumberOfSections() - 1;
-                var item = (int)feed.NumberOfItemsInSection(section) - 1;
-                NSIndexPath index = NSIndexPath.FromRowSection(item, section);
-                feed.ScrollToItem(index, UICollectionViewScrollPosition.Bottom, true);
+                if (survey == null)
+                {
+                    survey = await new FeedManager().GetSurvey(this.userId, this.creationDate, LoginController.tokenModel.access_token);
+                }
+                else
+                {
+                    this.userId = survey.userId;
+                    this.creationDate = survey.creationDate;
+                }
+
+                comments = await new CommentManager().GetSurveyComments(this.userId + this.creationDate, LoginController.tokenModel.access_token);
+
+                var feedCellHeight = FeedController.getHeightForFeedCell(survey, View.Frame.Width);
+                feedCell = new FeedCollectionViewCell(new CGRect(0, 0, View.Frame.Width, feedCellHeight));
+                feedController.BindFeedCell(feedCell, survey, indexPathRow);
+
+                feedCell.commentButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                feedCell.commentButton.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
+
+                if (feedController.NavigationController == null)
+                {
+                    feedCell.resultButton.Params[2] = this.NavigationController;
+                    feedCell.moreButton.Params[2] = this;
+                    (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
+                }
+
+                indicator.StopAnimating();
+
+                feed.Source = new CommentsCollectionViewSource(comments, feedCell, this.NavigationController);
+                feed.Delegate = new CommentsCollectionViewDelegate((float) feedCell.Frame.Height);
+                feed.ReloadData();
+
+                if (scrollToLastItem)
+                {
+                    var section = (int)feed.NumberOfSections() - 1;
+                    var item = (int)feed.NumberOfItemsInSection(section) - 1;
+                    NSIndexPath index = NSIndexPath.FromRowSection(item, section);
+                    feed.ScrollToItem(index, UICollectionViewScrollPosition.Bottom, true);
+                }
+                else if (!string.IsNullOrEmpty(commentDate))
+                {
+                    var index = comments.FindIndex(q => q.surveyId == userId + creationDate && q.commentDate == commentDate);
+                    if (index != -1)
+                    {
+                        feed.ScrollToItem(NSIndexPath.FromItemSection(index, 0), UICollectionViewScrollPosition.CenteredVertically, true);
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                indicator.StopAnimating();
+                Utils.HandleException(ex);
+            }
+        }
+
+        [Export("CommentSelector:")]
+        private void CommentSelector(UIFeedButton button)
+        {
+            commentArea.CommentText.BecomeFirstResponder();
         }
 
         private void KeyBoardUpNotification(NSNotification notification)
@@ -355,7 +414,7 @@ namespace Askker.App.iOS
         public List<SurveyCommentModel> comments { get; set; }
         public FeedCollectionViewCell feedCell { get; set; }
         public static NSCache imageCache = new NSCache();
-        public UINavigationController navigationController = new UINavigationController();
+        public UINavigationController navigationController { get; set; }
 
         public CommentsCollectionViewSource(List<SurveyCommentModel> comments, FeedCollectionViewCell feedCell, UINavigationController navigationController)
         {
@@ -372,6 +431,7 @@ namespace Askker.App.iOS
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var commentCell = collectionView.DequeueReusableCell(CommentViewController.commentCellId, indexPath) as CommentCell;
+
             UIImage image = UIImage.FromBundle("Profile");
 
             if (string.IsNullOrEmpty(comments[indexPath.Row].profilePicture))
@@ -430,13 +490,7 @@ namespace Askker.App.iOS
         {
             var headerView = collectionView.DequeueReusableSupplementaryView(elementKind, CommentViewController.feedHeadId, indexPath);
 
-            feedCell.Frame = headerView.Frame;
-            feedCell.commentButton.Hidden = true;
-
             headerView.AddSubview(feedCell);
-
-            //headerView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell));
-            //headerView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell));
 
             return headerView;
         }
@@ -444,8 +498,11 @@ namespace Askker.App.iOS
 
     public class CommentsCollectionViewDelegate : UICollectionViewDelegateFlowLayout
     {
-        public CommentsCollectionViewDelegate()
+        public float heightHeaderCell { get; set; }
+
+        public CommentsCollectionViewDelegate(float heightHeaderCell)
         {
+            this.heightHeaderCell = heightHeaderCell;
         }
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
@@ -470,6 +527,11 @@ namespace Askker.App.iOS
         public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
         {
             return 0;
+        }
+
+        public override CGSize GetReferenceSizeForHeader(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
+        {
+            return new CGSize(collectionView.Frame.Width, heightHeaderCell);
         }
     }
 }
