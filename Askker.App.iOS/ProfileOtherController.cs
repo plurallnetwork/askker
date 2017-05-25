@@ -11,6 +11,7 @@ namespace Askker.App.iOS
     public partial class ProfileOtherController : UIViewController
     {
         string fileName;
+        public static NSCache imageCache = new NSCache();
 
         public string UserId { get; set; }
 
@@ -23,6 +24,7 @@ namespace Askker.App.iOS
         public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
+            imageCache.RemoveAllObjects();
 
             try
             {
@@ -43,7 +45,7 @@ namespace Askker.App.iOS
                     fileName = userModel.profilePicturePath;
                     var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + userModel.profilePicturePath);
 
-                    var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
+                    var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
                     if (imageFromCache != null)
                     {
                         profileImageView.Image = imageFromCache;
@@ -68,7 +70,7 @@ namespace Askker.App.iOS
 
                                         if (imageToCache != null)
                                         {
-                                            FeedController.imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
+                                            imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
                                         }
                                     });
                                 }

@@ -113,7 +113,7 @@ namespace Askker.App.iOS
 
             var g = new UITapGestureRecognizer(() => View.EndEditing(true));
             
-            View.AddGestureRecognizer(g);
+            //View.AddGestureRecognizer(g);
         }
 
         private async void CommentButton_TouchUpInside(object sender, EventArgs e)
