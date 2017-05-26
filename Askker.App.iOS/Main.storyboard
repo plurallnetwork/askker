@@ -573,9 +573,7 @@
                                     <color key="titleColor" red="0.0" green="0.52549019607843139" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="BtnRegister_TouchUpInside:" destination="443" id="4427" eventType="touchUpInside"/>
-                                </connections>
+                                <connections/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
