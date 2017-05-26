@@ -77,8 +77,10 @@ namespace Askker.App.iOS
                 if (button == 0)
                 {
                     survey.finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    var tempOptionSelected = survey.optionSelected;
                     survey.optionSelected = null;
                     await new FeedManager().UpdateSurvey(survey, LoginController.tokenModel.access_token);
+                    survey.optionSelected = tempOptionSelected;
 
                     surveyCell.finishedLabel.Text = "Finished";
                     surveyCell.moreButton.Hidden = true;

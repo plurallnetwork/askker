@@ -111,9 +111,11 @@ namespace Askker.App.iOS
             // Keyboard Down
             NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
 
-            var g = new UITapGestureRecognizer(() => View.EndEditing(true));
-            
-            //View.AddGestureRecognizer(g);
+            // Keyboard dispose when clicking outside the comment box
+            var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            g.AddTarget(() => View.EndEditing(true));
+            g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);                                        
+            View.AddGestureRecognizer(g);
         }
 
         private async void CommentButton_TouchUpInside(object sender, EventArgs e)
