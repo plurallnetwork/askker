@@ -171,7 +171,7 @@ namespace Askker.App.iOS
             #endregion
 
             //string returnUrlLogin = "http://www.facebook.com/connect/login_success.html";
-            string returnUrlLogin = "https:%2F%2Fblinq-development.com%2Flogin";
+            string returnUrlLogin = "https:%2F%2Fblinq-development.com%2Fvote%2FexternalLogin";
             string externalProviderUrl = "https://blinq-development.com:44322/api/Account/ExternalLogin?provider=" + provider + "&response_type=token&client_id=self&redirect_uri=" + returnUrlLogin + "&isAdmin=1";
 
             var wkwebview = new WKWebView(UIScreen.MainScreen.Bounds, new WKWebViewConfiguration());
@@ -258,6 +258,8 @@ namespace Askker.App.iOS
                     indicator.StartAnimating();
 
                     string accessToken = url.Split('#')[1].Split('=')[1].Split('&')[0];
+                    string tokenType = url.Split('=')[2].Split('&')[0];
+                    string expiresIn = url.Split('=')[3];
 
                     Console.WriteLine("Access Token = " + accessToken);
 
@@ -266,11 +268,12 @@ namespace Askker.App.iOS
                     if (tokenModel == null)
                     {
                         tokenModel = new TokenModel();
+                        tokenModel.access_token = accessToken;
+                        tokenModel.userName = userModel.userName;
+                        tokenModel.expires_in = Int32.Parse(expiresIn);
+                        tokenModel.token_type = tokenType;
+                        tokenModel.expires = DateTime.Now.AddSeconds(tokenModel.expires_in);
                     }
-                    
-                    tokenModel.access_token = accessToken;
-                    tokenModel.userName = userModel.userName;
-                    
 
                     CredentialsService.SaveCredentials(tokenModel, userModel);
 
