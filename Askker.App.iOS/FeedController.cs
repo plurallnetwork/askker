@@ -14,7 +14,7 @@ namespace Askker.App.iOS
 {
     public partial class FeedController : UICollectionViewController
     {
-        public static List<SurveyModel> surveys { get; set; }
+        public List<SurveyModel> surveys { get; set; }
         public static NSCache imageCache = new NSCache();
         public static VoteManager voteManager = new VoteManager();
         public bool filterMine { get; set; }
@@ -23,9 +23,9 @@ namespace Askker.App.iOS
         public UIActivityIndicatorView indicator;
         public UIRefreshControl refreshControl;
         public static NSString feedCellId = new NSString("feedCell");
-        SurveyModel survey;
-        FeedCollectionViewCell surveyCell;
-        public MenuViewController menuViewController { get; set; }
+        public SurveyModel survey { get; set; }
+        public FeedCollectionViewCell surveyCell { get; set; }
+        public UIViewController viewController { get; set; }
 
         public FeedController (IntPtr handle) : base (handle)
         {
@@ -39,13 +39,12 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             imageCache.RemoveAllObjects();
-                        
-            feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCell), feedCellId);
-            feedCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
-            feedCollectionView.Delegate = new FeedCollectionViewDelegate();
-            feedCollectionView.AlwaysBounceVertical = true;
 
             surveys = new List<SurveyModel>();
+
+            feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCell), feedCellId);
+            feedCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
+            feedCollectionView.AlwaysBounceVertical = true;
 
             refreshControl = new UIRefreshControl();
             refreshControl.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -57,7 +56,7 @@ namespace Askker.App.iOS
 
             feedCollectionView.Add(refreshControl);
             feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", feedCollectionView, "v1", refreshControl));
-            feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-35-[v0]|", new NSLayoutFormatOptions(), "v0", refreshControl));            
+            feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-35-[v0]|", new NSLayoutFormatOptions(), "v0", refreshControl));
         }
 
         public override void ViewWillAppear(bool animated)
@@ -78,9 +77,20 @@ namespace Askker.App.iOS
                 if (button == 0)
                 {
                     survey.finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    var tempOptionSelected = survey.optionSelected;
+                    survey.optionSelected = null;
                     await new FeedManager().UpdateSurvey(survey, LoginController.tokenModel.access_token);
-                    surveys.Remove(survey);
-                    this.feedCollectionView.ReloadData();
+                    survey.optionSelected = tempOptionSelected;
+
+                    surveyCell.finishedLabel.Text = "Finished";
+                    surveyCell.moreButton.Hidden = true;
+
+                    if (surveys.Count > 0 && !this.filterFinished)
+                    {
+                        surveys.Remove(survey);
+                        this.feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
+                        this.feedCollectionView.ReloadData();
+                    }
                 }
 
                 MenuViewController.feedMenu.Hidden = true;
@@ -101,10 +111,11 @@ namespace Askker.App.iOS
             {
                 if (button == 0)
                 {
-                    await new FeedManager().CleanVotes(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
+                    await new FeedManager().CleanVotes(this.survey.userId + this.survey.creationDate, LoginController.tokenModel.access_token);
 
-                    survey.optionSelected = null;
-                    if (survey.type == SurveyType.Text.ToString())
+                    this.survey.optionSelected = null;
+                    surveyCell.totalVotesLabel.Text = "0 Votes";
+                    if (this.survey.type == SurveyType.Text.ToString())
                     {
                         surveyCell.optionsTableView.ReloadData();
                     }
@@ -126,26 +137,35 @@ namespace Askker.App.iOS
         [Export("EditSelector:")]
         private async void EditSelector(UIFeedButton but)
         {
-            if (survey.totalVotes > 0)
+            try
             {
-                nint optionButton = await Utils.ShowAlert("Edit", "The survey have votes. Please clean the votes to edit the survey.", "OK");
-            }
-            else
-            {
-                var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
-                if (CreateSurveyController != null)
+                if (survey.totalVotes > 0)
                 {
-                    CreateSurveyController.ScreenState = ScreenState.Edit.ToString();
-                    CreateSurveyController.UserId = survey.userId;
-                    CreateSurveyController.CreationDate = survey.creationDate;
-
-                    var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                    if (rootController != null)
-                    {
-                        this.PresentViewController(rootController, true, null);
-                    }
-                    //this.PresentViewController(CreateSurveyController.NavigationController, true, null);
+                    nint optionButton = await Utils.ShowAlert("Edit", "The survey have votes. Please clean the votes to edit the survey.", "OK");
                 }
+                else
+                {
+                    var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                    if (CreateSurveyController != null)
+                    {
+                        CreateSurveyController.ScreenState = ScreenState.Edit.ToString();
+                        CreateSurveyController.UserId = survey.userId;
+                        CreateSurveyController.CreationDate = survey.creationDate;
+
+                        var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                        if (rootController != null)
+                        {
+                            this.viewController.PresentViewController(rootController, true, null);
+                        }
+                    }
+                }
+
+                MenuViewController.feedMenu.Hidden = true;
+                MenuViewController.sidebarController.View.Alpha = 1f;
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
             }
         }
 
@@ -167,6 +187,7 @@ namespace Askker.App.iOS
 
             indicator.StopAnimating();
             refreshControl.EndRefreshing();
+            feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
             feedCollectionView.ReloadData();
         }
 
@@ -179,7 +200,7 @@ namespace Askker.App.iOS
         {
             var feedCell = collectionView.DequeueReusableCell(feedCellId, indexPath) as FeedCollectionViewCell;
 
-            BindFeedCell(feedCell, surveys[indexPath.Row], indexPath);
+            BindFeedCell(feedCell, surveys[indexPath.Row], indexPath.Row);
 
             return feedCell;
         }
@@ -189,17 +210,13 @@ namespace Askker.App.iOS
         {
             var buttonParams = button.Params.ToArray();
 
-            var commentController = menuViewController.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
+            var commentController = this.Storyboard.InstantiateViewController("CommentViewController") as CommentViewController;
 
-            commentController.survey = surveys[((NSIndexPath) buttonParams[0]).Row];
+            commentController.feedController = this;
+            commentController.survey = (SurveyModel)button.Params.ToArray()[0];
+            commentController.indexPathRow = (int)buttonParams[1];
 
-            var feedCell = new FeedCollectionViewCell(((FeedCollectionViewCell) buttonParams[1]).Frame);
-
-            BindFeedCell(feedCell, commentController.survey, (NSIndexPath) buttonParams[0]);
-
-            commentController.feedCell = feedCell;
-
-            menuViewController.NavigationController.PushViewController(commentController, true);
+            (buttonParams[2] as UINavigationController).PushViewController(commentController, true);
         }
 
         [Export("ResultSelector:")]
@@ -209,23 +226,19 @@ namespace Askker.App.iOS
 
             var resultController = this.Storyboard.InstantiateViewController("ResultViewController") as ResultViewController;
 
-            var survey = surveys[((NSIndexPath) buttonParams[0]).Row];
+            resultController.feedController = this;
+            resultController.survey = (SurveyModel)button.Params.ToArray()[0];
+            resultController.indexPathRow = (int)buttonParams[1];
 
-            resultController.userId = survey.userId;
-            resultController.creationDate = survey.creationDate;
-
-            var feedCell = new FeedCollectionViewCell(((FeedCollectionViewCell) buttonParams[1]).Frame);
-            BindFeedCell(feedCell, survey, (NSIndexPath) buttonParams[0]);
-            resultController.feedCell = feedCell;
-
-            this.NavigationController.PushViewController(resultController, true);
+            (buttonParams[2] as UINavigationController).PushViewController(resultController, true);
         }
 
         [Export("MoreSelector:")]
         private void MoreSelector(UIFeedButton button)
         {
-            survey = surveys[(int)button.Params.ToArray()[0]];
-            surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
+            this.survey = (SurveyModel)button.Params.ToArray()[0];
+            this.surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
+            this.viewController = (UIViewController)button.Params.ToArray()[2];
 
             MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
             {
@@ -241,17 +254,17 @@ namespace Askker.App.iOS
         [Export("TapProfilePictureSelector:")]
         public void TapProfilePictureSelector(UIFeedTapGestureRecognizer tapGesture)
         {
-            Utils.OpenUserProfile(menuViewController.NavigationController, (string)tapGesture.Params.ToArray()[0]);
+            Utils.OpenUserProfile((UINavigationController)tapGesture.Params.ToArray()[0], (string)tapGesture.Params.ToArray()[1]);
         }
 
-        public static async void saveVote(int surveyIndex, int optionId)
+        public static async void saveVote(SurveyModel survey, int optionId)
         {
             try
             {
-                surveys[surveyIndex].optionSelected = optionId;
+                survey.optionSelected = optionId;
 
                 SurveyVoteModel surveyVoteModel = new SurveyVoteModel();
-                surveyVoteModel.surveyId = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
+                surveyVoteModel.surveyId = survey.userId + survey.creationDate;
                 surveyVoteModel.optionId = optionId;
                 surveyVoteModel.user = new User();
                 surveyVoteModel.user.id = LoginController.userModel.id;
@@ -262,24 +275,24 @@ namespace Askker.App.iOS
 
                 await voteManager.Vote(surveyVoteModel, "");
 
-                if (LoginController.userModel.id != surveys[surveyIndex].userId)
+                if (LoginController.userModel.id != survey.userId)
                 {
                     UserNotificationModel userNotificationModel = new UserNotificationModel();
                     userNotificationModel.notificationDate = "";
-                    userNotificationModel.userId = surveys[surveyIndex].userId;
+                    userNotificationModel.userId = survey.userId;
                     userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
                     userNotificationModel.type = UserNotificationType.SurveyVote.ToString();
 
-                    if (surveys[surveyIndex].question.text.Length > 25)
+                    if (survey.question.text.Length > 25)
                     {
-                        userNotificationModel.text = "voted on \"" + surveys[surveyIndex].question.text.Substring(0, 25) + "...\"";
+                        userNotificationModel.text = "voted on \"" + survey.question.text.Substring(0, 25) + "...\"";
                     }
                     else
                     {
-                        userNotificationModel.text = "voted on \"" + surveys[surveyIndex].question.text + "\"";
+                        userNotificationModel.text = "voted on \"" + survey.question.text + "\"";
                     }
 
-                    userNotificationModel.link = surveys[surveyIndex].userId + surveys[surveyIndex].creationDate;
+                    userNotificationModel.link = survey.userId + survey.creationDate;
                     userNotificationModel.isDismissed = 0;
                     userNotificationModel.isRead = 0;
 
@@ -292,7 +305,7 @@ namespace Askker.App.iOS
             }
         }
 
-        public void BindFeedCell(FeedCollectionViewCell feedCell, SurveyModel survey, NSIndexPath indexPath)
+        public void BindFeedCell(FeedCollectionViewCell feedCell, SurveyModel survey, int indexPathRow)
         {
             if (survey.profilePicture != null)
             {
@@ -393,10 +406,10 @@ namespace Askker.App.iOS
                 feedCell.optionsTableView.Layer.MasksToBounds = true;
                 feedCell.optionsTableView.TranslatesAutoresizingMaskIntoConstraints = false;
                 feedCell.optionsTableView.ContentInset = new UIEdgeInsets(0, -10, 0, 0);
-                feedCell.optionsTableView.Tag = indexPath.Row;
+                feedCell.optionsTableView.Tag = indexPathRow;
                 feedCell.optionsTableView.FeedCell = feedCell;
 
-                feedCell.optionsTableViewSource.options = survey.options;
+                feedCell.optionsTableViewSource.survey = survey;
                 feedCell.optionsTableView.Source = feedCell.optionsTableViewSource;
                 feedCell.optionsTableView.ReloadData();
 
@@ -409,12 +422,13 @@ namespace Askker.App.iOS
             else
             {
                 feedCell.optionsCollectionView.TranslatesAutoresizingMaskIntoConstraints = false;
-                feedCell.optionsCollectionView.Tag = indexPath.Row;
+                feedCell.optionsCollectionView.Tag = indexPathRow;
                 feedCell.optionsCollectionView.FeedCell = feedCell;
 
-                feedCell.optionsCollectionViewSource.options = survey.options;
+                feedCell.optionsCollectionViewSource.survey = survey;
                 feedCell.optionsCollectionView.Source = feedCell.optionsCollectionViewSource;
                 feedCell.optionsCollectionViewDelegate.optionsCollectionViewSource = feedCell.optionsCollectionViewSource;
+                feedCell.optionsCollectionViewDelegate.survey = survey;
                 feedCell.optionsCollectionView.Delegate = feedCell.optionsCollectionViewDelegate;
                 feedCell.optionsCollectionView.ReloadData();
 
@@ -437,67 +451,100 @@ namespace Askker.App.iOS
 
             feedCell.updateTotalComments(survey.totalComments);
 
-            feedCell.commentButton.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
+            feedCell.commentButton.AddTarget(this, new Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
             List<Object> commentValues = new List<Object>();
-            commentValues.Add(indexPath);
-            commentValues.Add(feedCell);
+            commentValues.Add(survey);
+            commentValues.Add(indexPathRow);
+            commentValues.Add(this.NavigationController);
             feedCell.commentButton.Params = commentValues;
 
-            feedCell.resultButton.AddTarget(this, new ObjCRuntime.Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
+            feedCell.resultButton.AddTarget(this, new Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
             List<Object> resultValues = new List<Object>();
-            resultValues.Add(indexPath);
-            resultValues.Add(feedCell);
+            resultValues.Add(survey);
+            resultValues.Add(indexPathRow);
+            resultValues.Add(this.NavigationController);
             feedCell.resultButton.Params = resultValues;
 
-            feedCell.moreButton.AddTarget(this, new ObjCRuntime.Selector("MoreSelector:"), UIControlEvent.TouchUpInside);
+            feedCell.moreButton.AddTarget(this, new Selector("MoreSelector:"), UIControlEvent.TouchUpInside);
             List<Object> moreValues = new List<Object>();
-            moreValues.Add(indexPath.Row);
+            moreValues.Add(survey);
             moreValues.Add(feedCell);
+            moreValues.Add(this);
             feedCell.moreButton.Params = moreValues;
 
             var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
             List<Object> tapProfilePictureValues = new List<Object>();
+            tapProfilePictureValues.Add(this.NavigationController);
             tapProfilePictureValues.Add(survey.userId);
             feedTapGestureRecognizer.Params = tapProfilePictureValues;
             feedCell.profileImageView.AddGestureRecognizer(feedTapGestureRecognizer);
 
-            if(MenuViewController.feedMenu.CleanButton.AllTargets.Count <= 0)
+            if (MenuViewController.feedMenu.CleanButton.AllTargets.Count <= 0)
             {
-                MenuViewController.feedMenu.CleanButton.AddTarget(this, new ObjCRuntime.Selector("CleanSelector:"), UIControlEvent.TouchUpInside);
+                MenuViewController.feedMenu.CleanButton.AddTarget(this, new Selector("CleanSelector:"), UIControlEvent.TouchUpInside);
+            }
+            else if (!MenuViewController.feedMenu.CleanButton.AllTargets.IsEqual(this))
+            {
+                MenuViewController.feedMenu.CleanButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                MenuViewController.feedMenu.CleanButton.AddTarget(this, new Selector("CleanSelector:"), UIControlEvent.TouchUpInside);
             }
 
             if (MenuViewController.feedMenu.EditButton.AllTargets.Count <= 0)
             {
-                MenuViewController.feedMenu.EditButton.AddTarget(this, new ObjCRuntime.Selector("EditSelector:"), UIControlEvent.TouchUpInside);
+                MenuViewController.feedMenu.EditButton.AddTarget(this, new Selector("EditSelector:"), UIControlEvent.TouchUpInside);
+            }
+            else if (!MenuViewController.feedMenu.EditButton.AllTargets.IsEqual(this))
+            {
+                MenuViewController.feedMenu.EditButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                MenuViewController.feedMenu.EditButton.AddTarget(this, new Selector("EditSelector:"), UIControlEvent.TouchUpInside);
             }
 
             if (MenuViewController.feedMenu.FinishButton.AllTargets.Count <= 0)
             {
-                MenuViewController.feedMenu.FinishButton.AddTarget(this, new ObjCRuntime.Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
+                MenuViewController.feedMenu.FinishButton.AddTarget(this, new Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
             }
+            else if (!MenuViewController.feedMenu.FinishButton.AllTargets.IsEqual(this))
+            {
+                MenuViewController.feedMenu.FinishButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                MenuViewController.feedMenu.FinishButton.AddTarget(this, new Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
+            }
+        }
+
+        public static nfloat getHeightForFeedCell(SurveyModel survey, nfloat width)
+        {
+            var rect = new NSString(survey.question.text).GetBoundingRect(new CGSize(width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.SystemFontOfSize(14) }, null);
+
+            var optionsHeight = 176;
+
+            if (survey.type == SurveyType.Text.ToString() && survey.options.Count < 4)
+            {
+                optionsHeight = survey.options.Count * 44;
+            }
+
+            // Heights of the vertical components to format the cell dinamic height
+            var knownHeight = 8 + 44 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;
+
+            return rect.Height + knownHeight + 25;
         }
     }
 
     public class FeedCollectionViewDelegate : UICollectionViewDelegateFlowLayout
     {
+        public List<SurveyModel> surveys { get; set; }
+
+        public FeedCollectionViewDelegate(List<SurveyModel> surveys)
+        {
+            this.surveys = surveys;
+        }
+
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
-            var question = FeedController.surveys[indexPath.Row].question.text;
+            var question = surveys[indexPath.Row].question.text;
             if (!question.Equals(""))
             {
-                var rect = new NSString(question).GetBoundingRect(new CGSize(collectionView.Frame.Width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.SystemFontOfSize(14) }, null);
+                var feedCellHeight = FeedController.getHeightForFeedCell(surveys[indexPath.Row], collectionView.Frame.Width);
 
-                var optionsHeight = 176;
-
-                if (FeedController.surveys[indexPath.Row].type == SurveyType.Text.ToString() && FeedController.surveys[indexPath.Row].options.Count < 4)
-                {
-                    optionsHeight = FeedController.surveys[indexPath.Row].options.Count * 44;
-                }
-
-                // Heights of the vertical components to format the cell dinamic height
-                var knownHeight = 8 + 44 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;
-
-                return new CGSize(collectionView.Frame.Width, rect.Height + knownHeight + 25);
+                return new CGSize(collectionView.Frame.Width, feedCellHeight);
             }
 
             return new CGSize(collectionView.Frame.Width, 380);
@@ -639,43 +686,43 @@ namespace Askker.App.iOS
             return button;
         }
 
-        public void updateTotalComments(int totalVotes)
+        public void updateTotalComments(int totalComments)
         {
-            if (totalVotes == 1)
+            if (totalComments == 1)
             {
                 this.commentsLabel.Text = "1 Comment";
             }
             else
             {
-                this.commentsLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Comments";
+                this.commentsLabel.Text = Common.FormatNumberAbbreviation(totalComments) + " Comments";
             }
         }
     }
 
     public class OptionsTableViewSource : UITableViewSource
     {
-        public List<Option> options { get; set; }
+        public SurveyModel survey { get; set; }
 
         public OptionsTableViewSource()
         {
-            options = new List<Option>();
+            survey = new SurveyModel();
         }
 
         public override nint RowsInSection(UITableView tableView, nint section)
         {
-            return options.Count;
+            return survey.options.Count;
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
             var cell = tableView.DequeueReusableCell(FeedCollectionViewCell.optionCellId, indexPath) as OptionTableViewCell;
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-            cell.Tag = options[indexPath.Row].id;
+            cell.Tag = survey.options[indexPath.Row].id;
 
             cell.optionLetterLabel.Text = FeedCollectionViewCell.alphabet[indexPath.Row];
-            cell.optionLabel.Text = options[indexPath.Row].text;
+            cell.optionLabel.Text = survey.options[indexPath.Row].text;
 
-            if (FeedController.surveys[(int)tableView.Tag].optionSelected == options[indexPath.Row].id)
+            if (survey.optionSelected == survey.options[indexPath.Row].id)
             {
                 var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
                 optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
@@ -713,7 +760,7 @@ namespace Askker.App.iOS
                     ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
                 }
 
-                FeedController.saveVote((int)tableView.Tag, (int)optionCell.Tag);
+                FeedController.saveVote(survey, (int)optionCell.Tag);
             }
         }
 
@@ -784,27 +831,27 @@ namespace Askker.App.iOS
 
     public class OptionsCollectionViewSource : UICollectionViewSource
     {
-        public List<Option> options { get; set; }
+        public SurveyModel survey { get; set; }
 
         public OptionsCollectionViewSource()
         {
-            options = new List<Option>();
+            survey = new SurveyModel();
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
         {
-            return options.Count;
+            return survey.options.Count;
         }
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             var optionCell = collectionView.DequeueReusableCell(FeedCollectionViewCell.optionCellId, indexPath) as OptionCollectionViewCell;
             optionCell.BackgroundColor = UIColor.White;
-            optionCell.Tag = options[indexPath.Row].id;
+            optionCell.Tag = survey.options[indexPath.Row].id;
 
-            if (options[indexPath.Row].image != null)
+            if (survey.options[indexPath.Row].image != null)
             {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + options[indexPath.Row].image);
+                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + survey.options[indexPath.Row].image);
 
                 var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
                 if (imageFromCache != null)
@@ -845,9 +892,9 @@ namespace Askker.App.iOS
             }
 
             optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCell.alphabet[indexPath.Row] + "  ";
-            optionCell.optionLabel.Text = options[indexPath.Row].text;
+            optionCell.optionLabel.Text = survey.options[indexPath.Row].text;
 
-            if (FeedController.surveys[(int)collectionView.Tag].optionSelected == options[indexPath.Row].id)
+            if (survey.optionSelected == survey.options[indexPath.Row].id)
             {
                 optionCell.optionCheckImageView.Hidden = false;
                 collectionView.SelectItem(indexPath, false, UICollectionViewScrollPosition.None);
@@ -869,10 +916,12 @@ namespace Askker.App.iOS
     public class OptionsCollectionViewDelegate : UICollectionViewDelegateFlowLayout
     {
         public OptionsCollectionViewSource optionsCollectionViewSource { get; set; }
+        public SurveyModel survey { get; set; }
 
         public OptionsCollectionViewDelegate()
         {
             optionsCollectionViewSource = new OptionsCollectionViewSource();
+            survey = new SurveyModel();
         }
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
@@ -906,7 +955,7 @@ namespace Askker.App.iOS
                     ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
                 }
 
-                FeedController.saveVote((int)collectionView.Tag, (int)optionCell.Tag);
+                FeedController.saveVote(survey, (int)optionCell.Tag);
             }
         }
 

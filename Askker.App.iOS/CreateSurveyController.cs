@@ -239,6 +239,7 @@ namespace Askker.App.iOS
 
             try
             {
+                SurveyModel.optionSelected = null;
                 await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.access_token, QuestionImage, OptionImages);
 
                 var feedController = this.Storyboard.InstantiateViewController("MenuNavController");

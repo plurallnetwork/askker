@@ -15,15 +15,17 @@ namespace Askker.App.iOS
     {
         UIImagePickerController imagePicker = new UIImagePickerController();
         string fileName;
+        public static NSCache imageCache = new NSCache();
 
         public ProfileController (IntPtr handle) : base (handle)
         {
         }
 
-        public override async void ViewDidLoad()
+        public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            
+            imageCache.RemoveAllObjects();
+
             profileImageView.ClipsToBounds = true;
 
             uploadButton.TouchUpInside += btnUpload_TouchUpInside;
@@ -50,16 +52,17 @@ namespace Askker.App.iOS
             nameText.Text = LoginController.userModel.name;
             emailText.Text = LoginController.userModel.userName;
             ageText.Text = LoginController.userModel.age.ToString();
-            if("male".Equals(LoginController.userModel.gender) || "female".Equals(LoginController.userModel.gender)){
+            if ("male".Equals(LoginController.userModel.gender) || "female".Equals(LoginController.userModel.gender))
+            {
                 genderText.Text = LoginController.userModel.gender;
-            }            
-            
+            }
+
             if (LoginController.userModel.profilePicturePath != null)
             {
                 fileName = LoginController.userModel.profilePicturePath;
                 var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + LoginController.userModel.profilePicturePath);
 
-                var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
+                var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
                 if (imageFromCache != null)
                 {
                     profileImageView.Image = imageFromCache;
@@ -76,14 +79,15 @@ namespace Askker.App.iOS
                         {
                             try
                             {
-                                DispatchQueue.MainQueue.DispatchAsync(() => {
+                                DispatchQueue.MainQueue.DispatchAsync(() =>
+                                {
                                     var imageToCache = UIImage.LoadFromData(data);
 
                                     profileImageView.Image = imageToCache;
 
                                     if (imageToCache != null)
                                     {
-                                        FeedController.imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
+                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
                                     }
                                 });
                             }
@@ -98,7 +102,7 @@ namespace Askker.App.iOS
             }
         }
 
-        
+
         private void btnUpload_TouchUpInside(object sender, EventArgs e)
         {
             imagePicker.SourceType = UIImagePickerControllerSourceType.PhotoLibrary;

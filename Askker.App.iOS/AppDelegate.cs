@@ -24,6 +24,12 @@ namespace Askker.App.iOS
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
 
+            string userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+
+            // set default useragent
+            NSDictionary dictionary = NSDictionary.FromObjectAndKey(NSObject.FromObject(userAgent), NSObject.FromObject("UserAgent"));
+            NSUserDefaults.StandardUserDefaults.RegisterDefaults(dictionary);
+
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
 
             if (CredentialsService.DoCredentialsExist())

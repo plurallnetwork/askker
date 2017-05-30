@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UIKit;
+using ObjCRuntime;
 
 namespace Askker.App.iOS
 {
@@ -15,17 +16,25 @@ namespace Askker.App.iOS
     {
         public UICollectionView feed { get; set; }
         public FeedCollectionViewCell feedCell { get; set; }
+        public FeedController feedController { get; set; }
+        public UIActivityIndicatorView indicator;
 
         public List<ReportType> reports { get; set; }
 
+        public SurveyModel survey { get; set; }
         public string userId { get; set; }
         public string creationDate { get; set; }
+        public int indexPathRow { get; set; }
 
         public static NSString feedHeadId = new NSString("feedHeadId");
         public static NSString resultCellId = new NSString("resultCellId");
 
         public ResultViewController (IntPtr handle) : base (handle)
         {
+            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
+            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
+            indicator.Center = this.View.Center;
+            Add(indicator);
         }
 
         public override void ViewDidLoad()
@@ -37,10 +46,7 @@ namespace Askker.App.iOS
             reports.Add(ReportType.Gender);
             reports.Add(ReportType.Age);
 
-            feed = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout()
-            {
-                HeaderReferenceSize = new System.Drawing.SizeF((float)View.Frame.Width, (float)feedCell.Frame.Height) //headHeight
-            });
+            feed = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout());
             feed.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             feed.RegisterClassForCell(typeof(ResultCollectionViewCell), resultCellId);
             feed.RegisterClassForSupplementaryView(typeof(UICollectionReusableView), UICollectionElementKindSection.Header, feedHeadId);
@@ -55,20 +61,54 @@ namespace Askker.App.iOS
 
         public override void ViewWillAppear(bool animated)
         {
+            indicator.StartAnimating();
             fetchSurveyDetail();
         }
 
         public async void fetchSurveyDetail()
         {
-            ReportManager reportManager = new ReportManager();
-            List<ReportModel> reportsDatasets = new List<ReportModel>();
-            reportsDatasets.Add(await reportManager.GetOverallResults(this.userId, this.creationDate, LoginController.tokenModel.access_token));
-            reportsDatasets.Add(await reportManager.GetResultsByGender(this.userId, this.creationDate, LoginController.tokenModel.access_token));
-            reportsDatasets.Add(await reportManager.GetResultsByAge(this.userId, this.creationDate, LoginController.tokenModel.access_token));
+            try
+            {
+                if (survey == null)
+                {
+                    survey = await new FeedManager().GetSurvey(this.userId, this.creationDate, LoginController.tokenModel.access_token);
+                }
+                else
+                {
+                    this.userId = survey.userId;
+                    this.creationDate = survey.creationDate;
+                }
 
-            feed.Source = new ResultsCollectionViewSource(reports, reportsDatasets, feedCell);
-            feed.Delegate = new ResultsCollectionViewDelegate();
-            feed.ReloadData();
+                ReportManager reportManager = new ReportManager();
+                List<ReportModel> reportsDatasets = new List<ReportModel>();
+                reportsDatasets.Add(await reportManager.GetOverallResults(this.userId, this.creationDate, LoginController.tokenModel.access_token));
+                reportsDatasets.Add(await reportManager.GetResultsByGender(this.userId, this.creationDate, LoginController.tokenModel.access_token));
+                reportsDatasets.Add(await reportManager.GetResultsByAge(this.userId, this.creationDate, LoginController.tokenModel.access_token));
+
+                var feedCellHeight = FeedController.getHeightForFeedCell(survey, View.Frame.Width);
+                feedCell = new FeedCollectionViewCell(new CGRect(0, 0, View.Frame.Width, feedCellHeight));
+                feedController.BindFeedCell(feedCell, survey, indexPathRow);
+
+                feedCell.resultButton.Hidden = true;
+
+                if (feedController.NavigationController == null)
+                {
+                    feedCell.commentButton.Params[2] = this.NavigationController;
+                    feedCell.moreButton.Params[2] = this;
+                    (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
+                }
+
+                indicator.StopAnimating();
+
+                feed.Source = new ResultsCollectionViewSource(reports, reportsDatasets, feedCell);
+                feed.Delegate = new ResultsCollectionViewDelegate((float) feedCell.Frame.Height);
+                feed.ReloadData();
+            }
+            catch (Exception ex)
+            {
+                indicator.StopAnimating();
+                Utils.HandleException(ex);
+            }
         }
     }
 
@@ -104,13 +144,6 @@ namespace Askker.App.iOS
         {
             var resultCell = collectionView.DequeueReusableCell(ResultViewController.resultCellId, indexPath) as ResultCollectionViewCell;
             resultCell.BackgroundColor = UIColor.White;
-
-            //string[] months = new string[] { "Janeiro", "Fevereiro", "Março", "Abril", "Maio" };
-
-            //double[] values = new double[] { 50, 25, 30, 40, 41 };
-
-            //double[] unitsSold = new double[] { 20.0, 4.0, 6.0, 3.0, 12.0 };
-            //double[] unitsBought = new double[] { 10.0, 14.0, 60.0, 13.0, 2.0 };
 
             var reportDataSet = this.reportsDatasets[indexPath.Row];
 
@@ -230,9 +263,6 @@ namespace Askker.App.iOS
         {
             var headerView = collectionView.DequeueReusableSupplementaryView(elementKind, ResultViewController.feedHeadId, indexPath);
 
-            feedCell.Frame = headerView.Frame;
-            feedCell.resultButton.Hidden = true;
-
             headerView.AddSubview(feedCell);
 
             return headerView;
@@ -241,8 +271,11 @@ namespace Askker.App.iOS
 
     public class ResultsCollectionViewDelegate : UICollectionViewDelegateFlowLayout
     {
-        public ResultsCollectionViewDelegate()
+        public float heightHeaderCell { get; set; }
+
+        public ResultsCollectionViewDelegate(float heightHeaderCell)
         {
+            this.heightHeaderCell = heightHeaderCell;
         }
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
@@ -253,6 +286,11 @@ namespace Askker.App.iOS
         public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
         {
             return 0;
+        }
+
+        public override CGSize GetReferenceSizeForHeader(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
+        {
+            return new CGSize(collectionView.Frame.Width, heightHeaderCell);
         }
     }
 
