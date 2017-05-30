@@ -56,6 +56,10 @@ namespace Askker.App.iOS
                 indicator.StopAnimating();
                 refreshControl.EndRefreshing();
                 TableView.ReloadData();
+
+                await new NotificationManager().SetUserNotificationsRead(LoginController.userModel.id, LoginController.tokenModel.access_token);
+
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUnreadNotificationsCount"), null);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Enums;
+﻿using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Foundation;
 using SidebarNavigation;
 using System;
@@ -12,6 +13,9 @@ namespace Askker.App.iOS
         public static SidebarController sidebarController { get; private set; }
         public static FeedMenuView feedMenu = FeedMenuView.Create();
         private NSObject closeMenuObserver;
+        private NSObject updateUnreadNotificationsCountObserver;
+        public int unreadNotifications { get; set; }
+        public UILabel badge;
 
         FeedController content;
 
@@ -22,18 +26,24 @@ namespace Askker.App.iOS
         public override void ViewDidUnload()
         {
             base.ViewDidUnload();
+
             if(closeMenuObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(closeMenuObserver);
+            }
+
+            if (updateUnreadNotificationsCountObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(updateUnreadNotificationsCountObserver);
             }
         }
 
         public override void ViewDidLoad()
         {
-
             base.ViewDidLoad();
 
             closeMenuObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("CloseSideMenu"), CloseMessageRecieved);
+            updateUnreadNotificationsCountObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateUnreadNotificationsCount"), UpdateUnreadNotificationsMessageRecieved);
 
             feedMenu.Hidden = true;
             
@@ -70,7 +80,8 @@ namespace Askker.App.iOS
 
             sidebarController = new SidebarController(this, content, new SideMenuController(this));
             sidebarController.MenuLocation = MenuLocations.Left;
-            
+
+            UIBarButtonItem notificationsButton = GetNotificationsButton();
 
             this.NavigationItem.SetLeftBarButtonItem(
                 new UIBarButtonItem(UIImage.FromBundle("assets/img/threelines")
@@ -83,11 +94,7 @@ namespace Askker.App.iOS
 
             this.NavigationItem.SetRightBarButtonItems(
                 new UIBarButtonItem[] {
-                    new UIBarButtonItem(UIBarButtonSystemItem.Organize, (sender, args) =>
-                    {
-                        var notificationsController = this.Storyboard.InstantiateViewController("NotificationsController") as NotificationsController;
-                        this.NavigationController.PushViewController(notificationsController, true);
-                    }),
+                    notificationsButton,
                     new UIBarButtonItem(UIBarButtonSystemItem.Add, (sender, args) =>
                     {
                         var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
@@ -112,6 +119,34 @@ namespace Askker.App.iOS
             this.NavigationController.NavigationBar.TintColor = UIColor.Black;
         }
 
+        private UIBarButtonItem GetNotificationsButton()
+        {
+            var composeButton = new UIButton(new RectangleF(0, 0, 24, 24));
+            composeButton.SetBackgroundImage(UIImage.FromBundle("assets/img/notification"), UIControlState.Normal);
+            composeButton.AddTarget((sender, args) => {
+                var notificationsController = this.Storyboard.InstantiateViewController("NotificationsController") as NotificationsController;
+                this.NavigationController.PushViewController(notificationsController, true);
+            }, UIControlEvent.TouchUpInside);
+
+            // Notifications Badge
+            nfloat badgeSize = 16;
+            nfloat badgeOriginX = 12; // Half of the icon width
+            nfloat badgeOriginY = -6;
+
+            this.badge = new UILabel();
+            this.badge.TextColor = UIColor.White;
+            this.badge.BackgroundColor = UIColor.Red;
+            this.badge.Font = UIFont.SystemFontOfSize(11);
+            this.badge.TextAlignment = UITextAlignment.Center;
+            this.badge.Frame = CoreGraphics.CGRect.FromLTRB(badgeOriginX, badgeOriginY, badgeOriginX + badgeSize, badgeOriginY + badgeSize);
+            this.badge.Layer.CornerRadius = badgeSize / 2;
+            this.badge.Layer.MasksToBounds = true;
+
+            GetUserUnreadNotificationsCount(composeButton, badge);
+
+            return new UIBarButtonItem(composeButton);
+        }
+
         private void CloseMessageRecieved(NSNotification notification)
         {
             sidebarController.CloseMenu();
@@ -120,6 +155,26 @@ namespace Askker.App.iOS
         public void changeContentView(UIViewController viewController)
         {
             sidebarController.ChangeContentView(viewController);
+        }
+
+        public async void GetUserUnreadNotificationsCount(UIButton composeButton, UILabel badge)
+        {
+            unreadNotifications = await new NotificationManager().GetUserUnreadNotificationsCount(LoginController.userModel.id, LoginController.tokenModel.access_token);
+
+            if (unreadNotifications > 0)
+            {
+                badge.Text = this.unreadNotifications.ToString();
+                composeButton.AddSubview(badge);
+            }
+        }
+
+        private void UpdateUnreadNotificationsMessageRecieved(NSNotification notification)
+        {
+            if (badge != null)
+            {
+                badge.RemoveFromSuperview();
+
+            }
         }
     }
 }
