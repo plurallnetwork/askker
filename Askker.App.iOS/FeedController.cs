@@ -351,7 +351,7 @@ namespace Askker.App.iOS
             }
 
             var attributedText = new NSMutableAttributedString(survey.userName, UIFont.BoldSystemFontOfSize(14));
-            attributedText.Append(new NSAttributedString("\nto Public", UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
+            attributedText.Append(new NSAttributedString("\n" + survey.targetAudience, UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
 
             var paragraphStyle = new NSMutableParagraphStyle();
             paragraphStyle.LineSpacing = 4;
