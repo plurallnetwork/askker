@@ -308,6 +308,8 @@ namespace Askker.App.iOS
             // get common info (shared between images and video)
             NSUrl referenceURL = e.Info[new NSString("UIImagePickerControllerReferenceURL")] as NSUrl;
 
+            fileName = null;
+
             ALAssetsLibrary assetsLibrary = new ALAssetsLibrary();
             assetsLibrary.AssetForUrl(referenceURL, delegate (ALAsset asset)
             {
@@ -321,13 +323,14 @@ namespace Askker.App.iOS
                     fileName = representation.Filename.ToLower();
                 }
             }, delegate (NSError error) {});
-
+            
             if (isImage)
             {
                 UIImage originalImage = e.Info[UIImagePickerController.OriginalImage] as UIImage;
                 if (originalImage != null)
                 {
                     profileImageView.Image = originalImage;
+                    fileName = "1.jpg";
                     Update();
                 }
             }
