@@ -72,9 +72,11 @@ namespace Askker.App.iOS
 
                         CredentialsService.SaveCredentials(LoginController.tokenModel, LoginController.userModel);
 
-                        var alert = UIAlertController.Create("Register", "Registered and logged user successfully", UIAlertControllerStyle.Alert);
-                        alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
-                        PresentViewController(alert, true, null);
+                        var menuController = this.Storyboard.InstantiateViewController("MenuNavController");
+                        if (menuController != null)
+                        {
+                            this.PresentViewController(menuController, true, null);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -92,6 +94,9 @@ namespace Askker.App.iOS
                     }
                 }
             };
+
+            
+        
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Askker.App.iOS
         public static TokenModel tokenModel;
         public static UserModel userModel;
         public UIActivityIndicatorView indicator;
+        WKWebView wkwebview;
 
         public LoginManager loginManager;
 
@@ -25,13 +26,42 @@ namespace Askker.App.iOS
             Add(indicator);
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            NavigationController.SetNavigationBarHidden(true, false);
+            base.ViewDidAppear(animated);            
+
+            btnLoginFacebook.TouchUpInside += btnLoginFacebook_TouchUpInside;
+            btnLoginGoogle.TouchUpInside += btnLoginGoogle_TouchUpInside;
+            btnSignUp.TouchUpInside += BtnSignUp_TouchUpInside;
+        }
+
+        public override void ViewDidDisappear(bool animated)
+        {
+            base.ViewDidDisappear(animated);
+
+            btnLoginFacebook.TouchUpInside -= btnLoginFacebook_TouchUpInside;
+            btnLoginGoogle.TouchUpInside -= btnLoginGoogle_TouchUpInside;
+            btnSignUp.TouchUpInside -= BtnSignUp_TouchUpInside;
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
+            
 
-            btnLoginFacebook.TouchUpInside += btnLoginFacebook_TouchUpInside;
-            btnLoginGoogle.TouchUpInside += btnLoginGoogle_TouchUpInside;
+            
+        }
+
+        private void BtnSignUp_TouchUpInside(object sender, EventArgs e)
+        {
+            var registerController = this.Storyboard.InstantiateViewController("RegisterController");
+            if (registerController != null)
+            {
+                this.NavigationController.PushViewController(registerController, true);
+                NavigationController.SetNavigationBarHidden(false, true);
+            }
         }
 
         //public override async void ViewDidAppear(bool animated)
@@ -170,11 +200,15 @@ namespace Askker.App.iOS
             */
             #endregion
 
+            NavigationController.SetNavigationBarHidden(false, true);
+
             //string returnUrlLogin = "http://www.facebook.com/connect/login_success.html";
             string returnUrlLogin = "https:%2F%2Fblinq-development.com%2Fvote%2FexternalLogin";
             string externalProviderUrl = "https://blinq-development.com:44322/api/Account/ExternalLogin?provider=" + provider + "&response_type=token&client_id=self&redirect_uri=" + returnUrlLogin + "&isAdmin=1";
 
-            var wkwebview = new WKWebView(UIScreen.MainScreen.Bounds, new WKWebViewConfiguration());
+            var rect = new CoreGraphics.CGRect(UIScreen.MainScreen.Bounds.X, UIScreen.MainScreen.Bounds.Y + this.NavigationController.NavigationBar.Bounds.Height + 20 /*time/battery bar height*/, UIScreen.MainScreen.Bounds.Width, UIScreen.MainScreen.Bounds.Height);
+            wkwebview = new WKWebView(rect, new WKWebViewConfiguration());
+            
             wkwebview.NavigationDelegate = this;
 
             Add(wkwebview);
@@ -185,6 +219,7 @@ namespace Askker.App.iOS
             this.NavigationItem.SetLeftBarButtonItem(
                 new UIBarButtonItem(UIBarButtonSystemItem.Cancel, (sender, args) => {
                     this.NavigationItem.SetLeftBarButtonItem(null, true);
+                    NavigationController.SetNavigationBarHidden(true, true);
                     wkwebview.RemoveFromSuperview();
                     indicator.StopAnimating();
                 })
@@ -282,6 +317,14 @@ namespace Askker.App.iOS
                     Login();
 
                     Console.WriteLine("User Logged!");
+                }
+
+                if (url.Contains("#error=access_denied"))
+                {
+                    this.NavigationItem.SetLeftBarButtonItem(null, true);
+                    NavigationController.SetNavigationBarHidden(true, true);
+                    wkwebview.RemoveFromSuperview();
+                    indicator.StopAnimating();
                 }
             }
             catch (Exception ex)
