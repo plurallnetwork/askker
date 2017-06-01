@@ -114,6 +114,7 @@ namespace Askker.App.iOS
                     await new FeedManager().CleanVotes(this.survey.userId + this.survey.creationDate, LoginController.tokenModel.access_token);
 
                     this.survey.optionSelected = null;
+                    this.survey.totalVotes = 0;
                     surveyCell.totalVotesLabel.Text = "0 Votes";
                     if (this.survey.type == SurveyType.Text.ToString())
                     {
@@ -257,10 +258,21 @@ namespace Askker.App.iOS
             Utils.OpenUserProfile((UINavigationController)tapGesture.Params.ToArray()[0], (string)tapGesture.Params.ToArray()[1]);
         }
 
-        public static async void saveVote(SurveyModel survey, int optionId)
+        
+
+        public static async void saveVote(SurveyModel survey, int optionId, FeedCollectionViewCell feedCell)
         {
+            var incrementVote = false;
+
             try
             {
+                if (survey.optionSelected == null)
+                {
+                    incrementVote = true;
+                    survey.totalVotes++;
+                    feedCell.updateTotalVotes(survey.totalVotes);
+                }
+
                 survey.optionSelected = optionId;
 
                 SurveyVoteModel surveyVoteModel = new SurveyVoteModel();
@@ -275,32 +287,45 @@ namespace Askker.App.iOS
 
                 await voteManager.Vote(surveyVoteModel, "");
 
-                if (LoginController.userModel.id != survey.userId)
+                try
                 {
-                    UserNotificationModel userNotificationModel = new UserNotificationModel();
-                    userNotificationModel.notificationDate = "";
-                    userNotificationModel.userId = survey.userId;
-                    userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
-                    userNotificationModel.type = UserNotificationType.SurveyVote.ToString();
-
-                    if (survey.question.text.Length > 25)
+                    if (LoginController.userModel.id != survey.userId)
                     {
-                        userNotificationModel.text = "voted on \"" + survey.question.text.Substring(0, 25) + "...\"";
-                    }
-                    else
-                    {
-                        userNotificationModel.text = "voted on \"" + survey.question.text + "\"";
-                    }
+                        UserNotificationModel userNotificationModel = new UserNotificationModel();
+                        userNotificationModel.notificationDate = "";
+                        userNotificationModel.userId = survey.userId;
+                        userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
+                        userNotificationModel.type = UserNotificationType.SurveyVote.ToString();
 
-                    userNotificationModel.link = survey.userId + survey.creationDate;
-                    userNotificationModel.isDismissed = 0;
-                    userNotificationModel.isRead = 0;
+                        if (survey.question.text.Length > 25)
+                        {
+                            userNotificationModel.text = "voted on \"" + survey.question.text.Substring(0, 25) + "...\"";
+                        }
+                        else
+                        {
+                            userNotificationModel.text = "voted on \"" + survey.question.text + "\"";
+                        }
 
-                    await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
+                        userNotificationModel.link = survey.userId + survey.creationDate;
+                        userNotificationModel.isDismissed = 0;
+                        userNotificationModel.isRead = 0;
+
+                        await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
+                    }
+                }
+                catch
+                {
+                    return;
                 }
             }
             catch (Exception ex)
             {
+                if (incrementVote)
+                {
+                    survey.totalVotes--;
+                    feedCell.updateTotalVotes(survey.totalVotes);
+                }
+
                 Utils.HandleException(ex);
             }
         }
@@ -439,16 +464,7 @@ namespace Askker.App.iOS
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsCollectionView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
             }
 
-            if (survey.totalVotes == 1)
-            {
-                feedCell.totalVotesLabel.Text = "1 Vote";
-            }
-            else
-            {
-                feedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(survey.totalVotes) + " Votes";
-            }
-
-
+            feedCell.updateTotalVotes(survey.totalVotes);
             feedCell.updateTotalComments(survey.totalComments);
 
             feedCell.commentButton.AddTarget(this, new Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
@@ -686,6 +702,18 @@ namespace Askker.App.iOS
             return button;
         }
 
+        public void updateTotalVotes(int totalVotes)
+        {
+            if (totalVotes == 1)
+            {
+                this.totalVotesLabel.Text = "1 Vote";
+            }
+            else
+            {
+                this.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
+            }
+        }
+
         public void updateTotalComments(int totalComments)
         {
             if (totalComments == 1)
@@ -747,20 +775,7 @@ namespace Askker.App.iOS
                 optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
                 optionCell.AccessoryView = optionCheckImage;
 
-                int totalVotes = GetNumberFromLabel(((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text);
-
-                totalVotes++;
-
-                if (totalVotes == 1)
-                {
-                    ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = "1 Vote";
-                }
-                else
-                {
-                    ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
-                }
-
-                FeedController.saveVote(survey, (int)optionCell.Tag);
+                FeedController.saveVote(survey, (int)optionCell.Tag, ((UIOptionsTableView)tableView).FeedCell);
             }
         }
 
@@ -771,19 +786,6 @@ namespace Askker.App.iOS
             if (optionCell == null)
             {
                 optionCell = this.GetCell(tableView, indexPath);
-            }
-
-            int totalVotes = GetNumberFromLabel(((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text);
-
-            totalVotes--;
-
-            if (totalVotes == 1)
-            {
-                ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = "1 Vote";
-            }
-            else
-            {
-                ((UIOptionsTableView)tableView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
             }
 
             optionCell.AccessoryView = null;
@@ -942,20 +944,7 @@ namespace Askker.App.iOS
             {
                 optionCell.optionCheckImageView.Hidden = false;
 
-                int totalVotes = GetNumberFromLabel(((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text);
-
-                totalVotes++;
-
-                if (totalVotes == 1)
-                {
-                    ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = "1 Vote";
-                }
-                else
-                {
-                    ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
-                }
-
-                FeedController.saveVote(survey, (int)optionCell.Tag);
+                FeedController.saveVote(survey, (int)optionCell.Tag, ((UIOptionsCollectionView)collectionView).FeedCell);
             }
         }
 
@@ -969,19 +958,6 @@ namespace Askker.App.iOS
             }
 
             optionCell.optionCheckImageView.Hidden = true;
-
-            int totalVotes = GetNumberFromLabel(((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text);
-
-            totalVotes--;
-
-            if (totalVotes == 1)
-            {
-                ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = "1 Vote";
-            }
-            else
-            {
-                ((UIOptionsCollectionView)collectionView).FeedCell.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
-            }
         }
 
         private int GetNumberFromLabel(string label)
