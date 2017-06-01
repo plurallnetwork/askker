@@ -151,27 +151,32 @@ namespace Askker.App.iOS
             {
                 resultCell.sectionLabel.Text = reports[indexPath.Row].ToString();
 
-                var dataEntries = new List<PieChartDataEntry>();
-                for (int i = 0; i < reportDataSet.dataSets[0].Count; i++)
+                if (reportDataSet.totalVotes > 0)
                 {
-                    if (Convert.ToInt32(reportDataSet.dataSets[0][i]) > 0)
+                    var dataEntries = new List<PieChartDataEntry>();
+                    for (int i = 0; i < reportDataSet.dataSets[0].Count; i++)
                     {
-                        dataEntries.Add(new PieChartDataEntry(reportDataSet.dataSets[0][i], reportDataSet.labels[i]));
+                        if (Convert.ToInt32(reportDataSet.dataSets[0][i]) > 0)
+                        {
+                            dataEntries.Add(new PieChartDataEntry(reportDataSet.dataSets[0][i], reportDataSet.labels[i]));
+                        }
                     }
+
+                    var dataSet = new PieChartDataSet(dataEntries.ToArray(), "");
+
+                    dataSet.SliceSpace = 2;
+                    dataSet.Colors = ChartColorTemplates.Joyful;
+                    dataSet.ValueTextColor = UIColor.Black;
+                    dataSet.XValuePosition = PieChartValuePosition.OutsideSlice;
+                    dataSet.YValuePosition = PieChartValuePosition.OutsideSlice;
+
+                    resultCell.pieChartView.Data = new PieChartData(new PieChartDataSet[] { dataSet });
                 }
 
-                var dataSet = new PieChartDataSet(dataEntries.ToArray(), "");
-                dataSet.SliceSpace = 2;
-
-                dataSet.Colors = ChartColorTemplates.Joyful;
-                dataSet.ValueTextColor = UIColor.Black;
-                dataSet.XValuePosition = PieChartValuePosition.OutsideSlice;
-                dataSet.YValuePosition = PieChartValuePosition.OutsideSlice;
-
-                resultCell.pieChartView.Data = new PieChartData(new PieChartDataSet[] { dataSet });
                 resultCell.pieChartView.AnimateWithXAxisDuration(1.4, ChartEasingOption.EaseOutBack);
                 resultCell.pieChartView.DescriptionText = string.Format("Total {0} votes", reportDataSet.totalVotes);
                 resultCell.pieChartView.Legend.Enabled = false;
+                resultCell.pieChartView.NoDataText = "No results to show";
 
                 resultCell.AddSubview(resultCell.pieChartView);
 
@@ -203,52 +208,57 @@ namespace Askker.App.iOS
 
                 resultCell.barChartView.RightAxis.Enabled = false;
 
-                var groupCount = reportDataSet.groups.Count;
-                var optionsCount = reportDataSet.labels.Count;
-
-                var dataEntriesList = new List<List<BarChartDataEntry>>();
-
-                for (int i = 0; i < optionsCount; i++)
+                if (reportDataSet.totalVotes > 0)
                 {
-                    var dataEntries = new List<BarChartDataEntry>();
+                    var groupCount = reportDataSet.groups.Count;
+                    var optionsCount = reportDataSet.labels.Count;
 
-                    for (int j = 0; j < groupCount; j++)
+                    var dataEntriesList = new List<List<BarChartDataEntry>>();
+
+                    for (int i = 0; i < optionsCount; i++)
                     {
-                        dataEntries.Add(new BarChartDataEntry(i, reportDataSet.dataSets[i][j]));
+                        var dataEntries = new List<BarChartDataEntry>();
+
+                        for (int j = 0; j < groupCount; j++)
+                        {
+                            dataEntries.Add(new BarChartDataEntry(i, reportDataSet.dataSets[i][j]));
+                        }
+
+                        dataEntriesList.Add(dataEntries);
                     }
 
-                    dataEntriesList.Add(dataEntries);
+                    var chartDataSetList = new List<BarChartDataSet>();
+
+                    for (int i = 0; i < dataEntriesList.Count; i++)
+                    {
+                        var barChartDataSet = new BarChartDataSet(dataEntriesList[i].ToArray(), reportDataSet.labels[i]);
+                        barChartDataSet.SetColor(this.chartColors[i]);
+
+                        chartDataSetList.Add(barChartDataSet);
+                    }
+
+                    var dataSets = chartDataSetList.ToArray();
+
+                    var chartData = new BarChartData(dataSets);
+
+                    var initialXValue = 0;
+
+                    var groupSpace = 0.3;
+                    var barSpace = 0.05;
+                    var barWidth = (0.7 - (0.05 * optionsCount)) / optionsCount; // (barWidth + 0.05) * optionsCount + 0.3 = 1.00 -> interval per "group"
+
+                    chartData.BarWidth = barWidth;
+                    resultCell.barChartView.XAxis.AxisMinimum = initialXValue;
+                    resultCell.barChartView.XAxis.AxisMaximum = initialXValue + chartData.GroupWidthWithGroupSpace(groupSpace, barSpace) * groupCount;
+
+                    chartData.GroupBarsFromX(initialXValue, groupSpace, barSpace);
+
+                    resultCell.barChartView.Data = chartData;
                 }
-
-                var chartDataSetList = new List<BarChartDataSet>();
-
-                for (int i = 0; i < dataEntriesList.Count; i++)
-                {
-                    var barChartDataSet = new BarChartDataSet(dataEntriesList[i].ToArray(), reportDataSet.labels[i]);
-                    barChartDataSet.SetColor(this.chartColors[i]);
-
-                    chartDataSetList.Add(barChartDataSet);
-                }
-
-                var dataSets = chartDataSetList.ToArray();
-
-                var chartData = new BarChartData(dataSets);
-
-                var initialXValue = 0;
-
-                var groupSpace = 0.3;
-                var barSpace = 0.05;
-                var barWidth = (0.7 - (0.05 * optionsCount)) / optionsCount; // (barWidth + 0.05) * optionsCount + 0.3 = 1.00 -> interval per "group"
-
-                chartData.BarWidth = barWidth;
-                resultCell.barChartView.XAxis.AxisMinimum = initialXValue;
-                resultCell.barChartView.XAxis.AxisMaximum = initialXValue + chartData.GroupWidthWithGroupSpace(groupSpace, barSpace) * groupCount;
-
-                chartData.GroupBarsFromX(initialXValue, groupSpace, barSpace);
-
-                resultCell.barChartView.Data = chartData;
+                
                 resultCell.barChartView.AnimateWithXAxisDuration(1.4, ChartEasingOption.Linear);
                 resultCell.barChartView.DescriptionText = "";
+                resultCell.barChartView.NoDataText = "No results to show";
 
                 resultCell.AddSubview(resultCell.barChartView);
 

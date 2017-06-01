@@ -219,7 +219,7 @@ namespace Askker.App.iOS
                 {
                     CredentialsService.DeleteCredentials();
 
-                    var loginController = menuViewController.Storyboard.InstantiateViewController("LoginController");
+                    var loginController = menuViewController.Storyboard.InstantiateViewController("LoginNavController");
                     if (loginController != null)
                     {
                         menuViewController.PresentViewController(loginController, true, null);
