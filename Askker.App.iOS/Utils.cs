@@ -174,10 +174,6 @@ namespace Askker.App.iOS
                                     imageView.Image = UIImage.LoadFromData(data);
                                 }
                             }
-                            else
-                            {
-                                imageView.Image = UIImage.FromBundle("Profile");
-                            }
                         });
                     }
                     catch (Exception ex)
