@@ -134,12 +134,12 @@ namespace Askker.App.iOS
             }
         }
 
-        public static void SetImageFromNSUrlSession(string profilePicture, UIImageView imageView, NSCache imageCache = null)
+        public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSCache imageCache = null)
         {
             UIImage imageFromCache = null;
+            var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath);
             var noCacheStr = "?nocache=" + String.Format("{0:yyyyMMddHHmmssffff}", DateTime.Now);
-            var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + profilePicture);
-            var fetchUrl = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + profilePicture + noCacheStr);
+            var fetchUrl = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath + noCacheStr);
 
             if (imageCache != null)
             {
@@ -175,10 +175,6 @@ namespace Askker.App.iOS
                                 {
                                     imageView.Image = UIImage.LoadFromData(data);
                                 }
-                            }
-                            else
-                            {
-                                imageView.Image = UIImage.FromBundle("Profile");
                             }
                         });
                     }
