@@ -38,7 +38,7 @@ namespace Askker.App.iOS.Resources
         {
             base.LayoutSubviews();
             imageView.Layer.CornerRadius = 22;
-            imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             imageView.Layer.MasksToBounds = true;
             imageView.UserInteractionEnabled = true;
             imageView.TranslatesAutoresizingMaskIntoConstraints = false;
