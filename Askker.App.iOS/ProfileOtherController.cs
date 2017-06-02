@@ -43,45 +43,7 @@ namespace Askker.App.iOS
                 if (userModel.profilePicturePath != null)
                 {
                     fileName = userModel.profilePicturePath;
-                    var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + userModel.profilePicturePath);
-
-                    var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-                    if (imageFromCache != null)
-                    {
-                        profileImageView.Image = imageFromCache;
-                    }
-                    else
-                    {
-                        var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                        {
-                            if (response == null)
-                            {
-                                profileImageView.Image = UIImage.FromBundle("Profile");
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    DispatchQueue.MainQueue.DispatchAsync(() =>
-                                    {
-                                        var imageToCache = UIImage.LoadFromData(data);
-
-                                        profileImageView.Image = imageToCache;
-
-                                        if (imageToCache != null)
-                                        {
-                                            imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                        }
-                                    });
-                                }
-                                catch (Exception ex)
-                                {
-                                    throw new Exception(ex.Message);
-                                }
-                            }
-                        });
-                        task.Resume();
-                    }
+                    Utils.SetImageFromNSUrlSession(fileName, profileImageView, imageCache);
                 }
 
                 relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, UserId);

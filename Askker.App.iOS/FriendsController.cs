@@ -174,30 +174,7 @@ namespace Askker.App.iOS
 
             if (userFriend.profilePicture != null)
             {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + userFriend.profilePicture);
-
-                var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                {
-                    if (response == null)
-                    {
-                        cell.profileImageView.Image = UIImage.FromBundle("Profile");
-                    }
-                    else
-                    {
-                        try
-                        {
-                            DispatchQueue.MainQueue.DispatchAsync(() =>
-                            {
-                                cell.profileImageView.Image = UIImage.LoadFromData(data);
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception(ex.Message);
-                        }
-                    }
-                });
-                task.Resume();
+                Utils.SetImageFromNSUrlSession(userFriend.profilePicture, cell.profileImageView);
             }
 
             cell.nameLabel.Text = userFriend.name;

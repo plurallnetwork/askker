@@ -1,4 +1,5 @@
-﻿using CoreGraphics;
+﻿using CoreFoundation;
+using CoreGraphics;
 using Foundation;
 using System;
 using System.Collections.Generic;
@@ -130,6 +131,61 @@ namespace Askker.App.iOS
                     profileOtherController.UserId = userId;
                     navigationController.PushViewController(profileOtherController, true);
                 }
+            }
+        }
+
+        public static void SetImageFromNSUrlSession(string profilePicture, UIImageView imageView, NSCache imageCache = null)
+        {
+            UIImage imageFromCache = null;
+            var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + profilePicture);
+
+            if (imageCache != null)
+            {
+                imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
+            }
+
+            if (imageFromCache != null)
+            {
+                imageView.Image = imageFromCache;
+            }
+            else
+            {
+                var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
+                {
+                    try
+                    {
+                        DispatchQueue.MainQueue.DispatchAsync(() =>
+                        {
+                            if (response != null && ((NSHttpUrlResponse)response).StatusCode != 403 && error == null)
+                            {
+                                if (imageCache != null)
+                                {
+                                    var imageToCache = UIImage.LoadFromData(data);
+
+                                    imageView.Image = imageToCache;
+
+                                    if (imageToCache != null)
+                                    {
+                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
+                                    }
+                                }
+                                else
+                                {
+                                    imageView.Image = UIImage.LoadFromData(data);
+                                }
+                            }
+                            else
+                            {
+                                imageView.Image = UIImage.FromBundle("Profile");
+                            }
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.HandleException(ex);
+                    }
+                });
+                task.Resume();
             }
         }
     }

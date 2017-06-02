@@ -334,45 +334,7 @@ namespace Askker.App.iOS
         {
             if (survey.profilePicture != null)
             {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + survey.profilePicture);
-
-                var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-                if (imageFromCache != null)
-                {
-                    feedCell.profileImageView.Image = imageFromCache;
-                }
-                else
-                {
-                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                    {
-                        if (response == null)
-                        {
-                            feedCell.profileImageView.Image = UIImage.FromBundle("Profile");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                DispatchQueue.MainQueue.DispatchAsync(() =>
-                                {
-                                    var imageToCache = UIImage.LoadFromData(data);
-
-                                    feedCell.profileImageView.Image = imageToCache;
-
-                                    if (imageToCache != null)
-                                    {
-                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                    }
-                                });
-                            }
-                            catch (Exception ex)
-                            {
-                                Utils.HandleException(ex);
-                            }
-                        }
-                    });
-                    task.Resume();
-                }
+                Utils.SetImageFromNSUrlSession(survey.profilePicture, feedCell.profileImageView, imageCache);
             }
 
             var attributedText = new NSMutableAttributedString(survey.userName, UIFont.BoldSystemFontOfSize(14));
@@ -853,44 +815,7 @@ namespace Askker.App.iOS
 
             if (survey.options[indexPath.Row].image != null)
             {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + survey.options[indexPath.Row].image);
-
-                var imageFromCache = (UIImage)FeedController.imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-                if (imageFromCache != null)
-                {
-                    optionCell.optionImageView.Image = imageFromCache;
-                }
-                else
-                {
-                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                    {
-                        if (response == null)
-                        {
-                            optionCell.optionImageView.Image = null;
-                        }
-                        else
-                        {
-                            try
-                            {
-                                DispatchQueue.MainQueue.DispatchAsync(() => {
-                                    var imageToCache = UIImage.LoadFromData(data);
-
-                                    optionCell.optionImageView.Image = imageToCache;
-
-                                    if (imageToCache != null)
-                                    {
-                                        FeedController.imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                    }
-                                });
-                            }
-                            catch (Exception ex)
-                            {
-                                Utils.HandleException(ex);
-                            }
-                        }
-                    });
-                    task.Resume();
-                }
+                Utils.SetImageFromNSUrlSession(survey.options[indexPath.Row].image, optionCell.optionImageView, FeedController.imageCache);
             }
 
             optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCell.alphabet[indexPath.Row] + "  ";

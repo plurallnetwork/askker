@@ -21,11 +21,10 @@ namespace Askker.App.iOS.Resources
             // Note: this .ctor should not contain any initialization logic.
         }
 
-        public void UpdateCell(string name, string text, UIImage profilePicture, UINavigationController navigationController, string id)
+        public void UpdateCell(string name, string text, UINavigationController navigationController, string id)
         {
             nameLabel.Text = name;
             commentText.Text = text;
-            imageView.Image = profilePicture;
 
             var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
             List<Object> tapProfilePictureValues = new List<Object>();
@@ -45,6 +44,11 @@ namespace Askker.App.iOS.Resources
             imageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             commentText.BackgroundColor = UIColor.White;
+        }
+
+        public UIImageView GetImageView()
+        {
+            return this.imageView;
         }
 
         [Export("TapProfilePictureSelector:")]

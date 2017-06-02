@@ -82,30 +82,7 @@ namespace Askker.App.iOS
 
             if (notifications[indexPath.Row].notificationUser.profilePicture != null)
             {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + notifications[indexPath.Row].notificationUser.profilePicture);
-
-                var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                {
-                    if (response == null)
-                    {
-                        notificationCell.profileImageView.Image = UIImage.FromBundle("Profile");
-                    }
-                    else
-                    {
-                        try
-                        {
-                            DispatchQueue.MainQueue.DispatchAsync(() =>
-                            {
-                                notificationCell.profileImageView.Image = UIImage.LoadFromData(data);
-                            });
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception(ex.Message);
-                        }
-                    }
-                });
-                task.Resume();
+                Utils.SetImageFromNSUrlSession(notifications[indexPath.Row].notificationUser.profilePicture, notificationCell.profileImageView);
             }
 
             var attributedText = new NSMutableAttributedString(notifications[indexPath.Row].notificationUser.name, UIFont.BoldSystemFontOfSize(14));

@@ -37,7 +37,6 @@ namespace Askker.App.iOS.TableControllers
         {
             // request a recycled cell to save memory
             SearchAllCustomCell cell = tableView.DequeueReusableCell(cellIdentifier) as SearchAllCustomCell;
-            UIImage image = null;  
 
             // if there are no cells to reuse, create a new one
             if (cell == null)
@@ -45,56 +44,15 @@ namespace Askker.App.iOS.TableControllers
                 cell = new SearchAllCustomCell(cellIdentifier);
             }
 
-           
-            if (string.IsNullOrEmpty(searchItems[indexPath.Row].ImageName))
-            {
-                image = UIImage.FromBundle("Profile");
-            }
-            else
-            {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + searchItems[indexPath.Row].ImageName);
-                var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-                if (imageFromCache != null)
-                {
-                    image = imageFromCache;
-                }
-                else
-                {
-                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                    {
-                        if (response == null)
-                        {
-                            image = UIImage.FromBundle("Profile");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                DispatchQueue.MainQueue.DispatchAsync(() => {
-                                    var imageToCache = UIImage.LoadFromData(data);
-                    
-                                    image = imageToCache;
+            var imageView = cell.GetImageView();
+            imageView.Image = UIImage.FromBundle("Profile");
 
-                                    if (imageToCache != null)
-                                    {
-                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                        cell.UpdateCell(tableItems[indexPath.Row].Title, image);
-                                    }
-                                });
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception(ex.Message);
-                            }
-                        }
-                    });
-                    task.Resume();
-                }
-                    
+            if (!string.IsNullOrEmpty(searchItems[indexPath.Row].ImageName))
+            {
+                Utils.SetImageFromNSUrlSession(searchItems[indexPath.Row].ImageName, imageView, imageCache);
             }
-            
 
-            cell.UpdateCell(searchItems[indexPath.Row].Title, image);
+            cell.UpdateCell(searchItems[indexPath.Row].Title);
             return cell;
         }
 

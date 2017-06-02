@@ -435,56 +435,15 @@ namespace Askker.App.iOS
         {
             var commentCell = collectionView.DequeueReusableCell(CommentViewController.commentCellId, indexPath) as CommentCell;
 
-            UIImage image = UIImage.FromBundle("Profile");
+            var imageView = commentCell.GetImageView();
+            imageView.Image = UIImage.FromBundle("Profile");
 
-            if (string.IsNullOrEmpty(comments[indexPath.Row].profilePicture))
+            if (!string.IsNullOrEmpty(comments[indexPath.Row].profilePicture))
             {
-                image = UIImage.FromBundle("Profile");
-            }
-            else
-            {
-                var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + comments[indexPath.Row].profilePicture);
-                var imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-                if (imageFromCache != null)
-                {
-                    image = imageFromCache;
-                }
-                else
-                {
-                    var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                    {
-                        if (response == null)
-                        {
-                            image = UIImage.FromBundle("Profile");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                DispatchQueue.MainQueue.DispatchAsync(() => {
-                                    var imageToCache = UIImage.LoadFromData(data);
-
-                                    image = imageToCache;
-
-                                    if (imageToCache != null)
-                                    {
-                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                        commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image, this.navigationController, comments[indexPath.Row].userId);
-                                    }
-                                });
-                            }
-                            catch (Exception ex)
-                            {
-                                throw new Exception(ex.Message);
-                            }
-                        }
-                    });
-                    task.Resume();
-                }
-
+                Utils.SetImageFromNSUrlSession(comments[indexPath.Row].profilePicture, imageView, imageCache);
             }
 
-            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, image, this.navigationController, comments[indexPath.Row].userId);
+            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, this.navigationController, comments[indexPath.Row].userId);
 
             return commentCell;
         }

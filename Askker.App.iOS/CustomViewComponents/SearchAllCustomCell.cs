@@ -21,9 +21,8 @@ namespace Askker.App.iOS.CustomViewComponents
 
         }
 
-        public void UpdateCell(string caption, UIImage image)
+        public void UpdateCell(string caption)
         {
-            imageView.Image = image;
             textLabel.Text = caption;
         }
 
@@ -37,6 +36,11 @@ namespace Askker.App.iOS.CustomViewComponents
             imageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             textLabel.Frame = new CGRect(50, 10, ContentView.Bounds.Width - 50, 25);
+        }
+
+        public UIImageView GetImageView()
+        {
+            return this.imageView;
         }
     }
 }
