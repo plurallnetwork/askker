@@ -15,21 +15,35 @@ namespace Askker.App.iOS
     public partial class SideMenuController : UIViewController
     {
         MenuViewController menuViewController;
-        
+        private NSObject updateProfilePictureObserver;
+        UIImageView profileImageView;
+
         public SideMenuController(MenuViewController menuViewController)
         {
             this.menuViewController = menuViewController;
+        }
+
+        public override void ViewDidUnload()
+        {
+            base.ViewDidUnload();
+
+            if (updateProfilePictureObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(updateProfilePictureObserver);
+            }
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
+            updateProfilePictureObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateProfilePicture"), UpdateProfilePicture);
+
             View.BackgroundColor = UIColor.FromRGB(.9f, .9f, .9f);
 
             var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
 
-            var profileImageView = new UIImageView(new RectangleF(85, 80, 90, 90));
+            profileImageView = new UIImageView(new RectangleF(85, 80, 90, 90));
             profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             profileImageView.Image = UIImage.FromBundle("Profile");
             profileImageView.Layer.CornerRadius = (profileImageView.Frame.Width / 2);
@@ -117,6 +131,14 @@ namespace Askker.App.iOS
         {
             Utils.OpenUserProfile(menuViewController.NavigationController, LoginController.userModel.id);
             NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
+        }
+
+        private void UpdateProfilePicture(NSNotification notification)
+        {
+            if (LoginController.userModel.profilePicturePath != null)
+            {
+                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView);
+            }
         }
     }
 

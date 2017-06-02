@@ -137,7 +137,9 @@ namespace Askker.App.iOS
         public static void SetImageFromNSUrlSession(string profilePicture, UIImageView imageView, NSCache imageCache = null)
         {
             UIImage imageFromCache = null;
+            var noCacheStr = "?nocache=" + String.Format("{0:yyyyMMddHHmmssffff}", DateTime.Now);
             var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + profilePicture);
+            var fetchUrl = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + profilePicture + noCacheStr);
 
             if (imageCache != null)
             {
@@ -150,7 +152,7 @@ namespace Askker.App.iOS
             }
             else
             {
-                var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
+                var task = NSUrlSession.SharedSession.CreateDataTask(fetchUrl, (data, response, error) =>
                 {
                     try
                     {

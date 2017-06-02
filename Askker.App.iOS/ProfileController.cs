@@ -144,6 +144,8 @@ namespace Askker.App.iOS
                         byte[] myByteArray = new byte[imageData.Length];
                         System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
                         await new LoginManager().Update(LoginController.tokenModel.access_token, LoginController.userModel, myByteArray, "profile-picture.jpg");
+                        
+                        NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateProfilePicture"), null);
                     }
                 }
 
@@ -293,7 +295,7 @@ namespace Askker.App.iOS
                 {
                     profileImageView.Image = originalImage;
                     fileName = "1.jpg";
-                    Update();
+                    Update();                    
                 }
             }
             else
