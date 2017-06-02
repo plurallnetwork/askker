@@ -134,10 +134,10 @@ namespace Askker.App.iOS
             }
         }
 
-        public static void SetImageFromNSUrlSession(string profilePicture, UIImageView imageView, NSCache imageCache = null)
+        public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSCache imageCache = null)
         {
             UIImage imageFromCache = null;
-            var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + profilePicture);
+            var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath);
 
             if (imageCache != null)
             {
