@@ -126,13 +126,13 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatus status)
+        public async Task UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatus relationshipStatus)
         {
             try
             {
                 FriendService friendService = new FriendService();
 
-                var response = await friendService.UpdateUserRelationshipStatus(authenticationToken, friendId, status);
+                var response = await friendService.UpdateUserRelationshipStatus(authenticationToken, friendId, relationshipStatus);
 
                 if (!response.IsSuccessStatusCode)
                 {

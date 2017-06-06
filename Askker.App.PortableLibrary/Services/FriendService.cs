@@ -64,13 +64,13 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatus status)
+        public async Task<HttpResponseMessage> UpdateUserRelationshipStatus(string authenticationToken, string friendId, RelationshipStatus relationshipStatus)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/UpdateUserRelationshipStatus/{0}/{1}", friendId, status.ToString()));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/UpdateUserRelationshipStatus/{0}/{1}", friendId, relationshipStatus.ToString()));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.PostAsync(uri, null);

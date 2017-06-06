@@ -61,7 +61,7 @@ namespace Askker.App.iOS
 
                 await new NotificationManager().SetUserNotificationsRead(LoginController.userModel.id, LoginController.tokenModel.access_token);
 
-                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUnreadNotificationsCount"), null);
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUnreadNotificationsCount"), new NSString("false"));
             }
             catch (Exception ex)
             {
