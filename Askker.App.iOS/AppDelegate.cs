@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using SDWebImage;
 using System.Net;
 using UIKit;
 
@@ -24,13 +25,16 @@ namespace Askker.App.iOS
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
 
-            string userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36";
+            string userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 8_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12D508 [FBAN/FBIOS;FBAV/27.0.0.10.12;FBBV/8291884;FBDV/iPhone7,1;FBMD/iPhone;FBSN/iPhone OS;FBSV/8.2;FBSS/3; FBCR/vodafoneIE;FBID/phone;FBLC/en_US;FBOP/5]";
 
             // set default useragent
             NSDictionary dictionary = NSDictionary.FromObjectAndKey(NSObject.FromObject(userAgent), NSObject.FromObject("UserAgent"));
             NSUserDefaults.StandardUserDefaults.RegisterDefaults(dictionary);
 
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+
+            SDWebImageManager.SharedManager.ImageCache.ClearMemory();
+            SDWebImageManager.SharedManager.ImageCache.ClearDisk();
 
             if (CredentialsService.DoCredentialsExist())
             {

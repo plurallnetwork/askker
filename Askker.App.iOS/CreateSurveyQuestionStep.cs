@@ -71,6 +71,18 @@ namespace Askker.App.iOS
                 {
                     CreateSurveyController.SurveyModel = await new FeedManager().GetSurvey(CreateSurveyController.UserId, CreateSurveyController.CreationDate, LoginController.tokenModel.access_token);
 
+                    //pre-cache image options
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                    {
+                        foreach (var option in CreateSurveyController.SurveyModel.options)
+                        {
+                            UIImage image = Utils.GetImageFromNSUrl(option.image);
+                            if(image != null)
+                            {
+                                image.Dispose();
+                            }                            
+                        }                        
+                    }
                     _questionStepView.QuestionText.Text = CreateSurveyController.SurveyModel.question.text;
                 }
 

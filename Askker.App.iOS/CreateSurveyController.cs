@@ -4,6 +4,7 @@ using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Cirrious.FluentLayouts.Touch;
+using SDWebImage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -239,12 +240,21 @@ namespace Askker.App.iOS
 
             try
             {
+                //remove option images from cache to load the feed with the correct images
+                if (SurveyModel.type == SurveyType.Image.ToString())
+                {
+                    foreach (var option in SurveyModel.options)
+                    {
+                        Utils.RemoveImageFromCache(LoginController.userModel.id + "/" + SurveyModel.creationDate + "/optionImage-" + option.id + ".jpg");
+                    }
+                }
+
                 SurveyModel.optionSelected = null;
                 await new FeedManager().SaveSurvey(SurveyModel, LoginController.tokenModel.access_token, QuestionImage, OptionImages);
 
                 var feedController = this.Storyboard.InstantiateViewController("MenuNavController");
                 if (feedController != null)
-                {
+                {                    
                     this.PresentViewController(feedController, true, null);
                     CreateSurveyController.SurveyModel = null;
                 }

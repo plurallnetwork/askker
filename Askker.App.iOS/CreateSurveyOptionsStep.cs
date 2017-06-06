@@ -4,6 +4,7 @@ using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using CoreFoundation;
 using Foundation;
+using SDWebImage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,30 +38,53 @@ namespace Askker.App.iOS
                     }
                     else
                     {
-                        var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + option.image);
-                        var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
-                        {
-                            try
-                            {
-                                DispatchQueue.MainQueue.DispatchAsync(() => {
-                                    using (NSData imageData = Utils.CompressImage(UIImage.LoadFromData(data)))
-                                    {
-                                        byte[] myByteArray = new byte[imageData.Length];
-                                        System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
-                                        tableItems.Add(new SurveyOptionTableItem(option.text, ".jpg", myByteArray));
-                                        tableSource = new SurveyOptionTableSource(tableItems, this);
-                                        _optionsStepView.OptionsTable.Source = tableSource;
-                                        _optionsStepView.OptionsTable.ReloadData();
-                                    }
-                                });
-                            }
-                            catch (Exception ex)
-                            {
-                                Utils.HandleException(ex);
-                            }
+                        //UIImageView imageView = new UIImageView();
+                        //Utils.SetImageFromNSUrlSession(option.image, imageView, this);
 
-                        });
-                        task.Resume();                        
+                        UIImage image = Utils.GetImageFromNSUrl(option.image);
+
+                        try
+                        {
+                            using (NSData imageData = Utils.CompressImage(image))
+                            {
+                                byte[] myByteArray = new byte[imageData.Length];
+                                System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
+                                tableItems.Add(new SurveyOptionTableItem(option.text, ".jpg", myByteArray));
+                                tableSource = new SurveyOptionTableSource(tableItems, this);
+                                _optionsStepView.OptionsTable.Source = tableSource;
+                                _optionsStepView.OptionsTable.ReloadData();
+                            }
+                            
+                        }
+                        catch (Exception ex)
+                        {
+                            Utils.HandleException(ex);
+                        }
+
+                        //var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + option.image);
+                        //var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
+                        //{
+                        //    try
+                        //    {
+                        //        DispatchQueue.MainQueue.DispatchAsync(() => {
+                        //            using (NSData imageData = Utils.CompressImage(UIImage.LoadFromData(data)))
+                        //            {
+                        //                byte[] myByteArray = new byte[imageData.Length];
+                        //                System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
+                        //                tableItems.Add(new SurveyOptionTableItem(option.text, ".jpg", myByteArray));
+                        //                tableSource = new SurveyOptionTableSource(tableItems, this);
+                        //                _optionsStepView.OptionsTable.Source = tableSource;
+                        //                _optionsStepView.OptionsTable.ReloadData();
+                        //            }
+                        //        });
+                        //    }
+                        //    catch (Exception ex)
+                        //    {
+                        //        Utils.HandleException(ex);
+                        //    }
+
+                        //});
+                        //task.Resume();                        
                     }                    
                 }
             }

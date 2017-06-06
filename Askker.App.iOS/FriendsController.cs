@@ -174,7 +174,7 @@ namespace Askker.App.iOS
 
             if (userFriend.profilePicture != null)
             {
-                Utils.SetImageFromNSUrlSession(userFriend.profilePicture, cell.profileImageView);
+                Utils.SetImageFromNSUrlSession(userFriend.profilePicture, cell.profileImageView, this);
             }
 
             cell.nameLabel.Text = userFriend.name;

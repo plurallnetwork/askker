@@ -55,7 +55,7 @@ namespace Askker.App.iOS
 
             if (LoginController.userModel.profilePicturePath != null)
             {
-                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView);
+                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this);
             }
 
             var name = new UILabel(new RectangleF(20, 180, 220, 20));
@@ -137,7 +137,7 @@ namespace Askker.App.iOS
         {
             if (LoginController.userModel.profilePicturePath != null)
             {
-                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView);
+                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this);
             }
         }
     }

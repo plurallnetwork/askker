@@ -4,6 +4,7 @@ using AssetsLibrary;
 using CoreFoundation;
 using CoreGraphics;
 using Foundation;
+using SDWebImage;
 using System;
 using System.Drawing;
 using System.Text.RegularExpressions;
@@ -27,6 +28,7 @@ namespace Askker.App.iOS
             imageCache.RemoveAllObjects();
 
             profileImageView.ClipsToBounds = true;
+            profileImageView.Image = null;
 
             uploadButton.TouchUpInside += btnUpload_TouchUpInside;
             nameButton.TouchUpInside += btnName_TouchUpInside;
@@ -60,8 +62,12 @@ namespace Askker.App.iOS
             if (LoginController.userModel.profilePicturePath != null)
             {
                 fileName = LoginController.userModel.profilePicturePath;
-                Utils.SetImageFromNSUrlSession(fileName, profileImageView, imageCache);
+                Utils.SetImageFromNSUrlSession(fileName, profileImageView, this);                
             }
+            else
+            {
+                profileImageView.Image = UIImage.FromBundle("Profile");
+            }       
         }
 
 
@@ -144,6 +150,8 @@ namespace Askker.App.iOS
                         byte[] myByteArray = new byte[imageData.Length];
                         System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
                         await new LoginManager().Update(LoginController.tokenModel.access_token, LoginController.userModel, myByteArray, "profile-picture.jpg");
+
+                        SDWebImageManager.SharedManager.ImageCache.StoreImage(profileImageView.Image, "https://s3-us-west-2.amazonaws.com/askker-desenv/" + LoginController.userModel.profilePicturePath);
                         
                         NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateProfilePicture"), null);
                     }

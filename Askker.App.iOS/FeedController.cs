@@ -334,7 +334,7 @@ namespace Askker.App.iOS
         {
             if (survey.profilePicture != null)
             {
-                Utils.SetImageFromNSUrlSession(survey.profilePicture, feedCell.profileImageView, imageCache);
+                Utils.SetImageFromNSUrlSession(survey.profilePicture, feedCell.profileImageView, this);
             }
 
             var attributedText = new NSMutableAttributedString(survey.userName, UIFont.BoldSystemFontOfSize(14));
@@ -815,7 +815,7 @@ namespace Askker.App.iOS
 
             if (survey.options[indexPath.Row].image != null)
             {
-                Utils.SetImageFromNSUrlSession(survey.options[indexPath.Row].image, optionCell.optionImageView, FeedController.imageCache);
+                Utils.SetImageFromNSUrlSession(survey.options[indexPath.Row].image, optionCell.optionImageView, this);
             }
 
             optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCell.alphabet[indexPath.Row] + "  ";

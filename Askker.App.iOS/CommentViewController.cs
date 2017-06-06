@@ -440,7 +440,7 @@ namespace Askker.App.iOS
 
             if (!string.IsNullOrEmpty(comments[indexPath.Row].profilePicture))
             {
-                Utils.SetImageFromNSUrlSession(comments[indexPath.Row].profilePicture, imageView, imageCache);
+                Utils.SetImageFromNSUrlSession(comments[indexPath.Row].profilePicture, imageView, this);
             }
 
             commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, this.navigationController, comments[indexPath.Row].userId);

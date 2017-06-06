@@ -43,7 +43,7 @@ namespace Askker.App.iOS.TableControllers
 
             if (!string.IsNullOrEmpty(tableItems[indexPath.Row].ImageName))
             {
-                Utils.SetImageFromNSUrlSession(tableItems[indexPath.Row].ImageName, imageView, imageCache);
+                Utils.SetImageFromNSUrlSession(tableItems[indexPath.Row].ImageName, imageView, this);
             }
 
             if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString() && CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())

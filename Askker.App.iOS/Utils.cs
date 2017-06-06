@@ -1,6 +1,7 @@
 ﻿using CoreFoundation;
 using CoreGraphics;
 using Foundation;
+using SDWebImage;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +12,8 @@ namespace Askker.App.iOS
 {
     public class Utils
     {
+        static UIActivityIndicatorView activityIndicator;
+
         public static Task<nint> ShowAlert(string title, string message, params string[] buttons)
         {
             var tcs = new TaskCompletionSource<nint>();
@@ -134,57 +137,137 @@ namespace Askker.App.iOS
             }
         }
 
-        public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSCache imageCache = null)
+        //public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSCache imageCache = null)
+        //{
+        //    UIImage imageFromCache = null;
+        //    var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath);
+        //    var noCacheStr = "?nocache=" + String.Format("{0:yyyyMMddHHmmssffff}", DateTime.Now);
+        //    var fetchUrl = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath + noCacheStr);
+
+        //    if (imageCache != null)
+        //    {
+        //        imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
+        //    }
+
+        //    if (imageFromCache != null)
+        //    {
+        //        imageView.Image = imageFromCache;
+        //    }
+        //    else
+        //    {
+        //        var task = NSUrlSession.SharedSession.CreateDataTask(fetchUrl, (data, response, error) =>
+        //        {
+        //            try
+        //            {
+        //                DispatchQueue.MainQueue.DispatchAsync(() =>
+        //                {
+        //                    if (response != null && ((NSHttpUrlResponse)response).StatusCode != 403 && error == null)
+        //                    {
+        //                        if (imageCache != null)
+        //                        {
+        //                            var imageToCache = UIImage.LoadFromData(data);
+
+        //                            imageView.Image = imageToCache;
+
+        //                            if (imageToCache != null)
+        //                            {
+        //                                imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            imageView.Image = UIImage.LoadFromData(data);
+        //                        }
+        //                    }
+        //                });
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Utils.HandleException(ex);
+        //            }
+        //        });
+        //        task.Resume();
+        //    }
+        //}
+
+        public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSObject controller)
         {
-            UIImage imageFromCache = null;
-            var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath);
-            var noCacheStr = "?nocache=" + String.Format("{0:yyyyMMddHHmmssffff}", DateTime.Now);
-            var fetchUrl = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath + noCacheStr);
-
-            if (imageCache != null)
+            try
             {
-                imageFromCache = (UIImage)imageCache.ObjectForKey(NSString.FromObject(url.AbsoluteString));
-            }
-
-            if (imageFromCache != null)
-            {
-                imageView.Image = imageFromCache;
-            }
-            else
-            {
-                var task = NSUrlSession.SharedSession.CreateDataTask(fetchUrl, (data, response, error) =>
-                {
-                    try
+                imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), UIImage.FromBundle("ImagePlaceholder"), SDWebImageOptions.DelayPlaceholder,
+                    progressBlock: (receivedSize, completedSize) =>
                     {
-                        DispatchQueue.MainQueue.DispatchAsync(() =>
+                        if (activityIndicator == null)
                         {
-                            if (response != null && ((NSHttpUrlResponse)response).StatusCode != 403 && error == null)
+                            controller.InvokeOnMainThread(() =>
                             {
-                                if (imageCache != null)
-                                {
-                                    var imageToCache = UIImage.LoadFromData(data);
-
-                                    imageView.Image = imageToCache;
-
-                                    if (imageToCache != null)
-                                    {
-                                        imageCache.SetObjectforKey(imageToCache, NSString.FromObject(url.AbsoluteString));
-                                    }
-                                }
-                                else
-                                {
-                                    imageView.Image = UIImage.LoadFromData(data);
-                                }
-                            }
-                        });
-                    }
-                    catch (Exception ex)
+                                activityIndicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
+                                imageView.AddSubview(activityIndicator);
+                                activityIndicator.Center = imageView.Center;
+                                activityIndicator.StartAnimating();
+                            });
+                        }
+                    },
+                    completedBlock: (image, error, cacheType, finished) =>
                     {
-                        Utils.HandleException(ex);
-                    }
-                });
-                task.Resume();
+                        Console.WriteLine("Image = " + image);
+                        Console.WriteLine("Error = " + error);
+                        Console.WriteLine("Cache Type = " + cacheType);
+                        Console.WriteLine("Finished = " + finished);                        
+
+                        if (activityIndicator != null)
+                        {
+                            controller.InvokeOnMainThread(() =>
+                            {
+                                activityIndicator.RemoveFromSuperview();
+                                activityIndicator = null;
+                            });
+                        }
+
+                        if(image != null)
+                        {
+                            imageView.Image = image;
+                        }
+                    });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
-    }
+
+        public static UIImage GetImageFromNSUrl(string imagePath)
+        {
+            UIImage result = null;
+            SDWebImageManager.SharedManager.Download(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), SDWebImageOptions.DelayPlaceholder,
+                progressBlock: (receivedSize, completedSize) =>
+                {
+                    //do nothing
+                },
+                completedBlock: (image, error, cacheType, finished, imageUrl) =>
+                {
+                    Console.WriteLine("Image = " + image);
+                    Console.WriteLine("Error = " + error);
+                    Console.WriteLine("Cache Type = " + cacheType);
+                    Console.WriteLine("Finished = " + finished);
+
+                    
+                    if (image != null)
+                    {
+                        result = image;
+                    }
+                }
+            );
+
+            return result;
+        }
+
+        public static void RemoveImageFromCache(string imagePath)
+        {
+            SDWebImageManager.SharedManager.ImageCache.RemoveImage("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath, true ,completion: () =>
+            {
+                Console.WriteLine("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath + " removed from cache");
+            });
+        }
+        }
 }

@@ -15,7 +15,7 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="assets/img/logo_180.png" translatesAutoresizingMaskIntoConstraints="NO" id="8">
@@ -464,7 +464,7 @@
             <objects>
                 <navigationController title="Navigation" id="277" sceneMemberID="viewController" storyboardIdentifier="LoginNavController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="279">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -484,7 +484,7 @@
                         <viewControllerLayoutGuide type="bottom" id="441"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="444">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="447">
@@ -690,7 +690,7 @@
             <objects>
                 <navigationController storyboardIdentifier="FeedNavController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1335" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1337">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </navigationBar>
@@ -707,7 +707,7 @@
             <objects>
                 <collectionViewController storyboardIdentifier="FeedController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="1342" customClass="FeedController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="1557">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1559">
@@ -742,7 +742,7 @@
             <objects>
                 <navigationController storyboardIdentifier="CreateSurveyNavController" id="1647" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1649">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -762,7 +762,7 @@
                         <viewControllerLayoutGuide type="bottom" id="1654"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1657">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -781,7 +781,7 @@
                         <viewControllerLayoutGuide type="bottom" id="2477"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2480">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -796,7 +796,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MenuNavController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3007" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3009">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -812,7 +812,7 @@
             <objects>
                 <navigationController id="2486" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="2488">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -832,53 +832,29 @@
                         <viewControllerLayoutGuide type="bottom" id="2596"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2599">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2746">
-                                <rect key="frame" x="15" y="82" width="80" height="80"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="4518"/>
-                                    <constraint firstAttribute="height" constant="80" id="4519"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <real key="value" value="40"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="4518"/>
-                                        <exclude reference="4519"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact" image="Profile">
-                                    <mask key="constraints">
-                                        <include reference="4518"/>
-                                        <include reference="4519"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2747">
                                 <rect key="frame" x="122" y="94" width="166" height="52"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="166" id="4522"/>
-                                    <constraint firstAttribute="height" constant="52" id="4523"/>
-                                </constraints>
                                 <state key="normal" title="Upload New Photo">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="4522"/>
-                                        <exclude reference="4523"/>
-                                    </mask>
-                                </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <mask key="constraints">
-                                        <include reference="4522"/>
-                                        <include reference="4523"/>
+                                        <include reference="5805"/>
+                                        <include reference="5806"/>
+                                    </mask>
+                                </variation>
+                                <constraints>
+                                    <constraint id="5805" firstAttribute="width" constant="166"/>
+                                    <constraint id="5806" firstAttribute="height" constant="52"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="5805"/>
+                                        <exclude reference="5806"/>
                                     </mask>
                                 </variation>
                             </button>
@@ -1216,13 +1192,33 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="5796" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="15" y="82" width="80" height="80"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute keyPath="layer.cornerRadius" type="number">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <constraints>
+                                    <constraint id="5801" firstAttribute="width" constant="80"/>
+                                    <constraint id="5802" firstAttribute="height" constant="80"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="5801"/>
+                                        <exclude reference="5802"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="5801"/>
+                                        <include reference="5802"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="2746" firstAttribute="leading" secondItem="2599" secondAttribute="leading" constant="15" id="4516"/>
-                            <constraint firstItem="2746" firstAttribute="top" secondItem="2599" secondAttribute="top" constant="82" id="4517"/>
-                            <constraint firstItem="2747" firstAttribute="top" secondItem="2599" secondAttribute="top" constant="94" id="4521"/>
-                            <constraint firstItem="2747" firstAttribute="leading" secondItem="2746" secondAttribute="trailing" constant="27" id="4524"/>
                             <constraint firstItem="4511" firstAttribute="top" secondItem="2595" secondAttribute="bottom" constant="125" id="4525"/>
                             <constraint firstItem="4511" firstAttribute="leading" secondItem="2599" secondAttribute="leading" constant="4" id="4526"/>
                             <constraint firstAttribute="trailing" secondItem="4511" secondAttribute="trailing" constant="3" id="4527"/>
@@ -1265,10 +1261,13 @@
                             <constraint firstItem="2768" firstAttribute="top" secondItem="4507" secondAttribute="centerY" constant="15" id="4618"/>
                             <constraint firstItem="2768" firstAttribute="leading" secondItem="2755" secondAttribute="trailing" constant="25" id="4619"/>
                             <constraint firstItem="2760" firstAttribute="leading" secondItem="2768" secondAttribute="trailing" constant="40" id="4620"/>
+                            <constraint id="5799" firstItem="5796" firstAttribute="leading" secondItem="2599" secondAttribute="leading" constant="15"/>
+                            <constraint id="5800" firstItem="5796" firstAttribute="top" secondItem="2599" secondAttribute="top" constant="82"/>
+                            <constraint id="5803" firstItem="2599" firstAttribute="trailing" secondItem="2747" secondAttribute="trailing" constant="87"/>
+                            <constraint id="5804" firstItem="2747" firstAttribute="top" secondItem="2599" secondAttribute="top" constant="94"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="2746"/>
                                 <exclude reference="2747"/>
                                 <exclude reference="2749"/>
                                 <exclude reference="2751"/>
@@ -1287,12 +1286,9 @@
                                 <exclude reference="4509"/>
                                 <exclude reference="4510"/>
                                 <exclude reference="4511"/>
+                                <exclude reference="5796"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="4516"/>
-                                <exclude reference="4517"/>
-                                <exclude reference="4521"/>
-                                <exclude reference="4524"/>
                                 <exclude reference="4525"/>
                                 <exclude reference="4526"/>
                                 <exclude reference="4527"/>
@@ -1335,11 +1331,14 @@
                                 <exclude reference="4609"/>
                                 <exclude reference="4613"/>
                                 <exclude reference="4620"/>
+                                <exclude reference="5799"/>
+                                <exclude reference="5800"/>
+                                <exclude reference="5803"/>
+                                <exclude reference="5804"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
-                                <include reference="2746"/>
                                 <include reference="2747"/>
                                 <include reference="2749"/>
                                 <include reference="2751"/>
@@ -1358,12 +1357,9 @@
                                 <include reference="4509"/>
                                 <include reference="4510"/>
                                 <include reference="4511"/>
+                                <include reference="5796"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="4516"/>
-                                <include reference="4517"/>
-                                <include reference="4521"/>
-                                <include reference="4524"/>
                                 <include reference="4525"/>
                                 <include reference="4526"/>
                                 <include reference="4527"/>
@@ -1406,6 +1402,10 @@
                                 <include reference="4609"/>
                                 <include reference="4613"/>
                                 <include reference="4620"/>
+                                <include reference="5799"/>
+                                <include reference="5800"/>
+                                <include reference="5803"/>
+                                <include reference="5804"/>
                             </mask>
                         </variation>
                     </view>
@@ -1419,9 +1419,9 @@
                         <outlet property="manButton" destination="2762" id="name-outlet-2762"/>
                         <outlet property="nameButton" destination="2756" id="name-outlet-2756"/>
                         <outlet property="nameText" destination="2765" id="name-outlet-2765"/>
-                        <outlet property="profileImageView" destination="2746" id="name-outlet-2746"/>
                         <outlet property="uploadButton" destination="2747" id="name-outlet-2747"/>
                         <outlet property="womanButton" destination="2761" id="name-outlet-2761"/>
+                        <outlet property="profileImageView" destination="5796" id="name-outlet-5796"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2600" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1433,7 +1433,7 @@
             <objects>
                 <navigationController id="3090" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3092">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1453,7 +1453,7 @@
                         <viewControllerLayoutGuide type="bottom" id="3097"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3100">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3278">
@@ -1887,7 +1887,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="FriendsController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="3314" customClass="FriendsController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3315">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -1906,7 +1906,7 @@
             <objects>
                 <navigationController id="3332" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3334">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1922,7 +1922,7 @@
             <objects>
                 <navigationController id="3489" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3491">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1942,7 +1942,7 @@
                         <viewControllerLayoutGuide type="bottom" id="3496"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3499">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1961,7 +1961,7 @@
                         <viewControllerLayoutGuide type="bottom" id="4871"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="4874">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -1976,7 +1976,7 @@
             <objects>
                 <navigationController id="4908" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4910">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -1992,7 +1992,7 @@
             <objects>
                 <navigationController id="5050" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5052">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -2012,7 +2012,7 @@
                         <viewControllerLayoutGuide type="bottom" id="5057"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="5060">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -2027,7 +2027,7 @@
             <objects>
                 <navigationController id="5172" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5174">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -2043,15 +2043,15 @@
             <objects>
                 <tableViewController storyboardIdentifier="NotificationsController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5307" customClass="NotificationsController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="5308">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="notificationCellId" id="5311">
-                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5311" id="5312">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -2071,7 +2071,7 @@
             <objects>
                 <navigationController id="5447" sceneMemberID="viewController" storyboardIdentifier="RegisterNavController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5449">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -2111,6 +2111,7 @@
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="assets/img/threelines.png" width="30" height="30"/>
         <image name="OptionCheck" width="220" height="220"/>
+        <image name="ImagePlaceholder" width="80" height="60"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

@@ -49,7 +49,7 @@ namespace Askker.App.iOS.TableControllers
 
             if (!string.IsNullOrEmpty(searchItems[indexPath.Row].ImageName))
             {
-                Utils.SetImageFromNSUrlSession(searchItems[indexPath.Row].ImageName, imageView, imageCache);
+                Utils.SetImageFromNSUrlSession(searchItems[indexPath.Row].ImageName, imageView, this);
             }
 
             cell.UpdateCell(searchItems[indexPath.Row].Title);
