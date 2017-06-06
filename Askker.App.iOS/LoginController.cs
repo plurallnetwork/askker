@@ -49,9 +49,11 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             // Perform any additional setup after loading the view, typically from a nib.
-            
 
-            
+            // Keyboard dispose when clicking outside the comment box
+            var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            g.AddTarget(() => View.EndEditing(true));
+            View.AddGestureRecognizer(g);
         }
 
         private void BtnSignUp_TouchUpInside(object sender, EventArgs e)

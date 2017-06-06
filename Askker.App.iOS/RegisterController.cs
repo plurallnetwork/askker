@@ -17,6 +17,11 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
 
+            // Keyboard dispose when clicking outside the comment box
+            var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            g.AddTarget(() => View.EndEditing(true));
+            View.AddGestureRecognizer(g);
+
             btnRegister.TouchUpInside += async (sender, e) =>
             {
                 if ("".Equals(txtName.Text))
@@ -94,9 +99,6 @@ namespace Askker.App.iOS
                     }
                 }
             };
-
-            
-        
         }
     }
 }

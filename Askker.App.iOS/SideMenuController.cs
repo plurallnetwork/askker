@@ -99,15 +99,15 @@ namespace Askker.App.iOS
             var dividerLineView3 = new UIView(new RectangleF(20, (float)filterTableView.Frame.Y + (float)filterTableView.Frame.Height + 25, 220, 0.5f));
             dividerLineView3.BackgroundColor = UIColor.Black;
 
-            var hashtagLabel = new UILabel(new RectangleF(20, (float)dividerLineView3.Frame.Y + 5, 220, 20));
-            hashtagLabel.Font = UIFont.BoldSystemFontOfSize(12.0f);
-            hashtagLabel.TextAlignment = UITextAlignment.Left;
-            hashtagLabel.TextColor = UIColor.Black;
-            hashtagLabel.Text = "Hashtag";
+            //var hashtagLabel = new UILabel(new RectangleF(20, (float)dividerLineView3.Frame.Y + 5, 220, 20));
+            //hashtagLabel.Font = UIFont.BoldSystemFontOfSize(12.0f);
+            //hashtagLabel.TextAlignment = UITextAlignment.Left;
+            //hashtagLabel.TextColor = UIColor.Black;
+            //hashtagLabel.Text = "Hashtag";
 
-            var hashtagText = new UITextField(new RectangleF(20, (float)hashtagLabel.Frame.Y + 30, 220, 40));
-            hashtagText.BorderStyle = UITextBorderStyle.Bezel;
-            hashtagText.Placeholder = "inserts tags to filter here";
+            //var hashtagText = new UITextField(new RectangleF(20, (float)hashtagLabel.Frame.Y + 30, 220, 40));
+            //hashtagText.BorderStyle = UITextBorderStyle.Bezel;
+            //hashtagText.Placeholder = "inserts tags to filter here";
 
             scrollView.Add(profileImageView);
             scrollView.Add(name);
@@ -118,8 +118,8 @@ namespace Askker.App.iOS
             scrollView.Add(filterLabel);
             scrollView.Add(filterTableView);
             scrollView.Add(dividerLineView3);
-            scrollView.Add(hashtagLabel);
-            scrollView.Add(hashtagText);
+            //scrollView.Add(hashtagLabel);
+            //scrollView.Add(hashtagText);
 
             scrollView.ContentSize = new CGSize(View.Frame.Width, 1000);
 
