@@ -1946,7 +1946,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Search" id="4090"/>
+                    <navigationItem key="navigationItem" title="Find Friends" id="4090"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3500" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

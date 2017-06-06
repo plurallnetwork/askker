@@ -141,8 +141,6 @@ namespace Askker.App.iOS
             this.badge.Layer.CornerRadius = badgeSize / 2;
             this.badge.Layer.MasksToBounds = true;
 
-            GetUserUnreadNotificationsCount(composeButton, badge);
-
             return new UIBarButtonItem(composeButton);
         }
 
@@ -163,7 +161,15 @@ namespace Askker.App.iOS
             if (unreadNotifications > 0)
             {
                 badge.Text = this.unreadNotifications.ToString();
-                composeButton.AddSubview(badge);
+
+                if (!badge.IsDescendantOfView(composeButton))
+                {
+                    composeButton.AddSubview(badge);
+                }
+            }
+            else
+            {
+                badge.RemoveFromSuperview();
             }
         }
 
@@ -171,8 +177,14 @@ namespace Askker.App.iOS
         {
             if (badge != null)
             {
-                badge.RemoveFromSuperview();
-
+                if (notification != null && notification.Object.ToString() == "true")
+                {
+                    GetUserUnreadNotificationsCount((UIButton)this.NavigationItem.RightBarButtonItems[0].CustomView, badge);
+                }
+                else
+                {
+                    badge.RemoveFromSuperview();
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ using CoreFoundation;
 using Foundation;
 using System;
 using UIKit;
+using System.Collections.Generic;
 
 namespace Askker.App.iOS
 {
@@ -13,7 +14,8 @@ namespace Askker.App.iOS
         string fileName;
         public static NSCache imageCache = new NSCache();
 
-        public string UserId { get; set; }
+        public string friendUserId { get; set; }
+        public UserModel friendUserModel { get; set; }
 
         public RelationshipStatus relationshipStatus { get; set; }
 
@@ -28,25 +30,26 @@ namespace Askker.App.iOS
 
             try
             {
+                btnRelationship.SetTitle("", UIControlState.Normal);
                 profileImageView.ClipsToBounds = true;
 
-                UserModel userModel = await new LoginManager().GetUserById(LoginController.tokenModel.access_token, UserId);
+                friendUserModel = await new LoginManager().GetUserById(LoginController.tokenModel.access_token, friendUserId);
 
-                nameText.Text = userModel.name;
-                emailText.Text = userModel.userName;
-                ageText.Text = userModel.age.ToString();
-                if ("male".Equals(userModel.gender) || "female".Equals(userModel.gender))
+                nameText.Text = friendUserModel.name;
+                emailText.Text = friendUserModel.userName;
+                ageText.Text = friendUserModel.age.ToString();
+                if ("male".Equals(friendUserModel.gender) || "female".Equals(friendUserModel.gender))
                 {
-                    genderText.Text = userModel.gender;
+                    genderText.Text = friendUserModel.gender;
                 }
 
-                if (userModel.profilePicturePath != null)
+                if (friendUserModel.profilePicturePath != null)
                 {
-                    fileName = userModel.profilePicturePath;
+                    fileName = friendUserModel.profilePicturePath;
                     Utils.SetImageFromNSUrlSession(fileName, profileImageView, this);
                 }
 
-                relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, UserId);
+                relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId);
 
                 LoadRelationshipButton();
             }
@@ -66,7 +69,10 @@ namespace Askker.App.iOS
                 {
                     relationshipStatus = RelationshipStatus.PendingFriendApproval;
 
-                    await new FriendManager().AddFriend(LoginController.tokenModel.access_token, UserId);
+                    var userOwnerAndFriend = new List<UserModel>();
+                    userOwnerAndFriend.Add(LoginController.userModel);
+                    userOwnerAndFriend.Add(friendUserModel);
+                    await new FriendManager().AddFriend(LoginController.tokenModel.access_token, friendUserId);
                 }
                 else
                 {
@@ -79,7 +85,7 @@ namespace Askker.App.iOS
                             relationshipStatus = RelationshipStatus.Friend;
                             break;
                         case RelationshipStatus.Unfriended:
-                            relationshipStatus = RelationshipStatus.Friend;
+                            relationshipStatus = RelationshipStatus.PendingFriendApproval;
                             break;
                         case RelationshipStatus.Friend:
                             relationshipStatus = RelationshipStatus.Unfriended;
@@ -89,7 +95,7 @@ namespace Askker.App.iOS
                             break;
                     }
 
-                    await new FriendManager().UpdateUserRelationshipStatus(LoginController.tokenModel.access_token, UserId, relationshipStatus);
+                    await new FriendManager().UpdateUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId, relationshipStatus);
                 }
 
                 LoadRelationshipButton();

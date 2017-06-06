@@ -190,6 +190,8 @@ namespace Askker.App.iOS
             refreshControl.EndRefreshing();
             feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
             feedCollectionView.ReloadData();
+
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUnreadNotificationsCount"), new NSString("true"));
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)

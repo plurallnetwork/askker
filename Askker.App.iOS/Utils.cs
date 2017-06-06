@@ -131,7 +131,7 @@ namespace Askker.App.iOS
                 var profileOtherController = Storyboard.InstantiateViewController("ProfileOtherController") as ProfileOtherController;
                 if (profileOtherController != null)
                 {
-                    profileOtherController.UserId = userId;
+                    profileOtherController.friendUserId = userId;
                     navigationController.PushViewController(profileOtherController, true);
                 }
             }
