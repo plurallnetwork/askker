@@ -192,9 +192,15 @@ namespace Askker.App.iOS
 
         public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSObject controller)
         {
+            UIImage placeholder = UIImage.FromBundle("ImagePlaceholder");
             try
             {
-                imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), UIImage.FromBundle("ImagePlaceholder"), SDWebImageOptions.DelayPlaceholder,
+                if(imagePath != null && imagePath.Contains("profile-picture"))
+                {
+                    placeholder = UIImage.FromBundle("Profile");
+                }
+
+                imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), placeholder, SDWebImageOptions.DelayPlaceholder,
                     progressBlock: (receivedSize, completedSize) =>
                     {
                         if (activityIndicator == null)
