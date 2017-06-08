@@ -115,7 +115,7 @@ namespace Askker.App.iOS
 
                     this.survey.optionSelected = null;
                     this.survey.totalVotes = 0;
-                    surveyCell.totalVotesLabel.Text = "0 Votes";
+                    surveyCell.totalVotesLabel.SetTitle("0 Votes", UIControlState.Normal);
                     if (this.survey.type == SurveyType.Text.ToString())
                     {
                         surveyCell.optionsTableView.ReloadData();
@@ -458,6 +458,20 @@ namespace Askker.App.iOS
             moreValues.Add(this);
             feedCell.moreButton.Params = moreValues;
 
+            feedCell.commentsLabel.AddTarget(this, new Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> commentLabelValues = new List<Object>();
+            commentLabelValues.Add(survey);
+            commentLabelValues.Add(indexPathRow);
+            commentLabelValues.Add(this.NavigationController);
+            feedCell.commentsLabel.Params = commentLabelValues;
+
+            feedCell.totalVotesLabel.AddTarget(this, new Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> resultVotesValues = new List<Object>();
+            resultVotesValues.Add(survey);
+            resultVotesValues.Add(indexPathRow);
+            resultVotesValues.Add(this.NavigationController);
+            feedCell.totalVotesLabel.Params = resultVotesValues;
+
             var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
             List<Object> tapProfilePictureValues = new List<Object>();
             tapProfilePictureValues.Add(this.NavigationController);
@@ -549,8 +563,8 @@ namespace Askker.App.iOS
         public UIOptionsCollectionView optionsCollectionView { get; set; }
         public OptionsCollectionViewSource optionsCollectionViewSource { get; set; }
         public OptionsCollectionViewDelegate optionsCollectionViewDelegate { get; set; }
-        public UILabel totalVotesLabel { get; set; }
-        public UILabel commentsLabel { get; set; }
+        public UIFeedButton totalVotesLabel { get; set; }
+        public UIFeedButton commentsLabel { get; set; }
         public UIView dividerLineView2 { get; set; }
         public UIFeedButton commentButton { get; set; }
         public UIFeedButton resultButton { get; set; }
@@ -609,17 +623,19 @@ namespace Askker.App.iOS
 
             optionsCollectionViewDelegate = new OptionsCollectionViewDelegate();
 
-            totalVotesLabel = new UILabel();
+            totalVotesLabel = new UIFeedButton();
             totalVotesLabel.Font = UIFont.SystemFontOfSize(12);
-            totalVotesLabel.TextAlignment = UITextAlignment.Left;
-            totalVotesLabel.TextColor = UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"));
+            totalVotesLabel.HorizontalAlignment = UIControlContentHorizontalAlignment.Left;
+            totalVotesLabel.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1")), UIControlState.Normal);
             totalVotesLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            totalVotesLabel.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
 
-            commentsLabel = new UILabel();
+            commentsLabel = new UIFeedButton();
             commentsLabel.Font = UIFont.SystemFontOfSize(12);
-            commentsLabel.TextAlignment = UITextAlignment.Right;
-            commentsLabel.TextColor = UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"));
+            commentsLabel.HorizontalAlignment = UIControlContentHorizontalAlignment.Right;
+            commentsLabel.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1")), UIControlState.Normal);
             commentsLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            commentsLabel.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
 
             dividerLineView2 = new UIView();
             dividerLineView2.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
@@ -676,11 +692,11 @@ namespace Askker.App.iOS
         {
             if (totalVotes == 1)
             {
-                this.totalVotesLabel.Text = "1 Vote";
+                this.totalVotesLabel.SetTitle("1 Vote", UIControlState.Normal);
             }
             else
             {
-                this.totalVotesLabel.Text = Common.FormatNumberAbbreviation(totalVotes) + " Votes";
+                this.totalVotesLabel.SetTitle(Common.FormatNumberAbbreviation(totalVotes) + " Votes", UIControlState.Normal);
             }
         }
 
@@ -688,11 +704,11 @@ namespace Askker.App.iOS
         {
             if (totalComments == 1)
             {
-                this.commentsLabel.Text = "1 Comment";
+                this.commentsLabel.SetTitle("1 Comment", UIControlState.Normal);
             }
             else
             {
-                this.commentsLabel.Text = Common.FormatNumberAbbreviation(totalComments) + " Comments";
+                this.commentsLabel.SetTitle(Common.FormatNumberAbbreviation(totalComments) + " Comments", UIControlState.Normal);
             }
         }
     }

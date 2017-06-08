@@ -198,6 +198,7 @@ namespace Askker.App.iOS
         {
             base.ViewDidAppear(animated);
             AddObservers();
+            commentArea.CommentText.BecomeFirstResponder();
         }
 
         public async void fetchSurveyComments(bool scrollToLastItem)
@@ -222,6 +223,9 @@ namespace Askker.App.iOS
 
                 feedCell.commentButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
                 feedCell.commentButton.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
+
+                feedCell.commentsLabel.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                feedCell.commentsLabel.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
 
                 if (feedController.NavigationController == null)
                 {
@@ -263,6 +267,7 @@ namespace Askker.App.iOS
         private void CommentSelector(UIFeedButton button)
         {
             commentArea.CommentText.BecomeFirstResponder();
+            ScrollToBottom(true);
         }
 
         private void KeyBoardUpNotification(NSNotification notification)

@@ -87,6 +87,8 @@ namespace Askker.App.iOS
 
                 feedCell.resultButton.Hidden = true;
 
+                feedCell.totalVotesLabel.RemoveTarget(null, null, UIControlEvent.AllEvents);
+
                 if (feedController.NavigationController == null)
                 {
                     feedCell.commentButton.Params[2] = this.NavigationController;
