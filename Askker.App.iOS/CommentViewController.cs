@@ -9,6 +9,7 @@ using CoreGraphics;
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -113,56 +114,75 @@ namespace Askker.App.iOS
             View.AddGestureRecognizer(g);
         }
 
-        private async void CommentButton_TouchUpInside(object sender, EventArgs e)
+        private void CommentButton_TouchUpInside(object sender, EventArgs e)
         {
-            SurveyCommentModel model = new SurveyCommentModel();
-            model.text = commentArea.CommentText.Text;
-            model.surveyId = survey.userId + survey.creationDate;
-            model.profilePicture = LoginController.userModel.profilePicturePath;
-            model.userId = LoginController.userModel.id;
-            model.userName = LoginController.userModel.name;
+            SurveyCommentModel surveyCommentModel = new SurveyCommentModel();
+            surveyCommentModel.text = commentArea.CommentText.Text;
+            surveyCommentModel.surveyId = survey.userId + survey.creationDate;
+            surveyCommentModel.profilePicture = LoginController.userModel.profilePicturePath;
+            surveyCommentModel.userId = LoginController.userModel.id;
+            surveyCommentModel.userName = LoginController.userModel.name;
 
-			survey.totalComments += 1;
-			feedCell.updateTotalComments(survey.totalComments);
+            comments.Add(surveyCommentModel);
+            var indexes = new NSIndexPath[] { NSIndexPath.FromItemSection(comments.IndexOf(comments.Last()), 0) };
+            createComment(surveyCommentModel, indexes);
 
-			try
+            feed.InsertItems(indexes);
+            feed.ScrollToItem(indexes.First(), UICollectionViewScrollPosition.Bottom, true);
+
+            commentArea.CommentText.Text = null;
+            commentArea.CommentButton.Enabled = false;
+            View.EndEditing(true);
+            ScrollTheView(false);
+        }
+
+        private async void createComment(SurveyCommentModel surveyCommentModel, NSIndexPath[] indexes)
+        {
+            try
             {
-                await new CommentManager().CreateSurveyComment(model, LoginController.tokenModel.access_token);
+                survey.totalComments += 1;
+                feedCell.updateTotalComments(survey.totalComments);
 
-				if (LoginController.userModel.id != survey.userId)
-            	{
-	                UserNotificationModel userNotificationModel = new UserNotificationModel();
-	                userNotificationModel.notificationDate = "";
-	                userNotificationModel.userId = survey.userId;
-	                userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
-	                userNotificationModel.type = UserNotificationType.SurveyComment.ToString();
+                surveyCommentModel.commentDate = (await new CommentManager().CreateSurveyComment(surveyCommentModel, LoginController.tokenModel.access_token)).commentDate;
 
-	                if (survey.question.text.Length > 25)
-	                {
-	                    userNotificationModel.text = "commented on \"" + survey.question.text.Substring(0, 25) + "...\"";
-	                }
-	                else
-	                {
-	                    userNotificationModel.text = "commented on \"" + survey.question.text + "\"";
-	                }
+                try
+                {
+                    if (LoginController.userModel.id != survey.userId)
+                    {
+                        UserNotificationModel userNotificationModel = new UserNotificationModel();
+                        userNotificationModel.notificationDate = "";
+                        userNotificationModel.userId = survey.userId;
+                        userNotificationModel.notificationUser = new UserFriendModel(LoginController.userModel.id, LoginController.userModel.name, LoginController.userModel.profilePicturePath);
+                        userNotificationModel.type = UserNotificationType.SurveyComment.ToString();
 
-	                userNotificationModel.link = model.surveyId + ";" + model.commentDate;
-	                userNotificationModel.isDismissed = 0;
-                    userNotificationModel.isRead = 0;
+                        if (survey.question.text.Length > 25)
+                        {
+                            userNotificationModel.text = "commented on \"" + survey.question.text.Substring(0, 25) + "...\"";
+                        }
+                        else
+                        {
+                            userNotificationModel.text = "commented on \"" + survey.question.text + "\"";
+                        }
 
-                    await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
-            	}
+                        userNotificationModel.link = surveyCommentModel.surveyId + ";" + surveyCommentModel.commentDate;
+                        userNotificationModel.isDismissed = 0;
+                        userNotificationModel.isRead = 0;
 
-                fetchSurveyComments(true);
-                commentArea.CommentText.Text = null;
-                commentArea.CommentButton.Enabled = false;
-                View.EndEditing(true);
-                ScrollTheView(false);
+                        await new NotificationManager().SetUserNotification(userNotificationModel, LoginController.tokenModel.access_token);
+                    }
+                }
+                catch
+                {
+                    return;
+                }
             }
             catch (Exception ex)
             {
                 survey.totalComments -= 1;
                 feedCell.updateTotalComments(survey.totalComments);
+
+                comments.RemoveAt(indexes.First().Row);
+                feed.DeleteItems(indexes);
 
                 Utils.HandleException(ex);
             }
