@@ -9,6 +9,7 @@ using CoreFoundation;
 using Askker.App.PortableLibrary.Util;
 using Askker.App.PortableLibrary.Enums;
 using ObjCRuntime;
+using BigTed;
 
 namespace Askker.App.iOS
 {
@@ -20,7 +21,6 @@ namespace Askker.App.iOS
         public bool filterMine { get; set; }
         public bool filterForMe { get; set; }
         public bool filterFinished { get; set; }
-        public UIActivityIndicatorView indicator;
         public UIRefreshControl refreshControl;
         public static NSString feedCellId = new NSString("feedCell");
         public SurveyModel survey { get; set; }
@@ -28,11 +28,7 @@ namespace Askker.App.iOS
         public UIViewController viewController { get; set; }
 
         public FeedController (IntPtr handle) : base (handle)
-        {
-            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
-            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
-            indicator.Center = this.View.Center;
-            Add(indicator);
+        {            
         }
 
         public override void ViewDidLoad()
@@ -63,7 +59,7 @@ namespace Askker.App.iOS
         {
             base.ViewWillAppear(animated);
 
-            indicator.StartAnimating();
+            BTProgressHUD.Show("Refreshing feed...", -1, ProgressHUD.MaskType.Clear);
             fetchSurveys(filterMine, filterForMe, filterFinished);
         }
 
@@ -76,6 +72,7 @@ namespace Askker.App.iOS
             {
                 if (button == 0)
                 {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
                     survey.finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     var tempOptionSelected = survey.optionSelected;
                     survey.optionSelected = null;
@@ -95,9 +92,11 @@ namespace Askker.App.iOS
 
                 MenuViewController.feedMenu.Hidden = true;
                 MenuViewController.sidebarController.View.Alpha = 1f;
+                BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
             {
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
         }
@@ -111,6 +110,7 @@ namespace Askker.App.iOS
             {
                 if (button == 0)
                 {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
                     await new FeedManager().CleanVotes(this.survey.userId + this.survey.creationDate, LoginController.tokenModel.access_token);
 
                     this.survey.optionSelected = null;
@@ -128,9 +128,11 @@ namespace Askker.App.iOS
 
                 MenuViewController.feedMenu.Hidden = true;
                 MenuViewController.sidebarController.View.Alpha = 1f;
+                BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
             {
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
         }
@@ -138,10 +140,12 @@ namespace Askker.App.iOS
         [Export("EditSelector:")]
         private async void EditSelector(UIFeedButton but)
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             try
             {
                 if (survey.totalVotes > 0)
                 {
+                    BTProgressHUD.Dismiss();
                     nint optionButton = await Utils.ShowAlert("Edit", "The survey have votes. Please clean the votes to edit the survey.", "OK");
                 }
                 else
@@ -163,9 +167,11 @@ namespace Askker.App.iOS
 
                 MenuViewController.feedMenu.Hidden = true;
                 MenuViewController.sidebarController.View.Alpha = 1f;
+                BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
             {
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
         }
@@ -186,7 +192,7 @@ namespace Askker.App.iOS
                 Utils.HandleException(ex);
             }
 
-            indicator.StopAnimating();
+            BTProgressHUD.Dismiss();
             refreshControl.EndRefreshing();
             feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
             feedCollectionView.ReloadData();

@@ -4,6 +4,7 @@ using Askker.App.PortableLibrary.Models;
 using System;
 using UIKit;
 using WebKit;
+using BigTed;
 
 namespace Askker.App.iOS
 {
@@ -11,7 +12,6 @@ namespace Askker.App.iOS
     {
         public static TokenModel tokenModel;
         public static UserModel userModel;
-        public UIActivityIndicatorView indicator;
         WKWebView wkwebview;
 
         public LoginManager loginManager;
@@ -19,11 +19,6 @@ namespace Askker.App.iOS
         public LoginController (IntPtr handle) : base (handle)
         {
             loginManager = new LoginManager();
-
-            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
-            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
-            indicator.Center = this.View.Center;
-            Add(indicator);
         }
 
         public override void ViewDidAppear(bool animated)
@@ -108,6 +103,8 @@ namespace Askker.App.iOS
             {
                 this.PresentViewController(menuController, true, null);
             }
+
+            BTProgressHUD.Dismiss();
         }
 
         //public async System.Threading.Tasks.Task<UserModel> GetUser(string accessToken)
@@ -117,8 +114,11 @@ namespace Askker.App.iOS
 
         async partial void btnEnter_TouchUpInside(UIKit.UIButton sender)
         {
+            BTProgressHUD.Show("Checking your credentials...",-1,ProgressHUD.MaskType.Clear);
+
             if (string.Empty.Equals(txtUsername.Text))
             {
+                BTProgressHUD.Dismiss();
                 UIAlertView alert = new UIAlertView()
                 {
                     Title = "E-mail",
@@ -129,6 +129,7 @@ namespace Askker.App.iOS
             }
             else if (string.Empty.Equals(txtPassword.Text))
             {
+                BTProgressHUD.Dismiss();
                 var alert = UIAlertController.Create("Password", "Please fill in the Password", UIAlertControllerStyle.Alert);
                 alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                 PresentViewController(alert, true, null);
@@ -170,6 +171,8 @@ namespace Askker.App.iOS
                     {
                         Utils.HandleException(ex);
                     }
+
+                    BTProgressHUD.Dismiss();
                 }
             }
         }
@@ -223,7 +226,7 @@ namespace Askker.App.iOS
                     this.NavigationItem.SetLeftBarButtonItem(null, true);
                     NavigationController.SetNavigationBarHidden(true, true);
                     wkwebview.RemoveFromSuperview();
-                    indicator.StopAnimating();
+                    BTProgressHUD.Dismiss(); 
                 })
             , true);
 
@@ -292,7 +295,7 @@ namespace Askker.App.iOS
                 {
                     webView.LoadRequest(new NSUrlRequest(new Uri("about:blank")));
 
-                    indicator.StartAnimating();
+                    BTProgressHUD.Show("Checking your credentials...", -1, ProgressHUD.MaskType.Clear);
 
                     string accessToken = url.Split('#')[1].Split('=')[1].Split('&')[0];
                     string tokenType = url.Split('=')[2].Split('&')[0];
@@ -326,14 +329,13 @@ namespace Askker.App.iOS
                     this.NavigationItem.SetLeftBarButtonItem(null, true);
                     NavigationController.SetNavigationBarHidden(true, true);
                     wkwebview.RemoveFromSuperview();
-                    indicator.StopAnimating();
+                    BTProgressHUD.Dismiss();
                 }
             }
             catch (Exception ex)
             {
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
-
-                indicator.StopAnimating();
             }
         }
     }

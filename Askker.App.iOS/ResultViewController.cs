@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UIKit;
 using ObjCRuntime;
+using BigTed;
 
 namespace Askker.App.iOS
 {
@@ -17,8 +18,7 @@ namespace Askker.App.iOS
         public UICollectionView feed { get; set; }
         public FeedCollectionViewCell feedCell { get; set; }
         public FeedController feedController { get; set; }
-        public UIActivityIndicatorView indicator;
-
+        
         public List<ReportType> reports { get; set; }
 
         public SurveyModel survey { get; set; }
@@ -30,11 +30,7 @@ namespace Askker.App.iOS
         public static NSString resultCellId = new NSString("resultCellId");
 
         public ResultViewController (IntPtr handle) : base (handle)
-        {
-            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
-            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
-            indicator.Center = this.View.Center;
-            Add(indicator);
+        {           
         }
 
         public override void ViewDidLoad()
@@ -61,7 +57,7 @@ namespace Askker.App.iOS
 
         public override void ViewWillAppear(bool animated)
         {
-            indicator.StartAnimating();
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             fetchSurveyDetail();
         }
 
@@ -98,7 +94,7 @@ namespace Askker.App.iOS
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
 
-                indicator.StopAnimating();
+                BTProgressHUD.Dismiss();
 
                 feed.Source = new ResultsCollectionViewSource(reports, reportsDatasets, feedCell);
                 feed.Delegate = new ResultsCollectionViewDelegate((float) feedCell.Frame.Height);
@@ -106,7 +102,7 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
-                indicator.StopAnimating();
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
         }
