@@ -1,4 +1,5 @@
-﻿using CoreFoundation;
+﻿using BigTed;
+using CoreFoundation;
 using CoreGraphics;
 using Foundation;
 using SDWebImage;
@@ -92,26 +93,34 @@ namespace Askker.App.iOS
                     }
                 }
 
-                var alert = new UIAlertView
-                {
-                    Title = "Session expired",
-                    Message = "Your session has expired. Please login again."
-                };
+                //var alert = new UIAlertView
+                //{
+                //    Title = "Session expired",
+                //    Message = "Your session has expired. Please login again."
+                //};
 
-                alert.AddButton("OK");
-                alert.Show();
+                //alert.AddButton("OK");
+                //alert.Show();
+
+                ShowToast("Your session has expired. Please login again.", 3000);                
             }
             else
             {
-                var alert = new UIAlertView
-                {
-                    Title = "Something went wrong",
-                    Message = ex.Message
-                };
+                //var alert = new UIAlertView
+                //{
+                //    Title = "Something went wrong",
+                //    Message = ex.Message
+                //};
 
-                alert.AddButton("OK");
-                alert.Show();
+                //alert.AddButton("OK");
+                //alert.Show();
+                ShowToast(ex.Message, 3000);                
             }
+        }
+
+        public static void ShowToast(string msg, double timeout)
+        {
+            BTProgressHUD.ShowToast(msg, showToastCentered: false, timeoutMs: timeout);            
         }
 
         public static void OpenUserProfile(UINavigationController navigationController, string userId)
@@ -230,7 +239,12 @@ namespace Askker.App.iOS
                             });
                         }
 
-                        if(image != null)
+                        if (error != null && error.ToString().Contains("1100"))
+                        {
+                            imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), placeholder, SDWebImageOptions.RetryFailed);
+                        }
+
+                        if (image != null)
                         {
                             imageView.Image = image;
                         }
@@ -257,8 +271,28 @@ namespace Askker.App.iOS
                     Console.WriteLine("Cache Type = " + cacheType);
                     Console.WriteLine("Finished = " + finished);
 
+                    if(error != null && error.ToString().Contains("1100"))
+                    {
+                        SDWebImageManager.SharedManager.Download(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), SDWebImageOptions.RetryFailed,
+                            progressBlock: (receivedSize, completedSize) =>
+                            {
+                                //do nothing
+                            },
+                            completedBlock: (image1, error1, cacheType1, finished1, imageUrl1) =>
+                            {
+                                Console.WriteLine("Image1 = " + image);
+                                Console.WriteLine("Error1 = " + error);
+                                Console.WriteLine("Cache Type1 = " + cacheType);
+                                Console.WriteLine("Finished1 = " + finished);
+
+                                if (image1 != null)
+                                {
+                                    result = image1;
+                                }
+                            });
+                    }
                     
-                    if (image != null)
+                    if (image != null && result == null)
                     {
                         result = image;
                     }

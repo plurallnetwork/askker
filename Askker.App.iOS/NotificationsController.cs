@@ -8,6 +8,7 @@ using System.Linq;
 using CoreFoundation;
 using CoreGraphics;
 using Askker.App.PortableLibrary.Enums;
+using BigTed;
 
 namespace Askker.App.iOS
 {
@@ -16,15 +17,10 @@ namespace Askker.App.iOS
         public static NSString notificationCellId = new NSString("notificationCellId");
 
         List<UserNotificationModel> notifications { get; set; }
-        public UIActivityIndicatorView indicator;
         public UIRefreshControl refreshControl;
 
         public NotificationsController (IntPtr handle) : base (handle)
-        {
-            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
-            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
-            indicator.Center = this.View.Center;
-            Add(indicator);
+        {        
         }
 
         public override void ViewDidLoad()
@@ -45,7 +41,7 @@ namespace Askker.App.iOS
 
             TableView.Add(refreshControl);
 
-            indicator.StartAnimating();
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             fetchNotifications();
         }
 
@@ -55,7 +51,7 @@ namespace Askker.App.iOS
             {
                 notifications = (await new NotificationManager().GetUserNotifications(LoginController.userModel.id, LoginController.tokenModel.access_token)).OrderByDescending(q => q.notificationDate).ToList();
 
-                indicator.StopAnimating();
+                BTProgressHUD.Dismiss();
                 refreshControl.EndRefreshing();
                 TableView.ReloadData();
 
@@ -65,7 +61,7 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
-                indicator.StopAnimating();
+                BTProgressHUD.Dismiss();
                 refreshControl.EndRefreshing();
                 Utils.HandleException(ex);
             }

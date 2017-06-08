@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using BigTed;
+using Foundation;
 using SDWebImage;
 using System.Net;
 using UIKit;
@@ -48,6 +49,12 @@ namespace Askker.App.iOS
                 }
             }
 
+            //Loading View config
+            ProgressHUD.Shared.HudBackgroundColour = UIColor.FromWhiteAlpha(0.0f, 0.8f);
+            ProgressHUD.Shared.HudForegroundColor = UIColor.White;
+            ProgressHUD.Shared.Ring.BackgroundColor = UIColor.FromWhiteAlpha(0.0f, 0.8f);
+            ProgressHUD.Shared.Ring.Color = UIColor.White;
+            
             return true;
         }
 

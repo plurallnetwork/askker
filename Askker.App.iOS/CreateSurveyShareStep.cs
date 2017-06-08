@@ -3,6 +3,7 @@ using Askker.App.iOS.TableControllers;
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
+using BigTed;
 using Foundation;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace Askker.App.iOS
 
         public override async void ViewDidLoad()
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             _shareStepView = ShareStepView.Create();
             View.AddSubview(_shareStepView);
 
@@ -80,6 +82,7 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
 
@@ -105,6 +108,7 @@ namespace Askker.App.iOS
                 CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Private.ToString();
 
             };
+            BTProgressHUD.Dismiss();
         }
 
         public void publicButtonLogic()

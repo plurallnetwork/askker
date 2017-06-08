@@ -3,6 +3,7 @@ using Askker.App.iOS.HorizontalSwipe;
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
+using BigTed;
 using Cirrious.FluentLayouts.Touch;
 using Foundation;
 using System;
@@ -64,6 +65,7 @@ namespace Askker.App.iOS
         public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
 
             try
             {
@@ -87,9 +89,11 @@ namespace Askker.App.iOS
                 }
 
                 StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
+                BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
             {
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
         }

@@ -3,6 +3,7 @@ using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Util;
+using BigTed;
 using CoreFoundation;
 using CoreGraphics;
 using Foundation;
@@ -42,14 +43,8 @@ namespace Askker.App.iOS
         //Variables used to resize the comment textView
         private UIView activeviewarea;         // CommentArea
 
-        public UIActivityIndicatorView indicator;
-
         public CommentViewController (IntPtr handle) : base (handle)
-        {
-            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
-            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
-            indicator.Center = this.View.Center;
-            Add(indicator);
+        {            
         }
 
         public override void ViewDidLoad()
@@ -195,7 +190,7 @@ namespace Askker.App.iOS
 
         public override void ViewWillAppear(bool animated)
         {
-            indicator.StartAnimating();
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             fetchSurveyComments(false);
         }
 
@@ -235,7 +230,7 @@ namespace Askker.App.iOS
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
 
-                indicator.StopAnimating();
+                BTProgressHUD.Dismiss();
 
                 feed.Source = new CommentsCollectionViewSource(comments, feedCell, this.NavigationController);
                 feed.Delegate = new CommentsCollectionViewDelegate((float) feedCell.Frame.Height);
@@ -259,7 +254,7 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
-                indicator.StopAnimating();
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
         }

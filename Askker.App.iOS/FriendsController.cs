@@ -1,5 +1,6 @@
 ﻿using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Models;
+using BigTed;
 using CoreFoundation;
 using CoreGraphics;
 using Foundation;
@@ -13,19 +14,14 @@ namespace Askker.App.iOS
     public partial class FriendsController : BaseTableViewController
     {
         public List<UserFriendModel> userFriends { get; set; }
-        public UIActivityIndicatorView indicator;
-
+        
         ResultsTableController resultsTableController;
         UISearchController searchController;
         bool searchControllerWasActive;
         bool searchControllerSearchFieldWasFirstResponder;
 
         public FriendsController (IntPtr handle) : base (handle)
-        {
-            indicator = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
-            indicator.Frame = new CoreGraphics.CGRect(0.0, 0.0, 80.0, 80.0);
-            indicator.Center = this.View.Center;
-            Add(indicator);
+        {        
         }
 
         public override void ViewDidLoad()
@@ -67,7 +63,7 @@ namespace Askker.App.iOS
                 }
             }
 
-            indicator.StartAnimating();
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             fetchFriends();
         }
 
@@ -82,7 +78,7 @@ namespace Askker.App.iOS
                 Utils.HandleException(ex);
             }
 
-            indicator.StopAnimating();
+            BTProgressHUD.Dismiss();
 
             TableView.ReloadData();
         }
