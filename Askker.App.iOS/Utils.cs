@@ -209,7 +209,7 @@ namespace Askker.App.iOS
                     placeholder = UIImage.FromBundle("Profile");
                 }
 
-                imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), placeholder, SDWebImageOptions.ProgressiveDownload,
+                imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), placeholder, SDWebImageOptions.ProgressiveDownload, //HighPriority
                     progressBlock: (receivedSize, completedSize) =>
                     {
                         if (activityIndicator == null)
@@ -259,7 +259,7 @@ namespace Askker.App.iOS
         public static UIImage GetImageFromNSUrl(string imagePath)
         {
             UIImage result = null;
-            SDWebImageManager.SharedManager.Download(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), SDWebImageOptions.ProgressiveDownload,
+            SDWebImageManager.SharedManager.Download(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), SDWebImageOptions.ProgressiveDownload, //HighPriority
                 progressBlock: (receivedSize, completedSize) =>
                 {
                     //do nothing
