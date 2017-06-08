@@ -3,6 +3,7 @@ using Askker.App.iOS.TableControllers;
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
+using BigTed;
 using Cirrious.FluentLayouts.Touch;
 using SDWebImage;
 using System;
@@ -135,15 +136,16 @@ namespace Askker.App.iOS
         }
 
         private void NextTapped(object s, EventArgs e)
-        {            
-            if(_currentStepIndex == 0)
+        {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+            if (_currentStepIndex == 0)
             {
                 if (CreateSurveyController.SurveyModel == null || 
                     CreateSurveyController.SurveyModel.question == null ||
                     string.IsNullOrEmpty(CreateSurveyController.SurveyModel.question.text))
                 {
                     new UIAlertView("Question", "Please write a question", null, "OK", null).Show();
-
+                    BTProgressHUD.Dismiss();
                     return;
                 }
             }else if (_currentStepIndex == 1)
@@ -151,7 +153,7 @@ namespace Askker.App.iOS
                 if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
                 {
                     new UIAlertView("Options", "Please press \"Done\" button to go to next page", null, "OK", null).Show();
-
+                    BTProgressHUD.Dismiss();
                     return;
                 }
 
@@ -196,7 +198,7 @@ namespace Askker.App.iOS
                     CreateSurveyController.SurveyModel.options.Count < 2)
                 {
                     new UIAlertView("Options", "Please give at least two options", null, "OK", null).Show();
-
+                    BTProgressHUD.Dismiss();
                     return;
                 }
             }
@@ -207,12 +209,13 @@ namespace Askker.App.iOS
 
         private void BackTapped(object s, EventArgs e)
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             if (_currentStepIndex == 1)
             {
                 if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
                 {
                     new UIAlertView("Options", "Please press \"Done\" button to go back", null, "OK", null).Show();
-
+                    BTProgressHUD.Dismiss();
                     return;
                 }
             }
@@ -223,12 +226,14 @@ namespace Askker.App.iOS
 
         private async void AskTapped(object s, EventArgs e)
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString() && (CreateSurveyController.SurveyModel == null ||
                     CreateSurveyController.SurveyModel.targetAudienceUsers == null ||
                     CreateSurveyController.SurveyModel.targetAudienceUsers.ids == null ||
                     CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count < 1))
             {
                 new UIAlertView("Share", "Please select at least one friend to share this survey", null, "OK", null).Show();
+                BTProgressHUD.Dismiss();
 
                 return;
             }
@@ -261,7 +266,8 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
-                Utils.HandleException(ex);
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);                
             }
         }
 

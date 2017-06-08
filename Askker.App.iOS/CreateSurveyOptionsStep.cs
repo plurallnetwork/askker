@@ -2,6 +2,7 @@
 using Askker.App.iOS.TableControllers;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
+using BigTed;
 using CoreFoundation;
 using Foundation;
 using SDWebImage;
@@ -24,6 +25,7 @@ namespace Askker.App.iOS
 
         public override void ViewDidLoad()
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             _optionsStepView = OptionsStepView.Create();            
             View.AddSubview(_optionsStepView);
             List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();
@@ -58,6 +60,7 @@ namespace Askker.App.iOS
                         }
                         catch (Exception ex)
                         {
+                            BTProgressHUD.Dismiss();
                             Utils.HandleException(ex);
                         }
 
@@ -201,6 +204,7 @@ namespace Askker.App.iOS
 
             };
 
+            BTProgressHUD.Dismiss();
         }
 
         public override void ViewDidLayoutSubviews()
