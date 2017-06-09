@@ -183,28 +183,6 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="forgot password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="29">
-                                <rect key="frame" x="248" y="632" width="108" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="108" id="4143"/>
-                                    <constraint firstAttribute="height" constant="21" id="4144"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="4143"/>
-                                        <exclude reference="4144"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="4143"/>
-                                        <include reference="4144"/>
-                                    </mask>
-                                </variation>
-                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4155">
                                 <rect key="frame" x="20" y="250" width="335" height="2"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -259,11 +237,34 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6068">
+                                <rect key="frame" x="248" y="632" width="108" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="forgot password">
+                                    <color key="titleColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections/>
+                                <constraints>
+                                    <constraint id="6071" firstAttribute="width" constant="108"/>
+                                    <constraint id="6072" firstAttribute="height" constant="21"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6071"/>
+                                        <exclude reference="6072"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="6071"/>
+                                        <include reference="6072"/>
+                                    </mask>
+                                </variation>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="29" secondAttribute="trailing" constant="19" id="4141"/>
-                            <constraint firstAttribute="bottom" secondItem="29" secondAttribute="bottom" constant="14" id="4142"/>
                             <constraint firstItem="28" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="4145"/>
                             <constraint firstAttribute="bottom" secondItem="28" secondAttribute="bottom" constant="14" id="4146"/>
                             <constraint firstItem="8" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="52" id="4150"/>
@@ -311,6 +312,8 @@
                                 <variation key="heightClass=regular-widthClass=compact" constant="10"/>
                             </constraint>
                             <constraint firstItem="93" firstAttribute="top" secondItem="630" secondAttribute="bottom" constant="16" id="4351"/>
+                            <constraint id="6069" firstItem="8bC-Xf-vdC" firstAttribute="trailing" secondItem="6068" secondAttribute="trailing" constant="19"/>
+                            <constraint id="6070" firstItem="8bC-Xf-vdC" firstAttribute="bottom" secondItem="6068" secondAttribute="bottom" constant="14"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
@@ -324,10 +327,10 @@
                                 <exclude reference="26"/>
                                 <exclude reference="93"/>
                                 <exclude reference="28"/>
-                                <exclude reference="29"/>
                                 <exclude reference="4155"/>
                                 <exclude reference="4156"/>
                                 <exclude reference="4157"/>
+                                <exclude reference="6068"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="4150"/>
@@ -373,8 +376,8 @@
                                 <exclude reference="4351"/>
                                 <exclude reference="4145"/>
                                 <exclude reference="4146"/>
-                                <exclude reference="4141"/>
-                                <exclude reference="4142"/>
+                                <exclude reference="6069"/>
+                                <exclude reference="6070"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -390,10 +393,10 @@
                                 <include reference="26"/>
                                 <include reference="93"/>
                                 <include reference="28"/>
-                                <include reference="29"/>
                                 <include reference="4155"/>
                                 <include reference="4156"/>
                                 <include reference="4157"/>
+                                <include reference="6068"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="4150"/>
@@ -439,8 +442,8 @@
                                 <include reference="4351"/>
                                 <include reference="4145"/>
                                 <include reference="4146"/>
-                                <include reference="4141"/>
-                                <include reference="4142"/>
+                                <include reference="6069"/>
+                                <include reference="6070"/>
                             </mask>
                         </variation>
                     </view>
@@ -453,6 +456,7 @@
                         <outlet property="lblNeedHelp" destination="28" id="name-outlet-28"/>
                         <outlet property="txtPassword" destination="12" id="name-outlet-12"/>
                         <outlet property="txtUsername" destination="9" id="name-outlet-9"/>
+                        <outlet property="btnForgotPassword" destination="6068" id="name-outlet-6068"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -2142,6 +2146,219 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5450" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1754" y="-60"/>
+        </scene>
+        <scene sceneID="5878">
+            <objects>
+                <viewController id="5879" sceneMemberID="viewController" customClass="ForgotPasswordController" storyboardIdentifier="ForgotPasswordController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5876"/>
+                        <viewControllerLayoutGuide type="bottom" id="5877"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5880">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="assets/img/logo_180.png" translatesAutoresizingMaskIntoConstraints="NO" id="6015">
+                                <rect key="frame" x="68" y="52" width="240" height="128"/>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="6063"/>
+                                        <include reference="6064"/>
+                                    </mask>
+                                </variation>
+                                <constraints>
+                                    <constraint id="6063" firstAttribute="width" constant="240"/>
+                                    <constraint id="6064" firstAttribute="height" constant="128"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6063"/>
+                                        <exclude reference="6064"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="E-mail adress" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6018">
+                                <rect key="frame" x="20" y="311" width="335" height="46"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="6036"/>
+                                    </mask>
+                                </variation>
+                                <constraints>
+                                    <constraint id="6036" firstAttribute="height" constant="46"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6036"/>
+                                    </mask>
+                                </variation>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6020">
+                                <rect key="frame" x="20" y="375" width="335" height="54"/>
+                                <color key="backgroundColor" red="0.1803921568627451" green="0.60784313725490191" blue="0.50588235294117645" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Send">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="6057"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <action selector="btnEnter_TouchUpInside:" destination="6023" eventType="touchUpInside" id="6022"/>
+                                    <action selector="BtnSend_TouchUpInside:" destination="5879" id="6067" eventType="touchUpInside"/>
+                                </connections>
+                                <constraints>
+                                    <constraint id="6057" firstAttribute="height" constant="54"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6057"/>
+                                    </mask>
+                                </variation>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6024">
+                                <rect key="frame" x="20" y="357" width="335" height="2"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <mask key="constraints">
+                                        <include reference="6050"/>
+                                    </mask>
+                                </variation>
+                                <constraints>
+                                    <constraint id="6050" firstAttribute="height" constant="2"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6050"/>
+                                    </mask>
+                                </variation>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6026" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="3" text="Enter the e-mail address of your account. You will receive a link to reset your password.">
+                                <rect key="frame" x="20" y="247" width="339" height="55"/>
+                                <nil key="highlightedColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <constraints>
+                                    <constraint id="6043" firstAttribute="height" constant="55"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6043"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="6043"/>
+                                    </mask>
+                                </variation>
+                            </label>
+                        </subviews>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="6015"/>
+                                <exclude reference="6018"/>
+                                <exclude reference="6020"/>
+                                <exclude reference="6024"/>
+                                <exclude reference="6026"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="6033"/>
+                                <exclude reference="6037"/>
+                                <exclude reference="6038"/>
+                                <exclude reference="6039"/>
+                                <exclude reference="6040"/>
+                                <exclude reference="6044"/>
+                                <exclude reference="6045"/>
+                                <exclude reference="6047"/>
+                                <exclude reference="6051"/>
+                                <exclude reference="6052"/>
+                                <exclude reference="6053"/>
+                                <exclude reference="6054"/>
+                                <exclude reference="6058"/>
+                                <exclude reference="6059"/>
+                                <exclude reference="6060"/>
+                                <exclude reference="6062"/>
+                                <exclude reference="6066"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="6015"/>
+                                <include reference="6018"/>
+                                <include reference="6020"/>
+                                <include reference="6024"/>
+                                <include reference="6026"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="6033"/>
+                                <include reference="6037"/>
+                                <include reference="6038"/>
+                                <include reference="6039"/>
+                                <include reference="6040"/>
+                                <include reference="6044"/>
+                                <include reference="6045"/>
+                                <include reference="6047"/>
+                                <include reference="6051"/>
+                                <include reference="6052"/>
+                                <include reference="6053"/>
+                                <include reference="6054"/>
+                                <include reference="6058"/>
+                                <include reference="6059"/>
+                                <include reference="6060"/>
+                                <include reference="6062"/>
+                                <include reference="6066"/>
+                            </mask>
+                        </variation>
+                        <constraints>
+                            <constraint id="6033" firstItem="5880" firstAttribute="trailing" secondItem="6018" secondAttribute="trailing" constant="20"/>
+                            <constraint id="6037" firstItem="6018" firstAttribute="centerX" secondItem="5880" secondAttribute="centerX"/>
+                            <constraint id="6038" firstItem="6018" firstAttribute="centerY" secondItem="5880" secondAttribute="centerY"/>
+                            <constraint id="6039" firstItem="6018" firstAttribute="leading" secondItem="5880" secondAttribute="leadingMargin" constant="4"/>
+                            <constraint id="6040" firstItem="5880" firstAttribute="trailing" secondItem="6026" secondAttribute="trailing" constant="16"/>
+                            <constraint id="6044" firstItem="6018" firstAttribute="top" secondItem="6026" secondAttribute="bottom" constant="9"/>
+                            <constraint id="6045" firstItem="6026" firstAttribute="leading" secondItem="5880" secondAttribute="leadingMargin" constant="4"/>
+                            <constraint id="6047" firstItem="5880" firstAttribute="trailing" secondItem="6024" secondAttribute="trailing" constant="20"/>
+                            <constraint id="6051" firstItem="6024" firstAttribute="top" secondItem="6018" secondAttribute="bottom"/>
+                            <constraint id="6052" firstItem="6024" firstAttribute="leading" secondItem="5880" secondAttribute="leadingMargin" constant="4"/>
+                            <constraint id="6053" firstItem="5880" firstAttribute="trailingMargin" secondItem="6024" secondAttribute="trailing" constant="4"/>
+                            <constraint id="6054" firstItem="5880" firstAttribute="trailing" secondItem="6020" secondAttribute="trailing" constant="20"/>
+                            <constraint id="6058" firstItem="6020" firstAttribute="leading" secondItem="5880" secondAttribute="leadingMargin" constant="4"/>
+                            <constraint id="6059" firstItem="5880" firstAttribute="trailingMargin" secondItem="6020" secondAttribute="trailing" constant="4"/>
+                            <constraint id="6060" firstItem="6020" firstAttribute="top" secondItem="6024" secondAttribute="centerY" constant="17"/>
+                            <constraint id="6062" firstItem="6015" firstAttribute="top" secondItem="5880" secondAttribute="top" constant="52"/>
+                            <constraint id="6066" firstItem="6015" firstAttribute="centerX" secondItem="5880" secondAttribute="centerX"/>
+                        </constraints>
+                    </view>
+                    <navigationItem title="Forgot Password" id="6012" key="navigationItem"/>
+                    <connections>
+                        <outlet property="btnSend" destination="6020" id="name-outlet-6020"/>
+                        <outlet property="txtEmail" destination="6018" id="name-outlet-6018"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5881" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1364" y="-42"/>
+        </scene>
+        <scene sceneID="5892">
+            <objects>
+                <navigationController id="5893" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5895">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue id="6013" destination="5879" kind="relationship" relationship="rootViewController"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5896" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="937" y="-40"/>
         </scene>
     </scenes>
     <resources>

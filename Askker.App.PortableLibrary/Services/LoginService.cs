@@ -162,5 +162,22 @@ namespace Askker.App.PortableLibrary.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<HttpResponseMessage> SendEmailResetPassword(string email)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var formContent = new StringContent(JsonConvert.SerializeObject(email), Encoding.UTF8, "application/json");
+
+                    return await client.PostAsync("https://blinq-development.com:44322/api/account/sendemailresetpassword", formContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

@@ -138,7 +138,7 @@ namespace Askker.App.iOS
         }
 
         [Export("EditSelector:")]
-        private async void EditSelector(UIFeedButton but)
+        private void EditSelector(UIFeedButton but)
         {
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             try
@@ -146,7 +146,7 @@ namespace Askker.App.iOS
                 if (survey.totalVotes > 0)
                 {
                     BTProgressHUD.Dismiss();
-                    nint optionButton = await Utils.ShowAlert("Edit", "The survey have votes. Please clean the votes to edit the survey.", "OK");
+                    Utils.ShowAlertOk("Edit", "The survey have votes. Please clean the votes to edit the survey.");
                 }
                 else
                 {

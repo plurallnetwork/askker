@@ -12,12 +12,17 @@ namespace Askker.App.PortableLibrary.Business
 {
     public class LoginManager
     {
+        public LoginService loginService { get; set; }
+
+        public LoginManager()
+        {
+            loginService = new LoginService();
+        }
+
         public async Task<TokenModel> GetAuthorizationToken(UserLoginModel userLoginModel)
         {
             try
             {
-                LoginService loginService = new LoginService();
-
                 var response = await loginService.GetAuthorizationToken(userLoginModel);
                 var json = await response.Content.ReadAsStringAsync();
 
@@ -59,8 +64,6 @@ namespace Askker.App.PortableLibrary.Business
 
         public UserModel GetUserByTokenSync(string authenticationToken)
         {
-            LoginService loginService = new LoginService();
-
             var response = loginService.GetUserByTokenSync(authenticationToken);
             var json = response.Content.ReadAsStringAsync().Result;
 
@@ -90,8 +93,6 @@ namespace Askker.App.PortableLibrary.Business
 
         public async Task<UserModel> GetUserById(string authenticationToken)
         {
-            LoginService loginService = new LoginService();
-
             var response = await loginService.GetUserById(authenticationToken);
             var json = await response.Content.ReadAsStringAsync();
 
@@ -122,8 +123,6 @@ namespace Askker.App.PortableLibrary.Business
 
         public async Task<UserModel> GetUserById(string authenticationToken, string userId)
         {
-            LoginService loginService = new LoginService();
-
             var response = await loginService.GetUserById(authenticationToken, userId);
             var json = await response.Content.ReadAsStringAsync();
 
@@ -154,8 +153,6 @@ namespace Askker.App.PortableLibrary.Business
 
         public async Task<List<UserModel>> SearchUsersByName(string authenticationToken, string name)
         {
-            LoginService loginService = new LoginService();
-
             var response = await loginService.SearchUsersByName(authenticationToken, name);
             var json = await response.Content.ReadAsStringAsync();
 
@@ -188,8 +185,6 @@ namespace Askker.App.PortableLibrary.Business
         {
             try
             {
-                LoginService loginService = new LoginService();
-
                 var response = await loginService.Update(authenticationToken, userModel, profileImage, profileImageName);
 
                 if (!response.IsSuccessStatusCode)
@@ -214,8 +209,6 @@ namespace Askker.App.PortableLibrary.Business
         {
             try
             {
-                LoginService loginService = new LoginService();
-
                 var response = await loginService.UpdateUserInformation(userModel, authenticationToken);
 
                 if (!response.IsSuccessStatusCode)
@@ -223,6 +216,38 @@ namespace Askker.App.PortableLibrary.Business
                     if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
                         throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task SendEmailResetPassword(string email)
+        {
+            try
+            {
+                var response = await loginService.SendEmailResetPassword(email);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (!json.Equals(""))
+                    {
+                        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                        {
+                            throw new Exception("Unauthorized");
+                        }
+                        else
+                        {
+                            throw new Exception(json);
+                        }
                     }
                     else
                     {

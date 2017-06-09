@@ -50,6 +50,7 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            AutomaticallyAdjustsScrollViewInsets = false;
 
             comments = new List<SurveyCommentModel>();
 
@@ -77,7 +78,7 @@ namespace Askker.App.iOS
             var pinRight = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, View, NSLayoutAttribute.Trailing, 1f, 0f);
             View.AddConstraint(pinRight);
 
-            var pinTop = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Top, NSLayoutRelation.Equal, TopLayoutGuide, NSLayoutAttribute.Bottom, 1f, -64f);
+            var pinTop = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Top, NSLayoutRelation.Equal, TopLayoutGuide, NSLayoutAttribute.Bottom, 1f, 0f);
             View.AddConstraint(pinTop);
 
             var pinBottom = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, View, NSLayoutAttribute.Bottom, 1f, -46f);

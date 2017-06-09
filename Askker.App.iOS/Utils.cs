@@ -15,6 +15,17 @@ namespace Askker.App.iOS
     {
         static UIActivityIndicatorView activityIndicator;
 
+        public static void ShowAlertOk(string title, string message)
+        {
+            var alert = new UIAlertView
+            {
+                Title = title,
+                Message = message
+            };
+            alert.AddButton("OK");
+            alert.Show();
+        }
+
         public static Task<nint> ShowAlert(string title, string message, params string[] buttons)
         {
             var tcs = new TaskCompletionSource<nint>();

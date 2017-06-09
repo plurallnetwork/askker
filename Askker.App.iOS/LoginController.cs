@@ -29,6 +29,7 @@ namespace Askker.App.iOS
             btnLoginFacebook.TouchUpInside += btnLoginFacebook_TouchUpInside;
             btnLoginGoogle.TouchUpInside += btnLoginGoogle_TouchUpInside;
             btnSignUp.TouchUpInside += BtnSignUp_TouchUpInside;
+            btnForgotPassword.TouchUpInside += BtnForgotPassword_TouchUpInside;
         }
 
         public override void ViewDidDisappear(bool animated)
@@ -38,6 +39,7 @@ namespace Askker.App.iOS
             btnLoginFacebook.TouchUpInside -= btnLoginFacebook_TouchUpInside;
             btnLoginGoogle.TouchUpInside -= btnLoginGoogle_TouchUpInside;
             btnSignUp.TouchUpInside -= BtnSignUp_TouchUpInside;
+            btnForgotPassword.TouchUpInside -= BtnForgotPassword_TouchUpInside;
         }
 
         public override void ViewDidLoad()
@@ -57,6 +59,16 @@ namespace Askker.App.iOS
             if (registerController != null)
             {
                 this.NavigationController.PushViewController(registerController, true);
+                NavigationController.SetNavigationBarHidden(false, true);
+            }
+        }
+
+        private void BtnForgotPassword_TouchUpInside(object sender, EventArgs e)
+        {
+            var forgotPasswordController = this.Storyboard.InstantiateViewController("ForgotPasswordController");
+            if (forgotPasswordController != null)
+            {
+                this.NavigationController.PushViewController(forgotPasswordController, true);
                 NavigationController.SetNavigationBarHidden(false, true);
             }
         }

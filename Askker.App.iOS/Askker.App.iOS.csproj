@@ -132,6 +132,10 @@
     <Compile Include="FeedMenuView.designer.cs">
       <DependentUpon>FeedMenuView.cs</DependentUpon>
     </Compile>
+    <Compile Include="ForgotPasswordController.cs" />
+    <Compile Include="ForgotPasswordController.designer.cs">
+      <DependentUpon>ForgotPasswordController.cs</DependentUpon>
+    </Compile>
     <Compile Include="FriendsController.cs" />
     <Compile Include="FriendsController.designer.cs">
       <DependentUpon>FriendsController.cs</DependentUpon>
