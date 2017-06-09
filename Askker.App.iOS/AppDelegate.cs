@@ -1,6 +1,7 @@
 ﻿using BigTed;
 using Foundation;
 using SDWebImage;
+using System;
 using System.Net;
 using UIKit;
 
@@ -19,6 +20,18 @@ namespace Askker.App.iOS
         {
             get;
             set;
+        }
+
+        public UIInterfaceOrientationMask ScreenOrientation
+        {
+            get;
+            set;
+        }
+
+        [Export("application:supportedInterfaceOrientationsForWindow:")]
+        public UIInterfaceOrientationMask GetSupportedInterfaceOrientations(UIApplication application, IntPtr forWindow)
+        {
+            return this.ScreenOrientation;
         }
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)

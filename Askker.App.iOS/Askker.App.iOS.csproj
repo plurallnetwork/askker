@@ -120,6 +120,9 @@
       <DependentUpon>CreateSurveyShareStep.cs</DependentUpon>
     </Compile>
     <Compile Include="CredentialsService.cs" />
+    <Compile Include="CustomUICollectionViewController.cs" />
+    <Compile Include="CustomUITableViewController.cs" />
+    <Compile Include="CustomUIViewController.cs" />
     <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
     <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
     <Compile Include="CustomViewComponents\SurveyOptionCustomCell.cs" />

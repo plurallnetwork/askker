@@ -5,7 +5,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class ForgotPasswordController : UIViewController
+    public partial class ForgotPasswordController : CustomUIViewController
     {
         public ForgotPasswordController (IntPtr handle) : base (handle)
         {
@@ -14,6 +14,8 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             // Keyboard dispose when clicking outside the comment box
             var g = new UITapGestureRecognizer { CancelsTouchesInView = false };

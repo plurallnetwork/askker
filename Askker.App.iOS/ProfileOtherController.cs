@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Askker.App.iOS
 {
-    public partial class ProfileOtherController : UIViewController
+    public partial class ProfileOtherController : CustomUIViewController
     {
         string fileName;
         public static NSCache imageCache = new NSCache();
@@ -26,6 +26,9 @@ namespace Askker.App.iOS
         public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+
             imageCache.RemoveAllObjects();
 
             try

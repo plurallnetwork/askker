@@ -12,7 +12,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class CreateSurveyShareStep : UIViewController, IMultiStepProcessStep
+    public partial class CreateSurveyShareStep : CustomUIViewController, IMultiStepProcessStep
     {
         private ShareStepView _shareStepView;
         SurveyShareTableSource tableSource;
@@ -32,6 +32,10 @@ namespace Askker.App.iOS
 
         public override async void ViewDidLoad()
         {
+            base.ViewDidLoad();
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             _shareStepView = ShareStepView.Create();
             View.AddSubview(_shareStepView);

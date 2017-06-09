@@ -8,7 +8,7 @@ using BigTed;
 
 namespace Askker.App.iOS
 {
-    public partial class LoginController : UIViewController, IWKNavigationDelegate
+    public partial class LoginController : CustomUIViewController, IWKNavigationDelegate
     {
         public static TokenModel tokenModel;
         public static UserModel userModel;
@@ -45,6 +45,8 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             // Perform any additional setup after loading the view, typically from a nib.
 
             // Keyboard dispose when clicking outside the comment box

@@ -13,7 +13,7 @@ using BigTed;
 
 namespace Askker.App.iOS
 {
-    public partial class FeedController : UICollectionViewController
+    public partial class FeedController : CustomUICollectionViewController
     {
         public List<SurveyModel> surveys { get; set; }
         public static NSCache imageCache = new NSCache();
@@ -34,6 +34,7 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             imageCache.RemoveAllObjects();
 
             surveys = new List<SurveyModel>();

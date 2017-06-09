@@ -14,7 +14,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class CommentViewController : UIViewController
+    public partial class CommentViewController : CustomUIViewController
     {
         public UICollectionView feed { get; set; }
         public static List<SurveyCommentModel> comments { get; set; }
@@ -50,6 +50,7 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             AutomaticallyAdjustsScrollViewInsets = false;
 
             comments = new List<SurveyCommentModel>();
@@ -191,6 +192,7 @@ namespace Askker.App.iOS
 
         public override void ViewWillAppear(bool animated)
         {
+            base.ViewWillAppear(animated);
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             fetchSurveyComments(false);
         }

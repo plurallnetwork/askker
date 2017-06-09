@@ -12,7 +12,7 @@ using BigTed;
 
 namespace Askker.App.iOS
 {
-    public partial class NotificationsController : UITableViewController
+    public partial class NotificationsController : CustomUITableViewController
     {
         public static NSString notificationCellId = new NSString("notificationCellId");
 
@@ -26,6 +26,7 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             TableView.RegisterClassForCellReuse(typeof(NotificationsTableViewCell), notificationCellId);
             TableView.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
