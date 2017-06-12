@@ -12,7 +12,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class CreateSurveyQuestionStep : UIViewController, IMultiStepProcessStep
+    public partial class CreateSurveyQuestionStep : CustomUIViewController, IMultiStepProcessStep
     {
         private QuestionStepView _questionStepView;
         
@@ -23,6 +23,10 @@ namespace Askker.App.iOS
 
         public override void ViewDidLoad()
         {
+            base.ViewDidLoad();
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+
             _questionStepView = QuestionStepView.Create();
             View.AddSubview(_questionStepView);
 

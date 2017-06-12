@@ -6,7 +6,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class RegisterController : UIViewController
+    public partial class RegisterController : CustomUIViewController
     {
         public RegisterController (IntPtr handle) : base (handle)
         {
@@ -16,6 +16,8 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             // Keyboard dispose when clicking outside the comment box
             var g = new UITapGestureRecognizer { CancelsTouchesInView = false };

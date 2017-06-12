@@ -14,7 +14,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class CreateSurveyController : UIViewController
+    public partial class CreateSurveyController : CustomUIViewController
     {
         enum SwipeDirection
         {
@@ -312,7 +312,9 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+
             if (ScreenState == Askker.App.PortableLibrary.Enums.ScreenState.Edit.ToString())
             {
                 Title = "Edit Survey";

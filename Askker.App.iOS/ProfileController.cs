@@ -13,7 +13,7 @@ using System.Globalization;
 
 namespace Askker.App.iOS
 {
-    public partial class ProfileController : UIViewController
+    public partial class ProfileController : CustomUIViewController
     {
         UIImagePickerController imagePicker = new UIImagePickerController();
         string fileName;
@@ -26,6 +26,9 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+
             imageCache.RemoveAllObjects();
 
             profileImageView.ClipsToBounds = true;

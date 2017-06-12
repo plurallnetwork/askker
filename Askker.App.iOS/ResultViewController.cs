@@ -13,7 +13,7 @@ using BigTed;
 
 namespace Askker.App.iOS
 {
-    public partial class ResultViewController : UIViewController
+    public partial class ResultViewController : CustomUIViewController
     {
         public UICollectionView feed { get; set; }
         public FeedCollectionViewCell feedCell { get; set; }
@@ -37,6 +37,8 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
 
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+
             reports = new List<ReportType>();
             reports.Add(ReportType.Overall);
             reports.Add(ReportType.Gender);
@@ -57,6 +59,7 @@ namespace Askker.App.iOS
 
         public override void ViewWillAppear(bool animated)
         {
+            base.ViewWillAppear(animated);
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             fetchSurveyDetail();
         }

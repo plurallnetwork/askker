@@ -8,7 +8,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class MenuViewController : UIViewController
+    public partial class MenuViewController : CustomUIViewController
     {
         public static SidebarController sidebarController { get; private set; }
         public static FeedMenuView feedMenu = FeedMenuView.Create();
@@ -36,11 +36,13 @@ namespace Askker.App.iOS
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(updateUnreadNotificationsCountObserver);
             }
-        }
+        }        
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             closeMenuObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("CloseSideMenu"), CloseMessageRecieved);
             updateUnreadNotificationsCountObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateUnreadNotificationsCount"), UpdateUnreadNotificationsMessageRecieved);

@@ -9,7 +9,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class SearchAllController : UIViewController
+    public partial class SearchAllController : CustomUIViewController
     {
         public SearchAllController (IntPtr handle) : base (handle)
         {
@@ -23,6 +23,7 @@ namespace Askker.App.iOS
         public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             // Perform any additional setup after loading the view, typically from a nib.
 
             //Declare the search bar and add it to the header of the table

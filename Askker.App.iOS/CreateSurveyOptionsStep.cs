@@ -13,7 +13,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class CreateSurveyOptionsStep : UIViewController, IMultiStepProcessStep
+    public partial class CreateSurveyOptionsStep : CustomUIViewController, IMultiStepProcessStep
     {
         public static OptionsStepView _optionsStepView { get; set; }
         public static SurveyOptionTableSource tableSource;
@@ -26,6 +26,9 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+            
             _optionsStepView = OptionsStepView.Create();            
             View.AddSubview(_optionsStepView);
             List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();

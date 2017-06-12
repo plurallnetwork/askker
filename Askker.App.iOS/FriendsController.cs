@@ -145,7 +145,7 @@ namespace Askker.App.iOS
         }
     }
 
-    public class BaseTableViewController : UITableViewController
+    public class BaseTableViewController : CustomUITableViewController
     {
         protected const string cellIdentifier = "cellId";
 
@@ -160,6 +160,7 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             TableView.RegisterClassForCellReuse(typeof(MyFriendsTableViewCell), cellIdentifier);
             TableView.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
         }
