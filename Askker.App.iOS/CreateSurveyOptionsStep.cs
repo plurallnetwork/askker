@@ -47,7 +47,7 @@ namespace Askker.App.iOS
 
                         try
                         {
-                            using (NSData imageData = Utils.CompressImage(image))
+                            using (NSData imageData = image.AsJPEG())
                             {
                                 byte[] myByteArray = new byte[imageData.Length];
                                 System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
@@ -70,7 +70,7 @@ namespace Askker.App.iOS
                         //    try
                         //    {
                         //        DispatchQueue.MainQueue.DispatchAsync(() => {
-                        //            using (NSData imageData = Utils.CompressImage(UIImage.LoadFromData(data)))
+                        //            using (NSData imageData = UIImage.LoadFromData(data))
                         //            {
                         //                byte[] myByteArray = new byte[imageData.Length];
                         //                System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
