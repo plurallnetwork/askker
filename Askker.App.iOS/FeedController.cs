@@ -267,8 +267,6 @@ namespace Askker.App.iOS
             Utils.OpenUserProfile((UINavigationController)tapGesture.Params.ToArray()[0], (string)tapGesture.Params.ToArray()[1]);
         }
 
-        
-
         public static async void saveVote(SurveyModel survey, int optionId, FeedCollectionViewCell feedCell)
         {
             var incrementVote = false;
@@ -282,8 +280,6 @@ namespace Askker.App.iOS
                     feedCell.updateTotalVotes(survey.totalVotes);
                 }
 
-                survey.optionSelected = optionId;
-
                 SurveyVoteModel surveyVoteModel = new SurveyVoteModel();
                 surveyVoteModel.surveyId = survey.userId + survey.creationDate;
                 surveyVoteModel.optionId = optionId;
@@ -295,6 +291,8 @@ namespace Askker.App.iOS
                 surveyVoteModel.user.country = LoginController.userModel.country;
 
                 await voteManager.Vote(surveyVoteModel, "");
+
+                survey.optionSelected = optionId;
 
                 try
                 {
@@ -332,7 +330,42 @@ namespace Askker.App.iOS
                 if (incrementVote)
                 {
                     survey.totalVotes--;
-                    feedCell.updateTotalVotes(survey.totalVotes);
+                }
+
+                if (survey.type == SurveyType.Text.ToString())
+                {
+                    feedCell.optionsTableView.ReloadData();
+                }
+                else
+                {
+                    feedCell.optionsCollectionView.ReloadData();
+                }
+
+                Utils.HandleException(ex);
+            }
+        }
+
+        public static async void deleteVote(SurveyModel survey, FeedCollectionViewCell feedCell)
+        {
+            try
+            {
+                survey.totalVotes--;
+                feedCell.updateTotalVotes(survey.totalVotes);
+
+                await voteManager.DeleteVote(survey.userId + survey.creationDate, LoginController.userModel.id, LoginController.tokenModel.access_token);
+
+                survey.optionSelected = null;
+            }
+            catch (Exception ex)
+            {
+                survey.totalVotes++;
+                if (survey.type == SurveyType.Text.ToString())
+                {
+                    feedCell.optionsTableView.ReloadData();
+                }
+                else
+                {
+                    feedCell.optionsCollectionView.ReloadData();
                 }
 
                 Utils.HandleException(ex);
@@ -764,6 +797,13 @@ namespace Askker.App.iOS
 
                 FeedController.saveVote(survey, (int)optionCell.Tag, ((UIOptionsTableView)tableView).FeedCell);
             }
+            else
+            {
+                optionCell.AccessoryView = null;
+                tableView.DeselectRow(indexPath, true);
+
+                FeedController.deleteVote(survey, ((UIOptionsTableView)tableView).FeedCell);
+            }
         }
 
         public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
@@ -895,6 +935,13 @@ namespace Askker.App.iOS
                 optionCell.optionCheckImageView.Hidden = false;
 
                 FeedController.saveVote(survey, (int)optionCell.Tag, ((UIOptionsCollectionView)collectionView).FeedCell);
+            }
+            else
+            {
+                optionCell.optionCheckImageView.Hidden = true;
+                collectionView.DeselectItem(indexPath, true);
+
+                FeedController.deleteVote(survey, ((UIOptionsCollectionView)collectionView).FeedCell);
             }
         }
 

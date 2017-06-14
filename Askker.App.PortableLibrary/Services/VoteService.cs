@@ -29,5 +29,23 @@ namespace Askker.App.PortableLibrary.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<HttpResponseMessage> DeleteVote(string surveyId, string userId, string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/deletevote/{0}/{1}", surveyId, userId));
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+                    return await client.PostAsync(uri, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
