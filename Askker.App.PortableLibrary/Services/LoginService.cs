@@ -163,7 +163,41 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SendEmailResetPassword(string email)
+        public async Task<HttpResponseMessage> SendEmailResetPasswordFromApp(ResetPasswordModel model)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var formContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+
+                    return await client.PostAsync("https://blinq-development.com:44322/api/account/sendemailresetpasswordfromapp", formContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<HttpResponseMessage> SetPasswordFromApp(SetPasswordModel model)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var formContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+
+                    return await client.PostAsync("https://blinq-development.com:44322/api/account/setpasswordfromapp", formContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<HttpResponseMessage> GetUserByEmail(string email)
         {
             try
             {
@@ -171,7 +205,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     var formContent = new StringContent(JsonConvert.SerializeObject(email), Encoding.UTF8, "application/json");
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/account/sendemailresetpassword", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/Account/GetUserByEmailFromApp", formContent);
                 }
             }
             catch (Exception ex)

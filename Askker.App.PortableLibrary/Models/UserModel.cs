@@ -53,5 +53,7 @@ namespace Askker.App.PortableLibrary.Models
         public string influencedByPrivacyLevel { get; set; }
 
         public string influenceOverPrivacyLevel { get; set; }
+
+        public string provider { get; set; }
     }
 }

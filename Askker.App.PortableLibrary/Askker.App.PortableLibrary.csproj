@@ -50,6 +50,8 @@
     <Compile Include="Enums\RelationshipStatus.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\ReportModel.cs" />
+    <Compile Include="Models\ResetPasswordModel.cs" />
+    <Compile Include="Models\SetPasswordModel.cs" />
     <Compile Include="Models\SurveyCommentModel.cs" />
     <Compile Include="Models\SurveyModel.cs" />
     <Compile Include="Models\TokenModel.cs" />

@@ -229,11 +229,11 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task SendEmailResetPassword(string email)
+        public async Task SendEmailResetPasswordFromApp(ResetPasswordModel model)
         {
             try
             {
-                var response = await loginService.SendEmailResetPassword(email);
+                var response = await loginService.SendEmailResetPasswordFromApp(model);
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
@@ -258,6 +258,68 @@ namespace Askker.App.PortableLibrary.Business
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task SetPasswordFromApp(SetPasswordModel model)
+        {
+            try
+            {
+                var response = await loginService.SetPasswordFromApp(model);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (!json.Equals(""))
+                    {
+                        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                        {
+                            throw new Exception("Unauthorized");
+                        }
+                        else
+                        {
+                            throw new Exception(json);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<UserModel> GetUserByEmail(string email)
+        {
+            var response = await loginService.GetUserByEmail(email);
+            var json = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<UserModel>(json);
+            }
+            else
+            {
+                if (!json.Equals(""))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        //JObject.Parse(json).SelectToken("$.error") != null
+                        throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    }
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
             }
         }
     }

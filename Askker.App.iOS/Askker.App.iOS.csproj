@@ -103,6 +103,10 @@
     <Compile Include="CommentViewController.designer.cs">
       <DependentUpon>CommentViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConfirmCodeController.cs" />
+    <Compile Include="ConfirmCodeController.designer.cs">
+      <DependentUpon>ConfirmCodeController.cs</DependentUpon>
+    </Compile>
     <Compile Include="CreateSurveyController.cs" />
     <Compile Include="CreateSurveyController.designer.cs">
       <DependentUpon>CreateSurveyController.cs</DependentUpon>

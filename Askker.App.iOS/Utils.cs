@@ -14,6 +14,7 @@ namespace Askker.App.iOS
     public class Utils
     {
         static UIActivityIndicatorView activityIndicator;
+        static NSTimer timer;
 
         public static void ShowAlertOk(string title, string message)
         {
@@ -132,6 +133,19 @@ namespace Askker.App.iOS
         public static void ShowToast(string msg, double timeout)
         {
             BTProgressHUD.ShowToast(msg, showToastCentered: false, timeoutMs: timeout);            
+        }
+
+        public static void KillAfter(float timeout = 1)
+        {
+            if (timer != null)
+            {
+                timer.Invalidate();
+            }
+            timer = NSTimer.CreateRepeatingTimer(timeout, delegate
+            {
+                BTProgressHUD.Dismiss();
+            });
+            NSRunLoop.Current.AddTimer(timer, NSRunLoopMode.Common);
         }
 
         public static void OpenUserProfile(UINavigationController navigationController, string userId)
