@@ -132,7 +132,8 @@ namespace Askker.App.iOS
 
         public static void ShowToast(string msg, double timeout)
         {
-            BTProgressHUD.ShowToast(msg, showToastCentered: false, timeoutMs: timeout);            
+            BTProgressHUD.ShowToast(msg, showToastCentered: false, timeoutMs: timeout);
+            KillAfter((float)timeout / 1000);       
         }
 
         public static void KillAfter(float timeout = 1)
