@@ -6,6 +6,7 @@ using Foundation;
 using System;
 using UIKit;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Askker.App.iOS
 {
@@ -43,7 +44,7 @@ namespace Askker.App.iOS
                 ageText.Text = friendUserModel.age.ToString();
                 if ("male".Equals(friendUserModel.gender) || "female".Equals(friendUserModel.gender))
                 {
-                    genderText.Text = friendUserModel.gender;
+                    genderText.Text = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(friendUserModel.gender);
                 }
 
                 if (friendUserModel.profilePicturePath != null)
