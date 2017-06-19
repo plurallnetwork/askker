@@ -205,6 +205,7 @@ namespace Askker.App.iOS
 
             var nextVcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex + 1) as UIViewController };
             _pageViewController.SetViewControllers(nextVcs, UIPageViewControllerNavigationDirection.Forward, true, null);
+            BTProgressHUD.Dismiss();
         }
 
         private void BackTapped(object s, EventArgs e)
@@ -222,6 +223,7 @@ namespace Askker.App.iOS
 
             var vcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex - 1) as UIViewController };
             _pageViewController.SetViewControllers(vcs, UIPageViewControllerNavigationDirection.Forward, true, null);
+            BTProgressHUD.Dismiss();
         }
 
         private async void AskTapped(object s, EventArgs e)
@@ -263,6 +265,7 @@ namespace Askker.App.iOS
                     this.PresentViewController(feedController, true, null);
                     CreateSurveyController.SurveyModel = null;
                 }
+                BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
             {
