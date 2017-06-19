@@ -7,6 +7,7 @@ using System;
 using UIKit;
 using System.Collections.Generic;
 using System.Globalization;
+using BigTed;
 
 namespace Askker.App.iOS
 {
@@ -26,6 +27,7 @@ namespace Askker.App.iOS
         
         public override async void ViewDidLoad()
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             base.ViewDidLoad();
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
@@ -59,10 +61,12 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
 
             btnRelationship.TouchUpInside += BtnRelationship_TouchUpInside;
+            BTProgressHUD.Dismiss();
         }
 
         private async void BtnRelationship_TouchUpInside(object sender, EventArgs e)

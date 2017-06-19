@@ -98,12 +98,12 @@ namespace Askker.App.iOS
                     feedCell.moreButton.Params[2] = this;
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
-
-                BTProgressHUD.Dismiss();
-
+                
                 feed.Source = new ResultsCollectionViewSource(reports, reportsDatasets, feedCell);
                 feed.Delegate = new ResultsCollectionViewDelegate((float) feedCell.Frame.Height);
                 feed.ReloadData();
+
+                BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
             {
