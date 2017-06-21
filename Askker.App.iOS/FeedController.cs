@@ -384,6 +384,9 @@ namespace Askker.App.iOS
             if (survey.profilePicture != null)
             {
                 Utils.SetImageFromNSUrlSession(survey.profilePicture, feedCell.profileImageView, this);
+            }else
+            {
+                feedCell.profileImageView.Image = UIImage.FromBundle("Profile");
             }
 
             var attributedText = new NSMutableAttributedString(survey.userName, UIFont.BoldSystemFontOfSize(14));

@@ -28,7 +28,7 @@
     <IOSDebuggerPort>10000</IOSDebuggerPort>
     <CodesignKey>iPhone Developer: leandrobarbieri21@gmail.com (4L5R34Z284)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>0dc38e2d-cdf8-44b6-8cc1-0fa4da508321</CodesignProvision>
+    <CodesignProvision>bb4cedb7-f04b-4d24-90d6-9661aa477c7e</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
