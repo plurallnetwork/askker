@@ -292,6 +292,8 @@ namespace Askker.App.iOS
 
                 await voteManager.Vote(surveyVoteModel, "");
 
+                BTProgressHUD.Dismiss();
+
                 survey.optionSelected = optionId;
 
                 try
@@ -322,7 +324,7 @@ namespace Askker.App.iOS
                 }
                 catch
                 {
-                    return;
+                   return;
                 }
             }
             catch (Exception ex)
@@ -340,7 +342,7 @@ namespace Askker.App.iOS
                 {
                     feedCell.optionsCollectionView.ReloadData();
                 }
-
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
         }
@@ -349,16 +351,19 @@ namespace Askker.App.iOS
         {
             try
             {
-                survey.totalVotes--;
+                if (survey.totalVotes > 0) {
+                    survey.totalVotes--;
+                }
                 feedCell.updateTotalVotes(survey.totalVotes);
 
                 await voteManager.DeleteVote(survey.userId + survey.creationDate, LoginController.userModel.id, LoginController.tokenModel.access_token);
+
+                BTProgressHUD.Dismiss();
 
                 survey.optionSelected = null;
             }
             catch (Exception ex)
             {
-                survey.totalVotes++;
                 if (survey.type == SurveyType.Text.ToString())
                 {
                     feedCell.optionsTableView.ReloadData();
@@ -367,6 +372,8 @@ namespace Askker.App.iOS
                 {
                     feedCell.optionsCollectionView.ReloadData();
                 }
+
+                BTProgressHUD.Dismiss();
 
                 Utils.HandleException(ex);
             }
@@ -728,6 +735,10 @@ namespace Askker.App.iOS
             {
                 this.totalVotesLabel.SetTitle("1 Vote", UIControlState.Normal);
             }
+            if (totalVotes == 0)
+            {
+                this.totalVotesLabel.SetTitle("0 Votes", UIControlState.Normal);
+            }
             else
             {
                 this.totalVotesLabel.SetTitle(Common.FormatNumberAbbreviation(totalVotes) + " Votes", UIControlState.Normal);
@@ -739,6 +750,10 @@ namespace Askker.App.iOS
             if (totalComments == 1)
             {
                 this.commentsLabel.SetTitle("1 Comment", UIControlState.Normal);
+            }
+            else if (totalComments == 0)
+            {
+                this.commentsLabel.SetTitle("0 Comments", UIControlState.Normal);
             }
             else
             {
@@ -787,6 +802,7 @@ namespace Askker.App.iOS
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             var optionCell = tableView.CellAt(indexPath);
 
             if (optionCell.AccessoryView == null)
