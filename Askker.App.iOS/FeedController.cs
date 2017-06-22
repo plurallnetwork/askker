@@ -292,6 +292,8 @@ namespace Askker.App.iOS
 
                 await voteManager.Vote(surveyVoteModel, "");
 
+                BTProgressHUD.Dismiss();
+
                 survey.optionSelected = optionId;
 
                 try
@@ -322,7 +324,7 @@ namespace Askker.App.iOS
                 }
                 catch
                 {
-                    return;
+                   return;
                 }
             }
             catch (Exception ex)
@@ -340,7 +342,7 @@ namespace Askker.App.iOS
                 {
                     feedCell.optionsCollectionView.ReloadData();
                 }
-
+                BTProgressHUD.Dismiss();
                 Utils.HandleException(ex);
             }
         }
@@ -349,16 +351,19 @@ namespace Askker.App.iOS
         {
             try
             {
-                survey.totalVotes--;
+                if (survey.totalVotes > 0) {
+                    survey.totalVotes--;
+                }
                 feedCell.updateTotalVotes(survey.totalVotes);
 
                 await voteManager.DeleteVote(survey.userId + survey.creationDate, LoginController.userModel.id, LoginController.tokenModel.access_token);
+
+                BTProgressHUD.Dismiss();
 
                 survey.optionSelected = null;
             }
             catch (Exception ex)
             {
-                survey.totalVotes++;
                 if (survey.type == SurveyType.Text.ToString())
                 {
                     feedCell.optionsTableView.ReloadData();
@@ -367,6 +372,8 @@ namespace Askker.App.iOS
                 {
                     feedCell.optionsCollectionView.ReloadData();
                 }
+
+                BTProgressHUD.Dismiss();
 
                 Utils.HandleException(ex);
             }
@@ -377,6 +384,9 @@ namespace Askker.App.iOS
             if (survey.profilePicture != null)
             {
                 Utils.SetImageFromNSUrlSession(survey.profilePicture, feedCell.profileImageView, this);
+            }else
+            {
+                feedCell.profileImageView.Image = UIImage.FromBundle("Profile");
             }
 
             var attributedText = new NSMutableAttributedString(survey.userName, UIFont.BoldSystemFontOfSize(14));
@@ -446,7 +456,7 @@ namespace Askker.App.iOS
                 feedCell.AddSubview(feedCell.optionsTableView);
 
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsTableView));
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
+                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
             }
             else
             {
@@ -550,7 +560,7 @@ namespace Askker.App.iOS
 
             var optionsHeight = 176;
 
-            if (survey.type == SurveyType.Text.ToString())
+            if (survey.type == SurveyType.Text.ToString() && survey.options.Count < 4)
             {
                 optionsHeight = survey.options.Count * 44;
             }
@@ -728,6 +738,10 @@ namespace Askker.App.iOS
             {
                 this.totalVotesLabel.SetTitle("1 Vote", UIControlState.Normal);
             }
+            if (totalVotes == 0)
+            {
+                this.totalVotesLabel.SetTitle("0 Votes", UIControlState.Normal);
+            }
             else
             {
                 this.totalVotesLabel.SetTitle(Common.FormatNumberAbbreviation(totalVotes) + " Votes", UIControlState.Normal);
@@ -739,6 +753,10 @@ namespace Askker.App.iOS
             if (totalComments == 1)
             {
                 this.commentsLabel.SetTitle("1 Comment", UIControlState.Normal);
+            }
+            else if (totalComments == 0)
+            {
+                this.commentsLabel.SetTitle("0 Comments", UIControlState.Normal);
             }
             else
             {
@@ -787,6 +805,7 @@ namespace Askker.App.iOS
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             var optionCell = tableView.CellAt(indexPath);
 
             if (optionCell.AccessoryView == null)
@@ -928,6 +947,7 @@ namespace Askker.App.iOS
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             var optionCell = collectionView.CellForItem(indexPath) as OptionCollectionViewCell;
 
             if (optionCell.optionCheckImageView.Hidden)

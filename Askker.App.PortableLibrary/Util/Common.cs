@@ -20,6 +20,10 @@ namespace Askker.App.PortableLibrary.Util
 
         public static string FormatNumberAbbreviation(long number)
         {
+            if(number <= 0)
+            {
+                return "0";
+            }
             // Ensure number has max 3 significant digits (no rounding up can happen)
             long i = (long)Math.Pow(10, (int)Math.Max(0, Math.Log10(number) - 2));
             number = number / i * i;
