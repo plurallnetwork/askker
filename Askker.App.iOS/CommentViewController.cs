@@ -237,8 +237,6 @@ namespace Askker.App.iOS
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
 
-                BTProgressHUD.Dismiss();
-
                 feed.Source = new CommentsCollectionViewSource(comments, feedCell, this.NavigationController);
                 feed.Delegate = new CommentsCollectionViewDelegate((float) feedCell.Frame.Height);
                 feed.ReloadData();
@@ -258,6 +256,7 @@ namespace Askker.App.iOS
                         feed.ScrollToItem(NSIndexPath.FromItemSection(index, 0), UICollectionViewScrollPosition.CenteredVertically, true);
                     }
                 }
+                BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
             {

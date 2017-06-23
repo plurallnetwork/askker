@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using UIKit;
 using System.Globalization;
+using BigTed;
 
 namespace Askker.App.iOS
 {
@@ -25,6 +26,7 @@ namespace Askker.App.iOS
 
         public override void ViewDidLoad()
         {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             base.ViewDidLoad();
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
@@ -71,7 +73,8 @@ namespace Askker.App.iOS
             else
             {
                 profileImageView.Image = UIImage.FromBundle("Profile");
-            }       
+            }
+            BTProgressHUD.Dismiss();
         }
 
 

@@ -98,12 +98,12 @@ namespace Askker.App.iOS
                     feedCell.moreButton.Params[2] = this;
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
-
-                BTProgressHUD.Dismiss();
-
+                
                 feed.Source = new ResultsCollectionViewSource(reports, reportsDatasets, feedCell);
                 feed.Delegate = new ResultsCollectionViewDelegate((float) feedCell.Frame.Height);
                 feed.ReloadData();
+
+                BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
             {
@@ -165,6 +165,7 @@ namespace Askker.App.iOS
 
                     var dataSet = new PieChartDataSet(dataEntries.ToArray(), "");
 
+                    dataSet.ValueFormatter = new ChartDefaultValueFormatter(new NSNumberFormatter() { MinimumFractionDigits = 0 });
                     dataSet.SliceSpace = 2;
                     dataSet.Colors = ChartColorTemplates.Joyful;
                     dataSet.ValueTextColor = UIColor.Black;
@@ -175,7 +176,8 @@ namespace Askker.App.iOS
                 }
 
                 resultCell.pieChartView.AnimateWithXAxisDuration(1.4, ChartEasingOption.EaseOutBack);
-                resultCell.pieChartView.DescriptionText = string.Format("Total {0} votes", reportDataSet.totalVotes);
+                resultCell.pieChartView.DescriptionText = ""; 
+                resultCell.pieChartView.CenterAttributedText = new NSAttributedString(string.Format("Total {0} votes", reportDataSet.totalVotes));
                 resultCell.pieChartView.Legend.Enabled = false;
                 resultCell.pieChartView.NoDataText = "No results to show";
 
@@ -206,6 +208,8 @@ namespace Askker.App.iOS
                 resultCell.barChartView.LeftAxis.SpaceTop = 0.35f;
                 resultCell.barChartView.LeftAxis.AxisMinimum = 0;
                 resultCell.barChartView.LeftAxis.DrawGridLinesEnabled = false;
+                resultCell.barChartView.LeftAxis.Granularity = 1;
+                resultCell.barChartView.LeftAxis.ValueFormatter = new ChartDefaultAxisValueFormatter(new NSNumberFormatter() { MinimumFractionDigits = 0 });
 
                 resultCell.barChartView.RightAxis.Enabled = false;
 
@@ -234,6 +238,7 @@ namespace Askker.App.iOS
                     {
                         var barChartDataSet = new BarChartDataSet(dataEntriesList[i].ToArray(), reportDataSet.labels[i]);
                         barChartDataSet.SetColor(this.chartColors[i]);
+                        barChartDataSet.ValueFormatter = new ChartDefaultValueFormatter(new NSNumberFormatter() { MinimumFractionDigits = 0, ZeroSymbol = "" });
 
                         chartDataSetList.Add(barChartDataSet);
                     }
