@@ -113,6 +113,16 @@ namespace Askker.App.iOS
             // Called when the application is about to terminate. Save data, if needed. See also DidEnterBackground.
         }
 
+        public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+        {
+            if (sourceApplication == "com.apple.SafariViewService")
+            {
+                NSNotificationCenter.DefaultCenter.PostNotificationName("FinishAuthentication", url);
+            }
+
+            return true;
+        }
+
         public void Login()
         {
             //TODO: Try to update this attribute with a broadcast message

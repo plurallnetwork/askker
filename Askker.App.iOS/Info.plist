@@ -42,5 +42,22 @@
 	<string>Askker needs access to photos</string>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Media.xcassets/AppIcons.appiconset</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.blinq.Askker.App.iOS</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb919804201485283</string>
+			</array>
+			<key>CFBundleURLTypes</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>919804201485283</string>
+	<key>FacebookDisplayName</key>
+	<string>Askker</string>
 </dict>
 </plist>
