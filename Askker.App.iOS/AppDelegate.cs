@@ -91,14 +91,19 @@ namespace Askker.App.iOS
             // Here you can undo many of the changes made on entering the background.
             if (CredentialsService.DoCredentialsExist() && !CredentialsService.GetTokenModel().isStillValid(System.DateTime.Now))
             {
-                CredentialsService.DeleteCredentials();
+                ResetCredentials();
+            }
+        }
 
-                var loginController = this.Window.RootViewController.Storyboard.InstantiateViewController("LoginNavController") as LoginController;
+        private void ResetCredentials()
+        {
+            CredentialsService.DeleteCredentials();
 
-                if (loginController != null)
-                {
-                    this.Window.RootViewController = loginController;
-                }
+            var loginController = this.Window.RootViewController.Storyboard.InstantiateViewController("LoginNavController") as LoginController;
+
+            if (loginController != null)
+            {
+                this.Window.RootViewController = loginController;
             }
         }
 
@@ -131,11 +136,18 @@ namespace Askker.App.iOS
                 LoginController.tokenModel = CredentialsService.GetTokenModel();
                 LoginController.userModel = new PortableLibrary.Business.LoginManager().GetUserByTokenSync(CredentialsService.access_token);
 
-                var menuController = this.Window.RootViewController.Storyboard.InstantiateViewController("MenuNavController");
-
-                if (menuController != null)
+                if (LoginController.userModel != null)
                 {
-                    this.Window.RootViewController = menuController;
+                    var menuController = this.Window.RootViewController.Storyboard.InstantiateViewController("MenuNavController");
+
+                    if (menuController != null)
+                    {
+                        this.Window.RootViewController = menuController;
+                    }
+                }
+                else
+                {
+                    ResetCredentials();
                 }
             }
             catch (System.Exception ex)

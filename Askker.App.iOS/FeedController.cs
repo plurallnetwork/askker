@@ -187,18 +187,22 @@ namespace Askker.App.iOS
                 {
                     survey.options = Common.Randomize(survey.options);
                 }
+
+                BTProgressHUD.Dismiss();
+                refreshControl.EndRefreshing();
+
+                if (surveys.Count > 0)
+                {
+                    feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
+                    feedCollectionView.ReloadData();
+                }
+
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUnreadNotificationsCount"), new NSString("true"));
             }
             catch (Exception ex)
             {
                 Utils.HandleException(ex);
             }
-
-            BTProgressHUD.Dismiss();
-            refreshControl.EndRefreshing();
-            feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
-            feedCollectionView.ReloadData();
-
-            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUnreadNotificationsCount"), new NSString("true"));
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
@@ -583,8 +587,7 @@ namespace Askker.App.iOS
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
-            var question = surveys[indexPath.Row].question.text;
-            if (!question.Equals(""))
+            if (surveys[indexPath.Row].question != null && !surveys[indexPath.Row].question.text.Equals(""))
             {
                 var feedCellHeight = FeedController.getHeightForFeedCell(surveys[indexPath.Row], collectionView.Frame.Width);
 

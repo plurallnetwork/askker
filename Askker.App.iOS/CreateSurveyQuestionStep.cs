@@ -94,6 +94,8 @@ namespace Askker.App.iOS
 
                 StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
                 BTProgressHUD.Dismiss();
+
+                _questionStepView.QuestionText.BecomeFirstResponder();
             }
             catch (Exception ex)
             {

@@ -96,8 +96,8 @@ namespace Askker.App.iOS
             filterTableView.ScrollEnabled = false;
             new MenuTableViewController(filterTableView, filterItems, menuViewController);
 
-            var dividerLineView3 = new UIView(new RectangleF(20, (float)filterTableView.Frame.Y + (float)filterTableView.Frame.Height + 25, 220, 0.5f));
-            dividerLineView3.BackgroundColor = UIColor.Black;
+            //var dividerLineView3 = new UIView(new RectangleF(20, (float)filterTableView.Frame.Y + (float)filterTableView.Frame.Height + 25, 220, 0.5f));
+            //dividerLineView3.BackgroundColor = UIColor.Black;
 
             //var hashtagLabel = new UILabel(new RectangleF(20, (float)dividerLineView3.Frame.Y + 5, 220, 20));
             //hashtagLabel.Font = UIFont.BoldSystemFontOfSize(12.0f);
@@ -117,7 +117,7 @@ namespace Askker.App.iOS
             scrollView.Add(dividerLineView2);
             scrollView.Add(filterLabel);
             scrollView.Add(filterTableView);
-            scrollView.Add(dividerLineView3);
+            //scrollView.Add(dividerLineView3);
             //scrollView.Add(hashtagLabel);
             //scrollView.Add(hashtagText);
 
