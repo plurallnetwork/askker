@@ -217,6 +217,8 @@ namespace Askker.App.iOS
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Logout)
                 {
                     CredentialsService.DeleteCredentials();
+                    LoginController.tokenModel = null;
+                    LoginController.userModel = null;
 
                     var loginController = menuViewController.Storyboard.InstantiateViewController("LoginNavController");
                     if (loginController != null)

@@ -741,7 +741,7 @@ namespace Askker.App.iOS
             {
                 this.totalVotesLabel.SetTitle("1 Vote", UIControlState.Normal);
             }
-            if (totalVotes == 0)
+            else if (totalVotes == 0)
             {
                 this.totalVotesLabel.SetTitle("0 Votes", UIControlState.Normal);
             }
