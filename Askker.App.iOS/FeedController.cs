@@ -464,14 +464,14 @@ namespace Askker.App.iOS
                 feedCell.AddSubview(feedCell.optionsTableView);
 
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsTableView));
-                
+
                 if (finished)
                 {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3(1)][v4(" + survey.options.Count * 44 + ")]-8-[v5(24)]-8-[v6(1)][v7(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.dividerLineView, "v4", feedCell.optionsTableView, "v5", feedCell.totalVotesLabel, "v6", feedCell.dividerLineView2, "v7", feedCell.contentViewButtons));
+                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3(1)][v4]-8-[v5(24)]-8-[v6(1)][v7(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.dividerLineView, "v4", feedCell.optionsTableView, "v5", feedCell.totalVotesLabel, "v6", feedCell.dividerLineView2, "v7", feedCell.contentViewButtons));
                 }
                 else
                 {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(" + survey.options.Count * 44 + ")]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
+                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
                 }
             }
             else
@@ -824,30 +824,26 @@ namespace Askker.App.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(FeedCollectionViewCell.optionCellId, indexPath) as OptionTableViewCell;
-            cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-            cell.Tag = survey.options[indexPath.Row].id;
+            var optionCell = tableView.DequeueReusableCell(FeedCollectionViewCell.optionCellId, indexPath) as OptionTableViewCell;
+            optionCell.SelectionStyle = UITableViewCellSelectionStyle.None;
+            optionCell.Tag = survey.options[indexPath.Row].id;
 
-            cell.optionLetterLabel.Text = FeedCollectionViewCell.alphabet[indexPath.Row];
-            cell.optionLabel.Text = survey.options[indexPath.Row].text;
+            optionCell.optionLetterLabel.Text = FeedCollectionViewCell.alphabet[indexPath.Row];
+            optionCell.optionLabel.Text = survey.options[indexPath.Row].text;
 
             if (survey.optionSelected == survey.options[indexPath.Row].id)
             {
-                var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
-                optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
-                cell.AccessoryView = optionCheckImage;
-                cell.isSelected = true;
+                optionCell.AccessoryView = optionCell.optionCheckImage;
+                optionCell.isSelected = true;
                 tableView.SelectRow(indexPath, false, UITableViewScrollPosition.None);
             }
             else
             {
-                var optionEmptyCircle = new UIImageView(UIImage.FromBundle("assets/img/emptyCircle.png"));
-                optionEmptyCircle.Frame = new CGRect(0, 0, 40, 40);
-                cell.AccessoryView = optionEmptyCircle;
-                cell.isSelected = false;
+                optionCell.AccessoryView = optionCell.optionEmptyCircle;
+                optionCell.isSelected = false;
             }
 
-            return cell;
+            return optionCell;
         }
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
@@ -857,18 +853,14 @@ namespace Askker.App.iOS
 
             if (!optionCell.isSelected)
             {
-                var optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
-                optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
-                optionCell.AccessoryView = optionCheckImage;
+                optionCell.AccessoryView = optionCell.optionCheckImage;
                 optionCell.isSelected = true;
 
                 FeedController.saveVote(survey, (int)optionCell.Tag, ((UIOptionsTableView)tableView).FeedCell);
             }
             else
             {
-                var optionEmptyCircle = new UIImageView(UIImage.FromBundle("assets/img/emptyCircle.png"));
-                optionEmptyCircle.Frame = new CGRect(0, 0, 40, 40);
-                optionCell.AccessoryView = optionEmptyCircle;
+                optionCell.AccessoryView = optionCell.optionEmptyCircle;
                 optionCell.isSelected = false;
                 tableView.DeselectRow(indexPath, true);
 
@@ -911,6 +903,8 @@ namespace Askker.App.iOS
         public bool isSelected { get; set; }
         public UILabel optionLetterLabel { get; set; }
         public UILabel optionLabel { get; set; }
+        public UIImageView optionCheckImage { get; set; }
+        public UIImageView optionEmptyCircle { get; set; }
 
         protected OptionTableViewCell(IntPtr handle) : base(handle)
         {
@@ -923,6 +917,12 @@ namespace Askker.App.iOS
             optionLabel = new UILabel();
             optionLabel.Font = UIFont.SystemFontOfSize(14);
             optionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
+            optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
+
+            optionEmptyCircle = new UIImageView(UIImage.FromBundle("assets/img/emptyCircle.png"));
+            optionEmptyCircle.Frame = new CGRect(0, 0, 40, 40);
 
             ContentView.Add(optionLetterLabel);
             ContentView.Add(optionLabel);
@@ -966,12 +966,16 @@ namespace Askker.App.iOS
             {
                 optionCell.optionCheckOpacityView.Hidden = false;
                 optionCell.optionCheckImageView.Hidden = false;
+                optionCell.optionEmptyCircle.Hidden = true;
+                optionCell.isSelected = true;
                 collectionView.SelectItem(indexPath, false, UICollectionViewScrollPosition.None);
             }
             else
             {
                 optionCell.optionCheckOpacityView.Hidden = true;
                 optionCell.optionCheckImageView.Hidden = true;
+                optionCell.optionEmptyCircle.Hidden = false;
+                optionCell.isSelected = false;
             }
 
             return optionCell;
@@ -1009,16 +1013,21 @@ namespace Askker.App.iOS
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             var optionCell = collectionView.CellForItem(indexPath) as OptionCollectionViewCell;
 
-            if (optionCell.optionCheckImageView.Hidden)
+            if (!optionCell.isSelected)
             {
                 optionCell.optionCheckOpacityView.Hidden = false;
                 optionCell.optionCheckImageView.Hidden = false;
+                optionCell.optionEmptyCircle.Hidden = true;
+                optionCell.isSelected = true;
+
                 FeedController.saveVote(survey, (int)optionCell.Tag, ((UIOptionsCollectionView)collectionView).FeedCell);
             }
             else
             {
                 optionCell.optionCheckOpacityView.Hidden = true;
                 optionCell.optionCheckImageView.Hidden = true;
+                optionCell.optionEmptyCircle.Hidden = false;
+                optionCell.isSelected = false;
                 collectionView.DeselectItem(indexPath, true);
 
                 FeedController.deleteVote(survey, ((UIOptionsCollectionView)collectionView).FeedCell);
@@ -1036,6 +1045,8 @@ namespace Askker.App.iOS
 
             optionCell.optionCheckOpacityView.Hidden = true;
             optionCell.optionCheckImageView.Hidden = true;
+            optionCell.optionEmptyCircle.Hidden = false;
+            optionCell.isSelected = false;
         }
 
         private int GetNumberFromLabel(string label)
@@ -1055,16 +1066,20 @@ namespace Askker.App.iOS
 
     public class OptionCollectionViewCell : UICollectionViewCell
     {
+        public bool isSelected { get; set; }
         public UIImageView optionImageView { get; set; }
         public UIView optionCheckOpacityView { get; set; }
         public UIView optionView { get; set; }
         public UILabel optionLetterLabel { get; set; }
         public UILabel optionLabel { get; set; }
         public UIImageView optionCheckImageView { get; set; }
+        public UIImageView optionEmptyCircle { get; set; }
 
         [Export("initWithFrame:")]
         public OptionCollectionViewCell(CGRect frame) : base(frame)
         {
+            isSelected = false;
+
             optionImageView = new UIImageView();
             optionImageView.Image = null;
             optionImageView.ContentMode = UIViewContentMode.ScaleToFill;
@@ -1114,21 +1129,32 @@ namespace Askker.App.iOS
 
             optionCheckImageView = new UIImageView();
             optionCheckImageView.Image = UIImage.FromBundle("OptionCheck");
-            optionCheckImageView.Frame = new CGRect(0, 0, 50, 50);
+            optionCheckImageView.Frame = new CGRect(0, 0, 40, 40);
             optionCheckImageView.TranslatesAutoresizingMaskIntoConstraints = false;
             optionCheckImageView.Hidden = true;
+
+            optionEmptyCircle = new UIImageView();
+            optionEmptyCircle.Image = UIImage.FromBundle("assets/img/emptyCircle.png");
+            optionEmptyCircle.Frame = new CGRect(0, 0, 40, 40);
+            optionEmptyCircle.TranslatesAutoresizingMaskIntoConstraints = false;
+            optionEmptyCircle.Hidden = false;
 
             AddSubview(optionImageView);
             AddSubview(optionView);
             AddSubview(optionCheckImageView);
+            AddSubview(optionEmptyCircle);
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterY, "v0", this, "v1", optionCheckImageView));
+            //AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterY, "v0", this, "v1", optionCheckImageView));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0(40)]-4-|", new NSLayoutFormatOptions(), "v0", optionCheckImageView));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0(40)]-4-|", new NSLayoutFormatOptions(), "v0", optionEmptyCircle));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-20-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", this, "v1", optionCheckImageView));
+            //AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", this, "v1", optionCheckImageView));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(40)]-26-|", new NSLayoutFormatOptions(), "v0", optionCheckImageView));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(40)]-26-|", new NSLayoutFormatOptions(), "v0", optionEmptyCircle));
         }
     }
 
