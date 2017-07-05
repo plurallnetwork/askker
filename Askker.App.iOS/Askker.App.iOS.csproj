@@ -443,6 +443,7 @@
     <Content Include="images\icons\text.gif" />
     <BundleResource Include="images\icons\woman.png" />
     <BundleResource Include="Resources\assets\img\notification.png" />
+    <BundleResource Include="Resources\assets\img\emptyCircle.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\assets\img\filterPublic.png" />

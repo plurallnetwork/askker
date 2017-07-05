@@ -732,7 +732,7 @@
                             </collectionViewCell>
                         </cells>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Askker Feed" id="1519"/>
+                    <navigationItem key="navigationItem" title="Askker" id="1519"/>
                     <connections>
                         <outlet property="feedCollectionView" destination="1557" id="name-outlet-1557"/>
                     </connections>
@@ -789,7 +789,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Askker Feed" id="3058"/>
+                    <navigationItem key="navigationItem" title="Askker" id="3058"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2481" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2709,6 +2709,7 @@
         <image name="assets/img/threelines.png" width="30" height="30"/>
         <image name="OptionCheck" width="220" height="220"/>
         <image name="ImagePlaceholder" width="80" height="60"/>
+        <image name="assets/img/emptyCircle.png" width="625" height="608"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>
