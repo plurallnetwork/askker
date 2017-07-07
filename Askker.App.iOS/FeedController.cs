@@ -1104,7 +1104,7 @@ namespace Askker.App.iOS
             var colorBottom = UIColor.Clear.CGColor;
             var gradientLayer = new CAGradientLayer();
             gradientLayer.Colors = new CGColor[] { colorTop, colorBottom };
-            gradientLayer.Locations = new NSNumber[] { 0.3, 0.8 };
+            gradientLayer.Locations = new NSNumber[] { 0.3, 0.9 };
             gradientLayer.Frame = optionView.Bounds;
             optionView.Layer.InsertSublayer(gradientLayer, 0);
             optionView.TranslatesAutoresizingMaskIntoConstraints = false;
