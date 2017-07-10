@@ -60,9 +60,11 @@ namespace Askker.App.iOS
             nameText.Text = LoginController.userModel.name;
             emailText.Text = LoginController.userModel.userName;
             ageText.Text = LoginController.userModel.age.ToString();
+
             if ("male".Equals(LoginController.userModel.gender) || "female".Equals(LoginController.userModel.gender))
             {
                 genderText.Text = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(LoginController.userModel.gender);
+                UpdateGenderButtonStatus(LoginController.userModel.gender);
             }
 
             if (LoginController.userModel.profilePicturePath != null)
@@ -77,6 +79,20 @@ namespace Askker.App.iOS
             BTProgressHUD.Dismiss();
         }
 
+        private void UpdateGenderButtonStatus(string genderPressioned)
+        {
+            //TODO: Setar imagem habilitada/desabilitada para o male/female
+            if ("male".Equals(genderPressioned))
+            {
+                manButton.Enabled = false;
+                womanButton.Enabled = true;
+            }
+            else
+            {
+                manButton.Enabled = true;
+                womanButton.Enabled = false;
+            }
+        }
 
         private void btnUpload_TouchUpInside(object sender, EventArgs e)
         {
@@ -200,6 +216,9 @@ namespace Askker.App.iOS
         {
             genderText.Text = "Male";
             LoginController.userModel.gender = genderText.Text.ToLower();
+
+            UpdateGenderButtonStatus(LoginController.userModel.gender);
+
             Update();
         }
 
@@ -207,6 +226,9 @@ namespace Askker.App.iOS
         {
             genderText.Text = "Female";
             LoginController.userModel.gender = genderText.Text.ToLower();
+
+            UpdateGenderButtonStatus(LoginController.userModel.gender);
+
             Update();
         }
 
