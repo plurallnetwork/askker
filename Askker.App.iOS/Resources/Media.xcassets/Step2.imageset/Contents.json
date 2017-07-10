@@ -2,8 +2,7 @@
   "images": [
     {
       "scale": "1x",
-      "idiom": "iphone",
-      "filename": "step-2x1.png"
+      "idiom": "iphone"
     },
     {
       "scale": "2x",

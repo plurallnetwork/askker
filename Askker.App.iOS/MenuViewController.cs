@@ -113,15 +113,18 @@ namespace Askker.App.iOS
                         var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
                         if (CreateSurveyController != null)
                         {
-                            CreateSurveyController.ScreenState = ScreenState.Create.ToString();
-
-                            var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                            if (rootController != null)
+                            var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                            if (CreateSurveyController != null)
                             {
-                                this.PresentViewController(rootController, true, null);
+                                CreateSurveyController.ScreenState = ScreenState.Create.ToString();
+
+                                var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                                if (rootController != null)
+                                {
+                                    this.PresentViewController(rootController, true, null);
+                                }
                             }
-                        }
-                    }) }
+                        }) }
             , true);
 
             this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;

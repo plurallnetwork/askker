@@ -21,32 +21,26 @@
                             <variation key="heightClass=regular-widthClass=compact" constant="80"/>
                         </constraint>
                     </constraints>
-                    <state key="normal" image="images/icons/done.png">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                    <state key="normal" image="images/icons/done.png"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="101"/>
                         </mask>
                     </variation>
                     <variation key="heightClass=regular-widthClass=compact">
-                        <color key="backgroundColor" red="0.36078431372549019" green="0.33725490196078434" blue="0.33725490196078434" alpha="1" colorSpace="calibratedRGB"/>
                         <mask key="constraints">
                             <include reference="101"/>
                         </mask>
                     </variation>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8" customClass="UIButtonCustomBorder">
                     <rect key="frame" x="188" y="587" width="187" height="80"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="48" id="134">
                             <variation key="heightClass=regular-widthClass=compact" constant="80"/>
                         </constraint>
                     </constraints>
-                    <state key="normal" image="images/icons/text.gif">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                    <state key="normal" image="images/icons/text.gif"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="134"/>
@@ -78,18 +72,12 @@
                         </mask>
                     </variation>
                 </textView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="11">
-                    <rect key="frame" x="0.0" y="254" width="375" height="333"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7">
                     <rect key="frame" x="0.0" y="587" width="188" height="80"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="91"/>
                     </constraints>
-                    <state key="normal" image="images/icons/image.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
+                    <state key="normal" image="images/icons/image.png"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="91"/>
@@ -101,6 +89,10 @@
                         </mask>
                     </variation>
                 </button>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="11">
+                    <rect key="frame" x="0.0" y="254" width="375" height="333"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -207,17 +199,18 @@
         <image name="assets/img/friendsiOS.png" width="68" height="48"/>
         <image name="assets/img/logo_180.png" width="180" height="180"/>
         <image name="assets/img/menuiOS.png" width="61" height="38"/>
-        <image name="assets/img/optionCheck.png" width="220" height="220"/>
+        <image name="assets/img/optionCheck.png" width="512" height="512"/>
         <image name="assets/img/pagesFeed.png" width="48" height="38"/>
         <image name="assets/img/pagesFriends.png" width="48" height="34"/>
         <image name="assets/img/pagesHelp.png" width="43" height="44"/>
         <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="assets/img/threelines.png" width="30" height="30"/>
-        <image name="OptionCheck" width="220" height="220"/>
+        <image name="OptionCheck" width="512" height="512"/>
         <image name="Profile" width="210" height="260"/>
         <image name="assets/img/notification.png" width="512" height="512"/>
         <image name="ImagePlaceholder" width="80" height="60"/>
+        <image name="assets/img/emptyCircle.png" width="512" height="512"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

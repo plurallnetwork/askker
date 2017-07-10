@@ -32,7 +32,7 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton textButton { get; set; }
+        Askker.App.iOS.CustomViewComponents.UIButtonCustomBorder textButton { get; set; }
 
         void ReleaseDesignerOutlets ()
         {

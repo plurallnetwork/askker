@@ -1,4 +1,5 @@
-﻿using Cirrious.FluentLayouts.Touch;
+﻿using Askker.App.iOS.CustomViewComponents;
+using Cirrious.FluentLayouts.Touch;
 using Foundation;
 using System;
 using UIKit;
@@ -17,7 +18,7 @@ namespace Askker.App.iOS
         {
         }
 
-        public UIButton TextButton
+        public UIButtonCustomBorder TextButton
         {
             get { return textButton; }
             set { textButton = value; }

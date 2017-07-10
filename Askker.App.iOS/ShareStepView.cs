@@ -17,34 +17,16 @@ namespace Askker.App.iOS
             set { questionText = value; }
         }
 
-        public UIButton PrivateButton
+        public UITableView ShareOptions
         {
-            get { return btnPrivate; }
-            set { btnPrivate = value; }
-        }
-
-        public UIButton FriendsButton
-        {
-            get { return btnFriends; }
-            set { btnFriends = value; }
-        }
-
-        public UIButton PublicButton
-        {
-            get { return btnPublic; }
-            set { btnPublic = value; }
+            get { return shareOptions; }
+            set { shareOptions = value; }
         }
 
         public UITableView ShareTable
         {
             get { return shareTable; }
             set { shareTable = value; }
-        }
-
-        public UILabel ShareMessageLabel
-        {
-            get { return shareMessageLabel; }
-            set { shareMessageLabel = value; }
         }
 
         public static ShareStepView Create()
