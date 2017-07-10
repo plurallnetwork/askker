@@ -44,6 +44,9 @@ namespace Askker.App.iOS
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
+            //this.NavigationItem.TitleView = new UIImageView(UIImage.FromBundle("assets/img/logo_180"));
+            this.NavigationController.NavigationBar.BarTintColor = UIColor.White;
+
             closeMenuObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("CloseSideMenu"), CloseMessageRecieved);
             updateUnreadNotificationsCountObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateUnreadNotificationsCount"), UpdateUnreadNotificationsMessageRecieved);
 
@@ -89,6 +92,15 @@ namespace Askker.App.iOS
                         , UIBarButtonItemStyle.Plain
                         , (sender, args) =>
                         {
+                            if (sidebarController.IsOpen)
+                            {
+                                setMenuButtonClosed();
+                            }
+                            else
+                            {
+                                setMenuButtonOpened();
+                            }
+
                             sidebarController.ToggleMenu();
                         })
             , true);
@@ -149,11 +161,23 @@ namespace Askker.App.iOS
         private void CloseMessageRecieved(NSNotification notification)
         {
             sidebarController.CloseMenu();
+            setMenuButtonClosed();
         }
 
         public void changeContentView(UIViewController viewController)
         {
             sidebarController.ChangeContentView(viewController);
+            setMenuButtonClosed();
+        }
+
+        public void setMenuButtonClosed()
+        {
+            this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("assets/img/threelines");
+        }
+
+        public void setMenuButtonOpened()
+        {
+            this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("assets/img/pagesLogOut");
         }
 
         public async void GetUserUnreadNotificationsCount(UIButton composeButton, UILabel badge)

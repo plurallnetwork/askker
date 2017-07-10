@@ -39,7 +39,7 @@ namespace Askker.App.iOS
 
             updateProfilePictureObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateProfilePicture"), UpdateProfilePicture);
 
-            View.BackgroundColor = UIColor.FromRGB(.9f, .9f, .9f);
+            View.BackgroundColor = UIColor.FromRGB(33, 33, 33);
 
             var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
 
@@ -58,44 +58,53 @@ namespace Askker.App.iOS
                 Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this);
             }
 
+            var editProfileButtonImageView = new UIImageView(new RectangleF(220, 80, 20, 20));
+            editProfileButtonImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+            editProfileButtonImageView.Image = UIImage.FromBundle("assets/img/notification");
+            editProfileButtonImageView.Layer.MasksToBounds = true;
+            editProfileButtonImageView.AddGestureRecognizer(tapGestureRecognizer);
+            editProfileButtonImageView.UserInteractionEnabled = true;
+
             var name = new UILabel(new RectangleF(20, 180, 220, 20));
             name.Font = UIFont.SystemFontOfSize(14.0f);
             name.TextAlignment = UITextAlignment.Center;
-            name.TextColor = UIColor.Black;
+            name.TextColor = UIColor.White;
             name.Text = LoginController.userModel.name;
 
             var dividerLineView = new UIView(new RectangleF(20, 220, 220, 0.5f));
-            dividerLineView.BackgroundColor = UIColor.Black;
-
-            var pagesLabel = new UILabel(new RectangleF(20, 225, 220, 20));
-            pagesLabel.Font = UIFont.BoldSystemFontOfSize(12.0f);
-            pagesLabel.TextAlignment = UITextAlignment.Left;
-            pagesLabel.TextColor = UIColor.Black;
-            pagesLabel.Text = "Pages";
+            dividerLineView.BackgroundColor = UIColor.FromRGB(80, 80, 80);
 
             var pagesItems = new MenuPagesModel().MenuItems;
-            var pagesTableView = new UITableView(new RectangleF(20, 250, 220, pagesItems.Count * 44));
+            var pagesTableView = new UITableView(new RectangleF(20, 226, 220, (pagesItems.Count * 44) - 10));
             pagesTableView.ContentInset = new UIEdgeInsets(0, 20, 0, 0);
             pagesTableView.BackgroundColor = UIColor.Clear;
             pagesTableView.ScrollEnabled = false;
             new MenuTableViewController(pagesTableView, pagesItems, menuViewController);
 
             var dividerLineView2 = new UIView(new RectangleF(20, (float)pagesTableView.Frame.Y + (float)pagesTableView.Frame.Height + 25, 220, 0.5f));
-            dividerLineView2.BackgroundColor = UIColor.Black;
+            dividerLineView2.BackgroundColor = UIColor.FromRGB(80, 80, 80);
 
             var filterLabel = new UILabel(new RectangleF(20, (float)dividerLineView2.Frame.Y + 5, 220, 20));
             filterLabel.Font = UIFont.BoldSystemFontOfSize(12.0f);
             filterLabel.TextAlignment = UITextAlignment.Left;
-            filterLabel.TextColor = UIColor.Black;
+            filterLabel.TextColor = UIColor.FromRGB(80, 80, 80);
             filterLabel.Text = "Filter";
 
+            var filterTipLabel = new UILabel(new RectangleF(20, (float)dividerLineView2.Frame.Y + 5, 220, 20));
+            filterTipLabel.Font = UIFont.BoldSystemFontOfSize(9.0f);
+            filterTipLabel.TextAlignment = UITextAlignment.Right;
+            filterTipLabel.TextColor = UIColor.FromRGB(196, 155, 9);
+            filterTipLabel.Text = "You may select more than one";
+
             var filterItems = new MenuFilterModel().MenuItems;
-            var filterTableView = new UITableView(new RectangleF(20, (float)filterLabel.Frame.Y + 25, 220, filterItems.Count * 44));
-            filterTableView.ContentInset = new UIEdgeInsets(0, 20, 0, 0);
+            var filterTableView = new UITableView(new RectangleF(24, (float)filterLabel.Frame.Y + 25, 216, filterItems.Count * 44));
+            filterTableView.ContentInset = new UIEdgeInsets(0, 16, 0, 0);
+            filterTableView.SeparatorColor = UIColor.FromRGB(80, 80, 80);
             filterTableView.BackgroundColor = UIColor.Clear;
             filterTableView.ScrollEnabled = false;
             new MenuTableViewController(filterTableView, filterItems, menuViewController);
 
+            #region Hashtag Menu
             //var dividerLineView3 = new UIView(new RectangleF(20, (float)filterTableView.Frame.Y + (float)filterTableView.Frame.Height + 25, 220, 0.5f));
             //dividerLineView3.BackgroundColor = UIColor.Black;
 
@@ -108,20 +117,64 @@ namespace Askker.App.iOS
             //var hashtagText = new UITextField(new RectangleF(20, (float)hashtagLabel.Frame.Y + 30, 220, 40));
             //hashtagText.BorderStyle = UITextBorderStyle.Bezel;
             //hashtagText.Placeholder = "inserts tags to filter here";
+            #endregion
+
+            #region Logout Button
+            var logoutModel = new MenuLogoutModel();
+
+            var logoutButton = new UIButton(new RectangleF(0, (float)View.Frame.Height - 45, (float)View.Frame.Width, 45));
+            logoutButton.BackgroundColor = UIColor.FromRGB(50, 50, 50);
+            logoutButton.TouchUpInside += (object sender, EventArgs e) =>
+            {
+                CredentialsService.DeleteCredentials();
+                LoginController.tokenModel = null;
+                LoginController.userModel = null;
+
+                var loginController = menuViewController.Storyboard.InstantiateViewController("LoginNavController");
+                if (loginController != null)
+                {
+                    menuViewController.PresentViewController(loginController, true, null);
+                }
+            };
+            
+
+            var logoutIcoImageView = new UIImageView();
+            logoutIcoImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            logoutIcoImageView.Layer.MasksToBounds = true;
+            logoutIcoImageView.TranslatesAutoresizingMaskIntoConstraints = false;
+            logoutIcoImageView.Image = UIImage.FromBundle("assets/img/" + logoutModel.ImageName);
+
+            var logoutTitleLabel = new UILabel();
+            logoutTitleLabel.Font = UIFont.SystemFontOfSize(14);
+            logoutTitleLabel.Text = logoutModel.Title;
+            logoutTitleLabel.TextColor = UIColor.White;
+            logoutTitleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            logoutButton.Add(logoutIcoImageView);
+            logoutButton.Add(logoutTitleLabel);
+
+            logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-48-[v0(28)]-20-[v1]-8-|", new NSLayoutFormatOptions(), "v0", logoutIcoImageView, "v1", logoutTitleLabel));
+            logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(28)]", new NSLayoutFormatOptions(), "v0", logoutIcoImageView));
+            logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-10-[v0(24)]", new NSLayoutFormatOptions(), "v0", logoutTitleLabel));
+            #endregion
 
             scrollView.Add(profileImageView);
             scrollView.Add(name);
+            scrollView.Add(editProfileButtonImageView);
             scrollView.Add(dividerLineView);
-            scrollView.Add(pagesLabel);
             scrollView.Add(pagesTableView);
             scrollView.Add(dividerLineView2);
             scrollView.Add(filterLabel);
+            scrollView.Add(filterTipLabel);
             scrollView.Add(filterTableView);
+            #region Hashtag Menu
             //scrollView.Add(dividerLineView3);
             //scrollView.Add(hashtagLabel);
             //scrollView.Add(hashtagText);
+            #endregion
+            scrollView.Add(logoutButton);
 
-            scrollView.ContentSize = new CGSize(View.Frame.Width, 1000);
+            scrollView.ContentSize = new CGSize(View.Frame.Width, View.Frame.Height); //scrollView.ContentSize = new CGSize(View.Frame.Width, 1000); 
 
             View.AddSubview(scrollView);
         }
@@ -182,11 +235,18 @@ namespace Askker.App.iOS
                 cell.menuImageView.Image = UIImage.FromBundle("assets/img/" + menuItems[indexPath.Row].ImageName);
 
                 cell.menuTitleLabel.Text = menuItems[indexPath.Row].Title;
+                cell.menuTitleLabel.TextColor = UIColor.White;
 
-                if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed)
+                if (menuItems[indexPath.Row].MenuItem == MenuItem.Mine || menuItems[indexPath.Row].MenuItem == MenuItem.ForMe)
                 {
-                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
-                    tableView.SelectRow(indexPath, false, UITableViewScrollPosition.None);
+                    cell.SeparatorInset = new UIEdgeInsets(0, 8, 0, 0);
+                    cell.Bounds = new CGRect(0,0,cell.Bounds.Size.Width - 20, cell.Bounds.Size.Height);
+                    cell.menuCheckImageView.Image = UIImage.FromBundle("Profile");
+                    cell.menuCheckImageView.Image.Scale(new CGSize(28, 28));
+                }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.Finished)
+                {
+                    cell.menuCheckImageView.Image = UIImage.FromBundle("Profile"); //OptionCheck
                 }
 
                 return cell;
@@ -196,13 +256,7 @@ namespace Askker.App.iOS
             {
                 var cell = tableView.CellAt(indexPath) as MenuTableViewCell;
 
-                if (menuItems[indexPath.Row].MenuItem == MenuItem.Feed)
-                {
-                    cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
-                    var menuController = menuViewController.Storyboard.InstantiateViewController("MenuNavController");
-                    menuViewController.PresentViewController(menuController, true, null);
-                }
-                else if (menuItems[indexPath.Row].MenuItem == MenuItem.MyFriends)
+                if (menuItems[indexPath.Row].MenuItem == MenuItem.MyFriends)
                 {
                     var friendsController = menuViewController.Storyboard.InstantiateViewController("FriendsController");
                     menuViewController.NavigationController.PushViewController(friendsController, true);
@@ -214,28 +268,16 @@ namespace Askker.App.iOS
                     menuViewController.NavigationController.PushViewController(searchAllController, true);
                     NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
                 }
-                else if (menuItems[indexPath.Row].MenuItem == MenuItem.Logout)
-                {
-                    CredentialsService.DeleteCredentials();
-                    LoginController.tokenModel = null;
-                    LoginController.userModel = null;
-
-                    var loginController = menuViewController.Storyboard.InstantiateViewController("LoginNavController");
-                    if (loginController != null)
-                    {
-                        menuViewController.PresentViewController(loginController, true, null);
-                    }
-                }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Mine)
                 {
                     if (filterMine)
                     {
-                        cell.menuTitleLabel.TextColor = UIColor.Black;
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("Profile");
                         filterMine = false;
                     }
                     else
                     {
-                        cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("OptionCheck");
                         filterMine = true;
                     }
 
@@ -250,12 +292,12 @@ namespace Askker.App.iOS
                 {
                     if (filterForMe)
                     {
-                        cell.menuTitleLabel.TextColor = UIColor.Black;
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("Profile");
                         filterForMe = false;
                     }
                     else
                     {
-                        cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("OptionCheck");
                         filterForMe = true;
                     }
 
@@ -269,12 +311,12 @@ namespace Askker.App.iOS
                 {
                     if (filterFinished)
                     {
-                        cell.menuTitleLabel.TextColor = UIColor.Black;
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("Profile");
                         filterFinished = false;
                     }
                     else
                     {
-                        cell.menuTitleLabel.TextColor = UIColor.FromRGB(88, 185, 185);
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("OptionCheck");
                         filterFinished = true;
                     }
 
@@ -308,6 +350,7 @@ namespace Askker.App.iOS
     {
         public UIImageView menuImageView { get; set; }
         public UILabel menuTitleLabel { get; set; }
+        public UIImageView menuCheckImageView { get; set; }
 
         protected MenuTableViewCell(IntPtr handle) : base(handle)
         {
@@ -320,13 +363,20 @@ namespace Askker.App.iOS
             menuTitleLabel.Font = UIFont.SystemFontOfSize(14);
             menuTitleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
+            menuCheckImageView = new UIImageView(); ;
+            menuCheckImageView.Frame = new CGRect(0, 0, 28, 28);
+            this.AccessoryView = menuCheckImageView;
+
             ContentView.Add(menuImageView);
             ContentView.Add(menuTitleLabel);
-
+            ContentView.Add(menuCheckImageView);
+            
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(28)]-20-[v1]-8-|", new NSLayoutFormatOptions(), "v0", menuImageView, "v1", menuTitleLabel));
+            //AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0]-0-|", new NSLayoutFormatOptions(), "v0", menuCheckImageView));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(28)]", new NSLayoutFormatOptions(), "v0", menuImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-10-[v0(24)]", new NSLayoutFormatOptions(), "v0", menuTitleLabel));
+            //AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(28)]", new NSLayoutFormatOptions(), "v0", menuCheckImageView));
         }
     }
 }

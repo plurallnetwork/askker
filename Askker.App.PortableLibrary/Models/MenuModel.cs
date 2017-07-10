@@ -20,12 +20,12 @@ namespace Askker.App.iOS.Models
         public MenuPagesModel()
         {
             MenuItems = new List<MenuModel>();
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Feed, Title = "Feed", ImageName = "pagesFeed" });
+            //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Feed, Title = "Feed", ImageName = "pagesFeed" });
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.MyFriends, Title = "My Friends", ImageName = "pagesFriends" });
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.SearchFriends, Title = "Find Friends", ImageName = "pagesFriends" });
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Settings, Title = "Settings", ImageName = "pagesSettings" });
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Help, Title = "Help", ImageName = "pagesHelp" });
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Logout, Title = "Log out", ImageName = "pagesLogOut" });
+            //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Logout, Title = "Log out", ImageName = "pagesLogOut" });
         }
     }
 
@@ -39,6 +39,16 @@ namespace Askker.App.iOS.Models
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Mine, Title = "Mine", ImageName = "filterMine" });
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.ForMe, Title = "For Me", ImageName = "filterToYou" });
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Finished, Title = "Finished", ImageName = "filterPublic" });
+        }
+    }
+
+    public class MenuLogoutModel : MenuModel
+    {
+        public MenuLogoutModel()
+        {
+            this.MenuItem = MenuItem.Logout;
+            this.Title = "Log out";
+            this.ImageName = "pagesLogOut";
         }
     }
 }
