@@ -132,6 +132,7 @@
     <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
     <Compile Include="CustomViewComponents\SurveyOptionCustomCell.cs" />
     <Compile Include="CustomViewComponents\SurveyShareCustomCell.cs" />
+    <Compile Include="CustomViewComponents\UIButtonCustomBorder.cs" />
     <Compile Include="FeedController.cs" />
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>

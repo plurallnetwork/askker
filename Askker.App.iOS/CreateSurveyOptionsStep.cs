@@ -33,19 +33,49 @@ namespace Askker.App.iOS
             View.AddSubview(_optionsStepView);
             List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();
 
+            _optionsStepView.TextButton.SetLeftBorder(UIColor.LightGray, 1);
             _optionsStepView.TextButton.BackgroundColor = UIColor.Green;
+            _optionsStepView.TextButton.TintColor = UIColor.White;
             _optionsStepView.TextButton.SetTitle("Survey with Text", UIControlState.Normal);
-            _optionsStepView.TextButton.Font = UIFont.SystemFontOfSize(10);
+            _optionsStepView.TextButton.Font = UIFont.SystemFontOfSize(12);
             var uiImage = UIImage.FromFile("images/icons/text.gif");
             var lineHeight = _optionsStepView.TextButton.TitleLabel.Font.LineHeight;
             _optionsStepView.TextButton.TitleEdgeInsets = new UIEdgeInsets(uiImage.Size.Height, -uiImage.Size.Width, 0, 0);
             _optionsStepView.TextButton.ImageEdgeInsets = new UIEdgeInsets(-lineHeight, uiImage.Size.Width + (uiImage.Size.Width / 2), 0, 0);
 
             _optionsStepView.ImageButton.BackgroundColor = UIColor.Green;
-            _optionsStepView.DoneButton.BackgroundColor = UIColor.Green;
+            _optionsStepView.ImageButton.TintColor = UIColor.White;
+            _optionsStepView.ImageButton.SetTitle("Survey with Images", UIControlState.Normal);
+            _optionsStepView.ImageButton.Font = UIFont.SystemFontOfSize(12);
+            var uiImage1 = UIImage.FromFile("images/icons/image.png");
+            var lineHeight1 = _optionsStepView.ImageButton.TitleLabel.Font.LineHeight;
+            _optionsStepView.ImageButton.TitleEdgeInsets = new UIEdgeInsets(uiImage1.Size.Height, -uiImage1.Size.Width, 0, 0);
+            _optionsStepView.ImageButton.ImageEdgeInsets = new UIEdgeInsets(-lineHeight1, uiImage1.Size.Width + (uiImage1.Size.Width / 2), 0, 0);
+
+            _optionsStepView.DoneButton.BackgroundColor = UIColor.LightGray;
+            _optionsStepView.DoneButton.TintColor = UIColor.White;
+            _optionsStepView.DoneButton.SetTitle("Validate Survey", UIControlState.Normal);
+            _optionsStepView.DoneButton.Font = UIFont.SystemFontOfSize(12);
+            var uiImage2 = UIImage.FromFile("images/icons/done.png");
+            var lineHeight2 = _optionsStepView.DoneButton.TitleLabel.Font.LineHeight;
+            _optionsStepView.DoneButton.TitleEdgeInsets = new UIEdgeInsets(uiImage2.Size.Height, -uiImage2.Size.Width, 0, 0);
+            _optionsStepView.DoneButton.ImageEdgeInsets = new UIEdgeInsets(-lineHeight2, uiImage2.Size.Width + (uiImage2.Size.Width / 2), 0, 0);
 
             if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
             {
+                _optionsStepView.DoneButton.BackgroundColor = UIColor.Green;
+
+                if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
+                {
+                    _optionsStepView.ImageButton.BackgroundColor = UIColor.LightGray;
+                    _optionsStepView.TextButton.BackgroundColor = UIColor.Green;
+                }
+                else
+                {
+                    _optionsStepView.ImageButton.BackgroundColor = UIColor.Green;
+                    _optionsStepView.TextButton.BackgroundColor = UIColor.LightGray;
+                }
+
                 foreach(var option in CreateSurveyController.SurveyModel.options)
                 {
                     if(CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())

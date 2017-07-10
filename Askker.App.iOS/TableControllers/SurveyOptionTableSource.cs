@@ -124,11 +124,13 @@ namespace Askker.App.iOS.TableControllers
                                 tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text));
                                 //---- insert a new row in the table
                                 tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+
+                                updateDoneButton();
                             }
                             else
                             {
                                 new UIAlertView("Text Option", "Please fill the option description", null, "OK", null).Show();
-
+                                updateDoneButton();
                                 return;
                             }
                         };
@@ -168,9 +170,22 @@ namespace Askker.App.iOS.TableControllers
             }
         }
 
+        private void updateDoneButton()
+        {
+            if (tableItems.Count > 2) //not count "Add new option" cell
+            {
+                CreateSurveyOptionsStep._optionsStepView.DoneButton.BackgroundColor = UIColor.Green;
+            }
+            else
+            {
+                CreateSurveyOptionsStep._optionsStepView.DoneButton.BackgroundColor = UIColor.LightGray;
+            }
+        }
+
         private void Handle_Canceled(object sender, EventArgs e)
         {
             imagePicker.DismissModalViewController(true);
+            updateDoneButton();
         }
 
         protected void Handle_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e, UITableView tableView, NSIndexPath indexPath)
@@ -242,6 +257,8 @@ namespace Askker.App.iOS.TableControllers
                         }
                         //---- insert a new row in the table
                         tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+
+                        updateDoneButton();
                     };
 
                     alert.Show();

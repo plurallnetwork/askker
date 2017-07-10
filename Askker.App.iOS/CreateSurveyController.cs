@@ -56,8 +56,8 @@ namespace Askker.App.iOS
             View = new UIView();
             _pageTitles = new List<string> { "Write your question", "Choose your options", "Who do you want to ask to?" };
             _pageTitle = new UILabel();
-            _pageTitle.TextColor = UIColor.DarkGray;
-            _pageTitle.Font = UIFont.FromName("Arial", 12f);
+            _pageTitle.TextColor = UIColor.Yellow;
+            _pageTitle.Font = UIFont.BoldSystemFontOfSize(12);
 
             _pageViewController = new MultiStepProcessHorizontal(new MultiStepProcessDataSource(Steps));
             _pageViewController.WillTransition += _multiStepProcessHorizontal_WillTransition;
@@ -92,10 +92,10 @@ namespace Askker.App.iOS
                 BorderWidthAll = 1
             };
             _backButton.SetTitle("   <   Back   ", UIControlState.Normal);
-            _backButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+            _backButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
             _backButton.Font = UIFont.BoldSystemFontOfSize(16);
             _backButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
-            _backButton.BackgroundColor = UIColor.Green;
+            _backButton.BackgroundColor = UIColor.White;
 
             _backButton.TouchUpInside += BackTapped;
 
@@ -104,11 +104,11 @@ namespace Askker.App.iOS
                 BorderColorBottom = UIColor.LightGray,
                 BorderWidthAll = 1
             };
-            _askButton.SetTitle("   Ask   ", UIControlState.Normal);
-            _askButton.SetTitleColor(UIColor.Red, UIControlState.Normal);
-            _askButton.Font = UIFont.SystemFontOfSize(12);
-            _askButton.Layer.BorderColor = UIColor.Red.CGColor;
-            _askButton.Layer.BorderWidth = 1f;
+            _askButton.SetTitle("   Publish   >   ", UIControlState.Normal);
+            _askButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+            _askButton.Font = UIFont.SystemFontOfSize(16);
+            _askButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
+            _askButton.BackgroundColor = UIColor.White;
             _askButton.Hidden = true;
 
             _askButton.TouchUpInside += AskTapped;
