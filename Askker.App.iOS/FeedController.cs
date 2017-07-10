@@ -5,7 +5,6 @@ using UIKit;
 using CoreGraphics;
 using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Business;
-using CoreFoundation;
 using Askker.App.PortableLibrary.Util;
 using Askker.App.PortableLibrary.Enums;
 using ObjCRuntime;
@@ -726,7 +725,7 @@ namespace Askker.App.iOS
 
             resultButton = buttonForTitle(title: "Result", imageName: "result");
             commentButton = buttonForTitle(title: "Comment", imageName: "comment");
-            moreButton = buttonForTitle(title: "More", imageName: "more");
+            moreButton = buttonForTitle(title: "", imageName: "More");
 
             dividerLineButtons = new UIView();
             dividerLineButtons.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
@@ -769,7 +768,12 @@ namespace Askker.App.iOS
             button.SetTitle(title, UIControlState.Normal);
             button.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.56"), nfloat.Parse("0.58"), nfloat.Parse("0.63"), nfloat.Parse("1")), UIControlState.Normal);
             button.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
-            //button.SetImage(new UIImage(imageName), UIControlState.Normal);
+
+            if (!imageName.Equals(""))
+            {
+                button.SetImage(UIImage.FromBundle(imageName), UIControlState.Normal);
+            }
+
             button.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
             button.TranslatesAutoresizingMaskIntoConstraints = false;
             return button;
@@ -877,10 +881,8 @@ namespace Askker.App.iOS
                 optionCell = this.GetCell(tableView, indexPath) as OptionTableViewCell;
             }
 
+            optionCell.AccessoryView = optionCell.optionEmptyCircle;
             optionCell.isSelected = false;
-            var optionEmptyCircle = new UIImageView(UIImage.FromBundle("assets/img/emptyCircle.png"));
-            optionEmptyCircle.Frame = new CGRect(0, 0, 40, 40);
-            optionCell.AccessoryView = optionEmptyCircle;
         }
 
         private int GetNumberFromLabel(string label)
@@ -921,7 +923,7 @@ namespace Askker.App.iOS
             optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
             optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
 
-            optionEmptyCircle = new UIImageView(UIImage.FromBundle("assets/img/emptyCircle.png"));
+            optionEmptyCircle = new UIImageView(UIImage.FromBundle("EmptyCircleText"));
             optionEmptyCircle.Frame = new CGRect(0, 0, 40, 40);
 
             ContentView.Add(optionLetterLabel);
@@ -1129,13 +1131,11 @@ namespace Askker.App.iOS
 
             optionCheckImageView = new UIImageView();
             optionCheckImageView.Image = UIImage.FromBundle("OptionCheck");
-            optionCheckImageView.Frame = new CGRect(0, 0, 40, 40);
             optionCheckImageView.TranslatesAutoresizingMaskIntoConstraints = false;
             optionCheckImageView.Hidden = true;
 
             optionEmptyCircle = new UIImageView();
-            optionEmptyCircle.Image = UIImage.FromBundle("assets/img/emptyCircle.png");
-            optionEmptyCircle.Frame = new CGRect(0, 0, 40, 40);
+            optionEmptyCircle.Image = UIImage.FromBundle("EmptyCircleImage");
             optionEmptyCircle.TranslatesAutoresizingMaskIntoConstraints = false;
             optionEmptyCircle.Hidden = false;
 
@@ -1146,13 +1146,11 @@ namespace Askker.App.iOS
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionView));
-            //AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterY, "v0", this, "v1", optionCheckImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0(40)]-4-|", new NSLayoutFormatOptions(), "v0", optionCheckImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0(40)]-4-|", new NSLayoutFormatOptions(), "v0", optionEmptyCircle));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-20-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionView));
-            //AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", this, "v1", optionCheckImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(40)]-26-|", new NSLayoutFormatOptions(), "v0", optionCheckImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(40)]-26-|", new NSLayoutFormatOptions(), "v0", optionEmptyCircle));
         }

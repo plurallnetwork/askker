@@ -2,18 +2,17 @@
   "images": [
     {
       "scale": "1x",
-      "idiom": "iphone",
-      "filename": "profile.png"
+      "idiom": "iphone"
     },
     {
       "scale": "2x",
       "idiom": "iphone",
-      "filename": "profile.png"
+      "filename": "thumb-profile-x2.png"
     },
     {
       "scale": "3x",
       "idiom": "iphone",
-      "filename": "profile.png"
+      "filename": "thumb-profile-x3.png"
     },
     {
       "idiom": "iphone"
