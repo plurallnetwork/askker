@@ -60,7 +60,7 @@ namespace Askker.App.iOS
 
             var editProfileButtonImageView = new UIImageView(new RectangleF(220, 80, 20, 20));
             editProfileButtonImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
-            editProfileButtonImageView.Image = UIImage.FromBundle("assets/img/notification");
+            editProfileButtonImageView.Image = UIImage.FromBundle("EditMenu");
             editProfileButtonImageView.Layer.MasksToBounds = true;
             editProfileButtonImageView.AddGestureRecognizer(tapGestureRecognizer);
             editProfileButtonImageView.UserInteractionEnabled = true;
@@ -97,8 +97,8 @@ namespace Askker.App.iOS
             filterTipLabel.Text = "You may select more than one";
 
             var filterItems = new MenuFilterModel().MenuItems;
-            var filterTableView = new UITableView(new RectangleF(24, (float)filterLabel.Frame.Y + 25, 216, filterItems.Count * 44));
-            filterTableView.ContentInset = new UIEdgeInsets(0, 16, 0, 0);
+            var filterTableView = new UITableView(new RectangleF(26, (float)filterLabel.Frame.Y + 25, 214, filterItems.Count * 44));
+            filterTableView.ContentInset = new UIEdgeInsets(0, 14, 0, 0);
             filterTableView.SeparatorColor = UIColor.FromRGB(80, 80, 80);
             filterTableView.BackgroundColor = UIColor.Clear;
             filterTableView.ScrollEnabled = false;
@@ -142,7 +142,7 @@ namespace Askker.App.iOS
             logoutIcoImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
             logoutIcoImageView.Layer.MasksToBounds = true;
             logoutIcoImageView.TranslatesAutoresizingMaskIntoConstraints = false;
-            logoutIcoImageView.Image = UIImage.FromBundle("assets/img/" + logoutModel.ImageName);
+            logoutIcoImageView.Image = UIImage.FromBundle(logoutModel.ImageName);
 
             var logoutTitleLabel = new UILabel();
             logoutTitleLabel.Font = UIFont.SystemFontOfSize(14);
@@ -232,7 +232,7 @@ namespace Askker.App.iOS
                 cell.ContentView.BackgroundColor = UIColor.Clear;
                 cell.SeparatorInset = new UIEdgeInsets(0.0f, -20, 0.0f, cell.Bounds.Size.Width);
 
-                cell.menuImageView.Image = UIImage.FromBundle("assets/img/" + menuItems[indexPath.Row].ImageName);
+                cell.menuImageView.Image = UIImage.FromBundle(menuItems[indexPath.Row].ImageName);
 
                 cell.menuTitleLabel.Text = menuItems[indexPath.Row].Title;
                 cell.menuTitleLabel.TextColor = UIColor.White;
@@ -240,13 +240,11 @@ namespace Askker.App.iOS
                 if (menuItems[indexPath.Row].MenuItem == MenuItem.Mine || menuItems[indexPath.Row].MenuItem == MenuItem.ForMe)
                 {
                     cell.SeparatorInset = new UIEdgeInsets(0, 8, 0, 0);
-                    cell.Bounds = new CGRect(0,0,cell.Bounds.Size.Width - 20, cell.Bounds.Size.Height);
-                    cell.menuCheckImageView.Image = UIImage.FromBundle("Profile");
-                    cell.menuCheckImageView.Image.Scale(new CGSize(28, 28));
+                    cell.menuCheckImageView.Image = UIImage.FromBundle("EmptyCircleMenu");
                 }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Finished)
                 {
-                    cell.menuCheckImageView.Image = UIImage.FromBundle("Profile"); //OptionCheck
+                    cell.menuCheckImageView.Image = UIImage.FromBundle("EmptyCircleMenu");
                 }
 
                 return cell;
@@ -272,7 +270,7 @@ namespace Askker.App.iOS
                 {
                     if (filterMine)
                     {
-                        cell.menuCheckImageView.Image = UIImage.FromBundle("Profile");
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("EmptyCircleMenu");
                         filterMine = false;
                     }
                     else
@@ -292,7 +290,7 @@ namespace Askker.App.iOS
                 {
                     if (filterForMe)
                     {
-                        cell.menuCheckImageView.Image = UIImage.FromBundle("Profile");
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("EmptyCircleMenu");
                         filterForMe = false;
                     }
                     else
@@ -311,7 +309,7 @@ namespace Askker.App.iOS
                 {
                     if (filterFinished)
                     {
-                        cell.menuCheckImageView.Image = UIImage.FromBundle("Profile");
+                        cell.menuCheckImageView.Image = UIImage.FromBundle("EmptyCircleMenu");
                         filterFinished = false;
                     }
                     else

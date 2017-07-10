@@ -108,7 +108,7 @@ namespace Askker.App.iOS
             this.NavigationItem.SetRightBarButtonItems(
                 new UIBarButtonItem[] {
                     notificationsButton,
-                    new UIBarButtonItem(UIBarButtonSystemItem.Add, (sender, args) =>
+                    new UIBarButtonItem(UIImage.FromBundle("AddSurvey"), UIBarButtonItemStyle.Plain, (sender, args) =>
                     {
                         var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
                         if (CreateSurveyController != null)
@@ -135,7 +135,7 @@ namespace Askker.App.iOS
         private UIBarButtonItem GetNotificationsButton()
         {
             var composeButton = new UIButton(new RectangleF(0, 0, 24, 24));
-            composeButton.SetBackgroundImage(UIImage.FromBundle("assets/img/notification"), UIControlState.Normal);
+            composeButton.SetBackgroundImage(UIImage.FromBundle("Notification"), UIControlState.Normal);
             composeButton.AddTarget((sender, args) => {
                 var notificationsController = this.Storyboard.InstantiateViewController("NotificationsController") as NotificationsController;
                 this.NavigationController.PushViewController(notificationsController, true);
@@ -172,12 +172,12 @@ namespace Askker.App.iOS
 
         public void setMenuButtonClosed()
         {
-            this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("assets/img/threelines");
+            this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("Menu");
         }
 
         public void setMenuButtonOpened()
         {
-            this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("assets/img/pagesLogOut");
+            this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("CloseMenu");
         }
 
         public async void GetUserUnreadNotificationsCount(UIButton composeButton, UILabel badge)

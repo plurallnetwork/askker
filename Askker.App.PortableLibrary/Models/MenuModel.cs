@@ -21,8 +21,8 @@ namespace Askker.App.iOS.Models
         {
             MenuItems = new List<MenuModel>();
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Feed, Title = "Feed", ImageName = "pagesFeed" });
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.MyFriends, Title = "My Friends", ImageName = "pagesFriends" });
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.SearchFriends, Title = "Find Friends", ImageName = "pagesFriends" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.MyFriends, Title = "My Friends", ImageName = "MyFriends" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.SearchFriends, Title = "Find Friends", ImageName = "AddFriends" });
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Settings, Title = "Settings", ImageName = "pagesSettings" });
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Help, Title = "Help", ImageName = "pagesHelp" });
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Logout, Title = "Log out", ImageName = "pagesLogOut" });
@@ -36,9 +36,9 @@ namespace Askker.App.iOS.Models
         public MenuFilterModel()
         {
             MenuItems = new List<MenuModel>();
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Mine, Title = "Mine", ImageName = "filterMine" });
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.ForMe, Title = "For Me", ImageName = "filterToYou" });
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Finished, Title = "Finished", ImageName = "filterPublic" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Mine, Title = "My surveys", ImageName = "MySurveys" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.ForMe, Title = "For me", ImageName = "ForMe" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Finished, Title = "Finished", ImageName = "Finished" });
         }
     }
 
@@ -48,7 +48,7 @@ namespace Askker.App.iOS.Models
         {
             this.MenuItem = MenuItem.Logout;
             this.Title = "Log out";
-            this.ImageName = "pagesLogOut";
+            this.ImageName = "Logout";
         }
     }
 }
