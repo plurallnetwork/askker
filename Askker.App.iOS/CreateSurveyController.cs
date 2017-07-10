@@ -5,6 +5,8 @@ using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using BigTed;
 using Cirrious.FluentLayouts.Touch;
+using CoreAnimation;
+using CoreGraphics;
 using SDWebImage;
 using System;
 using System.Collections.Generic;
@@ -64,30 +66,44 @@ namespace Askker.App.iOS
             {
                 CurrentPage = 0,
                 Pages = Steps.Count,
-                BackgroundColor = UIColor.LightGray
-            };
-
+                BackgroundColor = UIColor.White,
+                BorderColorBottom = UIColor.LightGray,
+                BorderWidthAll = 1
+            };            
+            
             _pageControl.CurrentPage = 0;
 
-            _nextButton = new UIButton();
-            _nextButton.SetTitle("   Next   ", UIControlState.Normal);
-            _nextButton.SetTitleColor(UIColor.Red, UIControlState.Normal);
-            _nextButton.Font = UIFont.SystemFontOfSize(12);
-            _nextButton.Layer.BorderColor = UIColor.Red.CGColor;
-            _nextButton.Layer.BorderWidth = 1f;
-
+            _nextButton = new PageControlUIButton
+            {
+                BorderColorBottom = UIColor.LightGray,
+                BorderWidthAll = 1
+            };
+            _nextButton.SetTitle("   Next   >   ", UIControlState.Normal);
+            _nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+            _nextButton.Font = UIFont.BoldSystemFontOfSize(16);
+            _nextButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
+            _nextButton.BackgroundColor = UIColor.White;
+            
             _nextButton.TouchUpInside += NextTapped;
 
-            _backButton = new UIButton();
-            _backButton.SetTitle("   Back   ", UIControlState.Normal);
-            _backButton.SetTitleColor(UIColor.Red, UIControlState.Normal);
-            _backButton.Font = UIFont.SystemFontOfSize(12);
-            _backButton.Layer.BorderColor = UIColor.Red.CGColor;
-            _backButton.Layer.BorderWidth = 1f;
+            _backButton = new PageControlUIButton
+            {
+                BorderColorBottom = UIColor.LightGray,
+                BorderWidthAll = 1
+            };
+            _backButton.SetTitle("   <   Back   ", UIControlState.Normal);
+            _backButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+            _backButton.Font = UIFont.BoldSystemFontOfSize(16);
+            _backButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
+            _backButton.BackgroundColor = UIColor.Green;
 
             _backButton.TouchUpInside += BackTapped;
 
-            _askButton = new UIButton();
+            _askButton = new PageControlUIButton
+            {
+                BorderColorBottom = UIColor.LightGray,
+                BorderWidthAll = 1
+            };
             _askButton.SetTitle("   Ask   ", UIControlState.Normal);
             _askButton.SetTitleColor(UIColor.Red, UIControlState.Normal);
             _askButton.Font = UIFont.SystemFontOfSize(12);
@@ -103,8 +119,7 @@ namespace Askker.App.iOS
             View.Add(_askButton);
             View.Add(_backButton);
             View.Add(_pageTitle);
-
-
+            
             View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
             View.AddConstraints(
                 _pageViewController.View.AtTopOf(View),
@@ -118,21 +133,20 @@ namespace Askker.App.iOS
                 _pageControl.AtTopOf(View, 64),
                 _pageControl.Height().EqualTo(50),
 
-                _nextButton.AtRightOf(View, 22),
+                _nextButton.AtRightOf(View),
+                _nextButton.AtTopOf(_pageControl),
                 _nextButton.WithSameCenterY(_pageControl),
 
-                _backButton.AtLeftOf(View, 22),
+                _backButton.AtLeftOf(View),
+                _backButton.AtTopOf(_pageControl),
                 _backButton.WithSameCenterY(_pageControl),
 
-                _askButton.AtRightOf(View, 22),
+                _askButton.AtRightOf(View),
                 _askButton.WithSameCenterY(_pageControl),
-
+                            
                 _pageTitle.WithSameCenterX(_pageControl),
                 _pageTitle.AtTopOf(View, 93)
             );
-
-
-
         }
 
         private void NextTapped(object s, EventArgs e)
@@ -413,6 +427,76 @@ namespace Askker.App.iOS
             _steps = null;
 
             base.Dispose(disposing);
+        }
+    }
+
+    public class PageControlUIButton : UIButton
+    {
+        /* If set, overrides individual widths */
+        public nfloat BorderWidthAll { get; set; }
+        /* If set, overrides individual colors */
+        public UIColor BorderColorAll { get; set; }
+
+        /* For specifying individual widths */
+        public UIEdgeInsets BorderWidth { get; set; }
+        public UIColor BorderColorTop { get; set; }
+        public UIColor BorderColorBottom { get; set; }
+        public UIColor BorderColorLeft { get; set; }
+        public UIColor BorderColorRight { get; set; }
+
+        public override void Draw(CGRect rect)
+        {
+            base.Draw(rect);
+
+            if (BorderWidthAll > 0)
+            {
+                BorderWidth = new UIEdgeInsets(BorderWidthAll, BorderWidthAll, BorderWidthAll, BorderWidthAll);
+            }
+
+            if (BorderColorAll != null)
+            {
+                BorderColorTop = BorderColorBottom = BorderColorLeft = BorderColorRight = BorderColorAll;
+            }
+
+            var xMin = rect.GetMinX();
+            var xMax = rect.GetMaxX();
+
+            var yMin = rect.GetMinY();
+            var yMax = rect.GetMaxY();
+
+            var fWidth = this.Frame.Size.Width;
+            var fHeight = this.Frame.Size.Height;
+
+            var context = UIGraphics.GetCurrentContext();
+
+            DrawBorders(context, xMin, xMax, yMin, yMax, fWidth, fHeight);
+        }
+
+        void DrawBorders(CGContext context, nfloat xMin, nfloat xMax, nfloat yMin, nfloat yMax, nfloat fWidth, nfloat fHeight)
+        {
+            if (BorderColorTop != null)
+            {
+                context.SetFillColor(BorderColorTop.CGColor);
+                context.FillRect(new CGRect(xMin, yMin, fWidth, BorderWidth.Top));
+            }
+
+            if (BorderColorLeft != null)
+            {
+                context.SetFillColor(BorderColorLeft.CGColor);
+                context.FillRect(new CGRect(xMin, yMin, BorderWidth.Left, fHeight));
+            }
+
+            if (BorderColorRight != null)
+            {
+                context.SetFillColor(BorderColorRight.CGColor);
+                context.FillRect(new CGRect(xMax - BorderWidth.Right, yMin, BorderWidth.Right, fHeight));
+            }
+
+            if (BorderColorBottom != null)
+            {
+                context.SetFillColor(BorderColorBottom.CGColor);
+                context.FillRect(new CGRect(xMin, yMax - BorderWidth.Bottom, fWidth, BorderWidth.Bottom));
+            }
         }
     }
 }

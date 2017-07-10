@@ -119,31 +119,38 @@ namespace Askker.App.iOS
             switch (relationshipStatus)
             {
                 case RelationshipStatus.NotFriends:
-                    btnRelationship.SetTitle("Add Friend", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
+                    btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.Friend:
-                    btnRelationship.SetTitle("Unfriend", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Unfriend ", UIControlState.Normal);
+                    btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.PendingFriendApproval:
-                    btnRelationship.SetTitle("Pending Approval", UIControlState.Disabled);
+                    btnRelationship.SetTitle(" Pending Approval ", UIControlState.Disabled);
+                    btnRelationship.BackgroundColor = UIColor.Orange;
                     btnRelationship.Enabled = false;
                     break;
                 case RelationshipStatus.PendingYourApproval:
-                    btnRelationship.SetTitle("Accept", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Accept ", UIControlState.Normal);
+                    btnRelationship.BackgroundColor = UIColor.Green;
                     btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.RejectedByYou:
-                    btnRelationship.SetTitle("Add Friend", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
+                    btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.RejectedByFriend:
-                    btnRelationship.SetTitle("Pending Approval", UIControlState.Disabled);
+                    btnRelationship.SetTitle(" Pending Approval ", UIControlState.Disabled);
+                    btnRelationship.BackgroundColor = UIColor.Orange;
                     btnRelationship.Enabled = false;
                     break;
                 case RelationshipStatus.Unfriended:
-                    btnRelationship.SetTitle("Add Friend", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
+                    btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
                 default:

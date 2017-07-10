@@ -88,7 +88,7 @@ namespace Askker.App.iOS
             UIBarButtonItem notificationsButton = GetNotificationsButton();
 
             this.NavigationItem.SetLeftBarButtonItem(
-                new UIBarButtonItem(UIImage.FromBundle("assets/img/threelines")
+                new UIBarButtonItem(UIImage.FromBundle("Menu")
                         , UIBarButtonItemStyle.Plain
                         , (sender, args) =>
                         {

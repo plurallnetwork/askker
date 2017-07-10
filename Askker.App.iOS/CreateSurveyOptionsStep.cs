@@ -33,6 +33,17 @@ namespace Askker.App.iOS
             View.AddSubview(_optionsStepView);
             List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();
 
+            _optionsStepView.TextButton.BackgroundColor = UIColor.Green;
+            _optionsStepView.TextButton.SetTitle("Survey with Text", UIControlState.Normal);
+            _optionsStepView.TextButton.Font = UIFont.SystemFontOfSize(10);
+            var uiImage = UIImage.FromFile("images/icons/text.gif");
+            var lineHeight = _optionsStepView.TextButton.TitleLabel.Font.LineHeight;
+            _optionsStepView.TextButton.TitleEdgeInsets = new UIEdgeInsets(uiImage.Size.Height, -uiImage.Size.Width, 0, 0);
+            _optionsStepView.TextButton.ImageEdgeInsets = new UIEdgeInsets(-lineHeight, uiImage.Size.Width + (uiImage.Size.Width / 2), 0, 0);
+
+            _optionsStepView.ImageButton.BackgroundColor = UIColor.Green;
+            _optionsStepView.DoneButton.BackgroundColor = UIColor.Green;
+
             if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
             {
                 foreach(var option in CreateSurveyController.SurveyModel.options)
@@ -93,6 +104,8 @@ namespace Askker.App.iOS
                         //task.Resume();                        
                     }                    
                 }
+                CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
             }
 
             tableSource = new SurveyOptionTableSource(tableItems, this);
@@ -205,7 +218,29 @@ namespace Askker.App.iOS
                 CreateSurveyController._backButton.Hidden = false;
                 CreateSurveyController._nextButton.Hidden = false;
 
+                if (CreateSurveyOptionsStep.tableSource.GetTableItems().Count <= 1)
+                {
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                }
+                else
+                {
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+                }
+
             };
+
+            if (CreateSurveyOptionsStep.tableSource.GetTableItems().Count <= 1)
+            {
+                CreateSurveyController._nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+                CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+            }
+            else
+            {
+                CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+            }
 
             BTProgressHUD.Dismiss();
         }
