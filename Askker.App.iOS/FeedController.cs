@@ -1129,7 +1129,7 @@ namespace Askker.App.iOS
 
             optionCheckImageView = new UIImageView();
             optionCheckImageView.Image = UIImage.FromBundle("OptionCheck");
-            optionCheckImageView.Frame = new CGRect(0, 0, 40, 40);
+            //optionCheckImageView.Frame = new CGRect(0, 0, 40, 40);
             optionCheckImageView.TranslatesAutoresizingMaskIntoConstraints = false;
             optionCheckImageView.Hidden = true;
 
