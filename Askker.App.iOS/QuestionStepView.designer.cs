@@ -16,7 +16,7 @@ namespace Askker.App.iOS
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITextView questionText { get; set; }
+        UIKit.UITextField questionText { get; set; }
 
         void ReleaseDesignerOutlets ()
         {

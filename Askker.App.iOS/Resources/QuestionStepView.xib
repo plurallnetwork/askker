@@ -12,45 +12,81 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <subviews>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="4" translatesAutoresizingMaskIntoConstraints="NO" customClass="UITextView">
-                    <rect key="frame" x="0.0" y="114" width="375" height="553"/>
+                <view contentMode="scaleToFill" id="25" translatesAutoresizingMaskIntoConstraints="NO">
+                    <rect key="frame" x="20" y="197" width="335" height="1"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" colorSpace="calibratedWhite" white="0.666666666666667" alpha="1"/>
+                        <mask key="constraints">
+                            <include reference="39"/>
+                        </mask>
+                    </variation>
+                    <constraints>
+                        <constraint id="39" firstAttribute="height" constant="1"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="39"/>
+                        </mask>
+                    </variation>
+                </view>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="26" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" placeholder="Type here">
+                    <rect key="frame" x="20" y="165" width="335" height="30"/>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                    <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-                    <variation key="heightClass=regular-widthClass=compact"/>
-                </textView>
+                    <textInputTraits key="textInputTraits"/>
+                    <constraints>
+                        <constraint id="32" firstAttribute="height" constant="30"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="32"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="32"/>
+                        </mask>
+                    </variation>
+                </textField>
             </subviews>
             <variation key="default">
                 <mask key="subviews">
-                    <exclude reference="4"/>
+                    <exclude reference="25"/>
+                    <exclude reference="26"/>
                 </mask>
                 <mask key="constraints">
-                    <exclude reference="15"/>
-                    <exclude reference="16"/>
-                    <exclude reference="19"/>
-                    <exclude reference="20"/>
+                    <exclude reference="29"/>
+                    <exclude reference="30"/>
+                    <exclude reference="33"/>
+                    <exclude reference="36"/>
+                    <exclude reference="37"/>
+                    <exclude reference="40"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
                 <mask key="subviews">
-                    <include reference="4"/>
+                    <include reference="25"/>
+                    <include reference="26"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="15"/>
-                    <include reference="16"/>
-                    <include reference="19"/>
-                    <include reference="20"/>
+                    <include reference="29"/>
+                    <include reference="30"/>
+                    <include reference="33"/>
+                    <include reference="36"/>
+                    <include reference="37"/>
+                    <include reference="40"/>
                 </mask>
             </variation>
             <connections>
-                <outlet property="questionText" destination="4" id="name-outlet-4"/>
+                <outlet property="questionText" destination="26" id="name-outlet-26"/>
             </connections>
             <constraints>
-                <constraint id="15" firstItem="1" firstAttribute="bottom" secondItem="4" secondAttribute="bottom"/>
-                <constraint id="16" firstItem="1" firstAttribute="trailing" secondItem="4" secondAttribute="trailing"/>
-                <constraint id="19" firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="114"/>
-                <constraint id="20" firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
+                <constraint id="29" firstItem="1" firstAttribute="trailing" secondItem="26" secondAttribute="trailing" constant="20"/>
+                <constraint id="30" firstItem="26" firstAttribute="top" secondItem="1" secondAttribute="top" constant="165"/>
+                <constraint id="33" firstItem="26" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20"/>
+                <constraint id="36" firstItem="1" firstAttribute="trailing" secondItem="25" secondAttribute="trailing" constant="20"/>
+                <constraint id="37" firstItem="25" firstAttribute="top" secondItem="1" secondAttribute="top" constant="197"/>
+                <constraint id="40" firstItem="25" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20"/>
             </constraints>
         </view>
     </objects>
@@ -61,7 +97,6 @@
         <image name="images/white-pip-full.png" width="8" height="8"/>
         <image name="assets/img/logo_180.png" width="180" height="180"/>
         <image name="Profile" width="210" height="260"/>
-        <image name="images/icons/friendsiOS.png" width="68" height="48"/>
         <image name="images/icons/image.png" width="48" height="48"/>
         <image name="images/icons/text.gif" width="48" height="48"/>
         <image name="OptionCheck" width="220" height="220"/>
@@ -82,7 +117,8 @@
         <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="assets/img/threelines.png" width="30" height="30"/>
-        <image name="assets/img/plus.png" width="32" height="32"/>
+        <image name="assets/img/notification.png" width="512" height="512"/>
+        <image name="ImagePlaceholder" width="80" height="60"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

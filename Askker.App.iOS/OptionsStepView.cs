@@ -52,7 +52,7 @@ namespace Askker.App.iOS
 
         public override void AwakeFromNib()
         {
-            doneButton.Frame = new CoreGraphics.CGRect(0f, 587f, 375f, 80f);                                    
+            doneButton.Frame = new CoreGraphics.CGRect(0f, 587f, 375f, 80f);
         }
     }
 }

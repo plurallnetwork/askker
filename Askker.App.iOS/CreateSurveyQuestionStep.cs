@@ -8,6 +8,7 @@ using Cirrious.FluentLayouts.Touch;
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -30,12 +31,12 @@ namespace Askker.App.iOS
             _questionStepView = QuestionStepView.Create();
             View.AddSubview(_questionStepView);
 
-            NSNotificationCenter.DefaultCenter.AddObserver(UITextView.TextDidChangeNotification, TextChangedEvent);
+            NSNotificationCenter.DefaultCenter.AddObserver(UITextField.TextFieldTextDidChangeNotification, TextChangedEvent);            
         }
 
         private void TextChangedEvent(NSNotification notification)
         {
-            UITextView field = (UITextView)notification.Object;
+            UITextField field = (UITextField)notification.Object;
 
             if (field == _questionStepView.QuestionText)
             {
@@ -49,7 +50,18 @@ namespace Askker.App.iOS
                     CreateSurveyController.SurveyModel.question = new Question();
                 }
                 CreateSurveyController.SurveyModel.question.text = _questionStepView.QuestionText.Text;
-                CreateSurveyController.SurveyModel.question.image = "";                
+                CreateSurveyController.SurveyModel.question.image = "";
+
+                if (string.IsNullOrWhiteSpace(_questionStepView.QuestionText.Text))
+                {
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                }
+                else
+                {
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+                }
             }
         }
 
@@ -90,6 +102,17 @@ namespace Askker.App.iOS
                         }                        
                     }
                     _questionStepView.QuestionText.Text = CreateSurveyController.SurveyModel.question.text;
+
+                    if (string.IsNullOrWhiteSpace(_questionStepView.QuestionText.Text))
+                    {
+                        CreateSurveyController._nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+                        CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                    }
+                    else
+                    {
+                        CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                        CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+                    }
                 }
 
                 StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });

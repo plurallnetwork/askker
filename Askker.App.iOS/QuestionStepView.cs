@@ -8,7 +8,7 @@ namespace Askker.App.iOS
 {
     public partial class QuestionStepView : UIView
     {
-        public UITextView QuestionText
+        public UITextField QuestionText
         {
             get { return questionText; }
             set {questionText = value; }
