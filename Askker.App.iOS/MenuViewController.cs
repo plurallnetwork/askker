@@ -96,20 +96,22 @@ namespace Askker.App.iOS
             this.NavigationItem.SetRightBarButtonItems(
                 new UIBarButtonItem[] {
                     notificationsButton,
-                    new UIBarButtonItem(UIBarButtonSystemItem.Add, (sender, args) =>
-                    {
-                        var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
-                        if (CreateSurveyController != null)
+                    new UIBarButtonItem(UIImage.FromBundle("AddSurvey")
+                        , UIBarButtonItemStyle.Plain
+                        , (sender, args) =>
                         {
-                            CreateSurveyController.ScreenState = ScreenState.Create.ToString();
-
-                            var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                            if (rootController != null)
+                            var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                            if (CreateSurveyController != null)
                             {
-                                this.PresentViewController(rootController, true, null);
+                                CreateSurveyController.ScreenState = ScreenState.Create.ToString();
+
+                                var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                                if (rootController != null)
+                                {
+                                    this.PresentViewController(rootController, true, null);
+                                }
                             }
-                        }
-                    }) }
+                        }) }
             , true);
 
             this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;
@@ -123,7 +125,7 @@ namespace Askker.App.iOS
         private UIBarButtonItem GetNotificationsButton()
         {
             var composeButton = new UIButton(new RectangleF(0, 0, 24, 24));
-            composeButton.SetBackgroundImage(UIImage.FromBundle("assets/img/notification"), UIControlState.Normal);
+            composeButton.SetBackgroundImage(UIImage.FromBundle("Notification"), UIControlState.Normal);
             composeButton.AddTarget((sender, args) => {
                 var notificationsController = this.Storyboard.InstantiateViewController("NotificationsController") as NotificationsController;
                 this.NavigationController.PushViewController(notificationsController, true);

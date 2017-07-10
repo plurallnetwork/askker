@@ -54,6 +54,7 @@
     <Compile Include="Models\SetPasswordModel.cs" />
     <Compile Include="Models\SurveyCommentModel.cs" />
     <Compile Include="Models\SurveyModel.cs" />
+    <Compile Include="Models\TargetAudienceModel.cs" />
     <Compile Include="Models\TokenModel.cs" />
     <Compile Include="Models\UserFriendModel.cs" />
     <Compile Include="Models\UserLoginModel.cs" />

@@ -367,9 +367,6 @@
     <BundleResource Include="images\white-pip-full%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <ImageAsset Include="Resources\Media.xcassets\AddFriends.imageset\add-friends-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\AddFriends.imageset\add-friends-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -377,9 +374,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\AddFriends.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\AddSurvey.imageset\add-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\AddSurvey.imageset\add-x2.png">
@@ -424,9 +418,6 @@
     <ImageAsset Include="Resources\Media.xcassets\AppIcons.appiconset\logo_87_R.png">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\BackBlack.imageset\back-black-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\BackBlack.imageset\back-black-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -434,9 +425,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\BackBlack.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\CloseMenu.imageset\close-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\CloseMenu.imageset\close-x2.png">
@@ -451,9 +439,6 @@
     <ImageAsset Include="Resources\Media.xcassets\EditMenu.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\EditMenu.imageset\edit-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\EditMenu.imageset\edit-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -463,16 +448,10 @@
     <ImageAsset Include="Resources\Media.xcassets\EditProfile.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\EditProfile.imageset\edit-profile-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\EditProfile.imageset\edit-profile-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\EditProfile.imageset\edit-profile-x3.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\EmptyCircleImage.imageset\circle-img-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\EmptyCircleImage.imageset\circle-img-x2.png">
@@ -484,9 +463,6 @@
     <ImageAsset Include="Resources\Media.xcassets\EmptyCircleImage.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\EmptyCircleMenu.imageset\circle-menu-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\EmptyCircleMenu.imageset\circle-menu-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -494,9 +470,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\EmptyCircleMenu.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\EmptyCircleText.imageset\circle-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\EmptyCircleText.imageset\circle-x2.png">
@@ -511,9 +484,6 @@
     <ImageAsset Include="Resources\Media.xcassets\Female.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Female.imageset\female-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Female.imageset\female-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -521,9 +491,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Finished.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Finished.imageset\finished-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Finished.imageset\finished-x2.png">
@@ -535,9 +502,6 @@
     <ImageAsset Include="Resources\Media.xcassets\ForMe.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\ForMe.imageset\for-me-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\ForMe.imageset\for-me-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -547,9 +511,6 @@
     <ImageAsset Include="Resources\Media.xcassets\Friends.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Friends.imageset\friends-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Friends.imageset\friends-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -557,9 +518,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Globe.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Globe.imageset\globe-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Globe.imageset\globe-x2.png">
@@ -583,9 +541,6 @@
     <ImageAsset Include="Resources\Media.xcassets\Lock.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Lock.imageset\lock-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Lock.imageset\lock-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -593,9 +548,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Logout.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Logout.imageset\logout-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Logout.imageset\logout-x2.png">
@@ -607,9 +559,6 @@
     <ImageAsset Include="Resources\Media.xcassets\Male.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Male.imageset\male-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Male.imageset\male-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -617,9 +566,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Menu.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Menu.imageset\menu-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Menu.imageset\menu-x2.png">
@@ -631,9 +577,6 @@
     <ImageAsset Include="Resources\Media.xcassets\More.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\More.imageset\more-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\More.imageset\more-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -641,9 +584,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\MyFriends.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\MyFriends.imageset\myfriends-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\MyFriends.imageset\myfriends-x2.png">
@@ -655,9 +595,6 @@
     <ImageAsset Include="Resources\Media.xcassets\MySurveys.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\MySurveys.imageset\my-surveys-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\MySurveys.imageset\my-surveys-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -665,9 +602,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\NextStep.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\NextStep.imageset\next-step-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\NextStep.imageset\next-step-x2.png">
@@ -679,9 +613,6 @@
     <ImageAsset Include="Resources\Media.xcassets\NextStepGray.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\NextStepGray.imageset\next-step-gray-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\NextStepGray.imageset\next-step-gray-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -691,16 +622,10 @@
     <ImageAsset Include="Resources\Media.xcassets\Notification.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Notification.imageset\notification-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Notification.imageset\notification-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Notification.imageset\notification-x3.png">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\OptionCheck.imageset\check-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\OptionCheck.imageset\check-x2.png">
@@ -715,9 +640,6 @@
     <ImageAsset Include="Resources\Media.xcassets\PictureOption.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\PictureOption.imageset\picture-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\PictureOption.imageset\picture-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -725,9 +647,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Profile.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Profile.imageset\thumb-profile-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Profile.imageset\thumb-profile-x2.png">
@@ -739,9 +658,6 @@
     <ImageAsset Include="Resources\Media.xcassets\Step1.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Step1.imageset\step-1x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Step1.imageset\step-1x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -749,9 +665,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Step2.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Step2.imageset\step-2x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Step2.imageset\step-2x2.png">
@@ -763,9 +676,6 @@
     <ImageAsset Include="Resources\Media.xcassets\Step2Gray.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Step2Gray.imageset\step-2-gray-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Step2Gray.imageset\step-2-gray-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -773,9 +683,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Step3.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Step3.imageset\step-3x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Step3.imageset\step-3x2.png">
@@ -787,9 +694,6 @@
     <ImageAsset Include="Resources\Media.xcassets\Step3Gray.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\Step3Gray.imageset\step-3-gray-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Step3Gray.imageset\step-3-gray-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -797,9 +701,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\StepCheck.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\StepCheck.imageset\step-check-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\StepCheck.imageset\step-check-x2.png">
@@ -811,9 +712,6 @@
     <ImageAsset Include="Resources\Media.xcassets\TextOption.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\TextOption.imageset\text-x1.png">
-      <InProject>false</InProject>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\TextOption.imageset\text-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -821,9 +719,6 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\ValidateSurvey.imageset\Contents.json">
-      <InProject>false</InProject>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\ValidateSurvey.imageset\validate-survey-x1.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\ValidateSurvey.imageset\validate-survey-x2.png">
