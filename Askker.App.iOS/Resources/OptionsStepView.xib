@@ -21,7 +21,7 @@
                             <variation key="heightClass=regular-widthClass=compact" constant="80"/>
                         </constraint>
                     </constraints>
-                    <state key="normal" image="images/icons/done.png"/>
+                    <state key="normal" image="ValidateSurvey"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="101"/>
@@ -40,7 +40,7 @@
                             <variation key="heightClass=regular-widthClass=compact" constant="80"/>
                         </constraint>
                     </constraints>
-                    <state key="normal" image="images/icons/text.gif"/>
+                    <state key="normal" image="TextOption"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="134"/>
@@ -77,7 +77,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="80" id="91"/>
                     </constraints>
-                    <state key="normal" image="images/icons/image.png"/>
+                    <state key="normal" image="PictureOption"/>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="91"/>
@@ -206,11 +206,44 @@
         <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="assets/img/threelines.png" width="30" height="30"/>
-        <image name="OptionCheck" width="512" height="512"/>
-        <image name="Profile" width="210" height="260"/>
+        <image name="OptionCheck" width="68" height="68"/>
+        <image name="Profile" width="180" height="180"/>
         <image name="assets/img/notification.png" width="512" height="512"/>
         <image name="ImagePlaceholder" width="80" height="60"/>
         <image name="assets/img/emptyCircle.png" width="512" height="512"/>
+        <image name="AddFriends" width="40" height="42"/>
+        <image name="AddSurvey" width="48" height="48"/>
+        <image name="BackBlack" width="17" height="30"/>
+        <image name="CloseMenu" width="38" height="38"/>
+        <image name="EditMenu" width="43" height="43"/>
+        <image name="EditProfile" width="33" height="33"/>
+        <image name="EmptyCircleImage" width="84" height="84"/>
+        <image name="EmptyCircleMenu" width="68" height="68"/>
+        <image name="EmptyCircleText" width="68" height="68"/>
+        <image name="Female" width="27" height="42"/>
+        <image name="Finished" width="32" height="32"/>
+        <image name="ForMe" width="23" height="33"/>
+        <image name="Friends" width="44" height="34"/>
+        <image name="Globe" width="46" height="46"/>
+        <image name="Lock" width="37" height="49"/>
+        <image name="Logout" width="27" height="30"/>
+        <image name="Male" width="37" height="37"/>
+        <image name="Menu" width="50" height="34"/>
+        <image name="More" width="11" height="39"/>
+        <image name="MyFriends" width="33" height="27"/>
+        <image name="MySurveys" width="40" height="31"/>
+        <image name="NextStep" width="17" height="30"/>
+        <image name="NextStepGray" width="17" height="30"/>
+        <image name="Notification" width="27" height="34"/>
+        <image name="PictureOption" width="52" height="41"/>
+        <image name="Step1" width="35" height="35"/>
+        <image name="Step2" width="35" height="35"/>
+        <image name="Step2Gray" width="35" height="35"/>
+        <image name="Step3" width="35" height="35"/>
+        <image name="Step3Gray" width="35" height="35"/>
+        <image name="StepCheck" width="35" height="35"/>
+        <image name="TextOption" width="49" height="49"/>
+        <image name="ValidateSurvey" width="47" height="36"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>

@@ -78,12 +78,17 @@ namespace Askker.App.iOS
                 BorderColorBottom = UIColor.LightGray,
                 BorderWidthAll = 0.5f
             };
-            _nextButton.SetTitle("   Next   >   ", UIControlState.Normal);
+            _nextButton.SetTitle("   Next   ", UIControlState.Normal);
             _nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
             _nextButton.Font = UIFont.BoldSystemFontOfSize(16);
             _nextButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
             _nextButton.BackgroundColor = UIColor.White;
-            
+            _nextButton.SetImage(UIImage.FromBundle("NextStep"), UIControlState.Normal);
+            var uiImage = _nextButton.ImageView.Frame;
+            var line = _nextButton.TitleLabel.Frame;
+            _nextButton.TitleEdgeInsets = new UIEdgeInsets(0, -uiImage.Size.Width, 0, uiImage.Size.Width);
+            _nextButton.ImageEdgeInsets = new UIEdgeInsets(0, line.Size.Width, 0, -line.Size.Width);
+
             _nextButton.TouchUpInside += NextTapped;
 
             _backButton = new PageControlUIButton
