@@ -44,6 +44,9 @@ namespace Askker.App.iOS
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
+            this.NavigationItem.TitleView = new UIImageView(UIImage.FromBundle("AskkerLogo"));
+            this.NavigationController.NavigationBar.BarTintColor = UIColor.White;
+
             closeMenuObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("CloseSideMenu"), CloseMessageRecieved);
             updateUnreadNotificationsCountObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateUnreadNotificationsCount"), UpdateUnreadNotificationsMessageRecieved);
 
@@ -89,6 +92,15 @@ namespace Askker.App.iOS
                         , UIBarButtonItemStyle.Plain
                         , (sender, args) =>
                         {
+                            if (sidebarController.IsOpen)
+                            {
+                                setMenuButtonClosed();
+                            }
+                            else
+                            {
+                                setMenuButtonOpened();
+                            }
+
                             sidebarController.ToggleMenu();
                         })
             , true);
@@ -96,22 +108,21 @@ namespace Askker.App.iOS
             this.NavigationItem.SetRightBarButtonItems(
                 new UIBarButtonItem[] {
                     notificationsButton,
-                    new UIBarButtonItem(UIImage.FromBundle("AddSurvey")
-                        , UIBarButtonItemStyle.Plain
-                        , (sender, args) =>
+                    new UIBarButtonItem(UIImage.FromBundle("AddSurvey"), UIBarButtonItemStyle.Plain, (sender, args) =>
+                    {
+                        var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
+                        if (CreateSurveyController != null)
                         {
-                            var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
-                            if (CreateSurveyController != null)
-                            {
-                                CreateSurveyController.ScreenState = ScreenState.Create.ToString();
+                            CreateSurveyController.ScreenState = ScreenState.Create.ToString();
 
-                                var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                                if (rootController != null)
-                                {
-                                    this.PresentViewController(rootController, true, null);
-                                }
+                            var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                            if (rootController != null)
+                            {
+                                this.PresentViewController(rootController, true, null);
                             }
-                        }) }
+                        }
+                    })
+                }
             , true);
 
             this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;
@@ -144,6 +155,8 @@ namespace Askker.App.iOS
             this.badge.Frame = CoreGraphics.CGRect.FromLTRB(badgeOriginX, badgeOriginY, badgeOriginX + badgeSize, badgeOriginY + badgeSize);
             this.badge.Layer.CornerRadius = badgeSize / 2;
             this.badge.Layer.MasksToBounds = true;
+            this.badge.Layer.BorderWidth = 1;
+            this.badge.Layer.BorderColor = UIColor.White.CGColor;
 
             return new UIBarButtonItem(composeButton);
         }
@@ -151,11 +164,23 @@ namespace Askker.App.iOS
         private void CloseMessageRecieved(NSNotification notification)
         {
             sidebarController.CloseMenu();
+            setMenuButtonClosed();
         }
 
         public void changeContentView(UIViewController viewController)
         {
             sidebarController.ChangeContentView(viewController);
+            setMenuButtonClosed();
+        }
+
+        public void setMenuButtonClosed()
+        {
+            this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("Menu");
+        }
+
+        public void setMenuButtonOpened()
+        {
+            this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("CloseMenu");
         }
 
         public async void GetUserUnreadNotificationsCount(UIButton composeButton, UILabel badge)

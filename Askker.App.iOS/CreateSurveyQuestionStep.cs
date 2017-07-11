@@ -54,13 +54,13 @@ namespace Askker.App.iOS
 
                 if (string.IsNullOrWhiteSpace(_questionStepView.QuestionText.Text))
                 {
-                    CreateSurveyController._nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
                     CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
                 }
                 else
                 {
                     CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                    CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                 }
             }
         }
@@ -105,13 +105,13 @@ namespace Askker.App.iOS
 
                     if (string.IsNullOrWhiteSpace(_questionStepView.QuestionText.Text))
                     {
-                        CreateSurveyController._nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+                        CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
                         CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
                     }
                     else
                     {
                         CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                        CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+                        CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                     }
                 }
 

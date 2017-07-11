@@ -197,7 +197,7 @@ namespace Askker.App.iOS
             if (nameText.Enabled)
             {
                 LoginController.userModel.name = nameText.Text;
-                nameButton.SetImage(UIImage.FromBundle("images/icons/editar.png"), UIControlState.Normal);
+                nameButton.SetImage(UIImage.FromBundle("EditProfile"), UIControlState.Normal);
                 enableButtons("nameButton");
                 nameText.Enabled = false;
                 Update();
@@ -239,7 +239,7 @@ namespace Askker.App.iOS
                 if (Regex.Match(emailText.Text.Trim(), @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$").Success || string.IsNullOrEmpty(emailText.Text))
                 {
                     LoginController.userModel.userName = emailText.Text;
-                    emailButton.SetImage(UIImage.FromBundle("images/icons/editar.png"), UIControlState.Normal);
+                    emailButton.SetImage(UIImage.FromBundle("EditProfile"), UIControlState.Normal);
                     enableButtons("emailButton");
                     emailText.Enabled = false;
                     Update();
@@ -264,7 +264,7 @@ namespace Askker.App.iOS
                 {
                     LoginController.userModel.age = value;
                 }                
-                ageButton.SetImage(UIImage.FromBundle("images/icons/editar.png"), UIControlState.Normal);
+                ageButton.SetImage(UIImage.FromBundle("EditProfile"), UIControlState.Normal);
                 enableButtons("ageButton");
                 ageText.Enabled = false;
                 Update();
