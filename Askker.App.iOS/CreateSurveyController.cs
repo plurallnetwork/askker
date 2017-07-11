@@ -68,7 +68,7 @@ namespace Askker.App.iOS
                 Pages = Steps.Count,
                 BackgroundColor = UIColor.White,
                 BorderColorBottom = UIColor.LightGray,
-                BorderWidthAll = 1
+                BorderWidthAll = 0.5f
             };            
             
             _pageControl.CurrentPage = 0;
@@ -76,7 +76,7 @@ namespace Askker.App.iOS
             _nextButton = new PageControlUIButton
             {
                 BorderColorBottom = UIColor.LightGray,
-                BorderWidthAll = 1
+                BorderWidthAll = 0.5f
             };
             _nextButton.SetTitle("   Next   >   ", UIControlState.Normal);
             _nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
@@ -89,7 +89,7 @@ namespace Askker.App.iOS
             _backButton = new PageControlUIButton
             {
                 BorderColorBottom = UIColor.LightGray,
-                BorderWidthAll = 1
+                BorderWidthAll = 0.5f
             };
             _backButton.SetTitle("   <   Back   ", UIControlState.Normal);
             _backButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
@@ -102,7 +102,7 @@ namespace Askker.App.iOS
             _askButton = new PageControlUIButton
             {
                 BorderColorBottom = UIColor.LightGray,
-                BorderWidthAll = 1
+                BorderWidthAll = 0.5f
             };
             _askButton.SetTitle("   Publish   >   ", UIControlState.Normal);
             _askButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
@@ -142,6 +142,7 @@ namespace Askker.App.iOS
                 _backButton.WithSameCenterY(_pageControl),
 
                 _askButton.AtRightOf(View),
+                _askButton.AtTopOf(_pageControl),
                 _askButton.WithSameCenterY(_pageControl),
                             
                 _pageTitle.WithSameCenterX(_pageControl),
