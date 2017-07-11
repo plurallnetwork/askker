@@ -944,7 +944,7 @@
                                     <constraint firstAttribute="width" constant="24" id="4550"/>
                                     <constraint firstAttribute="height" constant="24" id="4551"/>
                                 </constraints>
-                                <state key="normal" image="images/icons/editar.png">
+                                <state key="normal" image="EditProfile">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="default">
@@ -967,7 +967,7 @@
                                     <constraint firstAttribute="width" constant="24" id="4591"/>
                                     <constraint firstAttribute="height" constant="24" id="4592"/>
                                 </constraints>
-                                <state key="normal" image="images/icons/editar.png">
+                                <state key="normal" image="EditProfile">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="default">
@@ -990,7 +990,7 @@
                                     <constraint firstAttribute="width" constant="24" id="4611"/>
                                     <constraint firstAttribute="height" constant="24" id="4612"/>
                                 </constraints>
-                                <state key="normal" image="images/icons/editar.png">
+                                <state key="normal" image="EditProfile">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="default">
@@ -1013,7 +1013,7 @@
                                     <constraint firstAttribute="width" constant="24" id="4564"/>
                                     <constraint firstAttribute="height" constant="24" id="4565"/>
                                 </constraints>
-                                <state key="normal" image="images/icons/woman.png">
+                                <state key="normal" image="Female">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="default">
@@ -1036,7 +1036,7 @@
                                     <constraint firstAttribute="width" constant="24" id="4569"/>
                                     <constraint firstAttribute="height" constant="24" id="4570"/>
                                 </constraints>
-                                <state key="normal" image="images/icons/man.png">
+                                <state key="normal" image="Male">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="default">
@@ -1296,7 +1296,7 @@
                             <constraint id="6558" firstItem="2765" firstAttribute="top" secondItem="2595" secondAttribute="bottom" constant="142"/>
                             <constraint id="6559" firstItem="2756" firstAttribute="top" secondItem="2595" secondAttribute="bottom" constant="145"/>
                             <constraint id="6566" firstItem="6560" firstAttribute="top" secondItem="4510" secondAttribute="centerY" constant="21"/>
-                            <constraint id="6567" firstItem="6560" firstAttribute="leading" secondItem="2762" secondAttribute="trailing" constant="3"/>
+                            <constraint id="6567" firstItem="6560" firstAttribute="leading" secondItem="2762" secondAttribute="trailing" constant="5"/>
                             <constraint id="6570" firstItem="2761" firstAttribute="leading" secondItem="6560" secondAttribute="trailing" constant="4"/>
                         </constraints>
                         <variation key="default">

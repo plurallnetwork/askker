@@ -44,7 +44,7 @@ namespace Askker.App.iOS
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
-            //this.NavigationItem.TitleView = new UIImageView(UIImage.FromBundle("assets/img/logo_180"));
+            this.NavigationItem.TitleView = new UIImageView(UIImage.FromBundle("AskkerLogo"));
             this.NavigationController.NavigationBar.BarTintColor = UIColor.White;
 
             closeMenuObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("CloseSideMenu"), CloseMessageRecieved);
@@ -113,18 +113,16 @@ namespace Askker.App.iOS
                         var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
                         if (CreateSurveyController != null)
                         {
-                            var CreateSurveyController = this.Storyboard.InstantiateViewController("CreateSurveyController") as CreateSurveyController;
-                            if (CreateSurveyController != null)
-                            {
-                                CreateSurveyController.ScreenState = ScreenState.Create.ToString();
+                            CreateSurveyController.ScreenState = ScreenState.Create.ToString();
 
-                                var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
-                                if (rootController != null)
-                                {
-                                    this.PresentViewController(rootController, true, null);
-                                }
+                            var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
+                            if (rootController != null)
+                            {
+                                this.PresentViewController(rootController, true, null);
                             }
-                        }) }
+                        }
+                    })
+                }
             , true);
 
             this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;
@@ -157,6 +155,8 @@ namespace Askker.App.iOS
             this.badge.Frame = CoreGraphics.CGRect.FromLTRB(badgeOriginX, badgeOriginY, badgeOriginX + badgeSize, badgeOriginY + badgeSize);
             this.badge.Layer.CornerRadius = badgeSize / 2;
             this.badge.Layer.MasksToBounds = true;
+            this.badge.Layer.BorderWidth = 1;
+            this.badge.Layer.BorderColor = UIColor.White.CGColor;
 
             return new UIBarButtonItem(composeButton);
         }
