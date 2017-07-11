@@ -135,7 +135,7 @@ namespace Askker.App.iOS
                     }                    
                 }
                 CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+                CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
             }
 
             tableSource = new SurveyOptionTableSource(tableItems, this);
@@ -250,26 +250,26 @@ namespace Askker.App.iOS
 
                 if (CreateSurveyOptionsStep.tableSource.GetTableItems().Count <= 1)
                 {
-                    CreateSurveyController._nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
                     CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
                 }
                 else
                 {
                     CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                    CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                 }
 
             };
 
             if (CreateSurveyOptionsStep.tableSource.GetTableItems().Count <= 1)
             {
-                CreateSurveyController._nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
+                CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
                 CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
             }
             else
             {
                 CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                CreateSurveyController._nextButton.BackgroundColor = UIColor.Green;
+                CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
             }
 
             BTProgressHUD.Dismiss();

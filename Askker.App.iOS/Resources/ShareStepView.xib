@@ -11,7 +11,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4">
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4">
                     <rect key="frame" x="0.0" y="114" width="375" height="80"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -19,7 +19,7 @@
                             <variation key="heightClass=regular-widthClass=compact" constant="80"/>
                         </constraint>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17" weight="semibold"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     <variation key="default">
                         <mask key="constraints">
@@ -33,8 +33,8 @@
                         </mask>
                     </variation>
                 </textView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="32">
-                    <rect key="frame" x="0.0" y="377" width="375" height="290"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="32" hidden="YES">
+                    <rect key="frame" x="0.0" y="352" width="375" height="315"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="116" scrollEnabled="NO">
@@ -57,9 +57,29 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Privacy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="123" translatesAutoresizingMaskIntoConstraints="NO">
                     <rect key="frame" x="15" y="216" width="109" height="21"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                    <color key="textColor" colorSpace="calibratedRGB" red="1" green="0.6470588235294118" blue="0" alpha="1"/>
+                    <color key="textColor" colorSpace="calibratedRGB" red="1" green="0.78431372549019607" blue="0" alpha="1"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <view contentMode="scaleToFill" id="133" translatesAutoresizingMaskIntoConstraints="NO">
+                    <rect key="frame" x="10" y="217" width="355" height="1"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.84313725490196079" green="0.84313725490196079" blue="0.84313725490196079" alpha="1"/>
+                        <mask key="constraints">
+                            <include reference="140"/>
+                        </mask>
+                    </variation>
+                    <constraints>
+                        <constraint id="140" firstItem="133" firstAttribute="height" constant="2">
+                            <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                        </constraint>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="140"/>
+                        </mask>
+                    </variation>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -71,12 +91,23 @@
                 <constraint firstAttribute="bottom" secondItem="32" secondAttribute="bottom" id="107"/>
                 <constraint firstAttribute="trailing" secondItem="32" secondAttribute="trailing" id="108"/>
                 <constraint firstItem="32" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="112"/>
-                <constraint id="124" firstItem="123" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="2"/>
-                <constraint id="125" firstItem="123" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16"/>
-                <constraint id="126" firstItem="116" firstAttribute="top" secondItem="123" secondAttribute="bottom" constant="8"/>
+                <constraint id="124" firstItem="123" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="2">
+                    <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                </constraint>
+                <constraint id="125" firstItem="123" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16">
+                    <variation key="heightClass=regular-widthClass=compact" constant="14"/>
+                </constraint>
                 <constraint id="127" firstItem="116" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
                 <constraint id="128" firstItem="116" firstAttribute="trailing" secondItem="1" secondAttribute="trailing"/>
-                <constraint id="129" firstItem="32" firstAttribute="top" secondItem="116" secondAttribute="bottom"/>
+                <constraint id="141" firstItem="133" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10"/>
+                <constraint id="142" firstItem="1" firstAttribute="trailing" secondItem="133" secondAttribute="trailing" constant="10"/>
+                <constraint id="143" firstItem="133" firstAttribute="top" secondItem="123" secondAttribute="bottom" constant="5">
+                    <variation key="heightClass=regular-widthClass=compact" constant="7"/>
+                </constraint>
+                <constraint id="144" firstItem="116" firstAttribute="top" secondItem="133" secondAttribute="centerY" constant="2">
+                    <variation key="heightClass=regular-widthClass=compact" constant="1"/>
+                </constraint>
+                <constraint id="145" firstItem="32" firstAttribute="top" secondItem="116" secondAttribute="bottom" constant="1"/>
             </constraints>
             <variation key="default">
                 <mask key="subviews">
@@ -84,6 +115,7 @@
                     <exclude reference="32"/>
                     <exclude reference="116"/>
                     <exclude reference="123"/>
+                    <exclude reference="133"/>
                 </mask>
                 <mask key="constraints">
                     <exclude reference="49"/>
@@ -94,10 +126,13 @@
                     <exclude reference="112"/>
                     <exclude reference="124"/>
                     <exclude reference="125"/>
-                    <exclude reference="126"/>
                     <exclude reference="127"/>
                     <exclude reference="128"/>
-                    <exclude reference="129"/>
+                    <exclude reference="141"/>
+                    <exclude reference="142"/>
+                    <exclude reference="143"/>
+                    <exclude reference="144"/>
+                    <exclude reference="145"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -106,6 +141,7 @@
                     <include reference="32"/>
                     <include reference="116"/>
                     <include reference="123"/>
+                    <include reference="133"/>
                 </mask>
                 <mask key="constraints">
                     <include reference="49"/>
@@ -116,10 +152,13 @@
                     <include reference="112"/>
                     <include reference="124"/>
                     <include reference="125"/>
-                    <include reference="126"/>
                     <include reference="127"/>
                     <include reference="128"/>
-                    <include reference="129"/>
+                    <include reference="141"/>
+                    <include reference="142"/>
+                    <include reference="143"/>
+                    <include reference="144"/>
+                    <include reference="145"/>
                 </mask>
             </variation>
             <connections>

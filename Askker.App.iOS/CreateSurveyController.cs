@@ -54,9 +54,9 @@ namespace Askker.App.iOS
         public override void LoadView()
         {
             View = new UIView();
-            _pageTitles = new List<string> { "Write your question", "Choose your options", "Who do you want to ask to?" };
+            _pageTitles = new List<string> { "Write your question", "Choose your options", "Who should see this?" };
             _pageTitle = new UILabel();
-            _pageTitle.TextColor = UIColor.Yellow;
+            _pageTitle.TextColor = UIColor.FromRGB(255, 200, 0);
             _pageTitle.Font = UIFont.BoldSystemFontOfSize(12);
 
             _pageViewController = new MultiStepProcessHorizontal(new MultiStepProcessDataSource(Steps));
@@ -78,9 +78,9 @@ namespace Askker.App.iOS
                 BorderColorBottom = UIColor.LightGray,
                 BorderWidthAll = 0.5f
             };
-            _nextButton.SetTitle("   Next   >   ", UIControlState.Normal);
-            _nextButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
-            _nextButton.Font = UIFont.BoldSystemFontOfSize(16);
+            _nextButton.SetTitle("    Next  >  ", UIControlState.Normal);
+            _nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+            _nextButton.Font = UIFont.SystemFontOfSize(16);
             _nextButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
             _nextButton.BackgroundColor = UIColor.White;
             
@@ -91,9 +91,9 @@ namespace Askker.App.iOS
                 BorderColorBottom = UIColor.LightGray,
                 BorderWidthAll = 0.5f
             };
-            _backButton.SetTitle("   <   Back   ", UIControlState.Normal);
+            _backButton.SetTitle("  <  Back  ", UIControlState.Normal);
             _backButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
-            _backButton.Font = UIFont.BoldSystemFontOfSize(16);
+            _backButton.Font = UIFont.SystemFontOfSize(16);
             _backButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
             _backButton.BackgroundColor = UIColor.White;
 
@@ -104,9 +104,9 @@ namespace Askker.App.iOS
                 BorderColorBottom = UIColor.LightGray,
                 BorderWidthAll = 0.5f
             };
-            _askButton.SetTitle("   Publish   >   ", UIControlState.Normal);
+            _askButton.SetTitle("  Publish  >  ", UIControlState.Normal);
             _askButton.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
-            _askButton.Font = UIFont.SystemFontOfSize(16);
+            _askButton.Font = UIFont.SystemFontOfSize(14);
             _askButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
             _askButton.BackgroundColor = UIColor.White;
             _askButton.Hidden = true;
@@ -163,7 +163,8 @@ namespace Askker.App.iOS
                     BTProgressHUD.Dismiss();
                     return;
                 }
-            }else if (_currentStepIndex == 1)
+            }
+            else if (_currentStepIndex == 1)
             {
                 if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
                 {
@@ -244,6 +245,14 @@ namespace Askker.App.iOS
         private async void AskTapped(object s, EventArgs e)
         {
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+            if (string.IsNullOrEmpty(CreateSurveyController.SurveyModel.targetAudience))
+            {
+                new UIAlertView("Share", "Please select the privacy", null, "OK", null).Show();
+                BTProgressHUD.Dismiss();
+                return;
+            }
+
             if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString() && (CreateSurveyController.SurveyModel == null ||
                     CreateSurveyController.SurveyModel.targetAudienceUsers == null ||
                     CreateSurveyController.SurveyModel.targetAudienceUsers.ids == null ||

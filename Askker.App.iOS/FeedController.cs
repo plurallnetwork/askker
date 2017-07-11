@@ -672,7 +672,7 @@ namespace Askker.App.iOS
             nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             finishedLabel = new UILabel();
-            finishedLabel.BackgroundColor = UIColor.Red;
+            finishedLabel.BackgroundColor = UIColor.FromRGB(250, 60, 60);
             finishedLabel.TextColor = UIColor.White;
             finishedLabel.TextAlignment = UITextAlignment.Center;
             finishedLabel.Font = UIFont.BoldSystemFontOfSize(14);
@@ -921,10 +921,10 @@ namespace Askker.App.iOS
             optionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             optionCheckImage = new UIImageView(UIImage.FromBundle("OptionCheck"));
-            optionCheckImage.Frame = new CGRect(0, 0, 40, 40);
+            optionCheckImage.Frame = new CGRect(0, 0, 38, 38);
 
             optionEmptyCircle = new UIImageView(UIImage.FromBundle("EmptyCircleText"));
-            optionEmptyCircle.Frame = new CGRect(0, 0, 40, 40);
+            optionEmptyCircle.Frame = new CGRect(0, 0, 38, 38);
 
             ContentView.Add(optionLetterLabel);
             ContentView.Add(optionLabel);

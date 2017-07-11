@@ -57,9 +57,10 @@ namespace Askker.App.iOS.TableControllers
                             cell.Accessory = UITableViewCellAccessory.Checkmark;
                         }
                     }
-                }                
+                }
             }
 
+            cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             cell.UpdateCell(tableItems[indexPath.Row].Name);
             return cell;
         }
@@ -90,7 +91,7 @@ namespace Askker.App.iOS.TableControllers
                 {
                     cell.Accessory = UITableViewCellAccessory.Checkmark;
 
-                    if(CreateSurveyController.SurveyModel.targetAudienceUsers == null)
+                    if (CreateSurveyController.SurveyModel.targetAudienceUsers == null)
                     {
                         CreateSurveyController.SurveyModel.targetAudienceUsers = new AudienceUsers();
                         CreateSurveyController.SurveyModel.targetAudienceUsers.ids = new List<string>();
@@ -99,6 +100,18 @@ namespace Askker.App.iOS.TableControllers
 
                     CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Add(tableItems[indexPath.Row].Id);
                     CreateSurveyController.SurveyModel.targetAudienceUsers.names.Add(tableItems[indexPath.Row].Name);
+                }
+
+                if (CreateSurveyController.SurveyModel != null && CreateSurveyController.SurveyModel.targetAudienceUsers != null &&
+                    CreateSurveyController.SurveyModel.targetAudienceUsers.ids != null && CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count > 0)
+                {
+                    CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                    CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                }
+                else
+                {
+                    CreateSurveyController._askButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                    CreateSurveyController._askButton.BackgroundColor = UIColor.White;
                 }
             }
             else
