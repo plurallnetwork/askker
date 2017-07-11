@@ -4,10 +4,10 @@ using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using BigTed;
+using CoreGraphics;
 using Foundation;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -58,32 +58,21 @@ namespace Askker.App.iOS
 
                 if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
                 {
-                    if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Public.ToString())
+                    if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
                     {
-                        publicButtonLogic();
+                        _shareStepView.ShareTable.Hidden = false;
                     }
-                    else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Friends.ToString())
+                    else
                     {
-                        friendsButtonLogic();
+                        _shareStepView.ShareTable.Hidden = true;
                     }
-                    else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
-                    {
-                        privateButtonLogic();
-                    }
-                }
-                else
-                {
-                    //_shareStepView.PublicButton.Enabled = false;
-                    //_shareStepView.FriendsButton.Enabled = true;
-                    //_shareStepView.PrivateButton.Enabled = true;
 
-                    //_shareStepView.ShareMessageLabel.Text = "This question will be visible to everybody!";
-                    _shareStepView.ShareTable.Hidden = true;
-
-                    CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Public.ToString();
+                    CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                    CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                 }
 
-
+                _shareStepView.ShareTable.BackgroundColor = UIColor.Clear;
+                _shareStepView.ShareTable.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
                 _shareStepView.ShareTable.Source = tableSource;
                 _shareStepView.ShareTable.ReloadData();
             }
@@ -93,59 +82,7 @@ namespace Askker.App.iOS
                 Utils.HandleException(ex);
             }
 
-            //_shareStepView.PublicButton.TouchUpInside += (sender, e) =>
-            //{
-            //    publicButtonLogic();
-
-            //    CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Public.ToString();
-            //};
-
-            //_shareStepView.FriendsButton.TouchUpInside += (sender, e) =>
-            //{
-            //    friendsButtonLogic();
-
-            //    CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Friends.ToString();
-
-            //};
-
-            //_shareStepView.PrivateButton.TouchUpInside += (sender, e) =>
-            //{
-            //    privateButtonLogic();
-
-            //    CreateSurveyController.SurveyModel.targetAudience = TargetAudience.Private.ToString();
-
-            //};
             BTProgressHUD.Dismiss();
-        }
-
-        public void publicButtonLogic()
-        {
-            //_shareStepView.PublicButton.Enabled = false;
-            //_shareStepView.FriendsButton.Enabled = true;
-            //_shareStepView.PrivateButton.Enabled = true;
-
-            //_shareStepView.ShareMessageLabel.Text = "This question will be visible to everybody!";
-            _shareStepView.ShareTable.Hidden = true;
-        }
-
-        public void friendsButtonLogic()
-        {
-            //_shareStepView.PublicButton.Enabled = true;
-            //_shareStepView.FriendsButton.Enabled = false;
-            //_shareStepView.PrivateButton.Enabled = true;
-
-            //_shareStepView.ShareMessageLabel.Text = "This question will be visible to all your friends!";
-            _shareStepView.ShareTable.Hidden = true;
-        }
-
-        public void privateButtonLogic()
-        {
-            //_shareStepView.PublicButton.Enabled = true;
-            //_shareStepView.FriendsButton.Enabled = true;
-            //_shareStepView.PrivateButton.Enabled = false;
-
-            //_shareStepView.ShareMessageLabel.Text = "This question will be visible to the selected friends below:";
-            _shareStepView.ShareTable.Hidden = false;
         }
 
         public override void ViewDidLayoutSubviews()
@@ -210,50 +147,72 @@ namespace Askker.App.iOS
                 cell.SelectionStyle = UITableViewCellSelectionStyle.None;
                 cell.BackgroundColor = UIColor.Clear;
                 cell.ContentView.BackgroundColor = UIColor.Clear;
-                cell.SeparatorInset = new UIEdgeInsets(0.0f, 0.0f, 0.0f, cell.Bounds.Size.Width);
+                cell.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
 
                 cell.ImageView.Image = UIImage.FromBundle(targetAudienceItems[indexPath.Row].ImageName);
 
-                cell.TextLabel.Font = UIFont.BoldSystemFontOfSize(12);
+                cell.TextLabel.Font = UIFont.BoldSystemFontOfSize(14);
                 cell.TextLabel.Text = targetAudienceItems[indexPath.Row].Title;
 
-                cell.DetailTextLabel.Font = UIFont.SystemFontOfSize(10);
                 cell.DetailTextLabel.Text = targetAudienceItems[indexPath.Row].Text;
+
+                if (CreateSurveyController.SurveyModel.targetAudience == targetAudienceItems[indexPath.Row].TargetAudience.ToString())
+                {
+                    cell.AccessoryView = new UIImageView(new CGRect(0, 0, 38, 38)) { Image = UIImage.FromBundle("OptionCheck") };
+                    tableView.SelectRow(indexPath, false, UITableViewScrollPosition.None);
+                }
+                else
+                {
+                    cell.AccessoryView = new UIImageView(new CGRect(0, 0, 38, 38)) { Image = UIImage.FromBundle("EmptyCircleText") };
+                }
 
                 return cell;
             }
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
-                var cell = tableView.CellAt(indexPath) as MenuTableViewCell;
+                var cell = tableView.CellAt(indexPath);
 
                 CreateSurveyController.SurveyModel.targetAudience = targetAudienceItems[indexPath.Row].TargetAudience.ToString();
 
                 if (targetAudienceItems[indexPath.Row].TargetAudience == TargetAudience.Private)
                 {
                     this.createSurveyShareStep._shareStepView.ShareTable.Hidden = false;
+
+                    if (CreateSurveyController.SurveyModel != null && CreateSurveyController.SurveyModel.targetAudienceUsers != null &&
+                        CreateSurveyController.SurveyModel.targetAudienceUsers.ids != null && CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count > 0)
+                    {
+                        CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                        CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    }
+                    else
+                    {
+                        CreateSurveyController._askButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                        CreateSurveyController._askButton.BackgroundColor = UIColor.White;
+                    }
                 }
                 else
                 {
                     this.createSurveyShareStep._shareStepView.ShareTable.Hidden = true;
+
+                    CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                    CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                 }
+
+                cell.AccessoryView = new UIImageView(new CGRect(0, 0, 38, 38)) { Image = UIImage.FromBundle("OptionCheck") };
             }
 
-            //public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
-            //{
-            //    var menuItem = menuItems[indexPath.Row].MenuItem;
-            //    if (menuItem == MenuItem.Mine || menuItem == MenuItem.ToYou || menuItem == MenuItem.Public)
-            //    {
-            //        var cell = tableView.CellAt(indexPath) as MenuTableViewCell;
+            public override void RowDeselected(UITableView tableView, NSIndexPath indexPath)
+            {
+                var cell = tableView.CellAt(indexPath);
 
-            //        if (cell == null)
-            //        {
-            //            cell = this.GetCell(tableView, indexPath) as MenuTableViewCell;
-            //        }
+                if (cell == null)
+                {
+                    cell = this.GetCell(tableView, indexPath);
+                }
 
-            //        cell.menuTitleLabel.TextColor = UIColor.Black;
-            //    }
-            //}
+                cell.AccessoryView = new UIImageView(new CGRect(0, 0, 38, 38)) { Image = UIImage.FromBundle("EmptyCircleText") };
+            }
         }
     }
 }
