@@ -62,7 +62,8 @@ namespace Askker.App.iOS
             editProfileButtonImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             editProfileButtonImageView.Image = UIImage.FromBundle("EditMenu");
             editProfileButtonImageView.Layer.MasksToBounds = true;
-            editProfileButtonImageView.AddGestureRecognizer(tapGestureRecognizer);
+            var tapGestureRecognizerEdit = new UITapGestureRecognizer(this, new ObjCRuntime.Selector("TapProfilePictureSelector:"));
+            editProfileButtonImageView.AddGestureRecognizer(tapGestureRecognizerEdit);
             editProfileButtonImageView.UserInteractionEnabled = true;
 
             var name = new UILabel(new RectangleF(20, 180, 220, 20));
