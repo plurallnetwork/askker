@@ -88,8 +88,6 @@ namespace Askker.App.iOS
                 feedCell = new FeedCollectionViewCell(new CGRect(0, 0, View.Frame.Width, feedCellHeight));
                 feedController.BindFeedCell(feedCell, survey, indexPathRow);
 
-                feedCell.resultButton.Hidden = true;
-
                 feedCell.totalVotesLabel.RemoveTarget(null, null, UIControlEvent.AllEvents);
 
                 if (feedController.NavigationController == null)
@@ -202,7 +200,7 @@ namespace Askker.App.iOS
                 resultCell.barChartView.XAxis.DrawGridLinesEnabled = true;
                 resultCell.barChartView.XAxis.LabelPosition = XAxisLabelPosition.Bottom;
                 resultCell.barChartView.XAxis.CenterAxisLabelsEnabled = true;
-                resultCell.barChartView.XAxis.ValueFormatter = new ChartIndexAxisValueFormatter(reportDataSet.groups.ToArray());
+                resultCell.barChartView.XAxis.ValueFormatter = new ChartIndexAxisValueFormatter(TranslateReportGroups(reportDataSet.groups.ToArray()));
                 resultCell.barChartView.XAxis.Granularity = 1;
 
                 resultCell.barChartView.LeftAxis.SpaceTop = 0.35f;
@@ -282,6 +280,39 @@ namespace Askker.App.iOS
             headerView.AddSubview(feedCell);
 
             return headerView;
+        }
+
+        public string[] TranslateReportGroups(string[] groups)
+        {
+            for (int i = 0; i < groups.Length; i++)
+            {
+                if (groups[i].ToString().Equals("Masculino"))
+                {
+                    groups[i] = "Male";
+                }
+                else if (groups[i].ToString().Equals("Feminino"))
+                {
+                    groups[i] = "Female";
+                }
+                else if (groups[i].ToString().Contains("18"))
+                {
+                    groups[i] = "0 - 18";
+                }
+                else if (groups[i].ToString().Contains("19"))
+                {
+                    groups[i] = "19 - 30";
+                }
+                else if (groups[i].ToString().Contains("31"))
+                {
+                    groups[i] = "31 - 40";
+                }
+                else if (groups[i].ToString().Contains("41"))
+                {
+                    groups[i] = "41+";
+                }
+            }
+
+            return groups;
         }
     }
 
