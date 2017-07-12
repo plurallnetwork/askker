@@ -79,7 +79,7 @@ namespace Askker.App.iOS
 
             if (notifications[indexPath.Row].notificationUser.profilePicture != null)
             {
-                Utils.SetImageFromNSUrlSession(notifications[indexPath.Row].notificationUser.profilePicture, notificationCell.profileImageView, this);
+                Utils.SetImageFromNSUrlSession(notifications[indexPath.Row].notificationUser.profilePicture, notificationCell.profileImageView, this, PictureType.Profile);
             }
 
             var attributedText = new NSMutableAttributedString(notifications[indexPath.Row].notificationUser.name, UIFont.BoldSystemFontOfSize(14));

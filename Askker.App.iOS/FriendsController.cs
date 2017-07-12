@@ -1,4 +1,5 @@
 ﻿using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using BigTed;
 using CoreFoundation;
@@ -171,7 +172,7 @@ namespace Askker.App.iOS
 
             if (userFriend.profilePicture != null)
             {
-                Utils.SetImageFromNSUrlSession(userFriend.profilePicture, cell.profileImageView, this);
+                Utils.SetImageFromNSUrlSession(userFriend.profilePicture, cell.profileImageView, this, PictureType.Profile);
             }
 
             cell.nameLabel.Text = userFriend.name;

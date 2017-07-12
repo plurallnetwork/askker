@@ -387,7 +387,7 @@ namespace Askker.App.iOS
         {
             if (survey.profilePicture != null)
             {
-                Utils.SetImageFromNSUrlSession(survey.profilePicture, feedCell.profileImageView, this);
+                Utils.SetImageFromNSUrlSession(survey.profilePicture, feedCell.profileImageView, this, PictureType.Profile);
             }else
             {
                 feedCell.profileImageView.Image = UIImage.FromBundle("Profile");
@@ -958,7 +958,7 @@ namespace Askker.App.iOS
 
             if (survey.options[indexPath.Row].image != null)
             {
-                Utils.SetImageFromNSUrlSession(survey.options[indexPath.Row].image, optionCell.optionImageView, this);
+                Utils.SetImageFromNSUrlSession(survey.options[indexPath.Row].image, optionCell.optionImageView, this, PictureType.OptionImage);
             }
 
             optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCell.alphabet[indexPath.Row] + "  ";

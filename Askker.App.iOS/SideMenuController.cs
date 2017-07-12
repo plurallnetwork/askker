@@ -55,7 +55,7 @@ namespace Askker.App.iOS
 
             if (LoginController.userModel.profilePicturePath != null)
             {
-                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this);
+                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this, PictureType.Profile);
             }
 
             var editProfileButtonImageView = new UIImageView(new RectangleF(220, 80, 20, 20));
@@ -191,7 +191,7 @@ namespace Askker.App.iOS
         {
             if (LoginController.userModel.profilePicturePath != null)
             {
-                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this);
+                Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this, PictureType.Profile);
             }
         }
     }

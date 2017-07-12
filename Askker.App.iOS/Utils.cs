@@ -1,4 +1,5 @@
-﻿using BigTed;
+﻿using Askker.App.PortableLibrary.Enums;
+using BigTed;
 using CoreFoundation;
 using CoreGraphics;
 using Foundation;
@@ -225,12 +226,12 @@ namespace Askker.App.iOS
         //    }
         //}
 
-        public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSObject controller)
+        public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSObject controller, PictureType picType)
         {
             UIImage placeholder = UIImage.FromBundle("ImagePlaceholder");
             try
             {
-                if(imagePath != null && imagePath.Contains("profile-picture"))
+                if(picType.Equals(PictureType.Profile))
                 {
                     placeholder = UIImage.FromBundle("Profile");
                 }
