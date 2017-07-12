@@ -34,7 +34,7 @@ namespace Askker.App.iOS
             List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();
 
             _optionsStepView.TextButton.SetLeftBorder(UIColor.LightGray, 1);
-            _optionsStepView.TextButton.BackgroundColor = UIColor.Green;
+            _optionsStepView.TextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
             _optionsStepView.TextButton.TintColor = UIColor.White;
             _optionsStepView.TextButton.SetTitle("Survey with Text", UIControlState.Normal);
             _optionsStepView.TextButton.Font = UIFont.SystemFontOfSize(12);
@@ -43,7 +43,7 @@ namespace Askker.App.iOS
             _optionsStepView.TextButton.TitleEdgeInsets = new UIEdgeInsets(0, -uiImage.Size.Width, -uiImage.Size.Height, 0);
             _optionsStepView.TextButton.ImageEdgeInsets = new UIEdgeInsets(-line.Size.Height, 0, 0, -line.Size.Width);
 
-            _optionsStepView.ImageButton.BackgroundColor = UIColor.Green;
+            _optionsStepView.ImageButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
             _optionsStepView.ImageButton.TintColor = UIColor.White;
             _optionsStepView.ImageButton.SetTitle("Survey with Images", UIControlState.Normal);
             _optionsStepView.ImageButton.Font = UIFont.SystemFontOfSize(12);
@@ -52,7 +52,7 @@ namespace Askker.App.iOS
             _optionsStepView.ImageButton.TitleEdgeInsets = new UIEdgeInsets(0, -uiImage1.Size.Width, -uiImage1.Size.Height, 0);
             _optionsStepView.ImageButton.ImageEdgeInsets = new UIEdgeInsets(-line1.Size.Height, 0, 0, -line1.Size.Width);
 
-            _optionsStepView.DoneButton.BackgroundColor = UIColor.LightGray;
+            _optionsStepView.DoneButton.BackgroundColor = UIColor.FromRGB(220, 220, 220);
             _optionsStepView.DoneButton.TintColor = UIColor.White;
             _optionsStepView.DoneButton.SetTitle("Validate Survey", UIControlState.Normal);
             _optionsStepView.DoneButton.Font = UIFont.SystemFontOfSize(12);
@@ -63,17 +63,17 @@ namespace Askker.App.iOS
 
             if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
             {
-                _optionsStepView.DoneButton.BackgroundColor = UIColor.Green;
+                _optionsStepView.DoneButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
 
                 if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
                 {
-                    _optionsStepView.ImageButton.BackgroundColor = UIColor.LightGray;
-                    _optionsStepView.TextButton.BackgroundColor = UIColor.Green;
+                    _optionsStepView.ImageButton.BackgroundColor = UIColor.FromRGB(220, 220, 220);
+                    _optionsStepView.TextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                 }
                 else
                 {
-                    _optionsStepView.ImageButton.BackgroundColor = UIColor.Green;
-                    _optionsStepView.TextButton.BackgroundColor = UIColor.LightGray;
+                    _optionsStepView.ImageButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    _optionsStepView.TextButton.BackgroundColor = UIColor.FromRGB(220, 220, 220);
                 }
 
                 foreach(var option in CreateSurveyController.SurveyModel.options)
@@ -248,6 +248,17 @@ namespace Askker.App.iOS
                 CreateSurveyController._backButton.Hidden = false;
                 CreateSurveyController._nextButton.Hidden = false;
 
+                if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
+                {
+                    _optionsStepView.ImageButton.BackgroundColor = UIColor.FromRGB(220, 220, 220);
+                    _optionsStepView.TextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                }
+                else
+                {
+                    _optionsStepView.ImageButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    _optionsStepView.TextButton.BackgroundColor = UIColor.FromRGB(220, 220, 220);
+                }
+
                 if (CreateSurveyOptionsStep.tableSource.GetTableItems().Count <= 1)
                 {
                     CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
@@ -261,6 +272,11 @@ namespace Askker.App.iOS
 
             };
 
+            BTProgressHUD.Dismiss();
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
             if (CreateSurveyOptionsStep.tableSource.GetTableItems().Count <= 1)
             {
                 CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
@@ -271,8 +287,6 @@ namespace Askker.App.iOS
                 CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
                 CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
             }
-
-            BTProgressHUD.Dismiss();
         }
 
         public override void ViewDidLayoutSubviews()

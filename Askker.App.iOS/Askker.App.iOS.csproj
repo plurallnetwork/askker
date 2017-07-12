@@ -354,18 +354,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Entitlements.plist" />
-    <BundleResource Include="images\purple-pip-circle%401x.png" />
-    <BundleResource Include="images\purple-pip-circle%402x.png" />
-    <BundleResource Include="images\purple-pip-circle%403x.png" />
-    <BundleResource Include="images\purple-pip-full%401x.png" />
-    <BundleResource Include="images\purple-pip-full%402x.png" />
-    <BundleResource Include="images\purple-pip-full%403x.png" />
-    <BundleResource Include="images\white-pip-circle%401x.png" />
-    <BundleResource Include="images\white-pip-circle%402x.png" />
-    <BundleResource Include="images\white-pip-circle%403x.png" />
-    <BundleResource Include="images\white-pip-full%401x.png" />
-    <BundleResource Include="images\white-pip-full%402x.png" />
-    <BundleResource Include="images\white-pip-full%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Media.xcassets\AddFriends.imageset\add-friends-x2.png">

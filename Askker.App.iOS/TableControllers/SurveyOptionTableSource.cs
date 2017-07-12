@@ -174,11 +174,11 @@ namespace Askker.App.iOS.TableControllers
         {
             if (tableItems.Count > 2) //not count "Add new option" cell
             {
-                CreateSurveyOptionsStep._optionsStepView.DoneButton.BackgroundColor = UIColor.Green;
+                CreateSurveyOptionsStep._optionsStepView.DoneButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
             }
             else
             {
-                CreateSurveyOptionsStep._optionsStepView.DoneButton.BackgroundColor = UIColor.LightGray;
+                CreateSurveyOptionsStep._optionsStepView.DoneButton.BackgroundColor = UIColor.FromRGB(220, 220, 220);
             }
         }
 
@@ -420,6 +420,11 @@ namespace Askker.App.iOS.TableControllers
             //tableView.DeleteRows(new NSIndexPath[] { NSIndexPath.FromRowSection(0, 0) }, UITableViewRowAnimation.Fade);
             ////---- finish animations
             //tableView.EndUpdates();
+
+            CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+            CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+
+            updateDoneButton();
 
             tableItems = new List<SurveyOptionTableItem>();
             tableView.Source = new SurveyOptionTableSource(tableItems, this.viewController);

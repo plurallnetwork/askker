@@ -235,10 +235,23 @@ namespace Askker.App.iOS
                     BTProgressHUD.Dismiss();
                     return;
                 }
+
+                if (CreateSurveyController.SurveyModel != null &&
+                    CreateSurveyController.SurveyModel.question != null &&
+                    !string.IsNullOrEmpty(CreateSurveyController.SurveyModel.question.text))
+                {
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                }
+                else
+                {
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                }
             }
 
             var vcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex - 1) as UIViewController };
-            _pageViewController.SetViewControllers(vcs, UIPageViewControllerNavigationDirection.Forward, true, null);
+            _pageViewController.SetViewControllers(vcs, UIPageViewControllerNavigationDirection.Reverse, true, null);
             BTProgressHUD.Dismiss();
         }
 

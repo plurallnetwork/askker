@@ -46,29 +46,27 @@ namespace Askker.App.iOS.HorizontalSwipe
                 var view = Subviews[index];
                 var dot = view.Subviews.OfType<UIImageView>().Select(subview => subview).FirstOrDefault();
 
-                var w = view.Frame.Width;
-                var h = view.Frame.Height;
-
                 var w1 = DotCheck.Size.Width;
                 var h1 = DotCheck.Size.Height;
 
                 if (dot == null)
                 {
-                    var x = 0;
-                    var y = -15;
+                    var x = 0f;
+                    var y = -17;
 
                     if (index == 0)
                     {
-                        x = -10;                        
+                        x = -10 * ((float)UIScreen.MainScreen.Scale - 1);
                     }
                     else if (index == 1)
                     {
-                        x = 0;
+                        x = -4 * ((float)UIScreen.MainScreen.Scale - 1);
                     }
                     else if (index == 2)
                     {
-                        x = 10;
+                        x = 2 * ((float)UIScreen.MainScreen.Scale - 1);
                     }
+
                     dot = new UIImageView(new CGRect(x, y, DotCheck.Size.Width, DotCheck.Size.Height));
                     view.AddSubview(dot);
                     
