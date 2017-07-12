@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using UIKit;
 using System.Globalization;
 using BigTed;
+using Askker.App.PortableLibrary.Enums;
 
 namespace Askker.App.iOS
 {
@@ -70,7 +71,7 @@ namespace Askker.App.iOS
             if (LoginController.userModel.profilePicturePath != null)
             {
                 fileName = LoginController.userModel.profilePicturePath;
-                Utils.SetImageFromNSUrlSession(fileName, profileImageView, this);                
+                Utils.SetImageFromNSUrlSession(fileName, profileImageView, this, PictureType.Profile);                
             }
             else
             {

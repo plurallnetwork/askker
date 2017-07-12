@@ -1,5 +1,6 @@
 ﻿using Askker.App.iOS.CustomViewComponents;
 using Askker.App.PortableLibrary.Business;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using CoreFoundation;
 using CoreGraphics;
@@ -49,7 +50,7 @@ namespace Askker.App.iOS.TableControllers
 
             if (!string.IsNullOrEmpty(searchItems[indexPath.Row].ImageName))
             {
-                Utils.SetImageFromNSUrlSession(searchItems[indexPath.Row].ImageName, imageView, this);
+                Utils.SetImageFromNSUrlSession(searchItems[indexPath.Row].ImageName, imageView, this, PictureType.Profile);
             }
 
             cell.UpdateCell(searchItems[indexPath.Row].Title);

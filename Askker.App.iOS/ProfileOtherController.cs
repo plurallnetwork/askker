@@ -52,7 +52,7 @@ namespace Askker.App.iOS
                 if (friendUserModel.profilePicturePath != null)
                 {
                     fileName = friendUserModel.profilePicturePath;
-                    Utils.SetImageFromNSUrlSession(fileName, profileImageView, this);
+                    Utils.SetImageFromNSUrlSession(fileName, profileImageView, this, PictureType.Profile);
                 }
 
                 relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId);
