@@ -84,6 +84,7 @@ namespace Askker.App.iOS
 
             sidebarController = new SidebarController(this, content, new SideMenuController(this));
             sidebarController.MenuLocation = MenuLocations.Left;
+            sidebarController.StateChangeHandler += SidebarController_StateChangeHandler;
 
             UIBarButtonItem notificationsButton = GetNotificationsButton();
 
@@ -92,15 +93,6 @@ namespace Askker.App.iOS
                         , UIBarButtonItemStyle.Plain
                         , (sender, args) =>
                         {
-                            if (sidebarController.IsOpen)
-                            {
-                                setMenuButtonClosed();
-                            }
-                            else
-                            {
-                                setMenuButtonOpened();
-                            }
-
                             sidebarController.ToggleMenu();
                         })
             , true);
@@ -164,13 +156,11 @@ namespace Askker.App.iOS
         private void CloseMessageRecieved(NSNotification notification)
         {
             sidebarController.CloseMenu();
-            setMenuButtonClosed();
         }
 
         public void changeContentView(UIViewController viewController)
         {
             sidebarController.ChangeContentView(viewController);
-            setMenuButtonClosed();
         }
 
         public void setMenuButtonClosed()
@@ -181,6 +171,18 @@ namespace Askker.App.iOS
         public void setMenuButtonOpened()
         {
             this.NavigationItem.LeftBarButtonItem.Image = UIImage.FromBundle("CloseMenu");
+        }
+
+        private void SidebarController_StateChangeHandler(object sender, bool e)
+        {
+            if (sidebarController.IsOpen)
+            {
+                setMenuButtonOpened();
+            }
+            else
+            {
+                setMenuButtonClosed();
+            }
         }
 
         public async void GetUserUnreadNotificationsCount(UIButton composeButton, UILabel badge)
