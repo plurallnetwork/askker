@@ -135,7 +135,7 @@ namespace Askker.App.iOS
                     break;
                 case RelationshipStatus.PendingYourApproval:
                     btnRelationship.SetTitle(" Accept ", UIControlState.Normal);
-                    btnRelationship.BackgroundColor = UIColor.Green;
+                    btnRelationship.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                     btnRelationship.Enabled = true;
                     break;
                 case RelationshipStatus.RejectedByYou:

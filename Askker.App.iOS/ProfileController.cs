@@ -88,7 +88,7 @@ namespace Askker.App.iOS
                 manButton.Enabled = false;
                 womanButton.Enabled = true;
             }
-            else
+            else if ("female".Equals(genderPressioned))
             {
                 manButton.Enabled = true;
                 womanButton.Enabled = false;
@@ -160,6 +160,8 @@ namespace Askker.App.iOS
                 womanButton.Enabled = true;
                 uploadButton.Enabled = true;
             }
+
+            UpdateGenderButtonStatus(LoginController.userModel.gender);
         }
 
         private async void Update()
