@@ -94,7 +94,7 @@ namespace Askker.App.iOS
                     CredentialsService.DeleteCredentials();
                 }
 
-                if (UIApplication.SharedApplication.KeyWindow.RootViewController.GetType() != typeof(LoginController))
+                if (UIApplication.SharedApplication.KeyWindow != null && UIApplication.SharedApplication.KeyWindow.RootViewController.GetType() != typeof(LoginController))
                 {
                     UIStoryboard Storyboard = UIStoryboard.FromName("Main", null);
 
@@ -104,30 +104,38 @@ namespace Askker.App.iOS
                     {
                         UIApplication.SharedApplication.KeyWindow.RootViewController = initialController;
                     }
+
+                    ShowToast("Your session has expired. Please login again.", 3000);
                 }
+                else
+                {
+                    var alert = new UIAlertView
+                    {
+                        Title = "Session expired",
+                        Message = "Your session has expired. Please login again."
+                    };
 
-                //var alert = new UIAlertView
-                //{
-                //    Title = "Session expired",
-                //    Message = "Your session has expired. Please login again."
-                //};
-
-                //alert.AddButton("OK");
-                //alert.Show();
-
-                ShowToast("Your session has expired. Please login again.", 3000);                
+                    alert.AddButton("OK");
+                    alert.Show();
+                }
             }
             else
             {
-                //var alert = new UIAlertView
-                //{
-                //    Title = "Something went wrong",
-                //    Message = ex.Message
-                //};
+                if (UIApplication.SharedApplication.KeyWindow != null)
+                {
+                    ShowToast(ex.Message, 3000);
+                }
+                else
+                {
+                    var alert = new UIAlertView
+                    {
+                        Title = "Something went wrong",
+                        Message = ex.Message
+                    };
 
-                //alert.AddButton("OK");
-                //alert.Show();
-                ShowToast(ex.Message, 3000);                
+                    alert.AddButton("OK");
+                    alert.Show();
+                }
             }
         }
 
