@@ -67,6 +67,11 @@ namespace Askker.App.iOS
                 genderText.Text = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(LoginController.userModel.gender);
                 UpdateGenderButtonStatus(LoginController.userModel.gender);
             }
+            else
+            {
+                manButton.Alpha = 0.3f;
+                womanButton.Alpha = 0.3f;
+            }
 
             if (LoginController.userModel.profilePicturePath != null)
             {
@@ -85,13 +90,18 @@ namespace Askker.App.iOS
             //TODO: Setar imagem habilitada/desabilitada para o male/female
             if ("male".Equals(genderPressioned))
             {
-                manButton.Enabled = false;
-                womanButton.Enabled = true;
+                manButton.Alpha = 1;
+                womanButton.Alpha = 0.3f;
             }
             else if ("female".Equals(genderPressioned))
             {
-                manButton.Enabled = true;
-                womanButton.Enabled = false;
+                manButton.Alpha = 0.3f;
+                womanButton.Alpha = 1;
+            }
+            else
+            {
+                manButton.Alpha = 0.3f;
+                womanButton.Alpha = 0.3f;
             }
         }
 
@@ -207,7 +217,7 @@ namespace Askker.App.iOS
             }
             else
             {
-                nameButton.SetImage(UIImage.FromBundle("images/icons/done.png"), UIControlState.Normal);
+                nameButton.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
                 disableButtons("nameButton");
                 nameText.Enabled = true;
                 nameText.BecomeFirstResponder();
@@ -250,7 +260,7 @@ namespace Askker.App.iOS
             }
             else
             {
-                emailButton.SetImage(UIImage.FromBundle("images/icons/done.png"), UIControlState.Normal);
+                emailButton.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
                 disableButtons("emailButton");
                 emailText.Enabled = true;
                 emailText.BecomeFirstResponder();
@@ -274,7 +284,7 @@ namespace Askker.App.iOS
             }
             else
             {
-                ageButton.SetImage(UIImage.FromBundle("images/icons/done.png"), UIControlState.Normal);
+                ageButton.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
                 disableButtons("ageButton");
                 ageText.Enabled = true;
                 ageText.BecomeFirstResponder();

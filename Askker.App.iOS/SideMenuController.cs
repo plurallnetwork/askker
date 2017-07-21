@@ -58,7 +58,7 @@ namespace Askker.App.iOS
                 Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this, PictureType.Profile);
             }
 
-            var editProfileButtonImageView = new UIImageView(new RectangleF(220, 80, 20, 20));
+            var editProfileButtonImageView = new UIImageView(new RectangleF(220, 80, 24, 24));
             editProfileButtonImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             editProfileButtonImageView.Image = UIImage.FromBundle("EditMenu");
             editProfileButtonImageView.Layer.MasksToBounds = true;
@@ -154,8 +154,8 @@ namespace Askker.App.iOS
             logoutButton.Add(logoutIcoImageView);
             logoutButton.Add(logoutTitleLabel);
 
-            logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-48-[v0(28)]-20-[v1]-8-|", new NSLayoutFormatOptions(), "v0", logoutIcoImageView, "v1", logoutTitleLabel));
-            logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(28)]", new NSLayoutFormatOptions(), "v0", logoutIcoImageView));
+            logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-48-[v0(24)]-20-[v1]-8-|", new NSLayoutFormatOptions(), "v0", logoutIcoImageView, "v1", logoutTitleLabel));
+            logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(24)]", new NSLayoutFormatOptions(), "v0", logoutIcoImageView));
             logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-10-[v0(24)]", new NSLayoutFormatOptions(), "v0", logoutTitleLabel));
             #endregion
 
@@ -234,7 +234,7 @@ namespace Askker.App.iOS
                 cell.SeparatorInset = new UIEdgeInsets(0.0f, -20, 0.0f, cell.Bounds.Size.Width);
 
                 cell.menuImageView.Image = UIImage.FromBundle(menuItems[indexPath.Row].ImageName);
-
+                
                 cell.menuTitleLabel.Text = menuItems[indexPath.Row].Title;
                 cell.menuTitleLabel.TextColor = UIColor.White;
 
@@ -354,6 +354,7 @@ namespace Askker.App.iOS
         protected MenuTableViewCell(IntPtr handle) : base(handle)
         {
             menuImageView = new UIImageView();
+            menuImageView.Frame = new CGRect(0, 0, 24, 24);
             menuImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
             menuImageView.Layer.MasksToBounds = true;
             menuImageView.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -363,17 +364,17 @@ namespace Askker.App.iOS
             menuTitleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             menuCheckImageView = new UIImageView(); ;
-            menuCheckImageView.Frame = new CGRect(0, 0, 28, 28);
+            menuCheckImageView.Frame = new CGRect(0, 0, 24, 24);
             this.AccessoryView = menuCheckImageView;
 
             ContentView.Add(menuImageView);
             ContentView.Add(menuTitleLabel);
             ContentView.Add(menuCheckImageView);
             
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(28)]-20-[v1]-8-|", new NSLayoutFormatOptions(), "v0", menuImageView, "v1", menuTitleLabel));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(24)]-20-[v1]-8-|", new NSLayoutFormatOptions(), "v0", menuImageView, "v1", menuTitleLabel));
             //AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0]-0-|", new NSLayoutFormatOptions(), "v0", menuCheckImageView));
 
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(28)]", new NSLayoutFormatOptions(), "v0", menuImageView));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(24)]", new NSLayoutFormatOptions(), "v0", menuImageView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-10-[v0(24)]", new NSLayoutFormatOptions(), "v0", menuTitleLabel));
             //AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(28)]", new NSLayoutFormatOptions(), "v0", menuCheckImageView));
         }

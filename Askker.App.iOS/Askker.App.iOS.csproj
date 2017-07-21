@@ -425,6 +425,15 @@
     <ImageAsset Include="Resources\Media.xcassets\BackBlack.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\CheckProfile.imageset\check-profile-x2.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\CheckProfile.imageset\check-profile-x3.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\CheckProfile.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\CloseMenu.imageset\close-x2.png">
       <InProject>false</InProject>
     </ImageAsset>
@@ -731,51 +740,6 @@
     <ImageAsset Include="Resources\Media.xcassets\ValidateSurvey.imageset\validate-survey-x3.png">
       <InProject>false</InProject>
     </ImageAsset>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\threelines.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\feediOS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\filterMine.png" />
-    <BundleResource Include="images\icons\image.png" />
-    <BundleResource Include="images\icons\editar.png" />
-    <BundleResource Include="images\icons\man.png" />
-    <BundleResource Include="images\icons\done.png" />
-    <Content Include="images\icons\text.gif" />
-    <BundleResource Include="images\icons\woman.png" />
-    <BundleResource Include="Resources\assets\img\notification.png" />
-    <BundleResource Include="Resources\assets\img\optionCheck.png" />
-    <BundleResource Include="Resources\assets\img\emptyCircle.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\filterPublic.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\filterToYou.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\friendsiOS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\menuiOS.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\pagesFriends.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\pagesHelp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\pagesLogOut.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\pagesSettings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\assets\img\pagesFeed.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Swift3.3.0.1\build\Xamarin.Swift3.targets" Condition="Exists('..\packages\Xamarin.Swift3.3.0.1\build\Xamarin.Swift3.targets')" />
