@@ -74,11 +74,7 @@ namespace Askker.App.iOS
                 if (button == 0)
                 {
                     BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
-                    survey.finishDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    var tempOptionSelected = survey.optionSelected;
-                    survey.optionSelected = null;
-                    await new FeedManager().UpdateSurvey(survey, LoginController.tokenModel.access_token);
-                    survey.optionSelected = tempOptionSelected;
+                    await new FeedManager().FinishSurvey(survey, LoginController.tokenModel.access_token);
 
                     surveyCell.finishedLabel.Text = "Finished";
                     surveyCell.moreButton.Hidden = true;
@@ -402,12 +398,8 @@ namespace Askker.App.iOS
 
             feedCell.nameLabel.AttributedText = attributedText;
 
-            DateTime outputDateTimeValue;
             bool finished = false;
-            if (survey.finishDate != null &&
-                DateTime.TryParseExact(survey.finishDate, "yyyy-MM-dd HH:mm:ss",
-                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue) &&
-                outputDateTimeValue < DateTime.Now)
+            if (survey.finishDate != null)
             {
 
                 feedCell.finishedLabel.Text = "Finished";
@@ -590,11 +582,7 @@ namespace Askker.App.iOS
 
             // Heights of the vertical components to format the cell dinamic height
             var knownHeight = 0;
-            DateTime outputDateTimeValue;
-            if (survey.finishDate != null &&
-                DateTime.TryParseExact(survey.finishDate, "yyyy-MM-dd HH:mm:ss",
-                                       System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out outputDateTimeValue) &&
-                outputDateTimeValue < DateTime.Now)
+            if (survey.finishDate != null)
             {
 
                 knownHeight = 8 + 44 + 8 + 32 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;

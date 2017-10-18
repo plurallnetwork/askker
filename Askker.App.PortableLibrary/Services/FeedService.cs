@@ -91,7 +91,7 @@ namespace Askker.App.PortableLibrary.Services
             return fileContent;
         }
 
-        public async Task<HttpResponseMessage> UpdateSurvey(SurveyModel surveyModel, string authenticationToken)
+        public async Task<HttpResponseMessage> FinishSurvey(SurveyModel surveyModel, string authenticationToken)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/updatesurvey", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/finishsurvey", formContent);
                 }
             }
             catch (Exception ex)

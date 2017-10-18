@@ -100,13 +100,13 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task UpdateSurvey(SurveyModel surveyModel, string authenticationToken)
+        public async Task FinishSurvey(SurveyModel surveyModel, string authenticationToken)
         {
             try
             {
                 FeedService feedService = new FeedService();
 
-                var response = await feedService.UpdateSurvey(surveyModel, authenticationToken);
+                var response = await feedService.FinishSurvey(surveyModel, authenticationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {
