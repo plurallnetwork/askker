@@ -41,7 +41,7 @@ namespace Askker.App.iOS
 
             View.BackgroundColor = UIColor.FromRGB(33, 33, 33);
 
-            var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
+            //var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
 
             profileImageView = new UIImageView(new RectangleF(85, 80, 90, 90));
             profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
@@ -159,25 +159,25 @@ namespace Askker.App.iOS
             logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-10-[v0(24)]", new NSLayoutFormatOptions(), "v0", logoutTitleLabel));
             #endregion
 
-            scrollView.Add(profileImageView);
-            scrollView.Add(name);
-            scrollView.Add(editProfileButtonImageView);
-            scrollView.Add(dividerLineView);
-            scrollView.Add(pagesTableView);
-            scrollView.Add(dividerLineView2);
-            scrollView.Add(filterLabel);
-            scrollView.Add(filterTipLabel);
-            scrollView.Add(filterTableView);
+            View.AddSubview(profileImageView);
+            View.AddSubview(name);
+            View.AddSubview(editProfileButtonImageView);
+            View.AddSubview(dividerLineView);
+            View.AddSubview(pagesTableView);
+            View.AddSubview(dividerLineView2);
+            View.AddSubview(filterLabel);
+            View.AddSubview(filterTipLabel);
+            View.AddSubview(filterTableView);
             #region Hashtag Menu
             //scrollView.Add(dividerLineView3);
             //scrollView.Add(hashtagLabel);
             //scrollView.Add(hashtagText);
             #endregion
-            scrollView.Add(logoutButton);
+            View.AddSubview(logoutButton);
 
-            scrollView.ContentSize = new CGSize(View.Frame.Width, View.Frame.Height); //scrollView.ContentSize = new CGSize(View.Frame.Width, 1000); 
+            //scrollView.ContentSize = new CGSize(View.Frame.Width, View.Frame.Height); //scrollView.ContentSize = new CGSize(View.Frame.Width, 1000); 
 
-            View.AddSubview(scrollView);
+            //View.AddSubview(scrollView);
         }
 
         [Export("TapProfilePictureSelector:")]

@@ -13,33 +13,20 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="assets/img/logo_180.png" translatesAutoresizingMaskIntoConstraints="NO" id="8">
-                    <rect key="frame" x="150" y="120" width="180" height="180"/>
+                    <rect key="frame" x="150" y="150" width="180" height="180"/>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We are building the future of decision making" textAlignment="center" lineBreakMode="characterWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4153" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="2">
-                    <rect key="frame" x="140" y="251" width="200" height="49"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <nil key="highlightedColor"/>
-                    <constraints>
-                        <constraint id="4178" firstItem="4153" firstAttribute="height" constant="49"/>
-                        <constraint id="4179" firstItem="4153" firstAttribute="width" constant="200"/>
-                    </constraints>
-                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="548" y="455"/>
             <constraints>
-                <constraint id="4170" firstItem="8" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX"/>
-                <constraint id="4171" firstItem="8" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="-30"/>
-                <constraint id="4176" firstItem="4153" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="35"/>
-                <constraint id="4177" firstItem="4153" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX"/>
+                <constraint id="4934" firstItem="8" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY"/>
+                <constraint id="4935" firstItem="8" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX"/>
             </constraints>
         </view>
     </objects>
     <resources>
-        <image name="images/icons/done.png" width="32" height="32"/>
-        <image name="images/icons/editar.png" width="59" height="60"/>
         <image name="images/icons/image.png" width="48" height="48"/>
         <image name="images/icons/man.png" width="32" height="32"/>
         <image name="images/icons/text.gif" width="48" height="48"/>
@@ -63,7 +50,44 @@
         <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="assets/img/threelines.png" width="30" height="30"/>
-        <image name="OptionCheck" width="220" height="220"/>
-        <image name="Profile" width="210" height="260"/>
+        <image name="OptionCheck" width="68" height="68"/>
+        <image name="Profile" width="180" height="180"/>
+        <image name="AddFriends" width="48" height="48"/>
+        <image name="AddSurvey" width="48" height="48"/>
+        <image name="AskkerLogo" width="205" height="45"/>
+        <image name="BackBlack" width="17" height="30"/>
+        <image name="CheckProfile" width="48" height="48"/>
+        <image name="CloseMenu" width="38" height="38"/>
+        <image name="DoneEditProfile" width="32" height="32"/>
+        <image name="EditMenu" width="43" height="43"/>
+        <image name="EditProfile" width="33" height="33"/>
+        <image name="EmptyCircleImage" width="84" height="84"/>
+        <image name="EmptyCircleMenu" width="68" height="68"/>
+        <image name="EmptyCircleText" width="68" height="68"/>
+        <image name="Female" width="27" height="42"/>
+        <image name="Finished" width="32" height="32"/>
+        <image name="ForMe" width="23" height="33"/>
+        <image name="Friends" width="44" height="34"/>
+        <image name="Globe" width="46" height="46"/>
+        <image name="ImagePlaceholder" width="80" height="60"/>
+        <image name="Lock" width="37" height="49"/>
+        <image name="Logout" width="27" height="30"/>
+        <image name="Male" width="37" height="37"/>
+        <image name="Menu" width="50" height="34"/>
+        <image name="More" width="11" height="39"/>
+        <image name="MyFriends" width="33" height="27"/>
+        <image name="MySurveys" width="40" height="31"/>
+        <image name="NextStep" width="17" height="30"/>
+        <image name="NextStepGray" width="17" height="30"/>
+        <image name="Notification" width="48" height="48"/>
+        <image name="PictureOption" width="52" height="41"/>
+        <image name="Step1" width="35" height="35"/>
+        <image name="Step2" width="35" height="35"/>
+        <image name="Step2Gray" width="35" height="35"/>
+        <image name="Step3" width="35" height="35"/>
+        <image name="Step3Gray" width="35" height="35"/>
+        <image name="StepCheck" width="35" height="35"/>
+        <image name="TextOption" width="49" height="49"/>
+        <image name="ValidateSurvey" width="47" height="36"/>
     </resources>
 </document>
