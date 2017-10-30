@@ -191,7 +191,7 @@ namespace Askker.App.iOS
                         System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
                         await new LoginManager().Update(LoginController.tokenModel.access_token, LoginController.userModel, myByteArray, "profile-picture.jpg");
 
-                        //SDWebImageManager.SharedManager.ImageCache.StoreImage(profileImageView.Image, "https://s3-us-west-2.amazonaws.com/askker-desenv/" + LoginController.userModel.profilePicturePath);
+                        //SDWebImageManager.SharedManager.ImageCache.StoreImage(profileImageView.Image, "https://s3-us-west-2.amazonaws.com/askker-prod/" + LoginController.userModel.profilePicturePath);
                         
                         NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateProfilePicture"), null);
                     }

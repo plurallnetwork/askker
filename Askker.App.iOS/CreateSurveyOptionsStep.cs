@@ -108,7 +108,7 @@ namespace Askker.App.iOS
                             Utils.HandleException(ex);
                         }
 
-                        //var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + option.image);
+                        //var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-prod/" + option.image);
                         //var task = NSUrlSession.SharedSession.CreateDataTask(url, (data, response, error) =>
                         //{
                         //    try

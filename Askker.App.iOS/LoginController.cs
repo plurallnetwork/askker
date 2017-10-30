@@ -188,7 +188,7 @@ namespace Askker.App.iOS
         public void SocialLogin(string provider)
         {
             string returnUrlLogin = "fb919804201485283:%2F%2Fauthorize";
-            string externalProviderUrl = "https://blinq-development.com:44322/api/Account/ExternalLogin?provider=" + provider + "&response_type=token&client_id=self&redirect_uri=" + returnUrlLogin + "&isAdmin=1";
+            string externalProviderUrl = "https://askker.io:44322/api/Account/ExternalLogin?provider=" + provider + "&response_type=token&client_id=self&redirect_uri=" + returnUrlLogin + "&isAdmin=1";
             
             sfViewController = new SFSafariViewController(new NSUrl(externalProviderUrl));
             PresentViewControllerAsync(sfViewController, true);

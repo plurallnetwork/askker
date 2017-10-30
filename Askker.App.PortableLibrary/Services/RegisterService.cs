@@ -19,7 +19,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     var formContent = new StringContent(JsonConvert.SerializeObject(userRegisterModel), Encoding.UTF8, "application/json");
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/Account/Register", formContent);
+                    return await client.PostAsync("https://askker.io:44322/api/Account/Register", formContent);
                 }
             }
             catch (Exception ex)

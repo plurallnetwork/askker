@@ -20,7 +20,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/GetOverallResults/{0}/{1}", userId, creationDate));
+                    var uri = new Uri(string.Format("https://askker.io:44322/api/survey/GetOverallResults/{0}/{1}", userId, creationDate));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -38,7 +38,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/GetResultsByAge/{0}/{1}", userId, creationDate));
+                    var uri = new Uri(string.Format("https://askker.io:44322/api/survey/GetResultsByAge/{0}/{1}", userId, creationDate));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -56,7 +56,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/GetResultsByGender/{0}/{1}", userId, creationDate));
+                    var uri = new Uri(string.Format("https://askker.io:44322/api/survey/GetResultsByGender/{0}/{1}", userId, creationDate));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
