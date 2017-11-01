@@ -72,17 +72,17 @@ namespace Askker.App.iOS
             name.TextColor = UIColor.White;
             name.Text = LoginController.userModel.name;
 
-            var dividerLineView = new UIView(new RectangleF(20, 220, 220, 0.5f));
+            var dividerLineView = new UIView(new RectangleF(20, 205, 220, 0.5f));
             dividerLineView.BackgroundColor = UIColor.FromRGB(80, 80, 80);
 
             var pagesItems = new MenuPagesModel().MenuItems;
-            var pagesTableView = new UITableView(new RectangleF(20, 226, 220, (pagesItems.Count * 44) - 10));
+            var pagesTableView = new UITableView(new RectangleF(20, 210, 220, (pagesItems.Count * 40) - 10));
             pagesTableView.ContentInset = new UIEdgeInsets(0, 20, 0, 0);
             pagesTableView.BackgroundColor = UIColor.Clear;
             pagesTableView.ScrollEnabled = false;
             new MenuTableViewController(pagesTableView, pagesItems, menuViewController);
 
-            var dividerLineView2 = new UIView(new RectangleF(20, (float)pagesTableView.Frame.Y + (float)pagesTableView.Frame.Height + 25, 220, 0.5f));
+            var dividerLineView2 = new UIView(new RectangleF(20, (float)pagesTableView.Frame.Y + (float)pagesTableView.Frame.Height + 15, 220, 0.5f));
             dividerLineView2.BackgroundColor = UIColor.FromRGB(80, 80, 80);
 
             var filterLabel = new UILabel(new RectangleF(20, (float)dividerLineView2.Frame.Y + 5, 220, 20));
@@ -98,7 +98,7 @@ namespace Askker.App.iOS
             filterTipLabel.Text = "You may select more than one";
 
             var filterItems = new MenuFilterModel().MenuItems;
-            var filterTableView = new UITableView(new RectangleF(26, (float)filterLabel.Frame.Y + 25, 214, filterItems.Count * 44));
+            var filterTableView = new UITableView(new RectangleF(26, (float)filterLabel.Frame.Y + 15, 214, filterItems.Count * 40));
             filterTableView.ContentInset = new UIEdgeInsets(0, 14, 0, 0);
             filterTableView.SeparatorColor = UIColor.FromRGB(80, 80, 80);
             filterTableView.BackgroundColor = UIColor.Clear;
@@ -123,7 +123,7 @@ namespace Askker.App.iOS
             #region Logout Button
             var logoutModel = new MenuLogoutModel();
 
-            var logoutButton = new UIButton(new RectangleF(0, (float)View.Frame.Height - 45, (float)View.Frame.Width, 45));
+            var logoutButton = new UIButton(new RectangleF(0, (float)View.Frame.Height - 40, (float)View.Frame.Width, 40));
             logoutButton.BackgroundColor = UIColor.FromRGB(50, 50, 50);
             logoutButton.TouchUpInside += (object sender, EventArgs e) =>
             {
@@ -249,6 +249,11 @@ namespace Askker.App.iOS
                 }
 
                 return cell;
+            }
+
+            public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
+            {
+                return 40;
             }
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
