@@ -16,7 +16,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://askker.io:44322/api/survey/getfriends/{0}", userId));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getfriends/{0}", userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -34,7 +34,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://askker.io:44322/api/Account/GetUserRelationshipStatus/{0}", friendId));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/GetUserRelationshipStatus/{0}", friendId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -52,7 +52,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://askker.io:44322/api/Account/AddUserFriend/{0}", friendId));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/AddUserFriend/{0}", friendId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.PostAsync(uri, null);
@@ -70,7 +70,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://askker.io:44322/api/Account/UpdateUserRelationshipStatus/{0}/{1}", friendId, relationshipStatus.ToString()));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/UpdateUserRelationshipStatus/{0}/{1}", friendId, relationshipStatus.ToString()));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.PostAsync(uri, null);

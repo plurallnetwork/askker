@@ -26,7 +26,7 @@ namespace Askker.App.PortableLibrary.Services
                         new KeyValuePair<string, string>("password", userLoginModel.Password)
                     });
 
-                    return await client.PostAsync("https://askker.io:44322/Token", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/Token", formContent);
                 }
             }
             catch (Exception ex)
@@ -43,7 +43,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return client.GetAsync("https://askker.io:44322/api/Account/GetUserById").Result;
+                    return client.GetAsync("https://blinq-development.com:44322/api/Account/GetUserById").Result;
                 }
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.GetAsync("https://askker.io:44322/api/Account/GetUserById");
+                    return await client.GetAsync("https://blinq-development.com:44322/api/Account/GetUserById");
                 }
             }
             catch (Exception ex)
@@ -75,7 +75,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://askker.io:44322/api/Account/GetUserById/{0}", userId));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/GetUserById/{0}", userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
@@ -94,7 +94,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://askker.io:44322/api/Account/SearchUsersByName/{0}", name));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/SearchUsersByName/{0}", name));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
@@ -123,7 +123,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://askker.io:44322/api/Account/Update", content);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/Account/Update", content);
                 }
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://askker.io:44322/api/survey/updateuserinformation", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/updateuserinformation", formContent);
                 }
             }
             catch (Exception ex)
@@ -171,7 +171,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     var formContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
-                    return await client.PostAsync("https://askker.io:44322/api/account/sendemailresetpasswordfromapp", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/account/sendemailresetpasswordfromapp", formContent);
                 }
             }
             catch (Exception ex)
@@ -188,7 +188,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     var formContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
-                    return await client.PostAsync("https://askker.io:44322/api/account/setpasswordfromapp", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/account/setpasswordfromapp", formContent);
                 }
             }
             catch (Exception ex)
@@ -205,7 +205,7 @@ namespace Askker.App.PortableLibrary.Services
                 {
                     var formContent = new StringContent(JsonConvert.SerializeObject(email), Encoding.UTF8, "application/json");
 
-                    return await client.PostAsync("https://askker.io:44322/api/Account/GetUserByEmailFromApp", formContent);
+                    return await client.PostAsync("https://blinq-development.com:44322/api/Account/GetUserByEmailFromApp", formContent);
                 }
             }
             catch (Exception ex)
