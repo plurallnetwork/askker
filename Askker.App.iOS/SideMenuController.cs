@@ -272,6 +272,12 @@ namespace Askker.App.iOS
                     menuViewController.NavigationController.PushViewController(searchAllController, true);
                     NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
                 }
+                else if (menuItems[indexPath.Row].MenuItem == MenuItem.SearchGroups)
+                {
+                    var searchUserGroupsController = menuViewController.Storyboard.InstantiateViewController("SearchUserGroupsController");
+                    menuViewController.NavigationController.PushViewController(searchUserGroupsController, true);
+                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("CloseSideMenu"), null);
+                }
                 else if (menuItems[indexPath.Row].MenuItem == MenuItem.Mine)
                 {
                     if (filterMine)
