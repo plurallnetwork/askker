@@ -22,17 +22,13 @@ namespace Askker.App.PortableLibrary.Business
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var json = JObject.Parse(await response.Content.ReadAsStringAsync());
+                    var jsonGroups = JArray.Parse(await response.Content.ReadAsStringAsync());
 
-                    if (json.HasValues)
+                    if (jsonGroups.HasValues)
                     {
-                        var ids = json.SelectToken("$.groups.ids").ToObject<JArray>();
-                        var names = json.SelectToken("$.groups.names").ToObject<JArray>();
-                        var profilePictures = json.SelectToken("$.groups.profilePictures").ToObject<JArray>();
-
-                        for (int i = 0; i < ids.Count; i++)
+                        foreach (var group in jsonGroups)
                         {
-                            groups.Add(new UserGroupModel(ids[i].ToString(), names[i].ToString(), profilePictures[i].ToString()));
+                            groups.Add(new UserGroupModel(group["userId"].ToString(), group["name"].ToString(), group["profilePicture"].ToString()));
                         }
                     }
 

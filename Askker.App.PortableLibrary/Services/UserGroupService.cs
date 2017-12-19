@@ -16,7 +16,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/SearchGroupsByName/{0}", userId));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getusergroups/{0}", userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);

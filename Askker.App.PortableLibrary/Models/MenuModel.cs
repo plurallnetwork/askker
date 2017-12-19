@@ -23,6 +23,7 @@ namespace Askker.App.iOS.Models
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Feed, Title = "Feed", ImageName = "pagesFeed" });
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.MyFriends, Title = "My Friends", ImageName = "MyFriends" });
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.SearchFriends, Title = "Find Friends", ImageName = "AddFriends" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.MyGroups, Title = "My Groups", ImageName = "MyFriends" });
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.SearchGroups, Title = "Find Groups", ImageName = "AddFriends" });
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Settings, Title = "Settings", ImageName = "pagesSettings" });
             //MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Help, Title = "Help", ImageName = "pagesHelp" });

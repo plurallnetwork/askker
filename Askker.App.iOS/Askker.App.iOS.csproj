@@ -150,6 +150,10 @@
     <Compile Include="FriendsController.designer.cs">
       <DependentUpon>FriendsController.cs</DependentUpon>
     </Compile>
+    <Compile Include="GroupsController.cs" />
+    <Compile Include="GroupsController.designer.cs">
+      <DependentUpon>GroupsController.cs</DependentUpon>
+    </Compile>
     <Compile Include="HorizontalSwipe\HorizontalSwipePageControl.cs" />
     <Compile Include="HorizontalSwipe\MultiStepProcessHorizontal.cs" />
     <Compile Include="LoginController.cs" />
