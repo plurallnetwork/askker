@@ -150,6 +150,10 @@
     <Compile Include="FriendsController.designer.cs">
       <DependentUpon>FriendsController.cs</DependentUpon>
     </Compile>
+    <Compile Include="GroupProfileController.cs" />
+    <Compile Include="GroupProfileController.designer.cs">
+      <DependentUpon>GroupProfileController.cs</DependentUpon>
+    </Compile>
     <Compile Include="GroupsController.cs" />
     <Compile Include="GroupsController.designer.cs">
       <DependentUpon>GroupsController.cs</DependentUpon>

@@ -175,5 +175,35 @@ namespace Askker.App.PortableLibrary.Business
                 }
             }
         }
+
+        public async Task<UserGroupModel> GetGroupById(string authenticationToken, string groupId)
+        {
+            var response = await new UserGroupService().GetGroupById(authenticationToken, groupId);
+            var json = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<UserGroupModel>(json);
+            }
+            else
+            {
+                if (!json.Equals(""))
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        //JObject.Parse(json).SelectToken("$.error") != null
+                        throw new Exception(JObject.Parse(json).SelectToken("$.error").ToString());
+                    }
+                }
+                else
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+        }
     }
 }
