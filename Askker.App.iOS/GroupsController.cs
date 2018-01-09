@@ -105,7 +105,7 @@ namespace Askker.App.iOS
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            Utils.OpenUserProfile(this.NavigationController, userGroups[indexPath.Row].id);
+            Utils.OpenGroupMembers(this.NavigationController, userGroups[indexPath.Row].userId, userGroups[indexPath.Row].userId + userGroups[indexPath.Row].creationDate, userGroups[indexPath.Row].profilePicture);
         }
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
@@ -134,8 +134,8 @@ namespace Askker.App.iOS
             {
                 IEnumerable<UserGroupModel> query =
                     from aGroup in userGroups
-                    where aGroup.searchName.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
-                    orderby aGroup.searchName
+                    where aGroup.name.IndexOf(item, StringComparison.OrdinalIgnoreCase) >= 0
+                    orderby aGroup.name
                     select aGroup;
 
                 filteredGroups.AddRange(query);
@@ -174,7 +174,7 @@ namespace Askker.App.iOS
                 Utils.SetImageFromNSUrlSession(userGroup.profilePicture, cell.profileImageView, this, PictureType.Profile);
             }
 
-            cell.nameLabel.Text = userGroup.searchName;
+            cell.nameLabel.Text = userGroup.name;
         }
     }
 

@@ -51,6 +51,7 @@
     <Compile Include="Enums\TargetAudience.cs" />
     <Compile Include="Enums\UserNotificationType.cs" />
     <Compile Include="Enums\RelationshipStatus.cs" />
+    <Compile Include="Models\UserGroupMemberModel.cs" />
     <Compile Include="Models\UserGroupModel.cs" />
     <Compile Include="Models\MenuModel.cs" />
     <Compile Include="Models\ReportModel.cs" />

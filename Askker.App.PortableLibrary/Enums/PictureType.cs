@@ -9,6 +9,7 @@ namespace Askker.App.PortableLibrary.Enums
     public enum PictureType
     {
         Profile,
-        OptionImage
+        OptionImage,
+        Group
     }
 }

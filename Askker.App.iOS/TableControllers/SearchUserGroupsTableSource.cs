@@ -46,7 +46,7 @@ namespace Askker.App.iOS.TableControllers
 
             if (!string.IsNullOrEmpty(searchItems[indexPath.Row].ImageName))
             {
-                Utils.SetImageFromNSUrlSession(searchItems[indexPath.Row].ImageName, imageView, this, PictureType.Profile);
+                Utils.SetImageFromNSUrlSession(searchItems[indexPath.Row].ImageName, imageView, this, PictureType.Group);
             }
 
             cell.UpdateCell(searchItems[indexPath.Row].Title);
@@ -71,7 +71,7 @@ namespace Askker.App.iOS.TableControllers
 
                     foreach (var group in groups)
                     {
-                        tableItems.Add(new SearchUserGroupsTableItem(group.id, group.searchName, group.profilePicture));
+                        tableItems.Add(new SearchUserGroupsTableItem(group.userId+group.creationDate, group.name, group.profilePicture));
                     }
 
                     SearchUserGroupsController.table.Source = new SearchUserGroupsTableSource(tableItems, this.navigationController);
@@ -98,7 +98,8 @@ namespace Askker.App.iOS.TableControllers
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            Utils.OpenUserProfile(this.navigationController, this.tableItems[indexPath.Row].Id);
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnText"), null);
+            Utils.OpenGroupMembers(this.navigationController, this.tableItems[indexPath.Row].Id, this.tableItems[indexPath.Row].Id, this.tableItems[indexPath.Row].ImageName);
         }
     }
 }

@@ -214,6 +214,10 @@
     <Compile Include="TableControllers\SurveyOptionTableSource.cs" />
     <Compile Include="TableControllers\SurveyShareTableItem.cs" />
     <Compile Include="TableControllers\SurveyShareTableSource.cs" />
+    <Compile Include="UserGroupMembersAdminController.cs" />
+    <Compile Include="UserGroupMembersAdminController.designer.cs">
+      <DependentUpon>UserGroupMembersAdminController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />
@@ -518,6 +522,15 @@
     <ImageAsset Include="Resources\Media.xcassets\Female.imageset\female-x3.png">
       <InProject>false</InProject>
     </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindGroup.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindGroup.imageset\find-groups-x2.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindGroup.imageset\find-groups-x3.png">
+      <InProject>false</InProject>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Finished.imageset\Contents.json">
       <InProject>false</InProject>
     </ImageAsset>
@@ -555,6 +568,12 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Group.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\Group.imageset\thumb-group-x2.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\Group.imageset\thumb-group-x3.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\ImagePlaceholder.imageset\Contents.json">
@@ -621,6 +640,15 @@
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\MyFriends.imageset\myfriends-x3.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyGroup.imageset\Contents.json">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyGroup.imageset\groups-x2.png">
+      <InProject>false</InProject>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyGroup.imageset\groups-x3.png">
       <InProject>false</InProject>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\MySurveys.imageset\Contents.json">

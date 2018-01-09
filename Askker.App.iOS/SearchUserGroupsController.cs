@@ -17,11 +17,31 @@ namespace Askker.App.iOS
         SearchUserGroupsTableSource tableSource;
         List<SearchUserGroupsTableItem> tableItems;
         UISearchBar searchBar;
+        private NSObject changeBackBtnText;
+
+        public override void ViewDidUnload()
+        {
+            base.ViewDidUnload();
+
+            if (changeBackBtnText != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(changeBackBtnText);
+            }
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            Title = "Find Groups";
+
+            base.ViewWillAppear(animated);
+        }
+
 
         public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+            changeBackBtnText = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("ChangeBackBtnText"), ChangeBackBtnText);
             // Perform any additional setup after loading the view, typically from a nib.
 
             //Declare the search bar and add it to the header of the table
@@ -83,6 +103,11 @@ namespace Askker.App.iOS
         {
             base.DidReceiveMemoryWarning();
             // Release any cached data, images, etc that aren't in use.
+        }
+
+        private void ChangeBackBtnText(NSNotification notification)
+        {
+            Title = "";
         }
     }
 }

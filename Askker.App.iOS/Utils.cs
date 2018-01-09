@@ -181,6 +181,43 @@ namespace Askker.App.iOS
             }
         }
 
+        public static void OpenGroupProfile(UINavigationController navigationController, string groupId)
+        {
+            UIStoryboard Storyboard = UIStoryboard.FromName("Main", null);
+            
+            var groupProfileController = Storyboard.InstantiateViewController("GroupProfileController") as GroupProfileController;
+            if (groupProfileController != null)
+            {
+                groupProfileController.groupId = groupId;
+                navigationController.PushViewController(groupProfileController, true);
+            }            
+        }
+
+        public static void OpenGroupMembers(UINavigationController navigationController, string userId, string groupId, string groupProfilePicture)
+        {
+            UIStoryboard Storyboard = UIStoryboard.FromName("Main", null);
+
+            //if (userId.Equals(LoginController.userModel.id))
+            //{
+                var userGroupMembersAdminController = Storyboard.InstantiateViewController("UserGroupMembersAdminController") as UserGroupMembersAdminController;
+                if (userGroupMembersAdminController != null)
+                {
+                    userGroupMembersAdminController.groupId = groupId;
+                    userGroupMembersAdminController.groupProfilePicture = groupProfilePicture;
+                navigationController.PushViewController(userGroupMembersAdminController, true);
+                }
+            //}
+            //else
+            //{
+            //    var profileOtherController = Storyboard.InstantiateViewController("ProfileOtherController") as ProfileOtherController;
+            //    if (profileOtherController != null)
+            //    {
+            //        profileOtherController.friendUserId = userId;
+            //        navigationController.PushViewController(profileOtherController, true);
+            //    }
+            //}
+        }
+
         //public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSCache imageCache = null)
         //{
         //    UIImage imageFromCache = null;
@@ -242,6 +279,11 @@ namespace Askker.App.iOS
                 if(picType.Equals(PictureType.Profile))
                 {
                     placeholder = UIImage.FromBundle("Profile");
+                }
+
+                if (picType.Equals(PictureType.Group))
+                {
+                    placeholder = UIImage.FromBundle("Group");
                 }
 
                 imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), placeholder, SDWebImageOptions.ProgressiveDownload, //HighPriority

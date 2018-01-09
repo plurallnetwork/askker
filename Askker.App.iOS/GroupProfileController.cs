@@ -36,12 +36,12 @@ namespace Askker.App.iOS
 
             groupModel = await new UserGroupManager().GetGroupById(LoginController.tokenModel.access_token, groupId);
 
-            lblName.Text = groupModel.searchName;
+            lblName.Text = groupModel.name;
             textDescription.Text = groupModel.description;
 
             if (groupModel.profilePicture != null)
             {
-                Utils.SetImageFromNSUrlSession(groupModel.profilePicture, profileImageView, this, PictureType.Profile);
+                Utils.SetImageFromNSUrlSession(groupModel.profilePicture, profileImageView, this, PictureType.Group);
             }
             else
             {
@@ -50,6 +50,16 @@ namespace Askker.App.iOS
 
             LoadRelationshipButton();
             btnRelationship.TouchUpInside += BtnRelationship_TouchUpInside;
+
+            if (groupId.Contains(LoginController.userModel.id))
+            {
+                btnRelationship.Hidden = true;
+            }
+            else
+            {
+                btnRelationship.Hidden = false;
+            }
+
             BTProgressHUD.Dismiss();
         }
 
@@ -100,12 +110,12 @@ namespace Askker.App.iOS
             switch (relationshipStatus)
             {
                 case UserGroupRelationshipStatus.NotInGroup:
-                    btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Request Membership ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
                 case UserGroupRelationshipStatus.InGroup:
-                    btnRelationship.SetTitle(" Unfriend ", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Quit Membership", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
@@ -120,7 +130,7 @@ namespace Askker.App.iOS
                     btnRelationship.Enabled = true;
                     break;
                 case UserGroupRelationshipStatus.RejectedByYou:
-                    btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Request Membership ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
@@ -130,7 +140,7 @@ namespace Askker.App.iOS
                     btnRelationship.Enabled = false;
                     break;
                 case UserGroupRelationshipStatus.UnGrouped:
-                    btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
+                    btnRelationship.SetTitle(" Request Membership ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
