@@ -10,6 +10,7 @@ namespace Askker.App.PortableLibrary.Enums
     {
         Public,
         Private,
-        Friends
+        Friends,
+        Groups
     }
 }

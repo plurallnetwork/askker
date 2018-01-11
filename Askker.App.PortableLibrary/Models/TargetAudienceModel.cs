@@ -28,6 +28,7 @@ namespace Askker.App.PortableLibrary.Models
             TargetAudienceItems.Add(new TargetAudienceModel() { TargetAudience = TargetAudience.Public, Title = "Public", Text = "Visible to everybody!", ImageName = "Globe" });
             TargetAudienceItems.Add(new TargetAudienceModel() { TargetAudience = TargetAudience.Friends, Title = "Friends", Text = "Visible to all your friends!", ImageName = "Friends" });
             TargetAudienceItems.Add(new TargetAudienceModel() { TargetAudience = TargetAudience.Private, Title = "Choose Friends", Text = "Visible to the selected friends below:", ImageName = "Lock" });
+            TargetAudienceItems.Add(new TargetAudienceModel() { TargetAudience = TargetAudience.Groups, Title = "Choose Groups", Text = "Visible to the selected groups below:", ImageName = "MyGroup" });
         }
     }
 }

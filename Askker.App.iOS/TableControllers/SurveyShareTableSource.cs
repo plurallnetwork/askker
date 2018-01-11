@@ -60,6 +60,20 @@ namespace Askker.App.iOS.TableControllers
                 }
             }
 
+            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString() && CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Groups.ToString())
+            {
+                if (CreateSurveyController.SurveyModel.targetAudienceGroups != null && CreateSurveyController.SurveyModel.targetAudienceGroups.ids.Count > 0)
+                {
+                    foreach (var id in CreateSurveyController.SurveyModel.targetAudienceGroups.ids)
+                    {
+                        if (id.Equals(tableItems[indexPath.Row].Id))
+                        {
+                            cell.Accessory = UITableViewCellAccessory.Checkmark;
+                        }
+                    }
+                }
+            }
+
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             cell.UpdateCell(tableItems[indexPath.Row].Name);
             return cell;
@@ -73,53 +87,111 @@ namespace Askker.App.iOS.TableControllers
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
             UITableViewCell cell = tableView.CellAt(indexPath);
-            if (indexPath.Row >= 0)
+            if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
             {
-                if (cell.Accessory == UITableViewCellAccessory.Checkmark)
+                if (indexPath.Row >= 0)
                 {
-                    cell.Accessory = UITableViewCellAccessory.None;
-
-                    var index = CreateSurveyController.SurveyModel.targetAudienceUsers.ids.IndexOf(tableItems[indexPath.Row].Id);
-
-                    if(index >= 0)
+                    if (cell.Accessory == UITableViewCellAccessory.Checkmark)
                     {
-                        CreateSurveyController.SurveyModel.targetAudienceUsers.ids.RemoveAt(index);
-                        CreateSurveyController.SurveyModel.targetAudienceUsers.names.RemoveAt(index);
-                    }                    
-                }
-                else
-                {
-                    cell.Accessory = UITableViewCellAccessory.Checkmark;
+                        cell.Accessory = UITableViewCellAccessory.None;
 
-                    if (CreateSurveyController.SurveyModel.targetAudienceUsers == null)
+                        var index = CreateSurveyController.SurveyModel.targetAudienceUsers.ids.IndexOf(tableItems[indexPath.Row].Id);
+
+                        if (index >= 0)
+                        {
+                            CreateSurveyController.SurveyModel.targetAudienceUsers.ids.RemoveAt(index);
+                            CreateSurveyController.SurveyModel.targetAudienceUsers.names.RemoveAt(index);
+                        }
+                    }
+                    else
                     {
-                        CreateSurveyController.SurveyModel.targetAudienceUsers = new AudienceUsers();
-                        CreateSurveyController.SurveyModel.targetAudienceUsers.ids = new List<string>();
-                        CreateSurveyController.SurveyModel.targetAudienceUsers.names = new List<string>();
+                        cell.Accessory = UITableViewCellAccessory.Checkmark;
+
+                        if (CreateSurveyController.SurveyModel.targetAudienceUsers == null)
+                        {
+                            CreateSurveyController.SurveyModel.targetAudienceUsers = new AudienceUsers();
+                            CreateSurveyController.SurveyModel.targetAudienceUsers.ids = new List<string>();
+                            CreateSurveyController.SurveyModel.targetAudienceUsers.names = new List<string>();
+                        }
+
+                        CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Add(tableItems[indexPath.Row].Id);
+                        CreateSurveyController.SurveyModel.targetAudienceUsers.names.Add(tableItems[indexPath.Row].Name);
                     }
 
-                    CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Add(tableItems[indexPath.Row].Id);
-                    CreateSurveyController.SurveyModel.targetAudienceUsers.names.Add(tableItems[indexPath.Row].Name);
-                }
-
-                if (CreateSurveyController.SurveyModel != null && CreateSurveyController.SurveyModel.targetAudienceUsers != null &&
-                    CreateSurveyController.SurveyModel.targetAudienceUsers.ids != null && CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count > 0)
-                {
-                    CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                    CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    if (CreateSurveyController.SurveyModel != null && CreateSurveyController.SurveyModel.targetAudienceUsers != null &&
+                        CreateSurveyController.SurveyModel.targetAudienceUsers.ids != null && CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count > 0)
+                    {
+                        CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                        CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    }
+                    else
+                    {
+                        CreateSurveyController._askButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                        CreateSurveyController._askButton.BackgroundColor = UIColor.White;
+                    }
                 }
                 else
                 {
-                    CreateSurveyController._askButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
-                    CreateSurveyController._askButton.BackgroundColor = UIColor.White;
+                    cell.Accessory = UITableViewCellAccessory.None;
                 }
-            }
-            else
+            } else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Groups.ToString())
             {
-                cell.Accessory = UITableViewCellAccessory.None;
+                if (indexPath.Row >= 0)
+                {
+                    if (cell.Accessory == UITableViewCellAccessory.Checkmark)
+                    {
+                        cell.Accessory = UITableViewCellAccessory.None;
+
+                        var index = CreateSurveyController.SurveyModel.targetAudienceGroups.ids.IndexOf(tableItems[indexPath.Row].Id);
+
+                        if (index >= 0)
+                        {
+                            CreateSurveyController.SurveyModel.targetAudienceGroups.ids.RemoveAt(index);
+                            CreateSurveyController.SurveyModel.targetAudienceGroups.names.RemoveAt(index);
+                        }
+                    }
+                    else
+                    {
+                        cell.Accessory = UITableViewCellAccessory.Checkmark;
+
+                        if (CreateSurveyController.SurveyModel.targetAudienceGroups == null)
+                        {
+                            CreateSurveyController.SurveyModel.targetAudienceGroups = new AudienceGroups();
+                            CreateSurveyController.SurveyModel.targetAudienceGroups.ids = new List<string>();
+                            CreateSurveyController.SurveyModel.targetAudienceGroups.names = new List<string>();
+                        }
+
+                        CreateSurveyController.SurveyModel.targetAudienceGroups.ids.Add(tableItems[indexPath.Row].Id);
+                        CreateSurveyController.SurveyModel.targetAudienceGroups.names.Add(tableItems[indexPath.Row].Name);
+                    }
+
+                    if (CreateSurveyController.SurveyModel != null && CreateSurveyController.SurveyModel.targetAudienceGroups != null &&
+                        CreateSurveyController.SurveyModel.targetAudienceGroups.ids != null && CreateSurveyController.SurveyModel.targetAudienceGroups.ids.Count > 0)
+                    {
+                        CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                        CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    }
+                    else
+                    {
+                        CreateSurveyController._askButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                        CreateSurveyController._askButton.BackgroundColor = UIColor.White;
+                    }
+                }
+                else
+                {
+                    cell.Accessory = UITableViewCellAccessory.None;
+                }
             }
 
             tableView.DeselectRow(indexPath, true);
         }
+
+        public void DeselectAll(UITableView tableView) {
+            for (int i = 0; i < tableItems.Count; i++)
+            {
+                if (tableView.CellAt(NSIndexPath.FromRowSection((nint)i, (nint)0)).Accessory == UITableViewCellAccessory.Checkmark)
+                    tableView.CellAt(NSIndexPath.FromRowSection((nint)i, (nint)0)).Accessory = UITableViewCellAccessory.None;
+            }
+        }        
     }
 }

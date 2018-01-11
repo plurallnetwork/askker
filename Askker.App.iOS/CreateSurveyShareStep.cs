@@ -15,7 +15,10 @@ namespace Askker.App.iOS
     public partial class CreateSurveyShareStep : CustomUIViewController, IMultiStepProcessStep
     {
         public ShareStepView _shareStepView;
-        SurveyShareTableSource tableSource;
+        public SurveyShareTableSource tableSource;
+
+        public List<SurveyShareTableItem> tableItems;
+        public List<SurveyShareTableItem> tableItemsGroups;
 
         public CreateSurveyShareStep (IntPtr handle) : base (handle)
         {
@@ -45,8 +48,10 @@ namespace Askker.App.iOS
                 var targetAudienceItems = new SurveyTargetAudiencesModel().TargetAudienceItems;
                 new TargetAudienceTableViewController(_shareStepView.ShareOptions, targetAudienceItems, this);
 
-                List<SurveyShareTableItem> tableItems = new List<SurveyShareTableItem>();
+                tableItems = new List<SurveyShareTableItem>();
+                tableItemsGroups = new List<SurveyShareTableItem>();
 
+                
                 List<UserFriendModel> friends = await new FriendManager().GetFriends(LoginController.userModel.id, LoginController.tokenModel.access_token);
 
                 foreach (var friend in friends)
@@ -54,12 +59,23 @@ namespace Askker.App.iOS
                     tableItems.Add(new SurveyShareTableItem(friend.name, friend.profilePicture, friend.id));
                 }
 
-                tableSource = new SurveyShareTableSource(tableItems);
+                List<UserGroupModel> groups = await new UserGroupManager().GetGroups(LoginController.userModel.id, LoginController.tokenModel.access_token);
 
+                foreach (var group in groups)
+                {
+                    tableItemsGroups.Add(new SurveyShareTableItem(group.name, group.profilePicture, group.userId+group.creationDate));
+                }
+                
                 if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
                 {
                     if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
                     {
+                        tableSource = new SurveyShareTableSource(tableItems);
+                        _shareStepView.ShareTable.Hidden = false;
+                    }
+                    else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Groups.ToString())
+                    {
+                        tableSource = new SurveyShareTableSource(tableItemsGroups);
                         _shareStepView.ShareTable.Hidden = false;
                     }
                     else
@@ -175,12 +191,44 @@ namespace Askker.App.iOS
 
                 CreateSurveyController.SurveyModel.targetAudience = targetAudienceItems[indexPath.Row].TargetAudience.ToString();
 
+                if(createSurveyShareStep.tableSource != null)
+                {
+                    createSurveyShareStep.tableSource.DeselectAll(createSurveyShareStep._shareStepView.ShareTable);
+                }
+
                 if (targetAudienceItems[indexPath.Row].TargetAudience == TargetAudience.Private)
                 {
+                    createSurveyShareStep.tableSource = new SurveyShareTableSource(createSurveyShareStep.tableItems);
+                    createSurveyShareStep._shareStepView.ShareTable.BackgroundColor = UIColor.Clear;
+                    createSurveyShareStep._shareStepView.ShareTable.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
+                    createSurveyShareStep._shareStepView.ShareTable.Source = createSurveyShareStep.tableSource;
+                    createSurveyShareStep._shareStepView.ShareTable.ReloadData();
+
                     this.createSurveyShareStep._shareStepView.ShareTable.Hidden = false;
 
                     if (CreateSurveyController.SurveyModel != null && CreateSurveyController.SurveyModel.targetAudienceUsers != null &&
                         CreateSurveyController.SurveyModel.targetAudienceUsers.ids != null && CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count > 0)
+                    {
+                        CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                        CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    }
+                    else
+                    {
+                        CreateSurveyController._askButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                        CreateSurveyController._askButton.BackgroundColor = UIColor.White;
+                    }
+                } else if (targetAudienceItems[indexPath.Row].TargetAudience == TargetAudience.Groups)
+                {
+                    createSurveyShareStep.tableSource = new SurveyShareTableSource(createSurveyShareStep.tableItemsGroups);
+                    createSurveyShareStep._shareStepView.ShareTable.BackgroundColor = UIColor.Clear;
+                    createSurveyShareStep._shareStepView.ShareTable.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
+                    createSurveyShareStep._shareStepView.ShareTable.Source = createSurveyShareStep.tableSource;
+                    createSurveyShareStep._shareStepView.ShareTable.ReloadData();
+
+                    this.createSurveyShareStep._shareStepView.ShareTable.Hidden = false;
+
+                    if (CreateSurveyController.SurveyModel != null && CreateSurveyController.SurveyModel.targetAudienceGroups != null &&
+                        CreateSurveyController.SurveyModel.targetAudienceGroups.ids != null && CreateSurveyController.SurveyModel.targetAudienceGroups.ids.Count > 0)
                     {
                         CreateSurveyController._askButton.SetTitleColor(UIColor.White, UIControlState.Normal);
                         CreateSurveyController._askButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);

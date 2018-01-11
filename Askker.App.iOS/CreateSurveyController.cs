@@ -277,9 +277,25 @@ namespace Askker.App.iOS
                 return;
             }
 
+            if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Groups.ToString() && (CreateSurveyController.SurveyModel == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceGroups == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceGroups.ids == null ||
+                    CreateSurveyController.SurveyModel.targetAudienceGroups.ids.Count < 1))
+            {
+                new UIAlertView("Share", "Please select at least one group to share this survey", null, "OK", null).Show();
+                BTProgressHUD.Dismiss();
+
+                return;
+            }
+
             if (CreateSurveyController.SurveyModel.targetAudience != TargetAudience.Private.ToString())
             {
                 CreateSurveyController.SurveyModel.targetAudienceUsers = null;
+            }
+
+            if (CreateSurveyController.SurveyModel.targetAudience != TargetAudience.Groups.ToString())
+            {
+                CreateSurveyController.SurveyModel.targetAudienceGroups = null;
             }
 
             try

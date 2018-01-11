@@ -14,5 +14,8 @@ namespace Askker.App.iOS
     [Register ("SearchUserGroupsController")]
     partial class SearchUserGroupsController
     {
+        void ReleaseDesignerOutlets ()
+        {
+        }
     }
 }

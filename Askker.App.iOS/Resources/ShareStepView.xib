@@ -34,23 +34,23 @@
                     </variation>
                 </textView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="32" hidden="YES">
-                    <rect key="frame" x="0.0" y="352" width="375" height="315"/>
+                    <rect key="frame" x="0.0" y="396" width="375" height="276"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="116" scrollEnabled="NO">
-                    <rect key="frame" x="0.0" y="219" width="375" height="132"/>
+                    <rect key="frame" x="0.0" y="219" width="375" height="176"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint id="130" firstItem="116" firstAttribute="height" constant="132"/>
+                        <constraint id="153" firstAttribute="height" constant="176"/>
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">
-                            <exclude reference="130"/>
+                            <exclude reference="153"/>
                         </mask>
                     </variation>
                     <variation key="heightClass=regular-widthClass=compact">
                         <mask key="constraints">
-                            <include reference="130"/>
+                            <include reference="153"/>
                         </mask>
                     </variation>
                 </tableView>
@@ -97,17 +97,15 @@
                 <constraint id="125" firstItem="123" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16">
                     <variation key="heightClass=regular-widthClass=compact" constant="14"/>
                 </constraint>
-                <constraint id="127" firstItem="116" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
-                <constraint id="128" firstItem="116" firstAttribute="trailing" secondItem="1" secondAttribute="trailing"/>
                 <constraint id="141" firstItem="133" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10"/>
                 <constraint id="142" firstItem="1" firstAttribute="trailing" secondItem="133" secondAttribute="trailing" constant="10"/>
                 <constraint id="143" firstItem="133" firstAttribute="top" secondItem="123" secondAttribute="bottom" constant="5">
                     <variation key="heightClass=regular-widthClass=compact" constant="7"/>
                 </constraint>
-                <constraint id="144" firstItem="116" firstAttribute="top" secondItem="133" secondAttribute="centerY" constant="2">
-                    <variation key="heightClass=regular-widthClass=compact" constant="1"/>
-                </constraint>
-                <constraint id="145" firstItem="32" firstAttribute="top" secondItem="116" secondAttribute="bottom" constant="1"/>
+                <constraint id="150" firstItem="1" firstAttribute="trailing" secondItem="116" secondAttribute="trailing"/>
+                <constraint id="154" firstItem="116" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
+                <constraint id="155" firstItem="116" firstAttribute="top" secondItem="133" secondAttribute="centerY" constant="1"/>
+                <constraint id="156" firstItem="32" firstAttribute="top" secondItem="116" secondAttribute="bottom" constant="1"/>
             </constraints>
             <variation key="default">
                 <mask key="subviews">
@@ -126,13 +124,13 @@
                     <exclude reference="112"/>
                     <exclude reference="124"/>
                     <exclude reference="125"/>
-                    <exclude reference="127"/>
-                    <exclude reference="128"/>
                     <exclude reference="141"/>
                     <exclude reference="142"/>
                     <exclude reference="143"/>
-                    <exclude reference="144"/>
-                    <exclude reference="145"/>
+                    <exclude reference="150"/>
+                    <exclude reference="154"/>
+                    <exclude reference="155"/>
+                    <exclude reference="156"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -152,13 +150,13 @@
                     <include reference="112"/>
                     <include reference="124"/>
                     <include reference="125"/>
-                    <include reference="127"/>
-                    <include reference="128"/>
                     <include reference="141"/>
                     <include reference="142"/>
                     <include reference="143"/>
-                    <include reference="144"/>
-                    <include reference="145"/>
+                    <include reference="150"/>
+                    <include reference="154"/>
+                    <include reference="155"/>
+                    <include reference="156"/>
                 </mask>
             </variation>
             <connections>
@@ -169,8 +167,6 @@
         </view>
     </objects>
     <resources>
-        <image name="assets/img/filterMine.png" width="48" height="37"/>
-        <image name="assets/img/filterPublic.png" width="41" height="48"/>
         <image name="assets/img/friendsiOS.png" width="68" height="48"/>
         <image name="images/icons/done.png" width="32" height="32"/>
         <image name="images/icons/editar.png" width="59" height="60"/>
@@ -195,7 +191,7 @@
         <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
         <image name="assets/img/pagesSettings.png" width="44" height="48"/>
         <image name="assets/img/threelines.png" width="30" height="30"/>
-        <image name="AddFriends" width="40" height="42"/>
+        <image name="AddFriends" width="48" height="48"/>
         <image name="AddSurvey" width="48" height="48"/>
         <image name="BackBlack" width="17" height="30"/>
         <image name="CloseMenu" width="38" height="38"/>
@@ -219,7 +215,7 @@
         <image name="MySurveys" width="40" height="31"/>
         <image name="NextStep" width="17" height="30"/>
         <image name="NextStepGray" width="17" height="30"/>
-        <image name="Notification" width="27" height="34"/>
+        <image name="Notification" width="48" height="48"/>
         <image name="OptionCheck" width="68" height="68"/>
         <image name="PictureOption" width="52" height="41"/>
         <image name="Profile" width="180" height="180"/>
@@ -231,6 +227,12 @@
         <image name="StepCheck" width="35" height="35"/>
         <image name="TextOption" width="49" height="49"/>
         <image name="ValidateSurvey" width="47" height="36"/>
+        <image name="AskkerLogo" width="205" height="45"/>
+        <image name="CheckProfile" width="48" height="48"/>
+        <image name="DoneEditProfile" width="32" height="32"/>
+        <image name="FindGroup" width="49" height="42"/>
+        <image name="Group" width="180" height="180"/>
+        <image name="MyGroup" width="44" height="34"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedScreenMetrics key="destination" type="retina47"/>
