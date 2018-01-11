@@ -197,25 +197,26 @@ namespace Askker.App.iOS
         {
             UIStoryboard Storyboard = UIStoryboard.FromName("Main", null);
 
-            //if (userId.Equals(LoginController.userModel.id))
-            //{
+            if (userId.Equals(LoginController.userModel.id))
+            {
                 var userGroupMembersAdminController = Storyboard.InstantiateViewController("UserGroupMembersAdminController") as UserGroupMembersAdminController;
                 if (userGroupMembersAdminController != null)
                 {
                     userGroupMembersAdminController.groupId = groupId;
                     userGroupMembersAdminController.groupProfilePicture = groupProfilePicture;
-                navigationController.PushViewController(userGroupMembersAdminController, true);
+                    navigationController.PushViewController(userGroupMembersAdminController, true);
                 }
-            //}
-            //else
-            //{
-            //    var profileOtherController = Storyboard.InstantiateViewController("ProfileOtherController") as ProfileOtherController;
-            //    if (profileOtherController != null)
-            //    {
-            //        profileOtherController.friendUserId = userId;
-            //        navigationController.PushViewController(profileOtherController, true);
-            //    }
-            //}
+            }
+            else
+            {
+                var userGroupMembersOtherController = Storyboard.InstantiateViewController("UserGroupMembersOtherController") as UserGroupMembersOtherController;
+                if (userGroupMembersOtherController != null)
+                {
+                    userGroupMembersOtherController.groupId = groupId;
+                    userGroupMembersOtherController.groupProfilePicture = groupProfilePicture;
+                    navigationController.PushViewController(userGroupMembersOtherController, true);
+                }
+            }
         }
 
         //public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSCache imageCache = null)

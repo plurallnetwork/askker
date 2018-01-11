@@ -218,6 +218,10 @@
     <Compile Include="UserGroupMembersAdminController.designer.cs">
       <DependentUpon>UserGroupMembersAdminController.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserGroupMembersOtherController.cs" />
+    <Compile Include="UserGroupMembersOtherController.designer.cs">
+      <DependentUpon>UserGroupMembersOtherController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
     <None Include="app.config" />
     <None Include="GettingStarted.Xamarin" />

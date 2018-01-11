@@ -11,16 +11,20 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class UserGroupMembersAdminController : GroupMemberBaseTableViewController
+    public partial class UserGroupMembersOtherController : GroupMemberOtherBaseTableViewController
     {
         public List<UserGroupMemberModel> members { get; set; }
         public string groupId { get; set; }
         public string groupProfilePicture { get; set; }
 
-        UIBarButtonItem edit, done;
+        MemberResultsOtherTableController resultsTableController;
+        UISearchController searchController;
+        bool searchControllerWasActive;
+        bool searchControllerSearchFieldWasFirstResponder;
+
         UIButton groupProfileBtn;
 
-        public UserGroupMembersAdminController(IntPtr handle) : base (handle)
+        public UserGroupMembersOtherController(IntPtr handle) : base (handle)
         {
         }
 
@@ -31,7 +35,7 @@ namespace Askker.App.iOS
         }
 
         public override void ViewWillAppear(bool animated)
-        {   
+        {
             base.ViewWillAppear(animated);
         }
 
@@ -52,34 +56,48 @@ namespace Askker.App.iOS
             groupProfileBtn.SetImage(UIImage.FromBundle("MyGroup"), UIControlState.Normal);
             //Utils.SetImageFromNSUrlSession(groupProfilePicture, groupProfileBtn.ImageView, this, PictureType.Profile);
             groupProfileBtn.SetTitle("View Group Details", UIControlState.Normal);
-            groupProfileBtn.TitleEdgeInsets = new UIEdgeInsets(0, groupProfileBtn.ImageView.Frame.Size.Width/4, 0, -groupProfileBtn.ImageView.Frame.Size.Width);
-            groupProfileBtn.ImageEdgeInsets = new UIEdgeInsets(0, -groupProfileBtn.TitleLabel.Frame.Size.Width/4, 0, groupProfileBtn.TitleLabel.Frame.Size.Width);
+            groupProfileBtn.TitleEdgeInsets = new UIEdgeInsets(0, groupProfileBtn.ImageView.Frame.Size.Width / 4, 0, -groupProfileBtn.ImageView.Frame.Size.Width);
+            groupProfileBtn.ImageEdgeInsets = new UIEdgeInsets(0, -groupProfileBtn.TitleLabel.Frame.Size.Width / 4, 0, groupProfileBtn.TitleLabel.Frame.Size.Width);
             groupProfileBtn.AddTarget(Self, new ObjCRuntime.Selector("GroupProfileBtn:"), UIControlEvent.TouchUpInside);
             NavigationItem.TitleView = groupProfileBtn;
 
             members = new List<UserGroupMemberModel>();
-            fetchMembers();
 
-            TableView.Source = new MemberResultsTableController(members, this, groupId);
-            TableView.ReloadData();
+            resultsTableController = new MemberResultsOtherTableController
+            {
+                filteredMembers = new List<UserGroupMemberModel>()
+            };
 
-            done = new UIBarButtonItem(UIImage.FromBundle("DoneEditProfile"), UIBarButtonItemStyle.Plain, (s, e) => {
-                TableView.SetEditing(false, true);
-                NavigationItem.RightBarButtonItem = edit;
-            });
+            searchController = new UISearchController(resultsTableController)
+            {
+                WeakDelegate = this,
+                DimsBackgroundDuringPresentation = false,
+                WeakSearchResultsUpdater = this
+            };
 
-            edit = new UIBarButtonItem(UIImage.FromBundle("EditProfile"), UIBarButtonItemStyle.Plain, (s, e) => {
-                if (TableView.Editing)
-                    TableView.SetEditing(false, true); // if we've half-swiped a row
+            searchController.SearchBar.SizeToFit();
+            TableView.TableHeaderView = searchController.SearchBar;
+            TableView.SetContentOffset(new CGPoint(0, 44), true);
 
-                TableView.SetEditing(true, true);
-                NavigationItem.LeftBarButtonItem = null;
-                NavigationItem.RightBarButtonItem = done;
+            resultsTableController.TableView.WeakDelegate = this;
+            searchController.SearchBar.WeakDelegate = this;
 
-            });
+            DefinesPresentationContext = true;
+
+            if (searchControllerWasActive)
+            {
+                searchController.Active = searchControllerWasActive;
+                searchControllerWasActive = false;
+
+                if (searchControllerSearchFieldWasFirstResponder)
+                {
+                    searchController.SearchBar.BecomeFirstResponder();
+                    searchControllerSearchFieldWasFirstResponder = false;
+                }
+            }
 
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
-            NavigationItem.RightBarButtonItem = edit;
+            fetchMembers();            
         }
 
         public async void fetchMembers()
@@ -87,8 +105,6 @@ namespace Askker.App.iOS
             try
             {
                 members = await new UserGroupManager().GetGroupMembers(LoginController.tokenModel.access_token, groupId);
-                TableView.Source = new MemberResultsTableController(members, this, groupId);
-                TableView.ReloadData();
             }
             catch (Exception ex)
             {
@@ -113,7 +129,7 @@ namespace Askker.App.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(cellIdentifier) as MembersTableViewCell;
+            var cell = tableView.DequeueReusableCell(cellIdentifier) as MembersOtherTableViewCell;
 
             ConfigureCell(cell, members[indexPath.Row]);
 
@@ -129,7 +145,15 @@ namespace Askker.App.iOS
         {
             return 60;
         }
-                
+
+        [Export("updateSearchResultsForSearchController:")]
+        public virtual void UpdateSearchResultsForSearchController(UISearchController searchController)
+        {
+            var tableController = (MemberResultsOtherTableController)searchController.SearchResultsController;
+            tableController.filteredMembers = PerformSearch(searchController.SearchBar.Text);
+            tableController.TableView.ReloadData();
+        }
+
         List<UserGroupMemberModel> PerformSearch(string searchString)
         {
             searchString = searchString.Trim();
@@ -154,15 +178,15 @@ namespace Askker.App.iOS
         }
     }
 
-    public class GroupMemberBaseTableViewController : CustomUITableViewController
+    public class GroupMemberOtherBaseTableViewController : CustomUITableViewController
     {
         protected const string cellIdentifier = "cellId";
 
-        public GroupMemberBaseTableViewController()
+        public GroupMemberOtherBaseTableViewController()
         {
         }
 
-        public GroupMemberBaseTableViewController(IntPtr handle) : base(handle)
+        public GroupMemberOtherBaseTableViewController(IntPtr handle) : base(handle)
         {
         }
 
@@ -170,11 +194,11 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
-            TableView.RegisterClassForCellReuse(typeof(MembersTableViewCell), cellIdentifier);
+            TableView.RegisterClassForCellReuse(typeof(MembersOtherTableViewCell), cellIdentifier);
             TableView.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
         }
 
-        protected void ConfigureCell(MembersTableViewCell cell, UserGroupMemberModel member)
+        protected void ConfigureCell(MembersOtherTableViewCell cell, UserGroupMemberModel member)
         {
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
 
@@ -187,12 +211,12 @@ namespace Askker.App.iOS
         }
     }
 
-    public partial class MembersTableViewCell : UITableViewCell
+    public partial class MembersOtherTableViewCell : UITableViewCell
     {
         public UIImageView profileImageView { get; set; }
         public UILabel nameLabel { get; set; }
 
-        protected MembersTableViewCell(IntPtr handle) : base(handle)
+        protected MembersOtherTableViewCell(IntPtr handle) : base(handle)
         {
             profileImageView = new UIImageView();
             profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
@@ -215,19 +239,9 @@ namespace Askker.App.iOS
         }
     }
 
-    public class MemberResultsTableController : UITableViewSource
+    public class MemberResultsOtherTableController : GroupMemberOtherBaseTableViewController
     {
         public List<UserGroupMemberModel> filteredMembers { get; set; }
-        protected const string cellIdentifier = "cellId";
-        UIViewController viewController;
-        public string groupId { get; set; }
-
-        public MemberResultsTableController(List<UserGroupMemberModel> items, UIViewController viewController, string groupId)
-        {
-            filteredMembers = items;
-            this.viewController = viewController;
-            this.groupId = groupId;
-        }
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
@@ -236,20 +250,11 @@ namespace Askker.App.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(cellIdentifier) as MembersTableViewCell;
+            var cell = tableView.DequeueReusableCell(cellIdentifier) as MembersOtherTableViewCell;
 
             var userGroup = filteredMembers[indexPath.Row];
 
-            //ConfigureCell(cell, userGroup);
-
-            cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-
-            if (userGroup.profilePicture != null)
-            {
-                Utils.SetImageFromNSUrlSession(userGroup.profilePicture, cell.profileImageView, this, PictureType.Profile);
-            }
-
-            cell.nameLabel.Text = userGroup.name;
+            ConfigureCell(cell, userGroup);
 
             return cell;
         }
@@ -257,55 +262,6 @@ namespace Askker.App.iOS
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
             return 60;
-        }
-
-        /// <summary>
-        /// Called by the table view to determine whether or not the row is editable
-        /// </summary>
-        public override bool CanEditRow(UITableView tableView, NSIndexPath indexPath)
-        {
-            return true; // return false if you wish to disable editing for a specific indexPath or for all rows
-        }
-        
-        /// <summary>
-        /// Custom text for delete button
-        /// </summary>
-        public override string TitleForDeleteConfirmation(UITableView tableView, NSIndexPath indexPath)
-        {
-            return "Remove member";
-        }
-
-        public override async void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, NSIndexPath indexPath)
-        {
-            switch (editingStyle)
-            {
-                case UITableViewCellEditingStyle.Delete:
-                    // remove the item from the underlying data source
-                    filteredMembers.RemoveAt(indexPath.Row);
-                    // delete the row from the table
-                    tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-
-                    await new UserGroupManager().UpdateGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, UserGroupRelationshipStatus.NotInGroup);
-                    break;
-
-                case UITableViewCellEditingStyle.Insert:
-
-                    Console.WriteLine("CommitEditingStyle:Insert called");
-                    break;
-
-                case UITableViewCellEditingStyle.None:
-                    Console.WriteLine("CommitEditingStyle:None called");
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Called by the table view to determine whether the editing control should be an insert
-        /// or a delete.
-        /// </summary>
-        public override UITableViewCellEditingStyle EditingStyleForRow(UITableView tableView, NSIndexPath indexPath)
-        {
-            return UITableViewCellEditingStyle.Delete;
         }
     }
 }
