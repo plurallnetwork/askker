@@ -48,7 +48,7 @@ namespace Askker.App.iOS
             groupProfileBtn = new UIButton(UIButtonType.System);
             groupProfileBtn.Frame = new CGRect(0, 0, 100, 40);
             groupProfileBtn.BackgroundColor = UIColor.White;
-            groupProfileBtn.SetTitleColor(UIColor.Black, UIControlState.Normal);
+            groupProfileBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
             //groupProfileBtn.ImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             //groupProfileBtn.ImageView.Layer.CornerRadius = 22;
             //groupProfileBtn.ImageView.Layer.MasksToBounds = true;

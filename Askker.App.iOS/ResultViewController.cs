@@ -166,7 +166,7 @@ namespace Askker.App.iOS
                     dataSet.ValueFormatter = new ChartDefaultValueFormatter(new NSNumberFormatter() { MinimumFractionDigits = 0 });
                     dataSet.SliceSpace = 2;
                     dataSet.Colors = ChartColorTemplates.Joyful;
-                    dataSet.ValueTextColor = UIColor.Black;
+                    dataSet.ValueTextColor = UIColor.FromRGB(90, 89, 89);
                     dataSet.XValuePosition = PieChartValuePosition.OutsideSlice;
                     dataSet.YValuePosition = PieChartValuePosition.OutsideSlice;
 

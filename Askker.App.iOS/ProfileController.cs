@@ -23,6 +23,13 @@ namespace Askker.App.iOS
 
         public ProfileController (IntPtr handle) : base (handle)
         {
+            // Set the default appearance values
+            UIButton.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
+            UIButton.Appearance.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+
+            UILabel.Appearance.TextColor = UIColor.FromRGB(90, 89, 89);
+
+            UITextField.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);            
         }
 
         public override void ViewDidLoad()
@@ -55,7 +62,7 @@ namespace Askker.App.iOS
                 return replacement.Length == 0 || int.TryParse(replacement, out number);
             };
 
-            uploadButton.Layer.BorderColor = UIColor.Black.CGColor;
+            uploadButton.Layer.BorderColor = UIColor.FromRGB(90, 89, 89).CGColor;
             uploadButton.Layer.BorderWidth = 1f;
 
             nameText.Text = LoginController.userModel.name;

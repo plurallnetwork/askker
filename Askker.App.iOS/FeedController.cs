@@ -645,6 +645,16 @@ namespace Askker.App.iOS
         [Export("initWithFrame:")]
         public FeedCollectionViewCell(CGRect frame) : base(frame)
         {
+            // Set the default appearance values
+            UIButton.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
+            UIButton.Appearance.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+
+            UILabel.Appearance.TextColor = UIColor.FromRGB(90, 89, 89);
+
+            UITextField.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
+            UITextView.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
+            
+
             ContentView.BackgroundColor = UIColor.White;
 
             profileImageView = new UIImageView();
@@ -658,6 +668,8 @@ namespace Askker.App.iOS
             nameLabel = new UILabel();
             nameLabel.Lines = 2;
             nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            nameLabel.TintColor = UIColor.FromRGB(90, 89, 89);
+            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
             finishedLabel = new UILabel();
             finishedLabel.BackgroundColor = UIColor.FromRGB(250, 60, 60);
@@ -672,6 +684,8 @@ namespace Askker.App.iOS
             questionText.ScrollEnabled = false;
             questionText.Editable = false;
             questionText.TranslatesAutoresizingMaskIntoConstraints = false;
+            questionText.TintColor = UIColor.FromRGB(90, 89, 89);
+            questionText.TextColor = UIColor.FromRGB(90, 89, 89);
 
             dividerLineView = new UIView();
             dividerLineView.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
@@ -714,6 +728,8 @@ namespace Askker.App.iOS
             resultButton = buttonForTitle(title: "Result", imageName: "result");
             commentButton = buttonForTitle(title: "Comment", imageName: "comment");
             moreButton = buttonForTitle(title: "", imageName: "More");
+            moreButton.TintColor = UIColor.FromRGB(90, 89, 89);
+            moreButton.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
 
             dividerLineButtons = new UIView();
             dividerLineButtons.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
@@ -821,7 +837,9 @@ namespace Askker.App.iOS
             optionCell.Tag = survey.options[indexPath.Row].id;
 
             optionCell.optionLetterLabel.Text = FeedCollectionViewCell.alphabet[indexPath.Row];
+            optionCell.optionLetterLabel.TextColor = UIColor.FromRGB(90, 89, 89);
             optionCell.optionLabel.Text = survey.options[indexPath.Row].text;
+            optionCell.optionLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
             if (survey.optionSelected == survey.options[indexPath.Row].id)
             {
@@ -1090,7 +1108,7 @@ namespace Askker.App.iOS
             optionView = new UIView(new CGRect(0, 0, 270, 25));
             optionView.BackgroundColor = UIColor.Clear;
             optionView.Alpha = 0.8f;
-            var colorTop = UIColor.Black.CGColor;
+            var colorTop = UIColor.FromRGB(90, 89, 89).CGColor;
             var colorBottom = UIColor.Clear.CGColor;
             var gradientLayer = new CAGradientLayer();
             gradientLayer.Colors = new CGColor[] { colorTop, colorBottom };

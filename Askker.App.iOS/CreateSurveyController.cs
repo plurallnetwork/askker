@@ -92,7 +92,7 @@ namespace Askker.App.iOS
                 BorderWidthAll = 0.5f
             };
             _backButton.SetTitle("  <  Back  ", UIControlState.Normal);
-            _backButton.SetTitleColor(UIColor.Black, UIControlState.Normal);
+            _backButton.SetTitleColor(UIColor.FromRGB(90,89,89), UIControlState.Normal);
             _backButton.Font = UIFont.SystemFontOfSize(16);
             _backButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
             _backButton.BackgroundColor = UIColor.White;

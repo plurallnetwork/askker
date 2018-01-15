@@ -117,12 +117,12 @@ namespace Askker.App.iOS
                 }
             , true);
 
-            this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.Black;
-            this.NavigationItem.RightBarButtonItem.TintColor = UIColor.Black;
+            this.NavigationItem.LeftBarButtonItem.TintColor = UIColor.FromRGB(90, 89, 89);
+            this.NavigationItem.RightBarButtonItem.TintColor = UIColor.FromRGB(90, 89, 89);
 
             this.NavigationItem.BackBarButtonItem = new UIBarButtonItem("", UIBarButtonItemStyle.Plain, null);
 
-            this.NavigationController.NavigationBar.TintColor = UIColor.Black;
+            this.NavigationController.NavigationBar.TintColor = UIColor.FromRGB(90, 89, 89);
         }
 
         private UIBarButtonItem GetNotificationsButton()
