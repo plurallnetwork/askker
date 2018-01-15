@@ -57,6 +57,7 @@ namespace Askker.App.iOS
             commentText.Layer.BorderColor = InputBorderColor.CGColor;
             commentText.Layer.BorderWidth = BorderWidth;
             commentText.Layer.CornerRadius = CornerRadius;
+            commentText.TextColor = UIColor.FromRGB(90, 89, 89);
 
             commentButton.TranslatesAutoresizingMaskIntoConstraints = false;
             commentButton.Enabled = false;

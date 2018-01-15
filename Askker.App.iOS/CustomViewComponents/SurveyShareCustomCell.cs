@@ -36,6 +36,7 @@ namespace Askker.App.iOS.CustomViewComponents
             imageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             textLabel.Frame = new CGRect(50, 10, ContentView.Bounds.Width - 50, 25);
+            textLabel.TextColor = UIColor.FromRGB(90, 89, 89);
         }
 
         public UIImageView GetImageView()

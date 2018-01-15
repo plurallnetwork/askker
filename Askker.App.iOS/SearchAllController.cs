@@ -53,6 +53,21 @@ namespace Askker.App.iOS
                 searchTable();
             };
 
+            foreach (UIView subView in searchBar.Subviews)
+            {
+                foreach (UIView secondLevelSubview in subView.Subviews)
+                {
+                    if (secondLevelSubview is UITextField)
+                    {
+                        UITextField searchBarTextField = (UITextField)secondLevelSubview;
+
+                        //set font color here
+                        searchBarTextField.TextColor = UIColor.FromRGB(90, 89, 89);
+                        break;
+                    }
+                }
+            }
+
             table = new UITableView(new CGRect(0, 0, View.Bounds.Width, View.Bounds.Height - 20));
             //table.AutoresizingMask = UIViewAutoresizing.All;
             tableItems = new List<SearchAllTableItem>();

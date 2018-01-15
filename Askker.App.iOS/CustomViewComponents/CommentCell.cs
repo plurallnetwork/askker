@@ -18,13 +18,13 @@ namespace Askker.App.iOS.Resources
 
         protected CommentCell(IntPtr handle) : base(handle)
         {
-            // Note: this .ctor should not contain any initialization logic.
+            // Note: this .ctor should not contain any initialization logic.            
         }
 
         public void UpdateCell(string name, string text, UINavigationController navigationController, string id)
         {
             nameLabel.Text = name;
-            commentText.Text = text;
+            commentText.Text = text;            
 
             var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
             List<Object> tapProfilePictureValues = new List<Object>();
@@ -44,6 +44,9 @@ namespace Askker.App.iOS.Resources
             imageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             commentText.BackgroundColor = UIColor.White;
+            commentText.TextColor = UIColor.FromRGB(90, 89, 89);
+
+            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
         }
 
         public UIImageView GetImageView()

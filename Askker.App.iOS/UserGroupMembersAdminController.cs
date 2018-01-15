@@ -52,8 +52,8 @@ namespace Askker.App.iOS
             groupProfileBtn.SetImage(UIImage.FromBundle("MyGroup"), UIControlState.Normal);
             //Utils.SetImageFromNSUrlSession(groupProfilePicture, groupProfileBtn.ImageView, this, PictureType.Profile);
             groupProfileBtn.SetTitle("View Group Details", UIControlState.Normal);
-            groupProfileBtn.TitleEdgeInsets = new UIEdgeInsets(0, groupProfileBtn.ImageView.Frame.Size.Width/4, 0, -groupProfileBtn.ImageView.Frame.Size.Width);
-            groupProfileBtn.ImageEdgeInsets = new UIEdgeInsets(0, -groupProfileBtn.TitleLabel.Frame.Size.Width/4, 0, groupProfileBtn.TitleLabel.Frame.Size.Width);
+            groupProfileBtn.TitleEdgeInsets = new UIEdgeInsets(0, groupProfileBtn.ImageView.Frame.Size.Width/5, 0, -groupProfileBtn.ImageView.Frame.Size.Width);
+            groupProfileBtn.ImageEdgeInsets = new UIEdgeInsets(0, -groupProfileBtn.TitleLabel.Frame.Size.Width/5, 0, groupProfileBtn.TitleLabel.Frame.Size.Width);
             groupProfileBtn.AddTarget(Self, new ObjCRuntime.Selector("GroupProfileBtn:"), UIControlEvent.TouchUpInside);
             NavigationItem.TitleView = groupProfileBtn;
 
@@ -204,6 +204,7 @@ namespace Askker.App.iOS
             nameLabel = new UILabel();
             nameLabel.Font = UIFont.SystemFontOfSize(14);
             nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
             ContentView.Add(profileImageView);
             ContentView.Add(nameLabel);

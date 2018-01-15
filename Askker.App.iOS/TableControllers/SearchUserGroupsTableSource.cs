@@ -99,6 +99,7 @@ namespace Askker.App.iOS.TableControllers
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
             NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnText"), null);
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnTextGroups"), null);
             Utils.OpenGroupMembers(this.navigationController, this.tableItems[indexPath.Row].Id, this.tableItems[indexPath.Row].Id, this.tableItems[indexPath.Row].ImageName);
         }
     }

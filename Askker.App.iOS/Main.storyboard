@@ -560,6 +560,7 @@
                                         <include reference="4440"/>
                                     </mask>
                                 </variation>
+                                <color key="textColor" colorSpace="calibratedRGB" red="0.35294117647058826" green="0.34901960784313724" blue="0.34901960784313724" alpha="1"/>
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="453">
                                 <rect key="frame" x="22" y="338" width="53" height="31"/>
@@ -2243,6 +2244,7 @@
                                         <include reference="6043"/>
                                     </mask>
                                 </variation>
+                                <color key="textColor" colorSpace="calibratedRGB" red="0.35294117647058826" green="0.34901960784313724" blue="0.34901960784313724" alpha="1"/>
                             </label>
                         </subviews>
                         <variation key="default">

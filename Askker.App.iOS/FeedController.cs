@@ -645,14 +645,14 @@ namespace Askker.App.iOS
         [Export("initWithFrame:")]
         public FeedCollectionViewCell(CGRect frame) : base(frame)
         {
-            // Set the default appearance values
-            UIButton.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
-            UIButton.Appearance.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+            //// Set the default appearance values
+            //UIButton.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
+            //UIButton.Appearance.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
 
-            UILabel.Appearance.TextColor = UIColor.FromRGB(90, 89, 89);
+            //UILabel.Appearance.TextColor = UIColor.FromRGB(90, 89, 89);
 
-            UITextField.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
-            UITextView.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
+            //UITextField.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
+            //UITextView.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
             
 
             ContentView.BackgroundColor = UIColor.White;

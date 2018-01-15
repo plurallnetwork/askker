@@ -30,7 +30,7 @@ namespace Askker.App.iOS
         public static NSString resultCellId = new NSString("resultCellId");
 
         public ResultViewController (IntPtr handle) : base (handle)
-        {           
+        {            
         }
 
         public override void ViewDidLoad()
@@ -167,6 +167,8 @@ namespace Askker.App.iOS
                     dataSet.SliceSpace = 2;
                     dataSet.Colors = ChartColorTemplates.Joyful;
                     dataSet.ValueTextColor = UIColor.FromRGB(90, 89, 89);
+                    dataSet.ValueLineColor = UIColor.FromRGB(90, 89, 89);
+                    dataSet.EntryLabelColor = UIColor.FromRGB(90, 89, 89);
                     dataSet.XValuePosition = PieChartValuePosition.OutsideSlice;
                     dataSet.YValuePosition = PieChartValuePosition.OutsideSlice;
 
@@ -174,11 +176,15 @@ namespace Askker.App.iOS
                 }
 
                 resultCell.pieChartView.AnimateWithXAxisDuration(1.4, ChartEasingOption.EaseOutBack);
-                resultCell.pieChartView.DescriptionText = ""; 
-                resultCell.pieChartView.CenterAttributedText = new NSAttributedString(string.Format("Total {0} votes", reportDataSet.totalVotes));
+                resultCell.pieChartView.DescriptionText = "";
+                var colorAttributes = new UIStringAttributes
+                {
+                    ForegroundColor = UIColor.FromRGB(90, 89, 89)                    
+                };
+                resultCell.pieChartView.CenterAttributedText = new NSAttributedString(string.Format("Total {0} votes", reportDataSet.totalVotes, colorAttributes));                
                 resultCell.pieChartView.Legend.Enabled = false;
                 resultCell.pieChartView.NoDataText = "No results to show";
-
+                
                 resultCell.AddSubview(resultCell.pieChartView);
 
                 resultCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", resultCell.pieChartView));
@@ -196,18 +202,26 @@ namespace Askker.App.iOS
                 resultCell.barChartView.Legend.YOffset = 10.0f;
                 resultCell.barChartView.Legend.XOffset = 10.0f;
                 resultCell.barChartView.Legend.YEntrySpace = 0.0f;
+                resultCell.barChartView.Legend.TextColor = UIColor.FromRGB(90, 89, 89);
 
                 resultCell.barChartView.XAxis.DrawGridLinesEnabled = true;
                 resultCell.barChartView.XAxis.LabelPosition = XAxisLabelPosition.Bottom;
                 resultCell.barChartView.XAxis.CenterAxisLabelsEnabled = true;
                 resultCell.barChartView.XAxis.ValueFormatter = new ChartIndexAxisValueFormatter(TranslateReportGroups(reportDataSet.groups.ToArray()));
                 resultCell.barChartView.XAxis.Granularity = 1;
+                resultCell.barChartView.XAxis.LabelTextColor = UIColor.FromRGB(90, 89, 89);
+                resultCell.barChartView.XAxis.GridColor = UIColor.FromRGB(90, 89, 89);
+                resultCell.barChartView.XAxis.AxisLineColor = UIColor.FromRGB(90, 89, 89);
 
                 resultCell.barChartView.LeftAxis.SpaceTop = 0.35f;
                 resultCell.barChartView.LeftAxis.AxisMinimum = 0;
                 resultCell.barChartView.LeftAxis.DrawGridLinesEnabled = false;
                 resultCell.barChartView.LeftAxis.Granularity = 1;
                 resultCell.barChartView.LeftAxis.ValueFormatter = new ChartDefaultAxisValueFormatter(new NSNumberFormatter() { MinimumFractionDigits = 0 });
+                resultCell.barChartView.LeftAxis.LabelTextColor = UIColor.FromRGB(90, 89, 89);
+                resultCell.barChartView.LeftAxis.GridColor = UIColor.FromRGB(90, 89, 89);
+                resultCell.barChartView.LeftAxis.AxisLineColor = UIColor.FromRGB(90, 89, 89);
+                resultCell.barChartView.LeftAxis.ZeroLineColor = UIColor.FromRGB(90, 89, 89);
 
                 resultCell.barChartView.RightAxis.Enabled = false;
 
@@ -237,6 +251,8 @@ namespace Askker.App.iOS
                         var barChartDataSet = new BarChartDataSet(dataEntriesList[i].ToArray(), reportDataSet.labels[i]);
                         barChartDataSet.SetColor(this.chartColors[i]);
                         barChartDataSet.ValueFormatter = new ChartDefaultValueFormatter(new NSNumberFormatter() { MinimumFractionDigits = 0, ZeroSymbol = "" });
+                        barChartDataSet.ValueTextColor = UIColor.FromRGB(90, 89, 89);
+                        barChartDataSet.BarBorderColor = UIColor.FromRGB(90, 89, 89);                        
 
                         chartDataSetList.Add(barChartDataSet);
                     }
@@ -254,7 +270,7 @@ namespace Askker.App.iOS
                     chartData.BarWidth = barWidth;
                     resultCell.barChartView.XAxis.AxisMinimum = initialXValue;
                     resultCell.barChartView.XAxis.AxisMaximum = initialXValue + chartData.GroupWidthWithGroupSpace(groupSpace, barSpace) * groupCount;
-
+                    
                     chartData.GroupBarsFromX(initialXValue, groupSpace, barSpace);
 
                     resultCell.barChartView.Data = chartData;
@@ -352,16 +368,24 @@ namespace Askker.App.iOS
         {
             sectionLabel = new UILabel();
             sectionLabel.Font = UIFont.BoldSystemFontOfSize(12);
-            sectionLabel.TextColor = UIColor.Gray;
+            sectionLabel.TextColor = UIColor.FromRGB(90, 89, 89); 
             sectionLabel.TextAlignment = UITextAlignment.Center;
             sectionLabel.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             sectionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             pieChartView = new PieChartView();
             pieChartView.TranslatesAutoresizingMaskIntoConstraints = false;
+            pieChartView.DescriptionTextColor = UIColor.FromRGB(90, 89, 89);
+            pieChartView.EntryLabelColor = UIColor.FromRGB(90, 89, 89);
+            pieChartView.TintColor = UIColor.FromRGB(90, 89, 89);
+            pieChartView.NoDataTextColor = UIColor.FromRGB(90, 89, 89);
 
             barChartView = new BarChartView();
             barChartView.TranslatesAutoresizingMaskIntoConstraints = false;
+            barChartView.DescriptionTextColor = UIColor.FromRGB(90, 89, 89);
+            barChartView.BorderColor = UIColor.FromRGB(90, 89, 89);
+            barChartView.TintColor = UIColor.FromRGB(90, 89, 89);
+            barChartView.NoDataTextColor = UIColor.FromRGB(90, 89, 89);
 
             AddSubview(sectionLabel);
 

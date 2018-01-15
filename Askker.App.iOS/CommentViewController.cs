@@ -44,7 +44,8 @@ namespace Askker.App.iOS
         private UIView activeviewarea;         // CommentArea
 
         public CommentViewController (IntPtr handle) : base (handle)
-        {            
+        {
+            
         }
 
         public override void ViewDidLoad()

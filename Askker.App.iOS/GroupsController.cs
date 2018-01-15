@@ -19,14 +19,35 @@ namespace Askker.App.iOS
         UISearchController searchController;
         bool searchControllerWasActive;
         bool searchControllerSearchFieldWasFirstResponder;
+        private NSObject changeBackBtnText;
+
+        public override void ViewDidUnload()
+        {
+            base.ViewDidUnload();
+
+            if (changeBackBtnText != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(changeBackBtnText);
+            }
+        }
+
+        public override void ViewWillAppear(bool animated)
+        {
+            Title = "My Groups";
+
+            base.ViewWillAppear(animated);
+        }
 
         public GroupsController (IntPtr handle) : base (handle)
-        {
+        {            
         }
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            changeBackBtnText = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("ChangeBackBtnTextGroups"), ChangeBackBtnText);
+
+            
 
             userGroups = new List<UserGroupModel>();
 
@@ -105,6 +126,8 @@ namespace Askker.App.iOS
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnText"), null);
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnTextGroups"), null);
             Utils.OpenGroupMembers(this.NavigationController, userGroups[indexPath.Row].userId, userGroups[indexPath.Row].userId + userGroups[indexPath.Row].creationDate, userGroups[indexPath.Row].profilePicture);
         }
 
@@ -142,6 +165,11 @@ namespace Askker.App.iOS
             }
 
             return filteredGroups.Distinct().ToList();
+        }
+
+        private void ChangeBackBtnText(NSNotification notification)
+        {
+            Title = "";
         }
     }
 
@@ -195,6 +223,7 @@ namespace Askker.App.iOS
             nameLabel = new UILabel();
             nameLabel.Font = UIFont.SystemFontOfSize(14);
             nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
             ContentView.Add(profileImageView);
             ContentView.Add(nameLabel);

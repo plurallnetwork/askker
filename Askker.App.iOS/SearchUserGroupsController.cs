@@ -10,7 +10,7 @@ namespace Askker.App.iOS
     public partial class SearchUserGroupsController : CustomUIViewController
     {
         public SearchUserGroupsController(IntPtr handle) : base(handle)
-        {
+        {            
         }
 
         public static UITableView table { get; set; }
@@ -70,6 +70,22 @@ namespace Askker.App.iOS
                 //this is the method that is called when the user searches
                 searchTable();
             };
+
+
+            foreach (UIView subView in searchBar.Subviews)
+            {
+                foreach (UIView secondLevelSubview in subView.Subviews)
+                {
+                    if (secondLevelSubview is UITextField)
+                    {
+                        UITextField searchBarTextField = (UITextField)secondLevelSubview;
+
+                        //set font color here
+                        searchBarTextField.TextColor = UIColor.FromRGB(90, 89, 89);
+                        break;
+                    }
+                }
+            }
 
             table = new UITableView(new CGRect(0, 0, View.Bounds.Width, View.Bounds.Height - 20));
             //table.AutoresizingMask = UIViewAutoresizing.All;

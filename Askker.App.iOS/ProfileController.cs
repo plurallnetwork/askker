@@ -22,14 +22,7 @@ namespace Askker.App.iOS
         public static NSCache imageCache = new NSCache();
 
         public ProfileController (IntPtr handle) : base (handle)
-        {
-            // Set the default appearance values
-            UIButton.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
-            UIButton.Appearance.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
-
-            UILabel.Appearance.TextColor = UIColor.FromRGB(90, 89, 89);
-
-            UITextField.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);            
+        {                      
         }
 
         public override void ViewDidLoad()
@@ -64,6 +57,17 @@ namespace Askker.App.iOS
 
             uploadButton.Layer.BorderColor = UIColor.FromRGB(90, 89, 89).CGColor;
             uploadButton.Layer.BorderWidth = 1f;
+
+            uploadButton.TintColor = UIColor.FromRGB(90, 89, 89);
+            uploadButton.SetTitleColor( UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+            nameButton.TintColor = UIColor.FromRGB(90, 89, 89);
+            emailButton.TintColor = UIColor.FromRGB(90, 89, 89);
+            ageButton.TintColor = UIColor.FromRGB(90, 89, 89);
+
+            nameText.TextColor = UIColor.FromRGB(90, 89, 89);
+            emailText.TextColor = UIColor.FromRGB(90, 89, 89);
+            ageText.TextColor = UIColor.FromRGB(90, 89, 89);
+            genderText.TextColor = UIColor.FromRGB(90, 89, 89);
 
             nameText.Text = LoginController.userModel.name;
             emailText.Text = LoginController.userModel.userName;

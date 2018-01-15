@@ -196,6 +196,7 @@ namespace Askker.App.iOS
             notificationLabel = new UILabel();
             notificationLabel.Lines = 2;
             notificationLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            notificationLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
             ContentView.Add(profileImageView);
             ContentView.Add(notificationLabel);

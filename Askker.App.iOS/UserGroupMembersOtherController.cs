@@ -228,6 +228,7 @@ namespace Askker.App.iOS
             nameLabel = new UILabel();
             nameLabel.Font = UIFont.SystemFontOfSize(14);
             nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
             ContentView.Add(profileImageView);
             ContentView.Add(nameLabel);

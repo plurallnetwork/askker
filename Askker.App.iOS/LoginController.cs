@@ -25,12 +25,15 @@ namespace Askker.App.iOS
         public override void ViewDidAppear(bool animated)
         {
             NavigationController.SetNavigationBarHidden(true, false);
-            base.ViewDidAppear(animated);            
-
+            base.ViewDidAppear(animated);
+            
             btnLoginFacebook.TouchUpInside += btnLoginFacebook_TouchUpInside;
             btnLoginGoogle.TouchUpInside += btnLoginGoogle_TouchUpInside;
             btnSignUp.TouchUpInside += BtnSignUp_TouchUpInside;
             btnForgotPassword.TouchUpInside += BtnForgotPassword_TouchUpInside;
+
+            txtUsername.TextColor = UIColor.FromRGB(90, 89, 89);
+            txtPassword.TextColor = UIColor.FromRGB(90, 89, 89);
         }
 
         public override void ViewDidDisappear(bool animated)
@@ -46,6 +49,11 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 

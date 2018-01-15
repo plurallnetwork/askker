@@ -41,6 +41,7 @@ namespace Askker.App.iOS
 
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             _shareStepView = ShareStepView.Create();
+            _shareStepView.QuestionText.TextColor = UIColor.FromRGB(90, 89, 89);
             View.AddSubview(_shareStepView);
 
             try
@@ -166,11 +167,14 @@ namespace Askker.App.iOS
                 cell.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
 
                 cell.ImageView.Image = UIImage.FromBundle(targetAudienceItems[indexPath.Row].ImageName);
+                cell.ImageView.TintColor = UIColor.FromRGB(90, 89, 89);
 
                 cell.TextLabel.Font = UIFont.BoldSystemFontOfSize(14);
                 cell.TextLabel.Text = targetAudienceItems[indexPath.Row].Title;
+                cell.TextLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
                 cell.DetailTextLabel.Text = targetAudienceItems[indexPath.Row].Text;
+                cell.DetailTextLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
                 if (CreateSurveyController.SurveyModel.targetAudience == targetAudienceItems[indexPath.Row].TargetAudience.ToString())
                 {

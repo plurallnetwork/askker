@@ -49,7 +49,9 @@ namespace Askker.App.iOS.CustomViewComponents
             else
             {
                 textLabel.Frame = new CGRect(50, 10, ContentView.Bounds.Width - 50, 25);
-            }            
+            }        
+            
+            textLabel.TextColor = UIColor.FromRGB(90, 89, 89);
         }
     }
 }

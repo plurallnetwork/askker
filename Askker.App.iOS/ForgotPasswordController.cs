@@ -26,6 +26,8 @@ namespace Askker.App.iOS
             g.AddTarget(() => View.EndEditing(true));
             View.AddGestureRecognizer(g);
 
+            txtEmail.TextColor = UIColor.FromRGB(90, 89, 89);
+
             txtEmail.ShouldReturn = delegate (UITextField textField)
             {
                 btnSend.SendActionForControlEvents(UIControlEvent.TouchUpInside);

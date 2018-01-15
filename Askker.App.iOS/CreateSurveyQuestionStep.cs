@@ -29,6 +29,7 @@ namespace Askker.App.iOS
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             _questionStepView = QuestionStepView.Create();
+            _questionStepView.QuestionText.TextColor = UIColor.FromRGB(90, 89, 89);
             View.AddSubview(_questionStepView);
 
             NSNotificationCenter.DefaultCenter.AddObserver(UITextField.TextFieldTextDidChangeNotification, TextChangedEvent);            

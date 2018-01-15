@@ -29,13 +29,15 @@ namespace Askker.App.iOS
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             
-            _optionsStepView = OptionsStepView.Create();            
+            _optionsStepView = OptionsStepView.Create();
+            _optionsStepView.QuestionText.TextColor = UIColor.FromRGB(90, 89, 89);
             View.AddSubview(_optionsStepView);
             List<SurveyOptionTableItem> tableItems = new List<SurveyOptionTableItem>();
 
             _optionsStepView.TextButton.SetLeftBorder(UIColor.LightGray, 1);
             _optionsStepView.TextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
             _optionsStepView.TextButton.TintColor = UIColor.White;
+            _optionsStepView.TextButton.SetTitleColor(UIColor.White,UIControlState.Normal);
             _optionsStepView.TextButton.SetTitle("Survey with Text", UIControlState.Normal);
             _optionsStepView.TextButton.Font = UIFont.SystemFontOfSize(12);
             var uiImage = _optionsStepView.TextButton.ImageView.Frame;
@@ -45,6 +47,7 @@ namespace Askker.App.iOS
 
             _optionsStepView.ImageButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
             _optionsStepView.ImageButton.TintColor = UIColor.White;
+            _optionsStepView.ImageButton.SetTitleColor(UIColor.White, UIControlState.Normal);
             _optionsStepView.ImageButton.SetTitle("Survey with Images", UIControlState.Normal);
             _optionsStepView.ImageButton.Font = UIFont.SystemFontOfSize(12);
             var uiImage1 = _optionsStepView.ImageButton.ImageView.Frame;
@@ -54,6 +57,7 @@ namespace Askker.App.iOS
 
             _optionsStepView.DoneButton.BackgroundColor = UIColor.FromRGB(220, 220, 220);
             _optionsStepView.DoneButton.TintColor = UIColor.White;
+            _optionsStepView.DoneButton.SetTitleColor(UIColor.White, UIControlState.Normal);
             _optionsStepView.DoneButton.SetTitle("Validate Survey", UIControlState.Normal);
             _optionsStepView.DoneButton.Font = UIFont.SystemFontOfSize(12);
             var uiImage2 = _optionsStepView.DoneButton.ImageView.Frame;

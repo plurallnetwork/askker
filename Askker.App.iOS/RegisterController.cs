@@ -19,6 +19,12 @@ namespace Askker.App.iOS
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
+            txtName.TextColor = UIColor.FromRGB(90, 89, 89);
+            txtEmail.TextColor = UIColor.FromRGB(90, 89, 89);
+            txtPassword.TextColor = UIColor.FromRGB(90, 89, 89);
+            txtConfirmPassword.TextColor = UIColor.FromRGB(90, 89, 89);
+            
+
             // Keyboard dispose when clicking outside the comment box
             var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
             g.AddTarget(() => View.EndEditing(true));

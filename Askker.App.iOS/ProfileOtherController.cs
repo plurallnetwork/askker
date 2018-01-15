@@ -44,6 +44,12 @@ namespace Askker.App.iOS
                 nameText.Text = friendUserModel.name;
                 emailText.Text = friendUserModel.userName;
                 ageText.Text = friendUserModel.age.ToString();
+
+                nameText.TextColor = UIColor.FromRGB(90, 89, 89);
+                emailText.TextColor = UIColor.FromRGB(90, 89, 89);
+                ageText.TextColor = UIColor.FromRGB(90, 89, 89);
+                genderText.TextColor = UIColor.FromRGB(90, 89, 89);
+
                 if ("male".Equals(friendUserModel.gender) || "female".Equals(friendUserModel.gender))
                 {
                     genderText.Text = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(friendUserModel.gender);

@@ -37,7 +37,10 @@ namespace Askker.App.iOS
             groupModel = await new UserGroupManager().GetGroupById(LoginController.tokenModel.access_token, groupId);
 
             lblName.Text = groupModel.name;
+            lblName.TextColor = UIColor.FromRGB(90, 89, 89);
+
             textDescription.Text = groupModel.description;
+            textDescription.TextColor = UIColor.FromRGB(90, 89, 89);
 
             if (groupModel.profilePicture != null)
             {
