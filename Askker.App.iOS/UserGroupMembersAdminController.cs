@@ -276,17 +276,32 @@ namespace Askker.App.iOS
             return "Remove member";
         }
 
+        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+        {
+            Utils.OpenUserProfile(this.viewController.NavigationController, filteredMembers[indexPath.Row].id);
+        }
+
         public override async void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, NSIndexPath indexPath)
         {
             switch (editingStyle)
             {
                 case UITableViewCellEditingStyle.Delete:
-                    // remove the item from the underlying data source
-                    filteredMembers.RemoveAt(indexPath.Row);
-                    // delete the row from the table
-                    tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
 
-                    await new UserGroupManager().UpdateGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, UserGroupRelationshipStatus.NotInGroup);
+                    var member = filteredMembers.ElementAt(indexPath.Row);
+
+                    if (!groupId.Contains(LoginController.userModel.id))
+                    {
+                        // remove the item from the underlying data source
+                        filteredMembers.RemoveAt(indexPath.Row);
+                        // delete the row from the table
+                        tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+
+                        await new UserGroupManager().UpdateGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, member.id, UserGroupRelationshipStatus.NotMember);
+                    }
+                    else
+                    {
+                        Utils.ShowToast("Can't remove group admin", 3000);
+                    }
                     break;
 
                 case UITableViewCellEditingStyle.Insert:

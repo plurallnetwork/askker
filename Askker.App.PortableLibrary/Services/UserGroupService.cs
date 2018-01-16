@@ -28,13 +28,13 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> GetGroupRelationshipStatus(string authenticationToken, string friendId)
+        public async Task<HttpResponseMessage> GetGroupRelationshipStatus(string authenticationToken, string groupId, string userId)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/GetUserRelationshipStatus/{0}", friendId));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/GetGroupRelationshipStatus/{0}/{1}", groupId, userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -46,13 +46,13 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> AddGroup(string authenticationToken, string friendId)
+        public async Task<HttpResponseMessage> RequestPermissionToGroup(string authenticationToken, string groupId, string userId)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/AddUserFriend/{0}", friendId));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/RequestPermissionToGroup/{0}/{1}", groupId, userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.PostAsync(uri, null);
@@ -64,13 +64,13 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> UpdateGroupRelationshipStatus(string authenticationToken, string friendId, UserGroupRelationshipStatus groupRelationshipStatus)
+        public async Task<HttpResponseMessage> UpdateGroupRelationshipStatus(string authenticationToken, string groupId, string userId, UserGroupRelationshipStatus groupRelationshipStatus)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/UpdateUserRelationshipStatus/{0}/{1}", friendId, groupRelationshipStatus.ToString()));
+                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/UpdateUserRelationshipStatusGroup/{0}/{1}/{2}", groupId, userId, groupRelationshipStatus.ToString()));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.PostAsync(uri, null);

@@ -52,14 +52,14 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task<UserGroupRelationshipStatus> GetGroupRelationshipStatus(string authenticationToken, string groupId)
+        public async Task<UserGroupRelationshipStatus> GetGroupRelationshipStatus(string authenticationToken, string groupId, string userId)
         {
             try
             {
                 UserGroupService groupService = new UserGroupService();
                 UserGroupRelationshipStatus groupRelationshipStatus = new UserGroupRelationshipStatus();
 
-                var response = await groupService.GetGroupRelationshipStatus(authenticationToken, groupId);
+                var response = await groupService.GetGroupRelationshipStatus(authenticationToken, groupId, userId);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -73,7 +73,7 @@ namespace Askker.App.PortableLibrary.Business
                     }
                     else
                     {
-                        return UserGroupRelationshipStatus.NotInGroup;
+                        return UserGroupRelationshipStatus.NotMember;
                     }
                 }
                 else
@@ -94,13 +94,13 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task AddGroup(string authenticationToken, string groupId)
+        public async Task RequestPermissionToGroup(string authenticationToken, string groupId, string userId)
         {
             try
             {
                 UserGroupService groupService = new UserGroupService();
 
-                var response = await groupService.AddGroup(authenticationToken, groupId);
+                var response = await groupService.RequestPermissionToGroup(authenticationToken, groupId, userId);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -120,13 +120,13 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task UpdateGroupRelationshipStatus(string authenticationToken, string groupId, UserGroupRelationshipStatus groupRelationshipStatus)
+        public async Task UpdateGroupRelationshipStatus(string authenticationToken, string groupId, string userId, UserGroupRelationshipStatus groupRelationshipStatus)
         {
             try
             {
                 UserGroupService groupService = new UserGroupService();
 
-                var response = await groupService.UpdateGroupRelationshipStatus(authenticationToken, groupId, groupRelationshipStatus);
+                var response = await groupService.UpdateGroupRelationshipStatus(authenticationToken, groupId, userId, groupRelationshipStatus);
 
                 if (!response.IsSuccessStatusCode)
                 {

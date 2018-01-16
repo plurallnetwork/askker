@@ -12,6 +12,8 @@ namespace Askker.App.PortableLibrary.Enums
         SurveyComment,
         SurveyTagged,
         FriendRequest,
-        FriendAccepted
+        FriendAccepted,
+        GroupMemberRequest,
+        GroupMemberAccepted
     }
 }

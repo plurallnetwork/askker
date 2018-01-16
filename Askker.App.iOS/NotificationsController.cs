@@ -135,7 +135,8 @@ namespace Askker.App.iOS
 
         private void openNotification(UserNotificationModel userNotificationModel)
         {
-            if (UserNotificationType.FriendAccepted.ToString().Equals(userNotificationModel.type) || UserNotificationType.FriendRequest.ToString().Equals(userNotificationModel.type))
+            if (UserNotificationType.FriendAccepted.ToString().Equals(userNotificationModel.type) || UserNotificationType.FriendRequest.ToString().Equals(userNotificationModel.type)
+                || UserNotificationType.GroupMemberRequest.ToString().Equals(userNotificationModel.type))
             {
                 Utils.OpenUserProfile(this.NavigationController, userNotificationModel.notificationUser.id);
             }
@@ -168,6 +169,10 @@ namespace Askker.App.iOS
                 resultController.indexPathRow = 0;
 
                 this.NavigationController.PushViewController(resultController, true);
+            }
+            else if (UserNotificationType.GroupMemberAccepted.ToString().Equals(userNotificationModel.type))
+            {
+                Utils.OpenGroupProfile(this.NavigationController, userNotificationModel.notificationUser.id);
             }
         }
     }

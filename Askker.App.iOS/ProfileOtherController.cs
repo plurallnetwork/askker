@@ -16,10 +16,12 @@ namespace Askker.App.iOS
         string fileName;
         public static NSCache imageCache = new NSCache();
 
+        string groupId { get; set; }
         public string friendUserId { get; set; }
         public UserModel friendUserModel { get; set; }
 
         public RelationshipStatus relationshipStatus { get; set; }
+        public UserGroupRelationshipStatus groupRelationshipStatus { get; set; }
 
         public ProfileOtherController (IntPtr handle) : base (handle)
         {
@@ -61,9 +63,39 @@ namespace Askker.App.iOS
                     Utils.SetImageFromNSUrlSession(fileName, profileImageView, this, PictureType.Profile);
                 }
 
-                relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId);
+                //get groups from logged user
+                List<UserGroupModel> userGroups = await new UserGroupManager().GetGroups(LoginController.userModel.id, LoginController.tokenModel.access_token);
 
+                //check if logged user is admin of one these groups
+                foreach(UserGroupModel userGroup in userGroups)
+                {
+                    if (LoginController.userModel.id.Equals(userGroup.userId))
+                    {                        
+                        List<UserGroupMemberModel> members = await new UserGroupManager().GetGroupMembers(LoginController.tokenModel.access_token, userGroup.userId + userGroup.creationDate);                        
+
+                        //check is profile user is part of ths group
+                        foreach(UserGroupMemberModel member in members)
+                        {
+                            if (member.id.Equals(friendUserId))
+                            {
+                                groupId = userGroup.userId + userGroup.creationDate;
+                            }
+                        }
+                    }
+                }
+
+                relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId);
                 LoadRelationshipButton();
+
+                if (groupId != null)
+                {
+                    groupRelationshipStatus = await new UserGroupManager().GetGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, friendUserId);
+                    LoadGroupRelationshipButton();
+                }
+                else
+                {
+                    btnGroupRelationship.Enabled = false;
+                }
             }
             catch (Exception ex)
             {
@@ -72,7 +104,27 @@ namespace Askker.App.iOS
             }
 
             btnRelationship.TouchUpInside += BtnRelationship_TouchUpInside;
+            btnGroupRelationship.TouchUpInside += BtnGroupRelationship_TouchUpInside;
             BTProgressHUD.Dismiss();
+        }
+
+        private async void BtnGroupRelationship_TouchUpInside(object sender, EventArgs e)
+        {
+            try
+            {
+                if (groupRelationshipStatus == UserGroupRelationshipStatus.PendingYourApproval)
+                {
+                    groupRelationshipStatus = UserGroupRelationshipStatus.Member;
+
+                    await new UserGroupManager().UpdateGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, friendUserId, groupRelationshipStatus);
+                }                
+
+                LoadGroupRelationshipButton();
+            }
+            catch (Exception ex)
+            {
+                Utils.HandleException(ex);
+            }
         }
 
         private async void BtnRelationship_TouchUpInside(object sender, EventArgs e)
@@ -161,6 +213,26 @@ namespace Askker.App.iOS
                     break;
                 default:
                     btnRelationship.Enabled = true;
+                    break;
+            }
+        }
+
+        private void LoadGroupRelationshipButton()
+        {
+            switch (groupRelationshipStatus)
+            {
+                case UserGroupRelationshipStatus.Member:
+                    btnGroupRelationship.SetTitle(" Accepted", UIControlState.Normal);
+                    btnGroupRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
+                    btnGroupRelationship.Enabled = true;
+                    break;
+                case UserGroupRelationshipStatus.PendingYourApproval:
+                    btnGroupRelationship.SetTitle(" Accept ", UIControlState.Disabled);
+                    btnGroupRelationship.BackgroundColor = UIColor.Orange;
+                    btnGroupRelationship.Enabled = true;
+                    break;
+                default:
+                    btnGroupRelationship.Enabled = false;
                     break;
             }
         }

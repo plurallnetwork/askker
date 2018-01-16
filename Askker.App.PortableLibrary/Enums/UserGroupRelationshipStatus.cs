@@ -2,12 +2,12 @@
 {
     public enum UserGroupRelationshipStatus
     {
-        NotInGroup,
-        InGroup,
-        PendingGroupApproval,
+        NotMember,
+        Member,
+        PendingMemberApproval,
         PendingYourApproval,
         RejectedByYou,
-        RejectedByGroup,
-        UnGrouped
+        RejectedByMember,
+        Unmembered
     }
 }

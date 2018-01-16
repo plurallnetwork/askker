@@ -51,6 +51,8 @@ namespace Askker.App.iOS
                 profileImageView.Image = UIImage.FromBundle("Group");
             }
 
+            relationshipStatus = await new UserGroupManager().GetGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, LoginController.userModel.id);
+
             LoadRelationshipButton();
             btnRelationship.TouchUpInside += BtnRelationship_TouchUpInside;
 
@@ -70,34 +72,34 @@ namespace Askker.App.iOS
         {
             try
             {
-                if (relationshipStatus == UserGroupRelationshipStatus.NotInGroup)
+                if (relationshipStatus == UserGroupRelationshipStatus.NotMember)
                 {
-                    relationshipStatus = UserGroupRelationshipStatus.PendingGroupApproval;
+                    relationshipStatus = UserGroupRelationshipStatus.PendingYourApproval;
 
-                    await new UserGroupManager().AddGroup(LoginController.tokenModel.access_token, groupId);
+                    await new UserGroupManager().RequestPermissionToGroup(LoginController.tokenModel.access_token, groupId, LoginController.userModel.id);
                 }
                 else
                 {
                     switch (relationshipStatus)
                     {
-                        case UserGroupRelationshipStatus.PendingYourApproval:
-                            relationshipStatus = UserGroupRelationshipStatus.InGroup;
+                        case UserGroupRelationshipStatus.PendingMemberApproval:
+                            relationshipStatus = UserGroupRelationshipStatus.Member;
                             break;
-                        case UserGroupRelationshipStatus.RejectedByYou:
-                            relationshipStatus = UserGroupRelationshipStatus.InGroup;
+                        case UserGroupRelationshipStatus.RejectedByMember:
+                            relationshipStatus = UserGroupRelationshipStatus.Member;
                             break;
-                        case UserGroupRelationshipStatus.UnGrouped:
-                            relationshipStatus = UserGroupRelationshipStatus.PendingGroupApproval;
+                        case UserGroupRelationshipStatus.Unmembered:
+                            relationshipStatus = UserGroupRelationshipStatus.PendingYourApproval;
                             break;
-                        case UserGroupRelationshipStatus.InGroup:
-                            relationshipStatus = UserGroupRelationshipStatus.UnGrouped;
+                        case UserGroupRelationshipStatus.Member:
+                            relationshipStatus = UserGroupRelationshipStatus.Unmembered;
                             break;
                         default:
-                            relationshipStatus = UserGroupRelationshipStatus.PendingGroupApproval;
+                            relationshipStatus = UserGroupRelationshipStatus.PendingYourApproval;
                             break;
                     }
 
-                    await new UserGroupManager().UpdateGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, relationshipStatus);
+                    await new UserGroupManager().UpdateGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, LoginController.userModel.id,  relationshipStatus);
                 }
 
                 LoadRelationshipButton();
@@ -112,37 +114,37 @@ namespace Askker.App.iOS
         {
             switch (relationshipStatus)
             {
-                case UserGroupRelationshipStatus.NotInGroup:
+                case UserGroupRelationshipStatus.NotMember:
                     btnRelationship.SetTitle(" Request Membership ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
-                case UserGroupRelationshipStatus.InGroup:
+                case UserGroupRelationshipStatus.Member:
                     btnRelationship.SetTitle(" Quit Membership", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
-                case UserGroupRelationshipStatus.PendingGroupApproval:
+                case UserGroupRelationshipStatus.PendingYourApproval:
                     btnRelationship.SetTitle(" Pending Approval ", UIControlState.Disabled);
                     btnRelationship.BackgroundColor = UIColor.Orange;
                     btnRelationship.Enabled = false;
                     break;
-                case UserGroupRelationshipStatus.PendingYourApproval:
+                case UserGroupRelationshipStatus.PendingMemberApproval:
                     btnRelationship.SetTitle(" Accept ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                     btnRelationship.Enabled = true;
                     break;
-                case UserGroupRelationshipStatus.RejectedByYou:
+                case UserGroupRelationshipStatus.RejectedByMember:
                     btnRelationship.SetTitle(" Request Membership ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
                     break;
-                case UserGroupRelationshipStatus.RejectedByGroup:
+                case UserGroupRelationshipStatus.RejectedByYou:
                     btnRelationship.SetTitle(" Pending Approval ", UIControlState.Disabled);
                     btnRelationship.BackgroundColor = UIColor.Orange;
                     btnRelationship.Enabled = false;
                     break;
-                case UserGroupRelationshipStatus.UnGrouped:
+                case UserGroupRelationshipStatus.Unmembered:
                     btnRelationship.SetTitle(" Request Membership ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
