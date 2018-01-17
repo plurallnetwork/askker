@@ -42,6 +42,7 @@ namespace Askker.App.iOS
             feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCell), feedCellId);
             feedCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             feedCollectionView.AlwaysBounceVertical = true;
+            feedCollectionView.ContentInset = new UIEdgeInsets(-64, 0, 0, 0);
 
             refreshControl = new UIRefreshControl();
             refreshControl.TranslatesAutoresizingMaskIntoConstraints = false;

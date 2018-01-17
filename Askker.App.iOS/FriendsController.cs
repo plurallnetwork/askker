@@ -45,7 +45,7 @@ namespace Askker.App.iOS
 
             searchController.SearchBar.SizeToFit();
             TableView.TableHeaderView = searchController.SearchBar;
-            TableView.SetContentOffset(new CGPoint(0, 44), true);
+            TableView.SetContentOffset(new CGPoint(0, 56), true);
 
             resultsTableController.TableView.WeakDelegate = this;
             searchController.SearchBar.WeakDelegate = this;
