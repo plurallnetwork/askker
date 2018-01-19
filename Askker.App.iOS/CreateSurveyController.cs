@@ -130,7 +130,7 @@ namespace Askker.App.iOS
                 _pageControl.WithSameCenterX(_pageViewController.View),
                 _pageControl.AtLeftOf(View),
                 _pageControl.AtRightOf(View),
-                _pageControl.AtTopOf(View, 64),
+                _pageControl.ToTopMargin(View),
                 _pageControl.Height().EqualTo(50),
 
                 _nextButton.AtRightOf(View),
@@ -146,7 +146,7 @@ namespace Askker.App.iOS
                 _askButton.WithSameCenterY(_pageControl),
                             
                 _pageTitle.WithSameCenterX(_pageControl),
-                _pageTitle.AtTopOf(View, 93)
+                _pageTitle.AtTopOf(_pageControl, 30)
             );
         }
 

@@ -98,7 +98,7 @@ namespace Askker.App.iOS
             var pinRightCommentArea = NSLayoutConstraint.Create(commentArea, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal, View, NSLayoutAttribute.Trailing, 1f, 0f);
             View.AddConstraint(pinRightCommentArea);
 
-            toolbarBottomConstraint = NSLayoutConstraint.Create(View, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, commentArea, NSLayoutAttribute.Bottom, 1f, 0f);
+            toolbarBottomConstraint = NSLayoutConstraint.Create(View, NSLayoutAttribute.BottomMargin, NSLayoutRelation.Equal, commentArea, NSLayoutAttribute.Bottom, 1f, 0f);
             View.AddConstraint(toolbarBottomConstraint);
 
             toolbarHeightConstraint = NSLayoutConstraint.Create(commentArea, NSLayoutAttribute.Height, NSLayoutRelation.Equal, null, NSLayoutAttribute.NoAttribute, 0f, 46f);
