@@ -39,6 +39,9 @@ namespace Askker.App.iOS
             try
             {
                 btnRelationship.SetTitle("", UIControlState.Normal);
+                btnGroupRelationship.SetTitle("", UIControlState.Normal);
+                btnRelationship.Hidden = true;
+                btnGroupRelationship.Hidden = true;
                 profileImageView.ClipsToBounds = true;
 
                 friendUserModel = await new LoginManager().GetUserById(LoginController.tokenModel.access_token, friendUserId);
@@ -94,7 +97,7 @@ namespace Askker.App.iOS
                 }
                 else
                 {
-                    btnGroupRelationship.Enabled = false;
+                    btnGroupRelationship.Hidden = true;
                 }
             }
             catch (Exception ex)
@@ -180,39 +183,47 @@ namespace Askker.App.iOS
                     btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
+                    btnRelationship.Hidden = false;
                     break;
                 case RelationshipStatus.Friend:
                     btnRelationship.SetTitle(" Unfriend ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
+                    btnRelationship.Hidden = false;
                     break;
                 case RelationshipStatus.PendingFriendApproval:
                     btnRelationship.SetTitle(" Pending Approval ", UIControlState.Disabled);
                     btnRelationship.BackgroundColor = UIColor.Orange;
                     btnRelationship.Enabled = false;
+                    btnRelationship.Hidden = false;
                     break;
                 case RelationshipStatus.PendingYourApproval:
                     btnRelationship.SetTitle(" Accept ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(70, 230, 130);
                     btnRelationship.Enabled = true;
+                    btnRelationship.Hidden = false;
                     break;
                 case RelationshipStatus.RejectedByYou:
                     btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
+                    btnRelationship.Hidden = false;
                     break;
                 case RelationshipStatus.RejectedByFriend:
                     btnRelationship.SetTitle(" Pending Approval ", UIControlState.Disabled);
                     btnRelationship.BackgroundColor = UIColor.Orange;
                     btnRelationship.Enabled = false;
+                    btnRelationship.Hidden = false;
                     break;
                 case RelationshipStatus.Unfriended:
                     btnRelationship.SetTitle(" Add Friend ", UIControlState.Normal);
                     btnRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnRelationship.Enabled = true;
+                    btnRelationship.Hidden = false;
                     break;
                 default:
                     btnRelationship.Enabled = true;
+                    btnRelationship.Hidden = false;
                     break;
             }
         }
@@ -222,17 +233,19 @@ namespace Askker.App.iOS
             switch (groupRelationshipStatus)
             {
                 case UserGroupRelationshipStatus.Member:
-                    btnGroupRelationship.SetTitle(" Accepted", UIControlState.Normal);
+                    btnGroupRelationship.SetTitle(" Accepted ", UIControlState.Normal);
                     btnGroupRelationship.BackgroundColor = UIColor.FromRGB(0, 134, 255);
-                    btnGroupRelationship.Enabled = true;
+                    btnGroupRelationship.Enabled = false;
+                    btnGroupRelationship.Hidden = false;
                     break;
                 case UserGroupRelationshipStatus.PendingYourApproval:
-                    btnGroupRelationship.SetTitle(" Accept ", UIControlState.Disabled);
+                    btnGroupRelationship.SetTitle(" Accept ", UIControlState.Normal);
                     btnGroupRelationship.BackgroundColor = UIColor.Orange;
                     btnGroupRelationship.Enabled = true;
+                    btnGroupRelationship.Hidden = false;
                     break;
                 default:
-                    btnGroupRelationship.Enabled = false;
+                    btnGroupRelationship.Hidden = true;
                     break;
             }
         }
