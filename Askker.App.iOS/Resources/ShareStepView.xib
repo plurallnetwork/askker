@@ -1,25 +1,26 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="1" customClass="ShareStepView">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4">
-                    <rect key="frame" x="0.0" y="114" width="375" height="80"/>
+                    <rect key="frame" x="0.0" y="108" width="414" height="80"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="143" id="53">
                             <variation key="heightClass=regular-widthClass=compact" constant="80"/>
                         </constraint>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17" weight="semibold"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     <variation key="default">
                         <mask key="constraints">
@@ -27,21 +28,21 @@
                         </mask>
                     </variation>
                     <variation key="heightClass=regular-widthClass=compact">
-                        <color key="backgroundColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <mask key="constraints">
                             <include reference="53"/>
                         </mask>
                     </variation>
                 </textView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="32" hidden="YES">
-                    <rect key="frame" x="0.0" y="396" width="375" height="276"/>
+                <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="32">
+                    <rect key="frame" x="0.0" y="389" width="414" height="347"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="116" scrollEnabled="NO">
-                    <rect key="frame" x="0.0" y="219" width="375" height="176"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="116">
+                    <rect key="frame" x="0.0" y="212" width="414" height="176"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint id="153" firstAttribute="height" constant="176"/>
+                        <constraint firstAttribute="height" constant="176" id="153"/>
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">
@@ -54,23 +55,17 @@
                         </mask>
                     </variation>
                 </tableView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Privacy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="123" translatesAutoresizingMaskIntoConstraints="NO">
-                    <rect key="frame" x="15" y="216" width="109" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Privacy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="123">
+                    <rect key="frame" x="14" y="189" width="84" height="14.5"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
-                    <color key="textColor" colorSpace="calibratedRGB" red="1" green="0.78431372549019607" blue="0" alpha="1"/>
+                    <color key="textColor" red="1" green="0.78431372549019607" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view contentMode="scaleToFill" id="133" translatesAutoresizingMaskIntoConstraints="NO">
-                    <rect key="frame" x="10" y="217" width="355" height="1"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="133">
+                    <rect key="frame" x="10" y="210.5" width="394" height="1"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <variation key="heightClass=regular-widthClass=compact">
-                        <color key="backgroundColor" colorSpace="calibratedRGB" red="0.84313725490196079" green="0.84313725490196079" blue="0.84313725490196079" alpha="1"/>
-                        <mask key="constraints">
-                            <include reference="140"/>
-                        </mask>
-                    </variation>
                     <constraints>
-                        <constraint id="140" firstItem="133" firstAttribute="height" constant="2">
+                        <constraint firstAttribute="height" constant="2" id="140">
                             <variation key="heightClass=regular-widthClass=compact" constant="1"/>
                         </constraint>
                     </constraints>
@@ -79,33 +74,39 @@
                             <exclude reference="140"/>
                         </mask>
                     </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <color key="backgroundColor" red="0.84313725490196079" green="0.84313725490196079" blue="0.84313725490196079" alpha="1" colorSpace="calibratedRGB"/>
+                        <mask key="constraints">
+                            <include reference="140"/>
+                        </mask>
+                    </variation>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="100" id="49">
-                    <variation key="heightClass=regular-widthClass=compact" constant="114"/>
+                <constraint firstItem="4" firstAttribute="topMargin" secondItem="1" secondAttribute="topMargin" constant="100" id="49">
+                    <variation key="heightClass=regular-widthClass=compact" constant="108"/>
                 </constraint>
                 <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="54"/>
                 <constraint firstItem="4" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="55"/>
                 <constraint firstAttribute="bottom" secondItem="32" secondAttribute="bottom" id="107"/>
                 <constraint firstAttribute="trailing" secondItem="32" secondAttribute="trailing" id="108"/>
                 <constraint firstItem="32" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="112"/>
-                <constraint id="124" firstItem="123" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="2">
+                <constraint firstItem="123" firstAttribute="top" secondItem="4" secondAttribute="bottom" constant="2" id="124">
                     <variation key="heightClass=regular-widthClass=compact" constant="1"/>
                 </constraint>
-                <constraint id="125" firstItem="123" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16">
+                <constraint firstItem="123" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="125">
                     <variation key="heightClass=regular-widthClass=compact" constant="14"/>
                 </constraint>
-                <constraint id="141" firstItem="133" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10"/>
-                <constraint id="142" firstItem="1" firstAttribute="trailing" secondItem="133" secondAttribute="trailing" constant="10"/>
-                <constraint id="143" firstItem="133" firstAttribute="top" secondItem="123" secondAttribute="bottom" constant="5">
+                <constraint firstItem="133" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="10" id="141"/>
+                <constraint firstAttribute="trailing" secondItem="133" secondAttribute="trailing" constant="10" id="142"/>
+                <constraint firstItem="133" firstAttribute="top" secondItem="123" secondAttribute="bottom" constant="5" id="143">
                     <variation key="heightClass=regular-widthClass=compact" constant="7"/>
                 </constraint>
-                <constraint id="150" firstItem="1" firstAttribute="trailing" secondItem="116" secondAttribute="trailing"/>
-                <constraint id="154" firstItem="116" firstAttribute="leading" secondItem="1" secondAttribute="leading"/>
-                <constraint id="155" firstItem="116" firstAttribute="top" secondItem="133" secondAttribute="centerY" constant="1"/>
-                <constraint id="156" firstItem="32" firstAttribute="top" secondItem="116" secondAttribute="bottom" constant="1"/>
+                <constraint firstAttribute="trailing" secondItem="116" secondAttribute="trailing" id="150"/>
+                <constraint firstItem="116" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="154"/>
+                <constraint firstItem="116" firstAttribute="top" secondItem="133" secondAttribute="centerY" constant="1" id="155"/>
+                <constraint firstItem="32" firstAttribute="top" secondItem="116" secondAttribute="bottom" constant="1" id="156"/>
             </constraints>
             <variation key="default">
                 <mask key="subviews">
@@ -119,17 +120,17 @@
                     <exclude reference="49"/>
                     <exclude reference="54"/>
                     <exclude reference="55"/>
-                    <exclude reference="107"/>
-                    <exclude reference="108"/>
-                    <exclude reference="112"/>
-                    <exclude reference="124"/>
-                    <exclude reference="125"/>
                     <exclude reference="141"/>
                     <exclude reference="142"/>
                     <exclude reference="143"/>
+                    <exclude reference="124"/>
+                    <exclude reference="125"/>
                     <exclude reference="150"/>
                     <exclude reference="154"/>
                     <exclude reference="155"/>
+                    <exclude reference="107"/>
+                    <exclude reference="108"/>
+                    <exclude reference="112"/>
                     <exclude reference="156"/>
                 </mask>
             </variation>
@@ -145,96 +146,28 @@
                     <include reference="49"/>
                     <include reference="54"/>
                     <include reference="55"/>
-                    <include reference="107"/>
-                    <include reference="108"/>
-                    <include reference="112"/>
-                    <include reference="124"/>
-                    <include reference="125"/>
                     <include reference="141"/>
                     <include reference="142"/>
                     <include reference="143"/>
+                    <include reference="124"/>
+                    <include reference="125"/>
                     <include reference="150"/>
                     <include reference="154"/>
                     <include reference="155"/>
+                    <include reference="107"/>
+                    <include reference="108"/>
+                    <include reference="112"/>
                     <include reference="156"/>
                 </mask>
             </variation>
             <connections>
                 <outlet property="questionText" destination="4" id="name-outlet-4"/>
-                <outlet property="shareTable" destination="32" id="name-outlet-32"/>
                 <outlet property="shareOptions" destination="116" id="name-outlet-116"/>
+                <outlet property="shareTable" destination="32" id="name-outlet-32"/>
             </connections>
         </view>
     </objects>
     <resources>
-        <image name="assets/img/friendsiOS.png" width="68" height="48"/>
-        <image name="images/icons/done.png" width="32" height="32"/>
-        <image name="images/icons/editar.png" width="59" height="60"/>
-        <image name="images/icons/image.png" width="48" height="48"/>
-        <image name="images/icons/man.png" width="32" height="32"/>
-        <image name="images/icons/text.gif" width="48" height="48"/>
-        <image name="images/icons/woman.png" width="32" height="32"/>
-        <image name="images/purple-pip-circle.png" width="8" height="8"/>
-        <image name="images/purple-pip-full.png" width="8" height="8"/>
-        <image name="images/white-pip-circle.png" width="8" height="8"/>
-        <image name="images/white-pip-full.png" width="8" height="8"/>
-        <image name="assets/img/emptyCircle.png" width="512" height="512"/>
-        <image name="assets/img/feediOS.png" width="68" height="54"/>
-        <image name="assets/img/filterToYou.png" width="42" height="48"/>
         <image name="assets/img/logo_180.png" width="180" height="180"/>
-        <image name="assets/img/menuiOS.png" width="61" height="38"/>
-        <image name="assets/img/notification.png" width="512" height="512"/>
-        <image name="assets/img/optionCheck.png" width="512" height="512"/>
-        <image name="assets/img/pagesFeed.png" width="48" height="38"/>
-        <image name="assets/img/pagesFriends.png" width="48" height="34"/>
-        <image name="assets/img/pagesHelp.png" width="43" height="44"/>
-        <image name="assets/img/pagesLogOut.png" width="37" height="44"/>
-        <image name="assets/img/pagesSettings.png" width="44" height="48"/>
-        <image name="assets/img/threelines.png" width="30" height="30"/>
-        <image name="AddFriends" width="48" height="48"/>
-        <image name="AddSurvey" width="48" height="48"/>
-        <image name="BackBlack" width="17" height="30"/>
-        <image name="CloseMenu" width="38" height="38"/>
-        <image name="EditMenu" width="43" height="43"/>
-        <image name="EditProfile" width="33" height="33"/>
-        <image name="EmptyCircleImage" width="84" height="84"/>
-        <image name="EmptyCircleMenu" width="68" height="68"/>
-        <image name="EmptyCircleText" width="68" height="68"/>
-        <image name="Female" width="27" height="42"/>
-        <image name="Finished" width="32" height="32"/>
-        <image name="ForMe" width="23" height="33"/>
-        <image name="Friends" width="44" height="34"/>
-        <image name="Globe" width="46" height="46"/>
-        <image name="ImagePlaceholder" width="80" height="60"/>
-        <image name="Lock" width="37" height="49"/>
-        <image name="Logout" width="27" height="30"/>
-        <image name="Male" width="37" height="37"/>
-        <image name="Menu" width="50" height="34"/>
-        <image name="More" width="11" height="39"/>
-        <image name="MyFriends" width="33" height="27"/>
-        <image name="MySurveys" width="40" height="31"/>
-        <image name="NextStep" width="17" height="30"/>
-        <image name="NextStepGray" width="17" height="30"/>
-        <image name="Notification" width="48" height="48"/>
-        <image name="OptionCheck" width="68" height="68"/>
-        <image name="PictureOption" width="52" height="41"/>
-        <image name="Profile" width="180" height="180"/>
-        <image name="Step1" width="35" height="35"/>
-        <image name="Step2" width="35" height="35"/>
-        <image name="Step2Gray" width="35" height="35"/>
-        <image name="Step3" width="35" height="35"/>
-        <image name="Step3Gray" width="35" height="35"/>
-        <image name="StepCheck" width="35" height="35"/>
-        <image name="TextOption" width="49" height="49"/>
-        <image name="ValidateSurvey" width="47" height="36"/>
-        <image name="AskkerLogo" width="205" height="45"/>
-        <image name="CheckProfile" width="48" height="48"/>
-        <image name="DoneEditProfile" width="32" height="32"/>
-        <image name="FindGroup" width="49" height="42"/>
-        <image name="Group" width="180" height="180"/>
-        <image name="MyGroup" width="44" height="34"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedScreenMetrics key="destination" type="retina47"/>
-    </simulatedMetricsContainer>
 </document>

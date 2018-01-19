@@ -41,9 +41,9 @@ namespace Askker.App.iOS
 
             View.BackgroundColor = UIColor.FromRGB(33, 33, 33);
 
-            //var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
+            var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
 
-            profileImageView = new UIImageView(new RectangleF(85, 80, 90, 90));
+            profileImageView = new UIImageView(new RectangleF(85, 100, 90, 90));
             profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             profileImageView.Image = UIImage.FromBundle("Profile");
             profileImageView.Layer.CornerRadius = (profileImageView.Frame.Width / 2);
@@ -58,7 +58,7 @@ namespace Askker.App.iOS
                 Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this, PictureType.Profile);
             }
 
-            var editProfileButtonImageView = new UIImageView(new RectangleF(220, 80, 24, 24));
+            var editProfileButtonImageView = new UIImageView(new RectangleF(220, 100, 24, 24));
             editProfileButtonImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             editProfileButtonImageView.Image = UIImage.FromBundle("EditMenu");
             editProfileButtonImageView.Layer.MasksToBounds = true;
@@ -66,17 +66,17 @@ namespace Askker.App.iOS
             editProfileButtonImageView.AddGestureRecognizer(tapGestureRecognizerEdit);
             editProfileButtonImageView.UserInteractionEnabled = true;
 
-            var name = new UILabel(new RectangleF(20, 180, 220, 20));
+            var name = new UILabel(new RectangleF(20, 200, 220, 20));
             name.Font = UIFont.SystemFontOfSize(14.0f);
             name.TextAlignment = UITextAlignment.Center;
             name.TextColor = UIColor.White;
             name.Text = LoginController.userModel.name;
 
-            var dividerLineView = new UIView(new RectangleF(20, 205, 220, 0.5f));
+            var dividerLineView = new UIView(new RectangleF(20, 225, 220, 0.5f));
             dividerLineView.BackgroundColor = UIColor.FromRGB(80, 80, 80);
 
             var pagesItems = new MenuPagesModel().MenuItems;
-            var pagesTableView = new UITableView(new RectangleF(20, 210, 220, (pagesItems.Count * 40) - 10));
+            var pagesTableView = new UITableView(new RectangleF(20, 230, 220, (pagesItems.Count * 40) - 10));
             pagesTableView.ContentInset = new UIEdgeInsets(0, 20, 0, 0);
             pagesTableView.BackgroundColor = UIColor.Clear;
             pagesTableView.ScrollEnabled = false;
@@ -105,6 +105,9 @@ namespace Askker.App.iOS
             filterTableView.ScrollEnabled = false;
             new MenuTableViewController(filterTableView, filterItems, menuViewController);
 
+            var dividerLineView3 = new UIView(new RectangleF(20, (float)filterTableView.Frame.Y + (float)filterTableView.Frame.Height + 15, 220, 0.5f));
+            dividerLineView3.BackgroundColor = UIColor.FromRGB(80, 80, 80);
+
             #region Hashtag Menu
             //var dividerLineView3 = new UIView(new RectangleF(20, (float)filterTableView.Frame.Y + (float)filterTableView.Frame.Height + 25, 220, 0.5f));
             //dividerLineView3.BackgroundColor = UIColor.Black;
@@ -123,8 +126,8 @@ namespace Askker.App.iOS
             #region Logout Button
             var logoutModel = new MenuLogoutModel();
 
-            var logoutButton = new UIButton(new RectangleF(0, (float)View.Frame.Height - 40, (float)View.Frame.Width, 40));
-            logoutButton.BackgroundColor = UIColor.FromRGB(50, 50, 50);
+            var logoutButton = new UIButton(new RectangleF(0, (float)dividerLineView3.Frame.Y + 5, (float)View.Frame.Width, 40));
+            //logoutButton.BackgroundColor = UIColor.FromRGB(50, 50, 50);
             logoutButton.TouchUpInside += (object sender, EventArgs e) =>
             {
                 CredentialsService.DeleteCredentials();
@@ -159,25 +162,37 @@ namespace Askker.App.iOS
             logoutButton.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-10-[v0(24)]", new NSLayoutFormatOptions(), "v0", logoutTitleLabel));
             #endregion
 
-            View.AddSubview(profileImageView);
-            View.AddSubview(name);
-            View.AddSubview(editProfileButtonImageView);
-            View.AddSubview(dividerLineView);
-            View.AddSubview(pagesTableView);
-            View.AddSubview(dividerLineView2);
-            View.AddSubview(filterLabel);
-            View.AddSubview(filterTipLabel);
-            View.AddSubview(filterTableView);
+            scrollView.AddSubview(profileImageView);
+            scrollView.AddSubview(name);
+            scrollView.AddSubview(editProfileButtonImageView);
+            scrollView.AddSubview(dividerLineView);
+            scrollView.AddSubview(pagesTableView);
+            scrollView.AddSubview(dividerLineView2);
+            scrollView.AddSubview(filterLabel);
+            scrollView.AddSubview(filterTipLabel);
+            scrollView.AddSubview(filterTableView);
+            scrollView.AddSubview(dividerLineView3);
             #region Hashtag Menu
             //scrollView.Add(dividerLineView3);
             //scrollView.Add(hashtagLabel);
             //scrollView.Add(hashtagText);
             #endregion
-            View.AddSubview(logoutButton);
+            scrollView.AddSubview(logoutButton);
 
-            //scrollView.ContentSize = new CGSize(View.Frame.Width, View.Frame.Height); //scrollView.ContentSize = new CGSize(View.Frame.Width, 1000); 
+            var scrollHeight = 100 + profileImageView.Frame.Height + 10 + name.Frame.Height + 25 + dividerLineView.Frame.Height + 5 + pagesTableView.Frame.Height + 15 +
+                               dividerLineView2.Frame.Height + 5 + filterLabel.Frame.Height + 10 + filterTableView.Frame.Height + 5 + dividerLineView3.Frame.Height + 5 +
+                               logoutButton.Frame.Height;
+            
+            if (scrollHeight > View.Frame.Height)
+            {
+                scrollView.ContentSize = new CGSize(View.Frame.Width, scrollHeight);
+            }
+            else
+            {
+                scrollView.ContentSize = new CGSize(View.Frame.Width, View.Frame.Height);
+            }
 
-            //View.AddSubview(scrollView);
+            View.AddSubview(scrollView);
         }
 
         [Export("TapProfilePictureSelector:")]
