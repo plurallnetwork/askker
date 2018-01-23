@@ -60,10 +60,7 @@ namespace Askker.App.iOS
 
             uploadButton.TintColor = UIColor.FromRGB(90, 89, 89);
             uploadButton.SetTitleColor( UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
-            nameButton.TintColor = UIColor.FromRGB(90, 89, 89);
-            emailButton.TintColor = UIColor.FromRGB(90, 89, 89);
-            ageButton.TintColor = UIColor.FromRGB(90, 89, 89);
-
+            
             nameText.TextColor = UIColor.FromRGB(90, 89, 89);
             emailText.TextColor = UIColor.FromRGB(90, 89, 89);
             ageText.TextColor = UIColor.FromRGB(90, 89, 89);

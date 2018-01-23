@@ -49,6 +49,10 @@ namespace Askker.App.iOS
             base.LayoutSubviews();
             //editBtn.ImageView.Frame = new CGRect(editBtn.ImageView.Frame.X, 5, 35, 35);
             editBtn.ContentMode = UIViewContentMode.ScaleToFill;
+            cancelBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89),UIControlState.Normal);
+            editBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+            cleanBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+            finishBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
         }
 
 

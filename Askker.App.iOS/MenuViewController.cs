@@ -134,7 +134,6 @@ namespace Askker.App.iOS
         {
             var composeButton = new UIButton(new RectangleF(0, 0, 24, 24));
             composeButton.SetBackgroundImage(UIImage.FromBundle("Notification"), UIControlState.Normal);
-            composeButton.TintColor = UIColor.FromRGB(90, 89, 89);
             composeButton.AddTarget((sender, args) => {
                 var notificationsController = this.Storyboard.InstantiateViewController("NotificationsController") as NotificationsController;
                 this.NavigationController.PushViewController(notificationsController, true);

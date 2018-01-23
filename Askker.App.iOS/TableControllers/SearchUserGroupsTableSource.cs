@@ -55,7 +55,25 @@ namespace Askker.App.iOS.TableControllers
 
         public override nint NumberOfSections(UITableView tableView)
         {
-            return 1;
+            var numOfSections = 0;
+
+            if(tableItems.Count > 0)
+            {
+                numOfSections = 1;
+                tableView.BackgroundView = null;
+                tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
+            }
+            else
+            {
+                UILabel label = new UILabel(new CoreGraphics.CGRect(0, 0, tableView.Bounds.Size.Width, tableView.Bounds.Size.Height));
+                label.Text = "No results found";
+                label.TextColor = UIColor.Red;
+                label.TextAlignment = UITextAlignment.Center;
+                tableView.BackgroundView = label;
+                tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            }
+
+            return numOfSections;
         }
 
         public async void PerformSearch(string searchText)
@@ -100,7 +118,7 @@ namespace Askker.App.iOS.TableControllers
         {
             NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnText"), null);
             NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnTextGroups"), null);
-            Utils.OpenGroupMembers(this.navigationController, this.tableItems[indexPath.Row].Id, this.tableItems[indexPath.Row].Id, this.tableItems[indexPath.Row].ImageName);
+            Utils.OpenGroupProfile(this.navigationController, this.tableItems[indexPath.Row].Id);
         }
     }
 }

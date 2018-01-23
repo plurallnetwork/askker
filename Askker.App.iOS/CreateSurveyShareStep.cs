@@ -167,8 +167,7 @@ namespace Askker.App.iOS
                 cell.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
 
                 cell.ImageView.Image = UIImage.FromBundle(targetAudienceItems[indexPath.Row].ImageName);
-                cell.ImageView.TintColor = UIColor.FromRGB(90, 89, 89);
-
+                
                 cell.TextLabel.Font = UIFont.BoldSystemFontOfSize(14);
                 cell.TextLabel.Text = targetAudienceItems[indexPath.Row].Title;
                 cell.TextLabel.TextColor = UIColor.FromRGB(90, 89, 89);

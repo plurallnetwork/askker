@@ -646,16 +646,6 @@ namespace Askker.App.iOS
         [Export("initWithFrame:")]
         public FeedCollectionViewCell(CGRect frame) : base(frame)
         {
-            //// Set the default appearance values
-            //UIButton.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
-            //UIButton.Appearance.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
-
-            //UILabel.Appearance.TextColor = UIColor.FromRGB(90, 89, 89);
-
-            //UITextField.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
-            //UITextView.Appearance.TintColor = UIColor.FromRGB(90, 89, 89);
-            
-
             ContentView.BackgroundColor = UIColor.White;
 
             profileImageView = new UIImageView();
@@ -729,9 +719,7 @@ namespace Askker.App.iOS
             resultButton = buttonForTitle(title: "Result", imageName: "result");
             commentButton = buttonForTitle(title: "Comment", imageName: "comment");
             moreButton = buttonForTitle(title: "", imageName: "More");
-            moreButton.TintColor = UIColor.FromRGB(90, 89, 89);
-            moreButton.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
-
+            
             dividerLineButtons = new UIView();
             dividerLineButtons.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
             dividerLineButtons.TranslatesAutoresizingMaskIntoConstraints = false;
