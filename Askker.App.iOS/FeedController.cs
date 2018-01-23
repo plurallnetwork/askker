@@ -391,7 +391,28 @@ namespace Askker.App.iOS
             }
 
             var attributedText = new NSMutableAttributedString(survey.userName, UIFont.BoldSystemFontOfSize(14));
-            attributedText.Append(new NSAttributedString("\n" + survey.targetAudience, UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
+            if ("Groups".Equals(survey.targetAudience))
+            {
+                var x = 0;
+                foreach(string group in survey.targetAudienceGroups.names)
+                {
+                    if(x == 0)
+                    {
+                        attributedText.Append(new NSAttributedString("\n" + group, UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
+                    }
+                    else
+                    {
+                        attributedText.Append(new NSAttributedString(", " + group , UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
+                    }
+                    x++;
+                }
+                
+            }
+            else
+            {
+                attributedText.Append(new NSAttributedString("\n" + survey.targetAudience, UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
+            }
+            
 
             var paragraphStyle = new NSMutableParagraphStyle();
             paragraphStyle.LineSpacing = 4;
