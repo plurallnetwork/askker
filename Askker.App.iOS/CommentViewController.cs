@@ -54,6 +54,11 @@ namespace Askker.App.iOS
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             AutomaticallyAdjustsScrollViewInsets = false;
 
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
             comments = new List<SurveyCommentModel>();
 
             commentArea.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);

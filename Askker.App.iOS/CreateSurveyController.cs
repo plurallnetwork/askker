@@ -369,6 +369,16 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
 
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
+            this.EdgesForExtendedLayout = UIRectEdge.None;
+            this.ExtendedLayoutIncludesOpaqueBars = false;
+            this.AutomaticallyAdjustsScrollViewInsets = false;
+            this.NavigationController.NavigationBar.Translucent = false;
+
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             if (ScreenState == Askker.App.PortableLibrary.Enums.ScreenState.Edit.ToString())

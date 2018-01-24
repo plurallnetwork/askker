@@ -30,6 +30,16 @@ namespace Askker.App.iOS
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             base.ViewDidLoad();
 
+            this.EdgesForExtendedLayout = UIRectEdge.None;
+            this.ExtendedLayoutIncludesOpaqueBars = false;
+            this.AutomaticallyAdjustsScrollViewInsets = false;
+            this.NavigationController.NavigationBar.Translucent = false;
+
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             imageCache.RemoveAllObjects();

@@ -45,6 +45,11 @@ namespace Askker.App.iOS
 
             Title = "";
 
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
             groupProfileBtn = new UIButton(UIButtonType.System);
             groupProfileBtn.Frame = new CGRect(0, 0, 100, 40);
             groupProfileBtn.BackgroundColor = UIColor.White;

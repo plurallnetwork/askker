@@ -34,6 +34,7 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             imageCache.RemoveAllObjects();
 

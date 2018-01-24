@@ -20,7 +20,12 @@ namespace Askker.App.iOS
             base.ViewDidLoad();
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
-                        
+
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
             // Keyboard dispose when clicking outside the comment box
             var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
             g.AddTarget(() => View.EndEditing(true));

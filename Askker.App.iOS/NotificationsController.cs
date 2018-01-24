@@ -28,6 +28,11 @@ namespace Askker.App.iOS
             base.ViewDidLoad();
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
             TableView.RegisterClassForCellReuse(typeof(NotificationsTableViewCell), notificationCellId);
             TableView.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
 

@@ -47,7 +47,15 @@ namespace Askker.App.iOS
             base.ViewDidLoad();
             changeBackBtnText = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("ChangeBackBtnTextGroups"), ChangeBackBtnText);
 
-            
+            this.EdgesForExtendedLayout = UIRectEdge.None;
+            this.ExtendedLayoutIncludesOpaqueBars = false;
+            this.AutomaticallyAdjustsScrollViewInsets = false;
+            this.NavigationController.NavigationBar.Translucent = false;
+
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
 
             userGroups = new List<UserGroupModel>();
 

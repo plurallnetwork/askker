@@ -39,6 +39,11 @@ namespace Askker.App.iOS
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
             reports = new List<ReportType>();
             reports.Add(ReportType.Overall);
             reports.Add(ReportType.Gender);

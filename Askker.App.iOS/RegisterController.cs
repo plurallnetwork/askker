@@ -23,7 +23,12 @@ namespace Askker.App.iOS
             txtEmail.TextColor = UIColor.FromRGB(90, 89, 89);
             txtPassword.TextColor = UIColor.FromRGB(90, 89, 89);
             txtConfirmPassword.TextColor = UIColor.FromRGB(90, 89, 89);
-            
+
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
 
             // Keyboard dispose when clicking outside the comment box
             var g = new UITapGestureRecognizer { CancelsTouchesInView = false };

@@ -42,7 +42,12 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
 
-            this.NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes()
+            this.EdgesForExtendedLayout = UIRectEdge.None;
+            this.ExtendedLayoutIncludesOpaqueBars = false;
+            this.AutomaticallyAdjustsScrollViewInsets = false;
+            this.NavigationController.NavigationBar.Translucent = false;
+
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
             {
                 ForegroundColor = UIColor.FromRGB(90, 89, 89)
             };

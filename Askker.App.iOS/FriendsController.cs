@@ -29,6 +29,16 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
 
+            this.EdgesForExtendedLayout = UIRectEdge.None;
+            this.ExtendedLayoutIncludesOpaqueBars = false;
+            this.AutomaticallyAdjustsScrollViewInsets = false;
+            this.NavigationController.NavigationBar.Translucent = false;
+
+            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = UIColor.FromRGB(90, 89, 89)
+            };
+
             userFriends = new List<UserFriendModel>();
 
             resultsTableController = new ResultsTableController

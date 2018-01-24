@@ -36,7 +36,7 @@ namespace Askker.App.iOS
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
+            
             updateProfilePictureObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateProfilePicture"), UpdateProfilePicture);
 
             View.BackgroundColor = UIColor.FromRGB(33, 33, 33);
