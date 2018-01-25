@@ -43,19 +43,14 @@ namespace Askker.App.iOS
             feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCell), feedCellId);
             feedCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
             feedCollectionView.AlwaysBounceVertical = true;
-            feedCollectionView.ContentInset = new UIEdgeInsets(-64, 0, 0, 0);
 
             refreshControl = new UIRefreshControl();
-            refreshControl.TranslatesAutoresizingMaskIntoConstraints = false;
             refreshControl.ValueChanged += (sender, e) =>
             {
                 refreshControl.BeginRefreshing();
                 fetchSurveys(filterMine, filterForMe, filterFinished);
             };
-
-            feedCollectionView.Add(refreshControl);
-            feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1]", NSLayoutFormatOptions.AlignAllCenterX, "v0", feedCollectionView, "v1", refreshControl));
-            feedCollectionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-35-[v0]|", new NSLayoutFormatOptions(), "v0", refreshControl));
+            feedCollectionView.RefreshControl = refreshControl;
         }
 
         public override void ViewWillAppear(bool animated)

@@ -43,7 +43,7 @@ namespace Askker.App.iOS
 
             var scrollView = new UIScrollView(new RectangleF(0, 0, (float)View.Frame.Width, (float)View.Frame.Height));
 
-            profileImageView = new UIImageView(new RectangleF(85, 100, 90, 90));
+            profileImageView = new UIImageView(new RectangleF(85, 20, 90, 90));
             profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             profileImageView.Image = UIImage.FromBundle("Profile");
             profileImageView.Layer.CornerRadius = (profileImageView.Frame.Width / 2);
@@ -58,7 +58,7 @@ namespace Askker.App.iOS
                 Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this, PictureType.Profile);
             }
 
-            var editProfileButtonImageView = new UIImageView(new RectangleF(220, 100, 24, 24));
+            var editProfileButtonImageView = new UIImageView(new RectangleF(220, 20, 24, 24));
             editProfileButtonImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
             editProfileButtonImageView.Image = UIImage.FromBundle("EditMenu");
             editProfileButtonImageView.Layer.MasksToBounds = true;
@@ -66,17 +66,17 @@ namespace Askker.App.iOS
             editProfileButtonImageView.AddGestureRecognizer(tapGestureRecognizerEdit);
             editProfileButtonImageView.UserInteractionEnabled = true;
 
-            var name = new UILabel(new RectangleF(20, 200, 220, 20));
+            var name = new UILabel(new RectangleF(20, 120, 220, 20));
             name.Font = UIFont.SystemFontOfSize(14.0f);
             name.TextAlignment = UITextAlignment.Center;
             name.TextColor = UIColor.White;
             name.Text = LoginController.userModel.name;
 
-            var dividerLineView = new UIView(new RectangleF(20, 225, 220, 0.5f));
+            var dividerLineView = new UIView(new RectangleF(20, 145, 220, 0.5f));
             dividerLineView.BackgroundColor = UIColor.FromRGB(80, 80, 80);
 
             var pagesItems = new MenuPagesModel().MenuItems;
-            var pagesTableView = new UITableView(new RectangleF(20, 230, 220, (pagesItems.Count * 40) - 10));
+            var pagesTableView = new UITableView(new RectangleF(20, 150, 220, (pagesItems.Count * 40) - 10));
             pagesTableView.ContentInset = new UIEdgeInsets(0, 20, 0, 0);
             pagesTableView.BackgroundColor = UIColor.Clear;
             pagesTableView.ScrollEnabled = false;
@@ -179,9 +179,9 @@ namespace Askker.App.iOS
             #endregion
             scrollView.AddSubview(logoutButton);
 
-            var scrollHeight = 100 + profileImageView.Frame.Height + 10 + name.Frame.Height + 25 + dividerLineView.Frame.Height + 5 + pagesTableView.Frame.Height + 15 +
+            var scrollHeight = 20 + profileImageView.Frame.Height + 10 + name.Frame.Height + 25 + dividerLineView.Frame.Height + 5 + pagesTableView.Frame.Height + 15 +
                                dividerLineView2.Frame.Height + 5 + filterLabel.Frame.Height + 10 + filterTableView.Frame.Height + 5 + dividerLineView3.Frame.Height + 5 +
-                               logoutButton.Frame.Height;
+                               logoutButton.Frame.Height + 40;
             
             if (scrollHeight > View.Frame.Height)
             {
