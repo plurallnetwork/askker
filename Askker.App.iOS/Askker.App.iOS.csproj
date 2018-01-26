@@ -26,9 +26,10 @@
     <MtouchDebug>True</MtouchDebug>
     <IOSDebugOverWiFi>False</IOSDebugOverWiFi>
     <IOSDebuggerPort>10000</IOSDebuggerPort>
-    <CodesignKey>iPhone Developer: Leandro Oliveira (3WQ4R4AZ44)</CodesignKey>
+    <CodesignKey>iPhone Developer: Alex Tubone (3S64Q987J7)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>iOS Team Provisioning Profile: com.blinq.Askker.App.iOS</CodesignProvision>
+    <CodesignProvision>
+    </CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -63,7 +64,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution: BLINQ SOLUTIONS INTERNET SERVICOS EM TECNOLOGIA DA INFORMACAO LTDA - me (4T48YB4VHD)</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>

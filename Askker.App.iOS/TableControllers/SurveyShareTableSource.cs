@@ -38,7 +38,9 @@ namespace Askker.App.iOS.TableControllers
                 cell = new SurveyShareCustomCell(cellIdentifier);
             }
 
-            var imageView = cell.GetImageView();
+            //var imageView = cell.GetCustomImageView();
+            //imageView.Image = UIImage.FromBundle("Profile");
+            UIImageView imageView = new UIImageView();
             imageView.Image = UIImage.FromBundle("Profile");
 
             if (!string.IsNullOrEmpty(tableItems[indexPath.Row].ImageName))
@@ -75,7 +77,8 @@ namespace Askker.App.iOS.TableControllers
             }
 
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-            cell.UpdateCell(tableItems[indexPath.Row].Name);
+            cell.UpdateCell(tableItems[indexPath.Row].Name, imageView.Image);
+            cell.LayoutSubviews();
             return cell;
         }
 
@@ -86,7 +89,7 @@ namespace Askker.App.iOS.TableControllers
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            UITableViewCell cell = tableView.CellAt(indexPath);
+            var cell = tableView.CellAt(indexPath) as SurveyShareCustomCell;
             if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
             {
                 if (indexPath.Row >= 0)
@@ -184,13 +187,19 @@ namespace Askker.App.iOS.TableControllers
             }
 
             tableView.DeselectRow(indexPath, true);
+
+            cell.LayoutSubviews();
         }
 
         public void DeselectAll(UITableView tableView) {
             for (int i = 0; i < tableItems.Count; i++)
             {
-                if (tableView.CellAt(NSIndexPath.FromRowSection((nint)i, (nint)0)).Accessory == UITableViewCellAccessory.Checkmark)
-                    tableView.CellAt(NSIndexPath.FromRowSection((nint)i, (nint)0)).Accessory = UITableViewCellAccessory.None;
+                var cell = tableView.CellAt(NSIndexPath.FromRowSection((nint)i, (nint)0));
+                if (cell.Accessory == UITableViewCellAccessory.Checkmark)
+                {
+                    cell.Accessory = UITableViewCellAccessory.None;
+                    cell.LayoutSubviews();
+                }
             }
         }        
     }

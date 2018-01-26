@@ -194,7 +194,7 @@ namespace Askker.App.iOS
 
                 CreateSurveyController.SurveyModel.targetAudience = targetAudienceItems[indexPath.Row].TargetAudience.ToString();
 
-                if(createSurveyShareStep.tableSource != null)
+                if (createSurveyShareStep.tableSource != null)
                 {
                     createSurveyShareStep.tableSource.DeselectAll(createSurveyShareStep._shareStepView.ShareTable);
                 }
