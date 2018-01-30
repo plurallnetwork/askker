@@ -192,14 +192,32 @@ namespace Askker.App.iOS
             {
                 var cell = tableView.CellAt(indexPath);
 
+                //workaround, when target audience is Groups or Friends set it to public to clean the tableSource, so the images will not resize
+                if (targetAudienceItems[indexPath.Row].TargetAudience == TargetAudience.Groups || targetAudienceItems[indexPath.Row].TargetAudience == TargetAudience.Private)
+                {
+                    RowSelected(tableView, NSIndexPath.FromRowSection((nint)0, (nint)0));
+                    RowDeselected(tableView, NSIndexPath.FromRowSection((nint)0, (nint)0));
+                }
+
                 CreateSurveyController.SurveyModel.targetAudience = targetAudienceItems[indexPath.Row].TargetAudience.ToString();
+                
 
                 if (createSurveyShareStep.tableSource != null)
                 {
                     createSurveyShareStep.tableSource.DeselectAll(createSurveyShareStep._shareStepView.ShareTable);
                 }
+                
+                //reset table source
+                createSurveyShareStep.tableSource = null;
+                createSurveyShareStep._shareStepView.ShareTable.BackgroundColor = UIColor.Clear;
+                createSurveyShareStep._shareStepView.ShareTable.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
+                createSurveyShareStep._shareStepView.ShareTable.Source = null;
+                createSurveyShareStep._shareStepView.ShareTable.ReloadData();
 
-                if (targetAudienceItems[indexPath.Row].TargetAudience == TargetAudience.Private)
+                this.createSurveyShareStep._shareStepView.ShareTable.Hidden = true;
+                
+
+                if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
                 {
                     createSurveyShareStep.tableSource = new SurveyShareTableSource(createSurveyShareStep.tableItems);
                     createSurveyShareStep._shareStepView.ShareTable.BackgroundColor = UIColor.Clear;
@@ -220,7 +238,7 @@ namespace Askker.App.iOS
                         CreateSurveyController._askButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
                         CreateSurveyController._askButton.BackgroundColor = UIColor.White;
                     }
-                } else if (targetAudienceItems[indexPath.Row].TargetAudience == TargetAudience.Groups)
+                } else if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Groups.ToString())
                 {
                     createSurveyShareStep.tableSource = new SurveyShareTableSource(createSurveyShareStep.tableItemsGroups);
                     createSurveyShareStep._shareStepView.ShareTable.BackgroundColor = UIColor.Clear;

@@ -30,6 +30,7 @@ namespace Askker.App.iOS.CustomViewComponents
         {
             textLabel.Text = caption;
             customImageView.Image = image;
+            LayoutSubviews();
         }
 
         public override void LayoutSubviews()

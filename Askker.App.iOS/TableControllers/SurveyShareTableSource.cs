@@ -40,12 +40,12 @@ namespace Askker.App.iOS.TableControllers
 
             //var imageView = cell.GetCustomImageView();
             //imageView.Image = UIImage.FromBundle("Profile");
-            UIImageView imageView = new UIImageView();
-            imageView.Image = UIImage.FromBundle("Profile");
+            UIImageView varImageView = new UIImageView();
+            varImageView.Image = UIImage.FromBundle("Profile");
 
             if (!string.IsNullOrEmpty(tableItems[indexPath.Row].ImageName))
             {
-                Utils.SetImageFromNSUrlSession(tableItems[indexPath.Row].ImageName, imageView, this, PictureType.OptionImage);
+                Utils.SetImageFromNSUrlSession(tableItems[indexPath.Row].ImageName, varImageView, this, PictureType.OptionImage);
             }
 
             if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString() && CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
@@ -77,7 +77,7 @@ namespace Askker.App.iOS.TableControllers
             }
 
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-            cell.UpdateCell(tableItems[indexPath.Row].Name, imageView.Image);
+            cell.UpdateCell(tableItems[indexPath.Row].Name, varImageView.Image);
             cell.LayoutSubviews();
             return cell;
         }
@@ -197,9 +197,9 @@ namespace Askker.App.iOS.TableControllers
                 var cell = tableView.CellAt(NSIndexPath.FromRowSection((nint)i, (nint)0));
                 if (cell.Accessory == UITableViewCellAccessory.Checkmark)
                 {
-                    cell.Accessory = UITableViewCellAccessory.None;
-                    cell.LayoutSubviews();
+                    cell.Accessory = UITableViewCellAccessory.None;                    
                 }
+                cell.LayoutSubviews();
             }
         }        
     }
