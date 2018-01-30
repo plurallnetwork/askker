@@ -207,7 +207,6 @@ namespace Askker.App.iOS
         {
             base.ViewDidAppear(animated);
             AddObservers();
-            commentArea.CommentText.BecomeFirstResponder();
         }
 
         public async void fetchSurveyComments(bool scrollToLastItem)
@@ -267,6 +266,7 @@ namespace Askker.App.iOS
                 }
 
                 BTProgressHUD.Dismiss();
+                commentArea.CommentText.BecomeFirstResponder();
             }
             catch (Exception ex)
             {
@@ -278,8 +278,8 @@ namespace Askker.App.iOS
         [Export("CommentSelector:")]
         private void CommentSelector(UIFeedButton button)
         {
+            //ScrollToBottom(true);
             commentArea.CommentText.BecomeFirstResponder();
-            ScrollToBottom(true);
         }
 
         private void KeyBoardUpNotification(NSNotification notification)
@@ -342,33 +342,38 @@ namespace Askker.App.iOS
             UIView.BeginAnimations(string.Empty, System.IntPtr.Zero);
             UIView.SetAnimationDuration(0.1);
 
-            CGRect frame = View.Frame;
-
             if (move)
             {
-                if ((View.Frame.Height - scroll_amount) > lastCommentBottom)
+                commentArea.Frame = new CGRect(commentArea.Frame.X, commentArea.Frame.Y - scroll_amount, commentArea.Frame.Width, commentArea.Frame.Height);
+                if ((View.Frame.Height - scroll_amount) < lastCommentBottom)
                 {
-                    commentArea.Frame = new CGRect(commentArea.Frame.X, commentArea.Frame.Y - scroll_amount, commentArea.Frame.Width, commentArea.Frame.Height);
-                }
-                else
-                {
-                    frame.Y -= scroll_amount;
+                    if (View.Frame.Height > lastCommentBottom)
+                    {
+                        feed.Frame = new CGRect(feed.Frame.X, feed.Frame.Y - (scroll_amount - (feed.Frame.Height - lastCommentBottom) - offset), feed.Frame.Width, feed.Frame.Height);
+                    }
+                    else
+                    {
+                        feed.Frame = new CGRect(feed.Frame.X, feed.Frame.Y - scroll_amount, feed.Frame.Width, feed.Frame.Height);
+                    }
                 }
             }
             else
             {
-                if ((View.Frame.Height - scroll_amount) > lastCommentBottom)
+                commentArea.Frame = new CGRect(commentArea.Frame.X, commentArea.Frame.Y + scroll_amount, commentArea.Frame.Width, commentArea.Frame.Height);
+                if ((View.Frame.Height - scroll_amount) < lastCommentBottom)
                 {
-                    commentArea.Frame = new CGRect(commentArea.Frame.X, commentArea.Frame.Y + scroll_amount, commentArea.Frame.Width, commentArea.Frame.Height);
-                }
-                else
-                {
-                    frame.Y += scroll_amount;
+                    if (View.Frame.Height > lastCommentBottom)
+                    {
+                        feed.Frame = new CGRect(feed.Frame.X, feed.Frame.Y + (scroll_amount - (feed.Frame.Height - lastCommentBottom) - offset), feed.Frame.Width, feed.Frame.Height);
+                    }
+                    else
+                    {
+                        feed.Frame = new CGRect(feed.Frame.X, feed.Frame.Y + scroll_amount, feed.Frame.Width, feed.Frame.Height);
+                    }
                 }
                 scroll_amount = 0;
             }
 
-            View.Frame = frame;
             UIView.CommitAnimations();
         }
 
