@@ -10,14 +10,14 @@ namespace Askker.App.iOS.CustomViewComponents
     public class SurveyShareCustomCell : UITableViewCell
     {
         UILabel textLabel;
-        UIImageView imageView;
+        UIImageView customImageView;
 
         public SurveyShareCustomCell(NSString cellId) : base (UITableViewCellStyle.Default, cellId)
         {
-            imageView = new UIImageView();
+            customImageView = new UIImageView();
             textLabel = new UILabel();
 
-            ContentView.AddSubviews(new UIView[] { imageView, textLabel });
+            ContentView.AddSubviews(new UIView[] { customImageView, textLabel });
 
         }
 
@@ -25,23 +25,31 @@ namespace Askker.App.iOS.CustomViewComponents
         {
             textLabel.Text = caption;
         }
-        
+
+        public void UpdateCell(string caption, UIImage image)
+        {
+            textLabel.Text = caption;
+            customImageView.Image = image;
+        }
+
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
-            imageView.Frame = new CGRect(8, 8, 30, 30);
-            imageView.Layer.CornerRadius = 15;
-            imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
-            imageView.Layer.MasksToBounds = true;
-            imageView.TranslatesAutoresizingMaskIntoConstraints = false;
+            customImageView.Frame = new CGRect(8, 8, 30, 30);
+            customImageView.Layer.CornerRadius = 15;
+            customImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+            customImageView.Layer.MasksToBounds = true;
+            customImageView.TranslatesAutoresizingMaskIntoConstraints = false;
+            customImageView.ClipsToBounds = true;
+            this.LayoutIfNeeded();
 
             textLabel.Frame = new CGRect(50, 10, ContentView.Bounds.Width - 50, 25);
             textLabel.TextColor = UIColor.FromRGB(90, 89, 89);
         }
 
-        public UIImageView GetImageView()
+        public UIImageView GetCustomImageView()
         {
-            return this.imageView;
+            return this.customImageView;
         }
     }
 }

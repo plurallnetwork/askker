@@ -116,6 +116,10 @@ namespace Askker.App.iOS.TableControllers
                         alert.AddButton("Done");
                         alert.Message = "Please enter an option description:";
                         alert.AlertViewStyle = UIAlertViewStyle.PlainTextInput;
+                        alert.GetTextField(0).ValueChanged += (object s, EventArgs ev) =>
+                        {
+                            
+                        };
                         alert.Clicked += (object s, UIButtonEventArgs ev) =>
                         {
                             if (!string.IsNullOrWhiteSpace(alert.GetTextField(0).Text)) { 
@@ -247,18 +251,28 @@ namespace Askker.App.iOS.TableControllers
                     alert.AlertViewStyle = UIAlertViewStyle.PlainTextInput;
                     alert.Clicked += (object s, UIButtonEventArgs ev) =>
                     {
-                        // user input will be in alert.GetTextField(0).text;
-                        //---- create a new item and add it to our underlying data
-                        using (NSData imageData = Utils.CompressImage(originalImage))
+                        if (!string.IsNullOrWhiteSpace(alert.GetTextField(0).Text))
                         {
-                            byte[] myByteArray = new byte[imageData.Length];
-                            System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
-                            tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text, ".jpg", myByteArray));
-                        }
-                        //---- insert a new row in the table
-                        tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
+                            // user input will be in alert.GetTextField(0).text;
+                            //---- create a new item and add it to our underlying data
+                            using (NSData imageData = Utils.CompressImage(originalImage))
+                            {
+                                byte[] myByteArray = new byte[imageData.Length];
+                                System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
+                                tableItems.Insert(indexPath.Row, new SurveyOptionTableItem(alert.GetTextField(0).Text, ".jpg", myByteArray));
+                            }
+                            //---- insert a new row in the table
+                            tableView.InsertRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
 
-                        updateDoneButton();
+                            updateDoneButton();
+                        }
+                        else
+                        {
+                            new UIAlertView("Image Option", "Please fill the option description", null, "OK", null).Show();
+                            updateDoneButton();
+                            return;
+                        }
+                        
                     };
 
                     alert.Show();

@@ -7,9 +7,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.blinq.Askker.App.iOS</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.7</string>
+	<string>1.1.8</string>
 	<key>CFBundleVersion</key>
-	<string>1.1.7</string>
+	<string>1.1.8</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -40,8 +40,6 @@
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Askker needs access to photos</string>
-	<key>XSAppIconAssets</key>
-	<string>Resources/Media.xcassets/AppIcons.appiconset</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
