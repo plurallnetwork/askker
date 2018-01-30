@@ -34,11 +34,12 @@ namespace Askker.App.iOS
         public static NSString commentCellId = new NSString("commentCellId");
 
         //Variables used when the keyboard appears
-        private UIView activeview;             // Controller that activated the keyboard
-        private float scroll_amount = 0.0f;    // amount to scroll 
-        private float bottom = 0.0f;           // bottom point
-        private float offset = 10.0f;          // extra offset
-        private bool moveViewUp = false;       // which direction are we moving
+        private UIView activeview;              // Controller that activated the keyboard
+        private float scroll_amount = 0.0f;     // amount to scroll 
+        private float bottom = 0.0f;            // bottom point
+        private float offset = 8.0f;            // extra offset
+        private bool moveViewUp = false;        // which direction are we moving
+        private float lastCommentBottom = 0.0f; // Bottom of the last comment
 
         //Variables used to resize the comment textView
         private UIView activeviewarea;         // CommentArea
@@ -78,6 +79,7 @@ namespace Askker.App.iOS
             feed.TranslatesAutoresizingMaskIntoConstraints = false;
 
             View.AddSubview(feed);
+            View.AddSubview(commentArea);
 
             var pinLeft = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, View, NSLayoutAttribute.Leading, 1f, 0f);
             View.AddConstraint(pinLeft);
@@ -88,10 +90,8 @@ namespace Askker.App.iOS
             var pinTop = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Top, NSLayoutRelation.Equal, TopLayoutGuide, NSLayoutAttribute.Bottom, 1f, 0f);
             View.AddConstraint(pinTop);
 
-            var pinBottom = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, View, NSLayoutAttribute.Bottom, 1f, -46f);
+            var pinBottom = NSLayoutConstraint.Create(feed, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, commentArea, NSLayoutAttribute.Top, 1f, 0f);
             View.AddConstraint(pinBottom);
-
-            View.AddSubview(commentArea);
 
             //View.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feed));
             //View.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", commentArea));
@@ -200,7 +200,7 @@ namespace Askker.App.iOS
         {
             base.ViewWillAppear(animated);
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
-            fetchSurveyComments(false);
+            fetchSurveyComments(true);
         }
 
         public override void ViewDidAppear(bool animated)
@@ -247,21 +247,25 @@ namespace Askker.App.iOS
                 feed.Delegate = new CommentsCollectionViewDelegate((float) feedCell.Frame.Height);
                 feed.ReloadData();
 
-                if (scrollToLastItem)
+                var section = (int)feed.NumberOfSections() - 1;
+                var item = (int)feed.NumberOfItemsInSection(section) - 1;
+                if (item != -1)
                 {
-                    var section = (int)feed.NumberOfSections() - 1;
-                    var item = (int)feed.NumberOfItemsInSection(section) - 1;
-                    NSIndexPath index = NSIndexPath.FromRowSection(item, section);
-                    feed.ScrollToItem(index, UICollectionViewScrollPosition.Bottom, true);
-                }
-                else if (!string.IsNullOrEmpty(commentDate))
-                {
-                    var index = comments.FindIndex(q => q.surveyId == userId + creationDate && q.commentDate == commentDate);
-                    if (index != -1)
+                    if (scrollToLastItem)
                     {
-                        feed.ScrollToItem(NSIndexPath.FromItemSection(index, 0), UICollectionViewScrollPosition.CenteredVertically, true);
+                        NSIndexPath indexPath = NSIndexPath.FromRowSection(item, section);
+                        feed.ScrollToItem(indexPath, UICollectionViewScrollPosition.Bottom, true);
+                    }
+                    else if (!string.IsNullOrEmpty(commentDate))
+                    {
+                        var index = comments.FindIndex(q => q.surveyId == userId + creationDate && q.commentDate == commentDate);
+                        if (index != -1)
+                        {
+                            feed.ScrollToItem(NSIndexPath.FromItemSection(index, 0), UICollectionViewScrollPosition.CenteredVertically, true);
+                        }    
                     }
                 }
+
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -280,50 +284,60 @@ namespace Askker.App.iOS
 
         private void KeyBoardUpNotification(NSNotification notification)
         {
-            // get the keyboard size
-            CGRect r = UIKeyboard.BoundsFromNotification(notification);
-
-            // Find what opened the keyboard
-            foreach (UIView view in this.View.Subviews)
+            if (!moveViewUp)
             {
-                if(view.GetType() == typeof (CommentAreaView)){
-                    foreach (UIView view2 in view.Subviews)
+                // get the keyboard size
+                CGRect r = UIKeyboard.BoundsFromNotification(notification);
+
+                // Find what opened the keyboard
+                foreach (UIView view in this.View.Subviews)
+                {
+                    if (view.GetType() == typeof(CommentAreaView))
                     {
-                        if (view2.IsFirstResponder)
-                            activeview = view2;
+                        foreach (UIView view2 in view.Subviews)
+                        {
+                            if (view2.IsFirstResponder)
+                                activeview = view2;
+                        }
                     }
                 }
-            }
 
-            // Bottom of the controller = initial position + height + offset (relative to the screen)     
-            UIView relativePositionView = UIApplication.SharedApplication.KeyWindow;
-            CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
+                // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
+                UIView relativePositionView = UIApplication.SharedApplication.KeyWindow;
+                CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
 
-            bottom = (float)(relativeFrame.Y + relativeFrame.Height + offset);
+                bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
 
-            // Calculate how far we need to scroll
-            scroll_amount = (float)(r.Height - (View.Frame.Size.Height - bottom));
+                // Calculate how far we need to scroll
+                scroll_amount = (float)(r.Height - (View.Frame.Size.Height - bottom));
 
-            // Perform the scrolling
-            if (scroll_amount > 0)
-            {
+                // Check the necessity of scroll
+                var section = (int)feed.NumberOfSections() - 1;
+                var item = (int)feed.NumberOfItemsInSection(section) - 1;
+                if (item != -1)
+                {
+                    NSIndexPath indexPath = NSIndexPath.FromRowSection(item, section);
+                    lastCommentBottom = (float)feed.GetLayoutAttributesForItem(indexPath).Frame.Y + (float)feed.GetLayoutAttributesForItem(indexPath).Frame.Height + offset;
+                }
+                else
+                {
+                    lastCommentBottom = 0f;
+                }
+
+                // Perform the scrolling
                 moveViewUp = true;
                 ScrollTheView(moveViewUp);
-            }
-            else
-            {
-                moveViewUp = false;
             }
         }
 
         private void KeyBoardDownNotification(NSNotification notification)
         {
-            if (moveViewUp) { ScrollTheView(false); }
+            moveViewUp = false;
+            ScrollTheView(moveViewUp);
         }
 
         private void ScrollTheView(bool move)
         {
-
             // scroll the view up or down
             UIView.BeginAnimations(string.Empty, System.IntPtr.Zero);
             UIView.SetAnimationDuration(0.1);
@@ -332,11 +346,25 @@ namespace Askker.App.iOS
 
             if (move)
             {
-                frame.Y -= scroll_amount;
+                if ((View.Frame.Height - scroll_amount) > lastCommentBottom)
+                {
+                    commentArea.Frame = new CGRect(commentArea.Frame.X, commentArea.Frame.Y - scroll_amount, commentArea.Frame.Width, commentArea.Frame.Height);
+                }
+                else
+                {
+                    frame.Y -= scroll_amount;
+                }
             }
             else
             {
-                frame.Y += scroll_amount;
+                if ((View.Frame.Height - scroll_amount) > lastCommentBottom)
+                {
+                    commentArea.Frame = new CGRect(commentArea.Frame.X, commentArea.Frame.Y + scroll_amount, commentArea.Frame.Width, commentArea.Frame.Height);
+                }
+                else
+                {
+                    frame.Y += scroll_amount;
+                }
                 scroll_amount = 0;
             }
 
