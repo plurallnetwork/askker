@@ -65,11 +65,7 @@ namespace Askker.App.iOS.TableControllers
             }
             else
             {
-                UILabel label = new UILabel(new CoreGraphics.CGRect(0, 0, tableView.Bounds.Size.Width, tableView.Bounds.Size.Height));
-                label.Text = "No results found";
-                label.TextColor = UIColor.Red;
-                label.TextAlignment = UITextAlignment.Center;
-                tableView.BackgroundView = label;
+                tableView.BackgroundView = Utils.GetSystemWarningImage("FindGroupsEmpty");
                 tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
             }
 

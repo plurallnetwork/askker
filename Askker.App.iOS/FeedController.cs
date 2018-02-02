@@ -186,8 +186,20 @@ namespace Askker.App.iOS
 
                 if (surveys.Count > 0)
                 {
+                    feedCollectionView.BackgroundColor = UIColor.FromWhiteAlpha(nfloat.Parse("0.95"), 1);
+                    feedCollectionView.BackgroundView = null;
+
                     feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
                     feedCollectionView.ReloadData();
+                }
+                else
+                {
+                    feedCollectionView.BackgroundColor = UIColor.White;
+
+                    if (filterMine || filterForMe || filterFinished)
+                        feedCollectionView.BackgroundView = Utils.GetSystemWarningImage("FeedClearFilters");
+                    else
+                        feedCollectionView.BackgroundView = Utils.GetSystemWarningImage("FeedNoAnswers");
                 }
 
                 NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUnreadNotificationsCount"), new NSString("true"));
@@ -1096,8 +1108,7 @@ namespace Askker.App.iOS
 
             optionImageView = new UIImageView();
             optionImageView.Image = null;
-            optionImageView.ContentMode = UIViewContentMode.ScaleToFill;
-            optionImageView.Layer.MasksToBounds = true;
+            optionImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
             optionImageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             optionCheckOpacityView = new UIView(new CGRect(0, 0, 270, 220));

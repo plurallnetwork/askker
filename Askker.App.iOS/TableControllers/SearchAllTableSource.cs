@@ -59,7 +59,21 @@ namespace Askker.App.iOS.TableControllers
 
         public override nint NumberOfSections(UITableView tableView)
         {
-            return 1;
+            var numOfSections = 0;
+
+            if (tableItems.Count > 0)
+            {
+                numOfSections = 1;
+                tableView.BackgroundView = null;
+                tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
+            }
+            else
+            {
+                tableView.BackgroundView = Utils.GetSystemWarningImage("FindFriendsEmpty");
+                tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            }
+
+            return numOfSections;
         }
 
         public async void PerformSearch(string searchText)

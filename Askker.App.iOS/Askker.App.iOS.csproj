@@ -26,10 +26,9 @@
     <MtouchDebug>True</MtouchDebug>
     <IOSDebugOverWiFi>False</IOSDebugOverWiFi>
     <IOSDebuggerPort>10000</IOSDebuggerPort>
-    <CodesignKey>iPhone Developer: Alex Tubone (3S64Q987J7)</CodesignKey>
+    <CodesignKey>iPhone Developer: Leandro Oliveira (3WQ4R4AZ44)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>
-    </CodesignProvision>
+    <CodesignProvision>iOS Team Provisioning Profile: com.blinq.Askker.App.iOS</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -535,6 +534,24 @@
     <ImageAsset Include="Resources\Media.xcassets\EmptyCircleText.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FeedClearFilters.imageset\01.02-empty_clear_filters-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FeedClearFilters.imageset\01.02-empty_clear_filters-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FeedClearFilters.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FeedNoAnswers.imageset\01.03-empty_no_answers_to_show-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FeedNoAnswers.imageset\01.03-empty_no_answers_to_show-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FeedNoAnswers.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Female.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -544,6 +561,15 @@
     <ImageAsset Include="Resources\Media.xcassets\Female.imageset\female-x3.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindFriendsEmpty.imageset\08.02-my_Friends_empty-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindFriendsEmpty.imageset\08.02-my_Friends_empty-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindFriendsEmpty.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\FindGroup.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -551,6 +577,15 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\FindGroup.imageset\find-groups-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindGroupsEmpty.imageset\10.00-Find_My_groups-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindGroupsEmpty.imageset\10.00-Find_My_groups-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FindGroupsEmpty.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\Finished.imageset\Contents.json">
@@ -664,6 +699,15 @@
     <ImageAsset Include="Resources\Media.xcassets\MyFriends.imageset\myfriends-x3.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyFriendsEmpty.imageset\08.01-my_Friends_empty-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyFriendsEmpty.imageset\08.01-my_Friends_empty-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyFriendsEmpty.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\MyGroup.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -671,6 +715,15 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\MyGroup.imageset\groups-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyGroupsEmpty.imageset\09.01-my_groups_empty-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyGroupsEmpty.imageset\09.01-my_groups_empty-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\MyGroupsEmpty.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\MySurveys.imageset\Contents.json">

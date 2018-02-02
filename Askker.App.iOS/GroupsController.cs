@@ -109,7 +109,15 @@ namespace Askker.App.iOS
 
             BTProgressHUD.Dismiss();
 
-            TableView.ReloadData();
+            if (userGroups.Count > 0)
+            {
+                TableView.BackgroundView = null;
+                TableView.ReloadData();
+            }
+            else
+            {
+                TableView.BackgroundView = Utils.GetSystemWarningImage("MyGroupsEmpty");
+            }
         }
 
         [Export("searchBarSearchButtonClicked:")]
@@ -120,6 +128,15 @@ namespace Askker.App.iOS
 
         public override nint RowsInSection(UITableView tableView, nint section)
         {
+            if (userGroups.Count > 0)
+            {
+                tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
+            }
+            else
+            {
+                tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            }
+
             return userGroups.Count;
         }
 

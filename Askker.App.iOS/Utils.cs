@@ -387,5 +387,13 @@ namespace Askker.App.iOS
                 Console.WriteLine("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath + " removed from cache");
             });
         }
+
+        public static UIImageView GetSystemWarningImage(string bundleName)
+        {
+            UIImageView system = new UIImageView(UIImage.FromBundle(bundleName));
+            system.ContentMode = UIViewContentMode.Center;
+
+            return system;
         }
+    }
 }
