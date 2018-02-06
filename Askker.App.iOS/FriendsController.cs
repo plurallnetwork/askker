@@ -29,11 +29,6 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
 
-            this.EdgesForExtendedLayout = UIRectEdge.None;
-            this.ExtendedLayoutIncludesOpaqueBars = false;
-            this.AutomaticallyAdjustsScrollViewInsets = false;
-            this.NavigationController.NavigationBar.Translucent = false;
-
             UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
             {
                 ForegroundColor = UIColor.FromRGB(90, 89, 89)
@@ -52,7 +47,7 @@ namespace Askker.App.iOS
                 DimsBackgroundDuringPresentation = false,
                 WeakSearchResultsUpdater = this
             };
-
+            searchController.HidesNavigationBarDuringPresentation = false;
             searchController.SearchBar.SizeToFit();
             TableView.TableHeaderView = searchController.SearchBar;
             TableView.SetContentOffset(new CGPoint(0, 56), true);
