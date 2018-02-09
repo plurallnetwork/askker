@@ -200,13 +200,12 @@ namespace Askker.App.iOS
                 }
 
                 CreateSurveyController.SurveyModel.targetAudience = targetAudienceItems[indexPath.Row].TargetAudience.ToString();
-                
 
-                if (createSurveyShareStep.tableSource != null)
-                {
-                    createSurveyShareStep.tableSource.DeselectAll(createSurveyShareStep._shareStepView.ShareTable);
-                }
-                
+                //if (createSurveyShareStep.tableSource != null)
+                //{
+                //    createSurveyShareStep.tableSource.DeselectAll(createSurveyShareStep._shareStepView.ShareTable);
+                //}
+
                 //reset table source
                 createSurveyShareStep.tableSource = null;
                 createSurveyShareStep._shareStepView.ShareTable.BackgroundColor = UIColor.Clear;
@@ -215,7 +214,6 @@ namespace Askker.App.iOS
                 createSurveyShareStep._shareStepView.ShareTable.ReloadData();
 
                 this.createSurveyShareStep._shareStepView.ShareTable.Hidden = true;
-                
 
                 if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
                 {
