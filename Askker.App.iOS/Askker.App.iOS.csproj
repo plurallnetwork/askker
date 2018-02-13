@@ -211,8 +211,9 @@
     <Compile Include="ShareStepView.designer.cs">
       <DependentUpon>ShareStepView.cs</DependentUpon>
     </Compile>
-    <Compile Include="TableControllers\SearchProfileTableItem.cs" />
-    <Compile Include="TableControllers\SearchProfileTableViewController.cs" />
+    <Compile Include="TableControllers\ProfileListTableViewController.cs" />
+    <Compile Include="TableControllers\ProfileTableItem.cs" />
+    <Compile Include="TableControllers\ProfileSearchTableViewController.cs" />
     <Compile Include="TableControllers\SurveyOptionTableItem.cs" />
     <Compile Include="TableControllers\SurveyOptionTableSource.cs" />
     <Compile Include="TableControllers\SurveyShareTableItem.cs" />

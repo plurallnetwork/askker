@@ -203,7 +203,7 @@ namespace Askker.App.iOS
                 if (userGroupMembersAdminController != null)
                 {
                     userGroupMembersAdminController.groupId = groupId;
-                    userGroupMembersAdminController.groupProfilePicture = groupProfilePicture;
+                    //userGroupMembersAdminController.groupProfilePicture = groupProfilePicture;
                     navigationController.PushViewController(userGroupMembersAdminController, true);
                 }
             }
@@ -213,7 +213,7 @@ namespace Askker.App.iOS
                 if (userGroupMembersOtherController != null)
                 {
                     userGroupMembersOtherController.groupId = groupId;
-                    userGroupMembersOtherController.groupProfilePicture = groupProfilePicture;
+                    //userGroupMembersOtherController.groupProfilePicture = groupProfilePicture;
                     navigationController.PushViewController(userGroupMembersOtherController, true);
                 }
             }

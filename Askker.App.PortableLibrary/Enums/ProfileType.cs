@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace Askker.App.PortableLibrary.Enums
 {
-    public enum SearchProfileType
+    public enum ProfileType
     {
-        Friends,
-        Groups
+        ListFriends,
+        FindFriends,
+        ListGroups,
+        FindGroups,
+        ListGroupMembers
     }
 }

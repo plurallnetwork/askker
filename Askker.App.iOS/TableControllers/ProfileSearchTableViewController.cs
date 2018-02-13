@@ -1,6 +1,7 @@
 ﻿using Askker.App.iOS.CustomViewComponents;
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
+using CoreGraphics;
 using Foundation;
 using System;
 using System.Collections.Generic;
@@ -8,20 +9,21 @@ using UIKit;
 
 namespace Askker.App.iOS.TableControllers
 {
-    public class SearchProfileTableViewController : CustomUITableViewController
+    public class ProfileSearchTableViewController : CustomUITableViewController
     {
         protected const string cellIdentifier = "cellId";
-        public List<SearchProfileTableItem> tableItems { get; set; }
-        public SearchProfileType searchProfileType { get; set; }
+        public List<ProfileTableItem> tableItems { get; set; }
+        public UISearchBar searchBar { get; set; }
+        public ProfileType profileType { get; set; }
         public UINavigationController navigationController { get; set; }
 
-        public SearchProfileTableViewController()
+        public ProfileSearchTableViewController()
         {
         }
 
-        public SearchProfileTableViewController(SearchProfileType searchProfileType, UINavigationController navigationController)
+        public ProfileSearchTableViewController(ProfileType profileType, UINavigationController navigationController)
         {
-            this.searchProfileType = searchProfileType;
+            this.profileType = profileType;
             this.navigationController = navigationController;
         }
 
@@ -29,10 +31,74 @@ namespace Askker.App.iOS.TableControllers
         {
             base.ViewDidLoad();
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
+
+            tableItems = new List<ProfileTableItem>();
+
+            //Declare the search bar and add it to the header of the table
+            searchBar = new UISearchBar();
+            searchBar.SizeToFit();
+            searchBar.AutocorrectionType = UITextAutocorrectionType.No;
+            searchBar.AutocapitalizationType = UITextAutocapitalizationType.None;
+            searchBar.Placeholder = "Type at least 3 characters";
+            searchBar.OnEditingStarted += (sender, e) =>
+            {
+                searchBar.ShowsCancelButton = true;
+            };
+            searchBar.OnEditingStopped += (sender, e) =>
+            {
+                searchBar.ShowsCancelButton = false;
+            };
+            searchBar.CancelButtonClicked += (sender, e) =>
+            {
+                cleanTable();
+                searchBar.ShowsCancelButton = false;
+                searchBar.Text = "";
+                searchBar.ResignFirstResponder();
+            };
+            searchBar.TextChanged += (sender, e) =>
+            {
+                //this is the method that is called when the user searches
+                searchTable();
+            };
+            searchBar.SearchButtonClicked += (sender, e) =>
+            {
+                searchBar.ResignFirstResponder();
+            };
+
+            foreach (UIView subView in searchBar.Subviews)
+            {
+                foreach (UIView secondLevelSubview in subView.Subviews)
+                {
+                    if (secondLevelSubview is UITextField)
+                    {
+                        UITextField searchBarTextField = (UITextField)secondLevelSubview;
+
+                        //set font color here
+                        searchBarTextField.TextColor = UIColor.FromRGB(90, 89, 89);
+                        break;
+                    }
+                }
+            }
+
             TableView.RegisterClassForCellReuse(typeof(ProfileTableViewCell), cellIdentifier);
             TableView.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
+            TableView.Frame = new CGRect(0, 0, View.Bounds.Width, View.Bounds.Height - 20);
+            TableView.TableHeaderView = searchBar;
+        }
 
-            tableItems = new List<SearchProfileTableItem>();
+        private void cleanTable()
+        {
+            tableItems = new List<ProfileTableItem>();
+            TableView.ReloadData();
+        }
+
+        private void searchTable()
+        {
+            //perform the search, and refresh the table with the results
+            if (searchBar.Text.Length >= 3)
+            {
+                PerformSearch(searchBar.Text);
+            }
         }
 
         public override nint RowsInSection(UITableView tableView, nint section)
@@ -44,11 +110,11 @@ namespace Askker.App.iOS.TableControllers
             }
             else
             {
-                if (SearchProfileType.Friends.Equals(searchProfileType))
+                if (ProfileType.FindFriends.Equals(profileType))
                 {
                     tableView.BackgroundView = Utils.GetSystemWarningImage("FindFriendsEmpty");
                 }
-                else if (SearchProfileType.Groups.Equals(searchProfileType))
+                else if (ProfileType.FindGroups.Equals(profileType))
                 {
                     tableView.BackgroundView = Utils.GetSystemWarningImage("FindGroupsEmpty");
                 }
@@ -70,12 +136,14 @@ namespace Askker.App.iOS.TableControllers
 
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            if (SearchProfileType.Friends.Equals(searchProfileType))
+            if (ProfileType.FindFriends.Equals(profileType))
             {
                 Utils.OpenUserProfile(this.navigationController, this.tableItems[indexPath.Row].Id);
             }
-            else if (SearchProfileType.Groups.Equals(searchProfileType))
+            else if (ProfileType.FindGroups.Equals(profileType))
             {
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnText"), null);
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("ChangeBackBtnTextGroups"), null);
                 Utils.OpenGroupProfile(this.navigationController, this.tableItems[indexPath.Row].Id);
             }
         }
@@ -85,11 +153,11 @@ namespace Askker.App.iOS.TableControllers
             return 60;
         }
 
-        protected void ConfigureCell(ProfileTableViewCell cell, SearchProfileTableItem tableItem)
+        protected void ConfigureCell(ProfileTableViewCell cell, ProfileTableItem tableItem)
         {
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
 
-            if (SearchProfileType.Friends.Equals(searchProfileType))
+            if (ProfileType.FindFriends.Equals(profileType))
             {
                 cell.profileImageView.Image = UIImage.FromBundle("Profile");
 
@@ -98,7 +166,7 @@ namespace Askker.App.iOS.TableControllers
                     Utils.SetImageFromNSUrlSession(tableItem.ProfilePicture, cell.profileImageView, this, PictureType.Profile);
                 }
             }
-            else if (SearchProfileType.Groups.Equals(searchProfileType))
+            else if (ProfileType.FindGroups.Equals(profileType))
             {
                 cell.profileImageView.Image = UIImage.FromBundle("Group");
 
@@ -118,24 +186,24 @@ namespace Askker.App.iOS.TableControllers
             {
                 try
                 {
-                    tableItems = new List<SearchProfileTableItem>();
+                    tableItems = new List<ProfileTableItem>();
 
-                    if (SearchProfileType.Friends.Equals(searchProfileType))
+                    if (ProfileType.FindFriends.Equals(profileType))
                     {
                         var users = await new LoginManager().SearchUsersByName(LoginController.tokenModel.access_token, searchText);
 
                         foreach (var user in users)
                         {
-                            tableItems.Add(new SearchProfileTableItem(user.id, user.name, user.profilePicturePath));
+                            tableItems.Add(new ProfileTableItem(user.id, user.name, user.profilePicturePath));
                         }
                     }
-                    else if (SearchProfileType.Groups.Equals(searchProfileType))
+                    else if (ProfileType.FindGroups.Equals(profileType))
                     {
                         var groups = await new UserGroupManager().SearchGroupsByName(LoginController.tokenModel.access_token, searchText);
 
                         foreach (var group in groups)
                         {
-                            tableItems.Add(new SearchProfileTableItem(group.userId + group.creationDate, group.name, group.profilePicture));
+                            tableItems.Add(new ProfileTableItem(group.userId + group.creationDate, group.name, group.profilePicture));
                         }
                     }
 

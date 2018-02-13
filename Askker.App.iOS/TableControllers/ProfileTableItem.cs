@@ -2,7 +2,7 @@
 
 namespace Askker.App.iOS.TableControllers
 {
-    public class SearchProfileTableItem
+    public class ProfileTableItem
     {
         public string Id { get; set; }
 
@@ -24,20 +24,20 @@ namespace Askker.App.iOS.TableControllers
         }
         protected UITableViewCellAccessory cellAccessory = UITableViewCellAccessory.None;
 
-        public SearchProfileTableItem() { }
+        public ProfileTableItem() { }
 
-        public SearchProfileTableItem(string name)
+        public ProfileTableItem(string name)
         {
             Name = name;
         }
 
-        public SearchProfileTableItem(string name, string profilePicture)
+        public ProfileTableItem(string name, string profilePicture)
         {
             Name = name;
             ProfilePicture = profilePicture;
         }
 
-        public SearchProfileTableItem(string id, string name, string profilePicture)
+        public ProfileTableItem(string id, string name, string profilePicture)
         {
             Id = id;
             Name = name;
