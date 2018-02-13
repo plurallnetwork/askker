@@ -1,8 +1,6 @@
 ﻿using Askker.App.iOS.TableControllers;
-using Askker.App.PortableLibrary.Business;
-using Askker.App.PortableLibrary.Models;
+using Askker.App.PortableLibrary.Enums;
 using CoreGraphics;
-using Foundation;
 using System;
 using System.Collections.Generic;
 using UIKit;
@@ -15,12 +13,10 @@ namespace Askker.App.iOS
         {
         }
 
-        public static UITableView table { get; set; }
-        SearchAllTableSource tableSource;
-        List<SearchAllTableItem> tableItems;
-        UISearchBar searchBar;
+        public SearchProfileTableViewController tableController { get; set; }
+        public UISearchBar searchBar { get; set; }
 
-        public override async void ViewDidLoad()
+        public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
@@ -68,31 +64,26 @@ namespace Askker.App.iOS
                 }
             }
 
-            table = new UITableView(new CGRect(0, 0, View.Bounds.Width, View.Bounds.Height - 20));
-            //table.AutoresizingMask = UIViewAutoresizing.All;
-            tableItems = new List<SearchAllTableItem>();
-            
-            tableSource = new SearchAllTableSource(tableItems, this.NavigationController);
-            table.Source = tableSource;
-            table.TableHeaderView = searchBar;
-            Add(table);
+            tableController = new SearchProfileTableViewController(SearchProfileType.Friends, NavigationController);
+            tableController.TableView.Frame = new CGRect(0, 0, View.Bounds.Width, View.Bounds.Height - 20);
+            tableController.TableView.TableHeaderView = searchBar;
+            Add(tableController.TableView);
+
+            tableController.TableView.ReloadData();
         }
 
         private void cleanTable()
         {
-            tableItems = new List<SearchAllTableItem>();
-
-            table.Source = new SearchAllTableSource(tableItems, this.NavigationController);
-            table.ReloadData();
+            tableController.tableItems = new List<SearchProfileTableItem>();
+            tableController.TableView.ReloadData();
         }
 
         private void searchTable()
         {
             //perform the search, and refresh the table with the results
-            if(searchBar.Text.Length >= 3)
+            if (searchBar.Text.Length >= 3)
             {
-                tableSource.PerformSearch(searchBar.Text);
-                table.ReloadData();
+                tableController.PerformSearch(searchBar.Text);
             }
         }
 

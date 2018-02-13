@@ -138,6 +138,7 @@
     <Compile Include="CustomViewComponents\SurveyOptionCustomCell.cs" />
     <Compile Include="CustomViewComponents\SurveyShareCustomCell.cs" />
     <Compile Include="CustomViewComponents\UIButtonCustomBorder.cs" />
+    <Compile Include="CustomViewComponents\ProfileTableViewCell.cs" />
     <Compile Include="FeedController.cs" />
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>
@@ -210,10 +211,8 @@
     <Compile Include="ShareStepView.designer.cs">
       <DependentUpon>ShareStepView.cs</DependentUpon>
     </Compile>
-    <Compile Include="TableControllers\SearchAllTableItem.cs" />
-    <Compile Include="TableControllers\SearchAllTableSource.cs" />
-    <Compile Include="TableControllers\SearchUserGroupsTableItem.cs" />
-    <Compile Include="TableControllers\SearchUserGroupsTableSource.cs" />
+    <Compile Include="TableControllers\SearchProfileTableItem.cs" />
+    <Compile Include="TableControllers\SearchProfileTableViewController.cs" />
     <Compile Include="TableControllers\SurveyOptionTableItem.cs" />
     <Compile Include="TableControllers\SurveyOptionTableSource.cs" />
     <Compile Include="TableControllers\SurveyShareTableItem.cs" />

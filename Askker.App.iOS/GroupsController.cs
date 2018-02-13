@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Business;
+﻿using Askker.App.iOS.CustomViewComponents;
+using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using BigTed;
@@ -137,7 +138,7 @@ namespace Askker.App.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(cellIdentifier) as MyGroupsTableViewCell;
+            var cell = tableView.DequeueReusableCell(cellIdentifier) as ProfileTableViewCell;
 
             ConfigureCell(cell, userGroups[indexPath.Row]);
 
@@ -209,13 +210,14 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
-            TableView.RegisterClassForCellReuse(typeof(MyGroupsTableViewCell), cellIdentifier);
+            TableView.RegisterClassForCellReuse(typeof(ProfileTableViewCell), cellIdentifier);
             TableView.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
         }
 
-        protected void ConfigureCell(MyGroupsTableViewCell cell, UserGroupModel userGroup)
+        protected void ConfigureCell(ProfileTableViewCell cell, UserGroupModel userGroup)
         {
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
+            cell.profileImageView.Image = UIImage.FromBundle("Group");
 
             if (userGroup.profilePicture != null)
             {
@@ -223,35 +225,6 @@ namespace Askker.App.iOS
             }
 
             cell.nameLabel.Text = userGroup.name;
-        }
-    }
-
-    public partial class MyGroupsTableViewCell : UITableViewCell
-    {
-        public UIImageView profileImageView { get; set; }
-        public UILabel nameLabel { get; set; }
-
-        protected MyGroupsTableViewCell(IntPtr handle) : base(handle)
-        {
-            profileImageView = new UIImageView();
-            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
-            profileImageView.Layer.CornerRadius = 22;
-            profileImageView.Layer.MasksToBounds = true;
-            profileImageView.TranslatesAutoresizingMaskIntoConstraints = false;
-            profileImageView.Image = UIImage.FromBundle("Group");
-
-            nameLabel = new UILabel();
-            nameLabel.Font = UIFont.SystemFontOfSize(14);
-            nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
-
-            ContentView.Add(profileImageView);
-            ContentView.Add(nameLabel);
-
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]-8-|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel));
-
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]", new NSLayoutFormatOptions(), "v0", profileImageView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-18-[v0(22)]", new NSLayoutFormatOptions(), "v0", nameLabel));
         }
     }
 
@@ -266,7 +239,7 @@ namespace Askker.App.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(cellIdentifier) as MyGroupsTableViewCell;
+            var cell = tableView.DequeueReusableCell(cellIdentifier) as ProfileTableViewCell;
 
             var userGroup = filteredGroups[indexPath.Row];
 

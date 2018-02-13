@@ -1,8 +1,8 @@
-﻿using Askker.App.PortableLibrary.Business;
+﻿using Askker.App.iOS.CustomViewComponents;
+using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using BigTed;
-using CoreFoundation;
 using CoreGraphics;
 using Foundation;
 using System;
@@ -119,7 +119,7 @@ namespace Askker.App.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(cellIdentifier) as MyFriendsTableViewCell;
+            var cell = tableView.DequeueReusableCell(cellIdentifier) as ProfileTableViewCell;
 
             ConfigureCell(cell, userFriends[indexPath.Row]);
 
@@ -184,13 +184,14 @@ namespace Askker.App.iOS
         {
             base.ViewDidLoad();
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
-            TableView.RegisterClassForCellReuse(typeof(MyFriendsTableViewCell), cellIdentifier);
+            TableView.RegisterClassForCellReuse(typeof(ProfileTableViewCell), cellIdentifier);
             TableView.SeparatorInset = new UIEdgeInsets(0, 10, 0, 10);
         }
 
-        protected void ConfigureCell(MyFriendsTableViewCell cell, UserFriendModel userFriend)
+        protected void ConfigureCell(ProfileTableViewCell cell, UserFriendModel userFriend)
         {
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
+            cell.profileImageView.Image = UIImage.FromBundle("Profile");
 
             if (userFriend.profilePicture != null)
             {
@@ -198,35 +199,6 @@ namespace Askker.App.iOS
             }
 
             cell.nameLabel.Text = userFriend.name;
-        }
-    }
-
-    public partial class MyFriendsTableViewCell : UITableViewCell
-    {
-        public UIImageView profileImageView { get; set; }
-        public UILabel nameLabel { get; set; }
-
-        protected MyFriendsTableViewCell(IntPtr handle) : base(handle)
-        {
-            profileImageView = new UIImageView();
-            profileImageView.ContentMode = UIViewContentMode.ScaleAspectFill;
-            profileImageView.Layer.CornerRadius = 22;
-            profileImageView.Layer.MasksToBounds = true;
-            profileImageView.TranslatesAutoresizingMaskIntoConstraints = false;
-            profileImageView.Image = UIImage.FromBundle("Profile");
-
-            nameLabel = new UILabel();
-            nameLabel.Font = UIFont.SystemFontOfSize(14);
-            nameLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
-
-            ContentView.Add(profileImageView);
-            ContentView.Add(nameLabel);
-
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]-8-|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel));
-
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]", new NSLayoutFormatOptions(), "v0", profileImageView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-18-[v0(22)]", new NSLayoutFormatOptions(), "v0", nameLabel));
         }
     }
 
@@ -241,7 +213,7 @@ namespace Askker.App.iOS
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = tableView.DequeueReusableCell(cellIdentifier) as MyFriendsTableViewCell;
+            var cell = tableView.DequeueReusableCell(cellIdentifier) as ProfileTableViewCell;
 
             var userFriend = filteredFriends[indexPath.Row];
 

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UIKit;
+﻿using UIKit;
 
 namespace Askker.App.iOS.TableControllers
 {
-    public class SearchAllTableItem
+    public class SearchProfileTableItem
     {
         public string Id { get; set; }
 
-        public string Title { get; set; }
+        public string Name { get; set; }
 
-        public string ImageName { get; set; }
+        public string ProfilePicture { get; set; }
 
         public UITableViewCellStyle CellStyle
         {
@@ -27,22 +24,24 @@ namespace Askker.App.iOS.TableControllers
         }
         protected UITableViewCellAccessory cellAccessory = UITableViewCellAccessory.None;
 
-        public SearchAllTableItem() { }
+        public SearchProfileTableItem() { }
 
-        public SearchAllTableItem(string title)
-        { Title = title; }
-
-        public SearchAllTableItem(string title, string imageName)
+        public SearchProfileTableItem(string name)
         {
-            Title = title;
-            ImageName = imageName;
+            Name = name;
         }
 
-        public SearchAllTableItem(string id, string title, string imageName)
+        public SearchProfileTableItem(string name, string profilePicture)
+        {
+            Name = name;
+            ProfilePicture = profilePicture;
+        }
+
+        public SearchProfileTableItem(string id, string name, string profilePicture)
         {
             Id = id;
-            Title = title;
-            ImageName = imageName;
+            Name = name;
+            ProfilePicture = profilePicture;
         }
     }
 }
