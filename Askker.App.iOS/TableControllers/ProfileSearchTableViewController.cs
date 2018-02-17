@@ -186,11 +186,11 @@ namespace Askker.App.iOS.TableControllers
             {
                 try
                 {
-                    tableItems = new List<ProfileTableItem>();
-
                     if (ProfileType.FindFriends.Equals(profileType))
                     {
                         var users = await new LoginManager().SearchUsersByName(LoginController.tokenModel.access_token, searchText);
+
+                        tableItems = new List<ProfileTableItem>();
 
                         foreach (var user in users)
                         {
@@ -200,6 +200,8 @@ namespace Askker.App.iOS.TableControllers
                     else if (ProfileType.FindGroups.Equals(profileType))
                     {
                         var groups = await new UserGroupManager().SearchGroupsByName(LoginController.tokenModel.access_token, searchText);
+
+                        tableItems = new List<ProfileTableItem>();
 
                         foreach (var group in groups)
                         {

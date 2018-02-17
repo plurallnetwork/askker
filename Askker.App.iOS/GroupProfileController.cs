@@ -31,7 +31,7 @@ namespace Askker.App.iOS
 
             imageCache.RemoveAllObjects();
 
-            profileImageView.ClipsToBounds = true;
+            profileImageView.Layer.MasksToBounds = true;
             profileImageView.Image = null;
 
             groupModel = await new UserGroupManager().GetGroupById(LoginController.tokenModel.access_token, groupId);
