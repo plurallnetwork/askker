@@ -9,12 +9,14 @@
     {
       "scale": "3x",
       "size": "20x20",
-      "idiom": "iphone"
+      "idiom": "iphone",
+      "filename": "app_icon_60.png"
     },
     {
       "scale": "1x",
       "size": "20x20",
-      "idiom": "ipad"
+      "idiom": "ipad",
+      "filename": "app_icon_20.png"
     },
     {
       "scale": "2x",
