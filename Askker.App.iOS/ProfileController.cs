@@ -231,6 +231,7 @@ namespace Askker.App.iOS
                 nameButton.SetImage(UIImage.FromBundle("EditProfile"), UIControlState.Normal);
                 enableButtons("nameButton");
                 nameText.Enabled = false;
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUserName"), null);
                 Update();
             }
             else
