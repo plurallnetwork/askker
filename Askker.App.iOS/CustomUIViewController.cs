@@ -11,7 +11,7 @@ namespace Askker.App.iOS
     public class CustomUIViewController : UIViewController
     {
         private UIInterfaceOrientationMask orientationMask = UIInterfaceOrientationMask.Portrait;
-
+        
         public CustomUIViewController(IntPtr handle) : base(handle)
         {
         }

@@ -26,9 +26,10 @@
     <MtouchDebug>True</MtouchDebug>
     <IOSDebugOverWiFi>False</IOSDebugOverWiFi>
     <IOSDebuggerPort>10000</IOSDebuggerPort>
-    <CodesignKey>iPhone Developer: Leandro Oliveira (3WQ4R4AZ44)</CodesignKey>
+    <CodesignKey>iPhone Developer: Alex Tubone (3S64Q987J7)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>iOS Team Provisioning Profile: com.blinq.Askker.App.iOS</CodesignProvision>
+    <CodesignProvision>
+    </CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -116,6 +117,7 @@
     <Compile Include="CreateSurveyController.designer.cs">
       <DependentUpon>CreateSurveyController.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreateSurveyFirstStep.cs" />
     <Compile Include="CreateSurveyOptionsStep.cs" />
     <Compile Include="CreateSurveyOptionsStep.designer.cs">
       <DependentUpon>CreateSurveyOptionsStep.cs</DependentUpon>
@@ -402,6 +404,24 @@
     <ImageAsset Include="Resources\Media.xcassets\AddFriends.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AddImage.imageset\button-add-image-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AddImage.imageset\button-add-image-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AddImage.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AddLine.imageset\add-line-survey-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AddLine.imageset\add-line-survey-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\AddLine.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\AddSurvey.imageset\add-x2.png">
       <Visible>false</Visible>
     </ImageAsset>
@@ -481,6 +501,15 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\CloseMenu.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\DeleteOption.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\DeleteOption.imageset\delete-survey-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\DeleteOption.imageset\delete-survey-x3.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\DoneEditProfile.imageset\Contents.json">
@@ -640,6 +669,24 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\ImagePlaceholder.imageset\placeholder@2x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ImageSurveyActive.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ImageSurveyActive.imageset\image-survey-active-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ImageSurveyActive.imageset\image-survey-active-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ImageSurveyInactive.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ImageSurveyInactive.imageset\image-survey-disable-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\ImageSurveyInactive.imageset\image-survey-disable-x3.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\LaunchImages.launchimage\Contents.json">
@@ -850,6 +897,24 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\TextOption.imageset\text-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\TextSurveyActive.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\TextSurveyActive.imageset\list-survey-active-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\TextSurveyActive.imageset\list-survey-active-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\TextSurveyInactive.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\TextSurveyInactive.imageset\list-survey-disable-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\TextSurveyInactive.imageset\list-survey-disable-x3.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\ValidateSurvey.imageset\Contents.json">

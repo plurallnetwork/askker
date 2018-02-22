@@ -346,7 +346,7 @@ namespace Askker.App.iOS
         {
             var steps = new List<IMultiStepProcessStep>
                 {
-                    new CreateSurveyQuestionStep(),
+                    new CreateSurveyFirstStep(this.NavigationController),
                     new CreateSurveyOptionsStep(),
                     new CreateSurveyShareStep()
                 };
