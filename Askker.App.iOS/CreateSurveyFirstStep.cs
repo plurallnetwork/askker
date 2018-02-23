@@ -26,14 +26,16 @@ namespace Askker.App.iOS
         private NSObject removeRowObserver;
         private NSObject updateRowObserver;
         private NSObject updateCellObserver;
+        private NSObject updateTextCellObserver;
+        private NSObject deleteCellObserver;
 
         static NSString imageCellId = new NSString("ImageCellId");
 
         private UINavigationController navigationController;
 
 
-        List<TextOptionTableItem> tableItems;
-        List<ImageOptionTableItem> collectionViewItems;
+        static List<TextOptionTableItem> tableItems;
+        static List<ImageOptionTableItem> collectionViewItems;
 
         UITextField questionText;
         UIView questionSeparator;
@@ -64,6 +66,16 @@ namespace Askker.App.iOS
             this.navigationController = navigationController;
         }
 
+        public static List<TextOptionTableItem> GetTextItems()
+        {
+            return tableItems;
+        }
+
+        public static List<ImageOptionTableItem> GetImageItems()
+        {
+            return collectionViewItems;
+        }
+
         public override void ViewDidUnload()
         {
             base.ViewDidUnload();
@@ -86,6 +98,16 @@ namespace Askker.App.iOS
             if (updateCellObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(updateCellObserver);
+            }
+
+            if (deleteCellObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(deleteCellObserver);
+            }
+
+            if (updateTextCellObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(updateTextCellObserver);
             }
         }
 
@@ -116,8 +138,6 @@ namespace Askker.App.iOS
             textTableView = new UITableView();
 
             imageCollectionView = new UICollectionView(new CGRect(), new PBCollectionViewWaterfallLayout());
-            
-
 
             View.Add(questionText);
             View.Add(questionSeparator);
@@ -170,10 +190,20 @@ namespace Askker.App.iOS
         }
 
         [Export("TextButtonBtn:")]
-        private void TextButtonBtn(UIButton button)
+        private async void TextButtonBtn(UIButton button)
         {
             if (CreateSurveyController.SurveyModel.type.Equals(SurveyType.Image.ToString()))
             {
+                if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
+                {
+                    nint alertBtn = await Utils.ShowAlert("Options", "All image options will be deleted. Continue?", "Ok", "Cancel");
+
+                    if (alertBtn == 1)
+                    {
+                        return;
+                    }
+                }
+
                 CreateSurveyController.SurveyModel.type = SurveyType.Text.ToString();
 
                 textTableView.Hidden = false;
@@ -189,21 +219,34 @@ namespace Askker.App.iOS
 
                 textBtn.SetImage(UIImage.FromBundle("TextSurveyActive"), UIControlState.Normal);
                 imageBtn.SetImage(UIImage.FromBundle("ImageSurveyInactive"), UIControlState.Normal);
-            }            
+
+                CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+            }
         }
 
         [Export("ImageButtonBtn:")]
-        private void ImageButtonBtn(UIButton button)
+        private async void ImageButtonBtn(UIButton button)
         {
             if (CreateSurveyController.SurveyModel.type.Equals(SurveyType.Text.ToString()))
             {
+                if (tableItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
+                {
+                    nint alertBtn = await Utils.ShowAlert("Options", "All text options will be deleted. Continue?", "Ok", "Cancel");
+
+                    if (alertBtn == 1)
+                    {
+                        return;
+                    }
+                }
+
                 CreateSurveyController.SurveyModel.type = SurveyType.Image.ToString();
 
                 textTableView.Hidden = true;
                 imageCollectionView.Hidden = false;
 
                 collectionViewItems = new List<ImageOptionTableItem>();
-                collectionViewItems.Add(new ImageOptionTableItem(UIImage.FromBundle("AddImage"), "", OptionType.Insert));
+                collectionViewItems.Add(new ImageOptionTableItem(UIImage.FromBundle("AddImage"), null, "", OptionType.Insert));
                 collectionViewSource = new ImageOptionSource(collectionViewItems, this.navigationController);
                 imageCollectionView.Source = collectionViewSource;
                 imageCollectionView.ReloadData();
@@ -218,7 +261,10 @@ namespace Askker.App.iOS
 
                 textBtn.SetImage(UIImage.FromBundle("TextSurveyInactive"), UIControlState.Normal);
                 imageBtn.SetImage(UIImage.FromBundle("ImageSurveyActive"), UIControlState.Normal);
-            }            
+
+                CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+            }
         }
 
         private void AddNewRow(NSNotification notification)
@@ -227,6 +273,8 @@ namespace Askker.App.iOS
             tableSource = new TextOptionSource(tableItems, this);
             textTableView.Source = tableSource;
             textTableView.ReloadData();
+
+            UpdateNextButton();
         }
 
         private void RemoveRow(NSNotification notification)
@@ -236,6 +284,8 @@ namespace Askker.App.iOS
             tableSource = new TextOptionSource(tableItems, this);
             textTableView.Source = tableSource;
             textTableView.ReloadData();
+
+            UpdateNextButton();
         }
 
         private void UpdateRow(NSNotification notification)
@@ -247,7 +297,9 @@ namespace Askker.App.iOS
             tableItems.Insert(index, new TextOptionTableItem(text, OptionType.Option));
             tableSource = new TextOptionSource(tableItems, this);
             textTableView.Source = tableSource;
-            textTableView.ReloadData();            
+            textTableView.ReloadData();
+
+            UpdateNextButton();
         }
 
         private void UpdateCell(NSNotification notification)
@@ -259,32 +311,103 @@ namespace Askker.App.iOS
             System.Runtime.InteropServices.Marshal.Copy(image.Bytes, myByteArray, 0, Convert.ToInt32(image.Length));
 
             collectionViewItems.RemoveAt(index);
-            collectionViewItems.Insert(index, new ImageOptionTableItem(UIImage.LoadFromData(NSData.FromArray(myByteArray)), "", OptionType.Option));
+            collectionViewItems.Insert(index, new ImageOptionTableItem(UIImage.LoadFromData(NSData.FromArray(myByteArray)), myByteArray, "", OptionType.Option));
             if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Insert)).ToList().Count() <= 0)
             {
-                collectionViewItems.Add(new ImageOptionTableItem(UIImage.FromBundle("AddImage"), "", OptionType.Insert));
+                collectionViewItems.Add(new ImageOptionTableItem(UIImage.FromBundle("AddImage"), null, "", OptionType.Insert));
             }
             collectionViewSource = new ImageOptionSource(collectionViewItems, this.navigationController);
             imageCollectionView.Source = collectionViewSource;
             imageCollectionView.ReloadData();
-
-            //SetupLayout();
-            //imageCollectionView.CollectionViewLayout = collectionViewLayout;
-            //UpdateLayout();
 
             CalculateCellHeights();
             var layout = imageCollectionView.CollectionViewLayout as PBCollectionViewWaterfallLayout;
             var vdelegate = layout.Delegate as ImageOptionDelegate;
             vdelegate.cellHeights = cellHeights;
             layout.UpdateLayout();
+
+            UpdateNextButton();
         }
 
-        public override void ViewDidLoad()
+        private void UpdateTextCell(NSNotification notification)
+        {
+            var dict = notification.Object as NSDictionary;
+            var index = Int32.Parse(dict[new NSString("index")].ToString());
+            var text = dict[new NSString("value")].ToString();
+
+            collectionViewItems.ElementAt(index).Text = text;
+            collectionViewSource = new ImageOptionSource(collectionViewItems, this.navigationController);
+            imageCollectionView.Source = collectionViewSource;
+            imageCollectionView.ReloadData();
+
+            CalculateCellHeights();
+            var layout = imageCollectionView.CollectionViewLayout as PBCollectionViewWaterfallLayout;
+            var vdelegate = layout.Delegate as ImageOptionDelegate;
+            vdelegate.cellHeights = cellHeights;
+            layout.UpdateLayout();
+
+            UpdateNextButton();
+        }
+
+        private void DeleteCell(NSNotification notification)
+        {
+            var index = Int32.Parse(notification.Object.ToString());
+            collectionViewItems.RemoveAt(index);
+            collectionViewSource = new ImageOptionSource(collectionViewItems, this.navigationController);
+            imageCollectionView.Source = collectionViewSource;
+            imageCollectionView.ReloadData();
+
+            CalculateCellHeights();
+            var layout = imageCollectionView.CollectionViewLayout as PBCollectionViewWaterfallLayout;
+            var vdelegate = layout.Delegate as ImageOptionDelegate;
+            vdelegate.cellHeights = cellHeights;
+            layout.UpdateLayout();
+
+            UpdateNextButton();
+        }
+
+        private void UpdateNextButton()
+        {
+            if (!string.IsNullOrWhiteSpace(questionText.Text.Trim()))
+            {
+                if (CreateSurveyController.SurveyModel.type.Equals(SurveyType.Text.ToString()))
+                {
+                    if (tableItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
+                    {
+                        CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                        CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    }
+                    else
+                    {
+                        CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                        CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                    }
+                }
+                else
+                {
+                    if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
+                    {
+                        CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                        CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                    }
+                    else
+                    {
+                        CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                        CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                    }
+                }
+            }
+            else
+            {
+                CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+            }
+        }
+
+        public override async void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
-
+            
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             NSNotificationCenter.DefaultCenter.AddObserver(UITextField.TextFieldTextDidChangeNotification, TextChangedEvent);
@@ -292,28 +415,144 @@ namespace Askker.App.iOS
             removeRowObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("RemoveRow"), RemoveRow);
             updateRowObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateRow"), UpdateRow);
             updateCellObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateCell"), UpdateCell);
+            deleteCellObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("DeleteCell"), DeleteCell);
+            updateTextCellObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateTextCell"), UpdateTextCell);
 
-            imageCollectionView.Hidden = true;
-            
             tableItems = new List<TextOptionTableItem>();
-            tableItems.Add(new TextOptionTableItem("", OptionType.Option));
-            tableItems.Add(new TextOptionTableItem("", OptionType.Option));
-            tableItems.Add(new TextOptionTableItem("Add new option -->", OptionType.Insert));
-            tableSource = new TextOptionSource(tableItems, this);
-            textTableView.Source = tableSource;
-            textTableView.ReloadData();
+            collectionViewItems = new List<ImageOptionTableItem>();
 
-            if (CreateSurveyController.SurveyModel == null)
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+            if (CreateSurveyController.ScreenState == ScreenState.Create.ToString())
             {
-                CreateSurveyController.SurveyModel = new SurveyModel();
-            }
+                textTableView.Hidden = false;
+                imageCollectionView.Hidden = true;
 
-            if (CreateSurveyController.SurveyModel.question == null)
+                tableItems = new List<TextOptionTableItem>();
+                tableItems.Add(new TextOptionTableItem("", OptionType.Option));
+                tableItems.Add(new TextOptionTableItem("", OptionType.Option));
+                tableItems.Add(new TextOptionTableItem("Add new option -->", OptionType.Insert));
+                tableSource = new TextOptionSource(tableItems, this);
+                textTableView.Source = tableSource;
+                textTableView.ReloadData();
+
+                if (CreateSurveyController.SurveyModel == null)
+                {
+                    CreateSurveyController.SurveyModel = new SurveyModel();
+                }
+
+                if (CreateSurveyController.SurveyModel.question == null)
+                {
+                    CreateSurveyController.SurveyModel.question = new Question();
+                }
+
+                CreateSurveyController.SurveyModel.type = SurveyType.Text.ToString();
+
+                textBtn.SetImage(UIImage.FromBundle("TextSurveyActive"), UIControlState.Normal);
+                imageBtn.SetImage(UIImage.FromBundle("ImageSurveyInactive"), UIControlState.Normal);
+            }
+            else
             {
-                CreateSurveyController.SurveyModel.question = new Question();
-            }
+                try
+                {
+                    CreateSurveyController.SurveyModel = await new FeedManager().GetSurvey(CreateSurveyController.UserId, CreateSurveyController.CreationDate, LoginController.tokenModel.access_token);
 
-            CreateSurveyController.SurveyModel.type = SurveyType.Text.ToString();
+                    //pre-cache image options
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                    {
+                        foreach (var option in CreateSurveyController.SurveyModel.options)
+                        {
+                            UIImage image = Utils.GetImageFromNSUrl(option.image);
+                            if (image != null)
+                            {
+                                image.Dispose();
+                            }
+                        }
+                    }
+                    questionText.Text = CreateSurveyController.SurveyModel.question.text;
+
+                    //questionText.BecomeFirstResponder();
+                }
+                catch (Exception ex)
+                {
+                    BTProgressHUD.Dismiss();
+                    Utils.HandleException(ex);
+                }
+
+                foreach (var option in CreateSurveyController.SurveyModel.options)
+                {
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
+                    {
+                        tableItems.Add(new TextOptionTableItem(option.text, OptionType.Option));
+                    }
+                    else
+                    {
+                        UIImage image = Utils.GetImageFromNSUrl(option.image);
+
+                        try
+                        {
+                            using (NSData imageData = image.AsJPEG())
+                            {
+                                byte[] myByteArray = new byte[imageData.Length];
+                                System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, myByteArray, 0, Convert.ToInt32(imageData.Length));
+                                collectionViewItems.Add(new ImageOptionTableItem(image, myByteArray, option.text, OptionType.Option));
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            BTProgressHUD.Dismiss();
+                            Utils.HandleException(ex);
+                        }
+                    }
+                }
+
+                if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
+                {
+                    textTableView.Hidden = false;
+                    imageCollectionView.Hidden = true;
+
+                    tableItems.Add(new TextOptionTableItem("Add new option -->", OptionType.Insert));
+                    tableSource = new TextOptionSource(tableItems, this);
+                    textTableView.Source = tableSource;
+                    textTableView.ReloadData();
+
+                    textBtn.SetImage(UIImage.FromBundle("TextSurveyActive"), UIControlState.Normal);
+                    imageBtn.SetImage(UIImage.FromBundle("ImageSurveyInactive"), UIControlState.Normal);
+                }
+                else
+                {
+                    textTableView.Hidden = true;
+                    imageCollectionView.Hidden = false;
+
+                    if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Insert)).ToList().Count() <= 0)
+                    {
+                        collectionViewItems.Add(new ImageOptionTableItem(UIImage.FromBundle("AddImage"), null, "", OptionType.Insert));
+                    }
+                    collectionViewSource = new ImageOptionSource(collectionViewItems, this.navigationController);
+                    imageCollectionView.Source = collectionViewSource;
+                    imageCollectionView.ReloadData();
+
+                    imageCollectionView.BackgroundColor = UIColor.White;
+                    imageCollectionView.RegisterClassForCell(typeof(ImageOptionCustomCell), imageCellId);
+                    SetupLayout();
+                    imageCollectionView.CollectionViewLayout = collectionViewLayout;
+
+                    cellWidth = Constants.cellWidth;
+                    UpdateLayout();
+
+                    CalculateCellHeights();
+                    var layout = imageCollectionView.CollectionViewLayout as PBCollectionViewWaterfallLayout;
+                    var vdelegate = layout.Delegate as ImageOptionDelegate;
+                    vdelegate.cellHeights = cellHeights;
+                    layout.UpdateLayout();
+
+                    textBtn.SetImage(UIImage.FromBundle("TextSurveyInactive"), UIControlState.Normal);
+                    imageBtn.SetImage(UIImage.FromBundle("ImageSurveyActive"), UIControlState.Normal);
+                }
+
+                UpdateNextButton();
+            }
 
             // Keyboard popup
             NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.DidShowNotification, KeyBoardUpNotification);
@@ -503,70 +742,12 @@ namespace Askker.App.iOS
                     CreateSurveyController.SurveyModel.question = new Question();
                 }
                 CreateSurveyController.SurveyModel.question.text = questionText.Text;
-                CreateSurveyController.SurveyModel.question.image = "";
-
-                if (string.IsNullOrWhiteSpace(questionText.Text))
-                {
-                    CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
-                    CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
-                }
-                else
-                {
-                    CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                    CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
-                }
+                CreateSurveyController.SurveyModel.question.image = "";                
             }
+
+            UpdateNextButton();
         }
-
-        public override async void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
-
-            try
-            {
-                if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString())
-                {
-                    CreateSurveyController.SurveyModel = await new FeedManager().GetSurvey(CreateSurveyController.UserId, CreateSurveyController.CreationDate, LoginController.tokenModel.access_token);
-
-                    //pre-cache image options
-                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
-                    {
-                        foreach (var option in CreateSurveyController.SurveyModel.options)
-                        {
-                            UIImage image = Utils.GetImageFromNSUrl(option.image);
-                            if (image != null)
-                            {
-                                image.Dispose();
-                            }
-                        }
-                    }
-                    questionText.Text = CreateSurveyController.SurveyModel.question.text;
-
-                    if (string.IsNullOrWhiteSpace(questionText.Text))
-                    {
-                        CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
-                        CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
-                    }
-                    else
-                    {
-                        CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                        CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
-                    }
-                }
-
-                StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
-                BTProgressHUD.Dismiss();
-
-                //questionText.BecomeFirstResponder();
-            }
-            catch (Exception ex)
-            {
-                BTProgressHUD.Dismiss();
-                Utils.HandleException(ex);
-            }
-        }
-
+        
         public override void ViewWillUnload()
         {
             if (questionText.Text.Length <= 0)
@@ -576,6 +757,24 @@ namespace Askker.App.iOS
                 return;
             }
 
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+            StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
+        }
+
+        public override async void ViewWillAppear(bool animated)
+        {
+            base.ViewWillAppear(animated);
+
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+            
         }
 
         public override void ViewWillDisappear(bool animated)
@@ -626,11 +825,6 @@ namespace Askker.App.iOS
             this.viewController = viewController;
         }
 
-        public List<TextOptionTableItem> GetTableItems()
-        {
-            return tableItems;
-        }
-
         public override nint RowsInSection(UITableView tableview, nint section)
         {
             return tableItems.Count;
@@ -650,49 +844,22 @@ namespace Askker.App.iOS
         {
             // request a recycled cell to save memory
             TextOptionCustomCell cell = tableView.DequeueReusableCell(cellIdentifier) as TextOptionCustomCell;
-
-            // UNCOMMENT one of these to use that style
-            //var cellStyle = UITableViewCellStyle.Default;
-            //          var cellStyle = UITableViewCellStyle.Subtitle;
-            //			var cellStyle = UITableViewCellStyle.Value1;
-            //			var cellStyle = UITableViewCellStyle.Value2;
-
+                        
             // if there are no cells to reuse, create a new one
             if (cell == null)
             {
                 cell = new TextOptionCustomCell(cellIdentifier);
             }
 
-            //cell.textLabel.Text = tableItems[indexPath.Row].Text;
             cell.UpdateCell(tableItems[indexPath.Row].Text, tableItems[indexPath.Row].Type, indexPath);
 
             cell.SelectionStyle = UITableViewCellSelectionStyle.None;
-
-            // Default style doesn't support Subtitle
-            //if (cellStyle == UITableViewCellStyle.Subtitle
-            //   || cellStyle == UITableViewCellStyle.Value1
-            //   || cellStyle == UITableViewCellStyle.Value2)
-            //{
-            //    cell.DetailTextLabel.Text = tableItems[indexPath.Row].ImageExtension;
-            //}
-
-            // Value2 style doesn't support an image
-            //if (cellStyle != UITableViewCellStyle.Value2)
-            //{
-            //    if (tableItems[indexPath.Row].Image != null)
-            //    {
-            //        //cell.ImageView.Image = UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image));
-            //        cell.UpdateCell(tableItems[indexPath.Row].Text, UIImage.LoadFromData(NSData.FromArray(tableItems[indexPath.Row].Image)));
-            //    }
-            //}
-
-            //cell.ImageView.image = UIImage.FromFile("Images/" + tableItems[indexPath.Row].ImageName);
 
             return cell;
         }
     }
 
-    class TextOptionTableItem
+    public class TextOptionTableItem
     {
         public string Text { get; set; }
         public OptionType Type { get; set; }
@@ -1098,6 +1265,9 @@ namespace Askker.App.iOS
         public UITextField ImageLabel { get; set; }
         public UIImageView Image { get; set; }
         public UIView TextSeparator { get; set; }
+        public UIButton Button { get; set; }
+
+        public NSIndexPath indexPath;
 
         [Export("initWithFrame:")]
         public ImageOptionCustomCell(CGRect frame) : base(frame)
@@ -1105,9 +1275,10 @@ namespace Askker.App.iOS
             ImageLabel = new UITextField()
             {
                 BackgroundColor = UIColor.White,
-                Placeholder = "Type your label here",
+                Placeholder = "Image Caption",
                 TextColor = UIColor.FromRGB(90, 89, 89)
             };
+            ImageLabel.AddTarget(Self, new ObjCRuntime.Selector("OnExitImageLabel:"), UIControlEvent.EditingDidEnd);
 
             Image = new UIImageView()
             {
@@ -1116,11 +1287,16 @@ namespace Askker.App.iOS
                 BackgroundColor = UIColor.FromRGB(90, 89, 89)
             };
 
+            Button = new UIButton();
+            Button.SetImage(UIImage.FromBundle("DeleteOption"), UIControlState.Normal);
+            Button.AddTarget(Self, new ObjCRuntime.Selector("ButtonClick:"), UIControlEvent.TouchUpInside);
+
             TextSeparator = new UIView();
             TextSeparator.BackgroundColor = UIColor.FromRGB(90, 89, 89);
 
             ContentView.Add(Image);
             ContentView.Add(ImageLabel);
+            ContentView.Add(Button);
             ContentView.Add(TextSeparator);
 
             ContentView.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
@@ -1131,12 +1307,17 @@ namespace Askker.App.iOS
                 Image.AtTopOf(ContentView),
 
                 ImageLabel.Below(Image),
-                ImageLabel.WithSameWidth(Image),
+                ImageLabel.AtRightOf(ContentView, 10),
                 ImageLabel.AtLeftOf(ContentView, 10),
                 ImageLabel.Height().EqualTo(30),
+                                                
+                Button.Below(Image),
+                Button.Width().EqualTo(20),
+                Button.WithSameHeight(ImageLabel),
+                Button.Left().EqualTo().RightOf(ImageLabel),
 
                 TextSeparator.Below(ImageLabel),
-                TextSeparator.WithSameWidth(ImageLabel),
+                TextSeparator.WithSameWidth(Image),
                 TextSeparator.AtLeftOf(ContentView, 10),
                 TextSeparator.Height().EqualTo(1)
             );
@@ -1150,30 +1331,62 @@ namespace Askker.App.iOS
             Image.Layer.BorderWidth = 1;
         }
 
+        [Export("ButtonClick:")]
+        private void ButtonClick(UIButton button)
+        {
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("DeleteCell"), new NSString(indexPath.Row.ToString()));
+        }
+
+        [Export("OnExitImageLabel:")]
+        private void OnExitTextField(UITextField textField)
+        {
+            var keys = new[]
+            {
+                new NSString("index"),
+                new NSString("value")
+            };
+
+            var objects = new[]
+            {
+                new NSString(indexPath.Row.ToString()),
+                new NSString(textField.Text)
+            };
+
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateTextCell"), new NSDictionary<NSString, NSObject>(keys, objects));
+        }
+
         public void PopulateCell(string label, UIImage image, OptionType type, NSIndexPath indexPath)
         {
             ImageLabel.Text = label.ToUpper();
             Image.Image = image;
+            this.indexPath = indexPath;
 
             if (type.Equals(OptionType.Insert))
             {
                 Image.ContentMode = UIViewContentMode.Center;
                 Image.BackgroundColor = UIColor.FromRGB(90, 89, 89);
+                Button.Hidden = true;
+                ImageLabel.Hidden = true;
+                TextSeparator.Hidden = true;
             }
             else
             {
                 Image.ContentMode = UIViewContentMode.ScaleAspectFit;
-                Image.BackgroundColor = UIColor.White;                
+                Image.BackgroundColor = UIColor.White;
+                Button.Hidden = false;
+                ImageLabel.Hidden = false;
+                TextSeparator.Hidden = false;
             }
 
             LayoutSubviews();
         }
     }
 
-    class ImageOptionTableItem
+    public class ImageOptionTableItem
     {
         public string Text { get; set; }
         public UIImage Image { get; set; }
+        public byte[] ImageArray { get; set; }
         public OptionType Type { get; set; }
 
         public UITableViewCellStyle CellStyle
@@ -1192,9 +1405,10 @@ namespace Askker.App.iOS
 
         public ImageOptionTableItem() { }
 
-        public ImageOptionTableItem(UIImage image, string text, OptionType type)
+        public ImageOptionTableItem(UIImage image, byte[] imageArray, string text, OptionType type)
         {
             Image = image;
+            ImageArray = imageArray;
             Text = text;
             Type = type;
         }
@@ -1230,7 +1444,7 @@ namespace Askker.App.iOS
                 imagePicker.Canceled += Handle_Canceled;
             }
         }
-                
+
         public override nint NumberOfSections(UICollectionView collectionView)
         {
             return 1;

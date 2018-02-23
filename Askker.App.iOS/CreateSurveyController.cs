@@ -54,6 +54,8 @@ namespace Askker.App.iOS
         public override void LoadView()
         {
             View = new UIView();
+            View.BackgroundColor = UIColor.White;
+
             _pageTitles = new List<string> { "Write your question", "Choose your options", "Who should see this?" };
             _pageTitle = new UILabel();
             _pageTitle.TextColor = UIColor.FromRGB(255, 200, 0);
@@ -163,9 +165,7 @@ namespace Askker.App.iOS
                     BTProgressHUD.Dismiss();
                     return;
                 }
-            }
-            else if (_currentStepIndex == 1)
-            {
+
                 if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
                 {
                     new UIAlertView("Options", "Please press \"Done\" button to go to next page", null, "OK", null).Show();
@@ -173,50 +173,131 @@ namespace Askker.App.iOS
                     return;
                 }
 
-                List<SurveyOptionTableItem> items = CreateSurveyOptionsStep.tableSource.GetTableItems();
-                if (items.Count > 0)
+                if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
                 {
-                    CreateSurveyController.SurveyModel.options = new List<Option>();
 
-                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                    List<TextOptionTableItem> items = CreateSurveyFirstStep.GetTextItems();
+                    if (items.Count > 0)
                     {
-                        //if (CreateSurveyController.OptionImages == null)
-                        //{
-                        CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
-                        //}
-                    }
+                        CreateSurveyController.SurveyModel.options = new List<Option>();
 
-                    int optionId = 0;
-                    items.ForEach(i =>
-                    {
-                        if (!"<- Add new option".Equals(i.Text))
+                        int optionId = 0;
+                        items.ForEach(i =>
                         {
-                            Option o = new Option();
-                            o.id = optionId;
-                            o.text = i.Text;
-                            o.image = "";
-
-                            if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString() && i.Image != null)
+                            if (OptionType.Option.Equals(i.Type))
                             {
-                                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + i.ImageExtension, i.Image));
+                                Option o = new Option();
+                                o.id = optionId;
+                                o.text = i.Text;
+                                o.image = "";
+
+                                CreateSurveyController.SurveyModel.options.Add(o);
+                                
+                                optionId++;
                             }
+                        });
+                    }
+                }
+                else
+                {
+                    List<ImageOptionTableItem> items = CreateSurveyFirstStep.GetImageItems();
+                    if (items.Count > 0)
+                    {
+                        CreateSurveyController.SurveyModel.options = new List<Option>();
 
-                            CreateSurveyController.SurveyModel.options.Add(o);
-
-
-                            optionId++;
+                        if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                        {
+                            //if (CreateSurveyController.OptionImages == null)
+                            //{
+                            CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
+                            //}
                         }
-                    });
+
+                        int optionId = 0;
+                        items.ForEach(i =>
+                        {
+                            if (OptionType.Option.Equals(i.Type))
+                            {
+                                Option o = new Option();
+                                o.id = optionId;
+                                o.text = i.Text;
+                                o.image = "";
+
+                                if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString() && i.Image != null)
+                                {
+                                    CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + ".jpg", i.ImageArray));
+                                }
+
+                                CreateSurveyController.SurveyModel.options.Add(o);
+
+                                optionId++;
+                            }
+                        });
+                    }                    
                 }
 
                 if (CreateSurveyController.SurveyModel == null ||
-                    CreateSurveyController.SurveyModel.options == null ||
-                    CreateSurveyController.SurveyModel.options.Count < 2)
+                        CreateSurveyController.SurveyModel.options == null ||
+                        CreateSurveyController.SurveyModel.options.Count < 2)
                 {
                     new UIAlertView("Options", "Please give at least two options", null, "OK", null).Show();
                     BTProgressHUD.Dismiss();
                     return;
                 }
+            }
+            else if (_currentStepIndex == 1)
+            {
+                //if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
+                //{
+                //    new UIAlertView("Options", "Please press \"Done\" button to go to next page", null, "OK", null).Show();
+                //    BTProgressHUD.Dismiss();
+                //    return;
+                //}
+
+                //List<SurveyOptionTableItem> items = CreateSurveyOptionsStep.tableSource.GetTableItems();
+                //if (items.Count > 0)
+                //{
+                //    CreateSurveyController.SurveyModel.options = new List<Option>();
+
+                //    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                //    {
+                //        //if (CreateSurveyController.OptionImages == null)
+                //        //{
+                //        CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
+                //        //}
+                //    }
+
+                //    int optionId = 0;
+                //    items.ForEach(i =>
+                //    {
+                //        if (!"<- Add new option".Equals(i.Text))
+                //        {
+                //            Option o = new Option();
+                //            o.id = optionId;
+                //            o.text = i.Text;
+                //            o.image = "";
+
+                //            if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString() && i.Image != null)
+                //            {
+                //                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + i.ImageExtension, i.Image));
+                //            }
+
+                //            CreateSurveyController.SurveyModel.options.Add(o);
+
+
+                //            optionId++;
+                //        }
+                //    });
+                //}
+
+                //if (CreateSurveyController.SurveyModel == null ||
+                //    CreateSurveyController.SurveyModel.options == null ||
+                //    CreateSurveyController.SurveyModel.options.Count < 2)
+                //{
+                //    new UIAlertView("Options", "Please give at least two options", null, "OK", null).Show();
+                //    BTProgressHUD.Dismiss();
+                //    return;
+                //}
             }
 
             var nextVcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex + 1) as UIViewController };
