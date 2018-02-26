@@ -47,7 +47,7 @@ namespace Askker.App.iOS
                 btnGroupRelationship.SetTitle("", UIControlState.Normal);
                 btnRelationship.Hidden = true;
                 btnGroupRelationship.Hidden = true;
-                profileImageView.ClipsToBounds = true;
+                profileImageView.Layer.MasksToBounds = true;
 
                 friendUserModel = await new LoginManager().GetUserById(LoginController.tokenModel.access_token, friendUserId);
 

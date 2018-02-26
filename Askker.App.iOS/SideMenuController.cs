@@ -16,7 +16,9 @@ namespace Askker.App.iOS
     {
         MenuViewController menuViewController;
         private NSObject updateProfilePictureObserver;
+        private NSObject updateUserNameObserver;
         UIImageView profileImageView;
+        UILabel userName;
 
         public SideMenuController(MenuViewController menuViewController)
         {
@@ -31,6 +33,11 @@ namespace Askker.App.iOS
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(updateProfilePictureObserver);
             }
+
+            if (updateUserNameObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(updateUserNameObserver);
+            }
         }
 
         public override void ViewDidLoad()
@@ -38,6 +45,7 @@ namespace Askker.App.iOS
             base.ViewDidLoad();
             
             updateProfilePictureObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateProfilePicture"), UpdateProfilePicture);
+            updateUserNameObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateUserName"), UpdateUserName);
 
             View.BackgroundColor = UIColor.FromRGB(33, 33, 33);
 
@@ -66,11 +74,11 @@ namespace Askker.App.iOS
             editProfileButtonImageView.AddGestureRecognizer(tapGestureRecognizerEdit);
             editProfileButtonImageView.UserInteractionEnabled = true;
 
-            var name = new UILabel(new RectangleF(20, 120, 220, 20));
-            name.Font = UIFont.SystemFontOfSize(14.0f);
-            name.TextAlignment = UITextAlignment.Center;
-            name.TextColor = UIColor.White;
-            name.Text = LoginController.userModel.name;
+            userName = new UILabel(new RectangleF(20, 120, 220, 20));
+            userName.Font = UIFont.SystemFontOfSize(14.0f);
+            userName.TextAlignment = UITextAlignment.Center;
+            userName.TextColor = UIColor.White;
+            userName.Text = LoginController.userModel.name;
 
             var dividerLineView = new UIView(new RectangleF(20, 145, 220, 0.5f));
             dividerLineView.BackgroundColor = UIColor.FromRGB(80, 80, 80);
@@ -163,7 +171,7 @@ namespace Askker.App.iOS
             #endregion
 
             scrollView.AddSubview(profileImageView);
-            scrollView.AddSubview(name);
+            scrollView.AddSubview(userName);
             scrollView.AddSubview(editProfileButtonImageView);
             scrollView.AddSubview(dividerLineView);
             scrollView.AddSubview(pagesTableView);
@@ -179,7 +187,7 @@ namespace Askker.App.iOS
             #endregion
             scrollView.AddSubview(logoutButton);
 
-            var scrollHeight = 20 + profileImageView.Frame.Height + 10 + name.Frame.Height + 25 + dividerLineView.Frame.Height + 5 + pagesTableView.Frame.Height + 15 +
+            var scrollHeight = 20 + profileImageView.Frame.Height + 10 + userName.Frame.Height + 25 + dividerLineView.Frame.Height + 5 + pagesTableView.Frame.Height + 15 +
                                dividerLineView2.Frame.Height + 5 + filterLabel.Frame.Height + 10 + filterTableView.Frame.Height + 5 + dividerLineView3.Frame.Height + 5 +
                                logoutButton.Frame.Height + 40;
             
@@ -207,6 +215,14 @@ namespace Askker.App.iOS
             if (LoginController.userModel.profilePicturePath != null)
             {
                 Utils.SetImageFromNSUrlSession(LoginController.userModel.profilePicturePath, profileImageView, this, PictureType.Profile);
+            }
+        }
+
+        private void UpdateUserName(NSNotification notification)
+        {
+            if (LoginController.userModel.name != null)
+            {
+                userName.Text = LoginController.userModel.name;
             }
         }
     }

@@ -47,7 +47,7 @@ namespace Askker.App.iOS
             this.AutomaticallyAdjustsScrollViewInsets = false;
             this.NavigationController.NavigationBar.Translucent = false;
 
-            UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
+            NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes
             {
                 ForegroundColor = UIColor.FromRGB(90, 89, 89)
             };

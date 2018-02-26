@@ -44,7 +44,7 @@ namespace Askker.App.iOS
 
             imageCache.RemoveAllObjects();
 
-            profileImageView.ClipsToBounds = true;
+            profileImageView.Layer.MasksToBounds = true;
             profileImageView.Image = null;
 
             uploadButton.TouchUpInside += btnUpload_TouchUpInside;
@@ -231,6 +231,7 @@ namespace Askker.App.iOS
                 nameButton.SetImage(UIImage.FromBundle("EditProfile"), UIControlState.Normal);
                 enableButtons("nameButton");
                 nameText.Enabled = false;
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateUserName"), null);
                 Update();
             }
             else

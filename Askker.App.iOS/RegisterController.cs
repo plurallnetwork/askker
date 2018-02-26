@@ -1,5 +1,6 @@
 ﻿using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Models;
+using BigTed;
 using Foundation;
 using System;
 using System.Linq;
@@ -84,6 +85,8 @@ namespace Askker.App.iOS
                 {
                     try
                     {
+                        BTProgressHUD.Show("Registering...", -1, ProgressHUD.MaskType.Clear);
+
                         RegisterManager registerManager = new RegisterManager();
                         UserRegisterModel userRegisterModel = new UserRegisterModel(txtName.Text, txtEmail.Text, txtPassword.Text, txtConfirmPassword.Text, swAgree.On);
 
@@ -102,9 +105,13 @@ namespace Askker.App.iOS
                         {
                             this.PresentViewController(menuController, true, null);
                         }
+
+                        BTProgressHUD.Dismiss();
                     }
                     catch (Exception ex)
                     {
+                        BTProgressHUD.Dismiss();
+
                         if (ex.Message.Equals("902"))
                         {
                             var alert = UIAlertController.Create("Register", "E-mail already registered", UIAlertControllerStyle.Alert);
@@ -115,7 +122,6 @@ namespace Askker.App.iOS
                         {
                             Utils.HandleException(ex);
                         }
-
                     }
                 }
             };

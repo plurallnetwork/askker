@@ -43,6 +43,7 @@
     <Compile Include="Business\RegisterManager.cs" />
     <Compile Include="Business\VoteManager.cs" />
     <Compile Include="Enums\OptionType.cs" />
+    <Compile Include="Enums\ProfileType.cs" />
     <Compile Include="Enums\UserGroupRelationshipStatus.cs" />
     <Compile Include="Enums\MenuItem.cs" />
     <Compile Include="Enums\PictureType.cs" />

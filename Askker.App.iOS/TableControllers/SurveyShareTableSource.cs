@@ -19,7 +19,7 @@ namespace Askker.App.iOS.TableControllers
 
         public SurveyShareTableSource(List<SurveyShareTableItem> items)
         {
-            this.tableItems = items;        
+            this.tableItems = items;
         }
 
         public override nint RowsInSection(UITableView tableview, nint section)
@@ -38,6 +38,9 @@ namespace Askker.App.iOS.TableControllers
                 cell = new SurveyShareCustomCell(cellIdentifier);
             }
 
+            cell.Accessory = UITableViewCellAccessory.None;
+            cell.UpdateCell(null, null);
+            
             //var imageView = cell.GetCustomImageView();
             //imageView.Image = UIImage.FromBundle("Profile");
             UIImageView varImageView = new UIImageView();
@@ -48,7 +51,7 @@ namespace Askker.App.iOS.TableControllers
                 Utils.SetImageFromNSUrlSession(tableItems[indexPath.Row].ImageName, varImageView, this, PictureType.OptionImage);
             }
 
-            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString() && CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
+            if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Private.ToString())
             {
                 if(CreateSurveyController.SurveyModel.targetAudienceUsers != null && CreateSurveyController.SurveyModel.targetAudienceUsers.ids.Count > 0)
                 {
@@ -61,8 +64,8 @@ namespace Askker.App.iOS.TableControllers
                     }
                 }
             }
-
-            if (CreateSurveyController.ScreenState == ScreenState.Edit.ToString() && CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Groups.ToString())
+            else
+            if (CreateSurveyController.SurveyModel.targetAudience == TargetAudience.Groups.ToString())
             {
                 if (CreateSurveyController.SurveyModel.targetAudienceGroups != null && CreateSurveyController.SurveyModel.targetAudienceGroups.ids.Count > 0)
                 {
@@ -195,11 +198,15 @@ namespace Askker.App.iOS.TableControllers
             for (int i = 0; i < tableItems.Count; i++)
             {
                 var cell = tableView.CellAt(NSIndexPath.FromRowSection((nint)i, (nint)0));
-                if (cell.Accessory == UITableViewCellAccessory.Checkmark)
+
+                if (cell != null)
                 {
-                    cell.Accessory = UITableViewCellAccessory.None;                    
+                    if (cell.Accessory == UITableViewCellAccessory.Checkmark)
+                    {
+                        cell.Accessory = UITableViewCellAccessory.None;
+                    }
+                    cell.LayoutSubviews();
                 }
-                cell.LayoutSubviews();
             }
         }        
     }
