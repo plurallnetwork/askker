@@ -126,6 +126,7 @@
     <Compile Include="CreateSurveyQuestionStep.designer.cs">
       <DependentUpon>CreateSurveyQuestionStep.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreateSurveySecondStep.cs" />
     <Compile Include="CreateSurveyShareStep.cs" />
     <Compile Include="CreateSurveyShareStep.designer.cs">
       <DependentUpon>CreateSurveyShareStep.cs</DependentUpon>

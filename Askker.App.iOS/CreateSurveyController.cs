@@ -166,13 +166,6 @@ namespace Askker.App.iOS
                     return;
                 }
 
-                if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
-                {
-                    new UIAlertView("Options", "Please press \"Done\" button to go to next page", null, "OK", null).Show();
-                    BTProgressHUD.Dismiss();
-                    return;
-                }
-
                 if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
                 {
 
@@ -245,60 +238,6 @@ namespace Askker.App.iOS
                     return;
                 }
             }
-            else if (_currentStepIndex == 1)
-            {
-                //if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
-                //{
-                //    new UIAlertView("Options", "Please press \"Done\" button to go to next page", null, "OK", null).Show();
-                //    BTProgressHUD.Dismiss();
-                //    return;
-                //}
-
-                //List<SurveyOptionTableItem> items = CreateSurveyOptionsStep.tableSource.GetTableItems();
-                //if (items.Count > 0)
-                //{
-                //    CreateSurveyController.SurveyModel.options = new List<Option>();
-
-                //    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
-                //    {
-                //        //if (CreateSurveyController.OptionImages == null)
-                //        //{
-                //        CreateSurveyController.OptionImages = new List<KeyValuePair<string, byte[]>>();
-                //        //}
-                //    }
-
-                //    int optionId = 0;
-                //    items.ForEach(i =>
-                //    {
-                //        if (!"<- Add new option".Equals(i.Text))
-                //        {
-                //            Option o = new Option();
-                //            o.id = optionId;
-                //            o.text = i.Text;
-                //            o.image = "";
-
-                //            if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString() && i.Image != null)
-                //            {
-                //                CreateSurveyController.OptionImages.Add(new KeyValuePair<string, byte[]>(optionId.ToString() + i.ImageExtension, i.Image));
-                //            }
-
-                //            CreateSurveyController.SurveyModel.options.Add(o);
-
-
-                //            optionId++;
-                //        }
-                //    });
-                //}
-
-                //if (CreateSurveyController.SurveyModel == null ||
-                //    CreateSurveyController.SurveyModel.options == null ||
-                //    CreateSurveyController.SurveyModel.options.Count < 2)
-                //{
-                //    new UIAlertView("Options", "Please give at least two options", null, "OK", null).Show();
-                //    BTProgressHUD.Dismiss();
-                //    return;
-                //}
-            }
 
             var nextVcs = new UIViewController[] { Steps.ElementAt(_currentStepIndex + 1) as UIViewController };
             _pageViewController.SetViewControllers(nextVcs, UIPageViewControllerNavigationDirection.Forward, true, null);
@@ -310,13 +249,6 @@ namespace Askker.App.iOS
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             if (_currentStepIndex == 1)
             {
-                if (!CreateSurveyOptionsStep._optionsStepView.DoneButton.Hidden)
-                {
-                    new UIAlertView("Options", "Please press \"Done\" button to go back", null, "OK", null).Show();
-                    BTProgressHUD.Dismiss();
-                    return;
-                }
-
                 if (CreateSurveyController.SurveyModel != null &&
                     CreateSurveyController.SurveyModel.question != null &&
                     !string.IsNullOrEmpty(CreateSurveyController.SurveyModel.question.text))
@@ -428,7 +360,7 @@ namespace Askker.App.iOS
             var steps = new List<IMultiStepProcessStep>
                 {
                     new CreateSurveyFirstStep(this.NavigationController),
-                    new CreateSurveyOptionsStep(),
+                    new CreateSurveySecondStep(),
                     new CreateSurveyShareStep()
                 };
 
@@ -482,6 +414,12 @@ namespace Askker.App.iOS
                     }
                 }
                 ), true);
+
+            // Keyboard dispose when clicking outside the comment box
+            var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            g.AddTarget(() => View.EndEditing(true));
+            g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);
+            View.AddGestureRecognizer(g);
         }
 
         public override void ViewDidAppear(bool animated)

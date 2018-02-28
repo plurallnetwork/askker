@@ -10,6 +10,7 @@ using Askker.App.PortableLibrary.Enums;
 using ObjCRuntime;
 using BigTed;
 using CoreAnimation;
+using System.Linq;
 
 namespace Askker.App.iOS
 {
@@ -390,142 +391,8 @@ namespace Askker.App.iOS
 
         public void BindFeedCell(FeedCollectionViewCell feedCell, SurveyModel survey, int indexPathRow)
         {
-            if (survey.profilePicture != null)
-            {
-                Utils.SetImageFromNSUrlSession(survey.profilePicture, feedCell.profileImageView, this, PictureType.Profile);
-            }else
-            {
-                feedCell.profileImageView.Image = UIImage.FromBundle("Profile");
-            }
-
-            var attributedText = new NSMutableAttributedString(survey.userName, UIFont.BoldSystemFontOfSize(14));
-            if ("Groups".Equals(survey.targetAudience))
-            {
-                var x = 0;
-                foreach(string group in survey.targetAudienceGroups.names)
-                {
-                    if(x == 0)
-                    {
-                        attributedText.Append(new NSAttributedString("\n" + group, UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
-                    }
-                    else
-                    {
-                        attributedText.Append(new NSAttributedString(", " + group , UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
-                    }
-                    x++;
-                }
-                
-            }
-            else
-            {
-                attributedText.Append(new NSAttributedString("\n" + survey.targetAudience, UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
-            }
-            
-
-            var paragraphStyle = new NSMutableParagraphStyle();
-            paragraphStyle.LineSpacing = 4;
-            attributedText.AddAttribute(new NSString("ParagraphStyle"), paragraphStyle, new NSRange(0, attributedText.Length));
-
-            feedCell.nameLabel.AttributedText = attributedText;
-
-            bool finished = false;
-            if (survey.finishDate != null)
-            {
-
-                feedCell.finishedLabel.Text = "Finished";
-                feedCell.moreButton.Hidden = true;
-                feedCell.optionsTableView.AllowsSelection = false;
-                feedCell.optionsCollectionView.AllowsSelection = false;
-                finished = true;
-
-                feedCell.AddSubview(feedCell.finishedLabel);
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.finishedLabel));
-            }
-            else
-            {
-                feedCell.finishedLabel.Text = "";
-                feedCell.moreButton.Hidden = false;
-                feedCell.optionsTableView.AllowsSelection = true;
-                feedCell.optionsCollectionView.AllowsSelection = true;
-                finished = false;
-            }
-
-            if (!survey.userId.Equals(LoginController.userModel.id))
-            {
-                feedCell.moreButton.Hidden = true;
-            }
-            else
-            {
-                if (finished)
-                {
-                    feedCell.moreButton.Hidden = true;
-                }
-                else
-                {
-                    feedCell.moreButton.Hidden = false;
-                }
-            }
-
-            feedCell.questionText.Text = survey.question.text;
-
-            if (survey.type == SurveyType.Text.ToString())
-            {
-                feedCell.optionsTableView.ContentMode = UIViewContentMode.ScaleAspectFill;
-                feedCell.optionsTableView.Layer.MasksToBounds = true;
-                feedCell.optionsTableView.TranslatesAutoresizingMaskIntoConstraints = false;
-                feedCell.optionsTableView.ContentInset = new UIEdgeInsets(0, -10, 0, 0);
-                feedCell.optionsTableView.Tag = indexPathRow;
-                feedCell.optionsTableView.FeedCell = feedCell;
-
-                feedCell.optionsTableViewSource.survey = survey;
-                feedCell.optionsTableView.Source = feedCell.optionsTableViewSource;
-                feedCell.optionsTableView.ReloadData();
-
-                feedCell.optionsCollectionView.RemoveFromSuperview();
-                feedCell.AddSubview(feedCell.optionsTableView);
-
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsTableView));
-
-                if (finished)
-                {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3(1)][v4]-8-[v5(24)]-8-[v6(1)][v7(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.dividerLineView, "v4", feedCell.optionsTableView, "v5", feedCell.totalVotesLabel, "v6", feedCell.dividerLineView2, "v7", feedCell.contentViewButtons));
-                }
-                else
-                {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
-                }
-            }
-            else
-            {
-                feedCell.optionsCollectionView.TranslatesAutoresizingMaskIntoConstraints = false;
-                feedCell.optionsCollectionView.Tag = indexPathRow;
-                feedCell.optionsCollectionView.FeedCell = feedCell;
-
-                feedCell.optionsCollectionViewSource.survey = survey;
-                feedCell.optionsCollectionView.Source = feedCell.optionsCollectionViewSource;
-                feedCell.optionsCollectionViewDelegate.optionsCollectionViewSource = feedCell.optionsCollectionViewSource;
-                feedCell.optionsCollectionViewDelegate.survey = survey;
-                feedCell.optionsCollectionView.Delegate = feedCell.optionsCollectionViewDelegate;
-                feedCell.optionsCollectionView.ReloadData();
-
-                feedCell.optionsTableView.RemoveFromSuperview();
-                feedCell.AddSubview(feedCell.optionsCollectionView);
-
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.optionsCollectionView));
-                
-                if (finished)
-                {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3(1)][v4(<=176)]-8-[v5(24)]-8-[v6(1)][v7(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.dividerLineView, "v4", feedCell.optionsCollectionView, "v5", feedCell.totalVotesLabel, "v6", feedCell.dividerLineView2, "v7", feedCell.contentViewButtons));
-                }
-                else
-                {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsCollectionView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
-                }
-            }
-
-            feedCell.updateTotalVotes(survey.totalVotes);
-            feedCell.updateTotalComments(survey.totalComments);
-
+            Utils.BindFeedCell(feedCell, survey, indexPathRow, this);
+                        
             feedCell.commentButton.AddTarget(this, new Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
             List<Object> commentValues = new List<Object>();
             commentValues.Add(survey);
@@ -597,33 +464,7 @@ namespace Askker.App.iOS
                 MenuViewController.feedMenu.FinishButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
                 MenuViewController.feedMenu.FinishButton.AddTarget(this, new Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
             }
-        }
-
-        public static nfloat getHeightForFeedCell(SurveyModel survey, nfloat width)
-        {
-            var rect = new NSString(survey.question.text).GetBoundingRect(new CGSize(width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.BoldSystemFontOfSize(16) }, null);
-
-            var optionsHeight = 176;
-
-            if (survey.type == SurveyType.Text.ToString())
-            {
-                optionsHeight = survey.options.Count * 44;
-            }
-
-            // Heights of the vertical components to format the cell dinamic height
-            var knownHeight = 0;
-            if (survey.finishDate != null)
-            {
-
-                knownHeight = 8 + 44 + 8 + 32 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;
-            }
-            else
-            {
-                knownHeight = 8 + 44 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;
-            }
-
-            return rect.Height + knownHeight + 25;
-        }
+        }        
     }
 
     public class FeedCollectionViewDelegate : UICollectionViewDelegateFlowLayout
@@ -639,7 +480,7 @@ namespace Askker.App.iOS
         {
             if (surveys[indexPath.Row].question != null && !surveys[indexPath.Row].question.text.Equals(""))
             {
-                var feedCellHeight = FeedController.getHeightForFeedCell(surveys[indexPath.Row], collectionView.Frame.Width);
+                var feedCellHeight = Utils.getHeightForFeedCell(surveys[indexPath.Row], collectionView.Frame.Width);
 
                 return new CGSize(collectionView.Frame.Width, feedCellHeight);
             }
@@ -963,6 +804,7 @@ namespace Askker.App.iOS
     public class OptionsCollectionViewSource : UICollectionViewSource
     {
         public SurveyModel survey { get; set; }
+        public bool isPreview { get; set; }
 
         public OptionsCollectionViewSource()
         {
@@ -980,10 +822,22 @@ namespace Askker.App.iOS
             optionCell.BackgroundColor = UIColor.White;
             optionCell.Tag = survey.options[indexPath.Row].id;
 
-            if (survey.options[indexPath.Row].image != null)
+            if (isPreview)
             {
-                Utils.SetImageFromNSUrlSession(survey.options[indexPath.Row].image, optionCell.optionImageView, this, PictureType.OptionImage);
+                
+                if (CreateSurveyController.OptionImages.ElementAt(survey.options[indexPath.Row].id).Value != null)
+                {                    
+                    optionCell.optionImageView.Image = UIImage.LoadFromData(NSData.FromArray(CreateSurveyController.OptionImages.ElementAt(survey.options[indexPath.Row].id).Value));
+                }
             }
+            else
+            {
+                if (survey.options[indexPath.Row].image != null)
+                {
+                    Utils.SetImageFromNSUrlSession(survey.options[indexPath.Row].image, optionCell.optionImageView, this, PictureType.OptionImage);
+                }
+            }
+            
 
             optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCell.alphabet[indexPath.Row] + "  ";
             optionCell.optionLabel.Text = survey.options[indexPath.Row].text;

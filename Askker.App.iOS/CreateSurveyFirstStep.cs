@@ -293,8 +293,10 @@ namespace Askker.App.iOS
             var dict = notification.Object as NSDictionary;
             var index = Int32.Parse(dict[new NSString("index")].ToString());
             var text = dict[new NSString("value")].ToString();
-            tableItems.RemoveAt(index);
-            tableItems.Insert(index, new TextOptionTableItem(text, OptionType.Option));
+            //tableItems.RemoveAt(index);
+            //tableItems.Insert(index, new TextOptionTableItem(text, OptionType.Option));
+            tableItems.ElementAt(index).Text = text;
+            tableItems.ElementAt(index).Type = OptionType.Option;
             tableSource = new TextOptionSource(tableItems, this);
             textTableView.Source = tableSource;
             textTableView.ReloadData();
@@ -560,11 +562,11 @@ namespace Askker.App.iOS
             // Keyboard Down
             NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
 
-            // Keyboard dispose when clicking outside the comment box
-            var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
-            g.AddTarget(() => View.EndEditing(true));
-            g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);
-            View.AddGestureRecognizer(g);
+            //// Keyboard dispose when clicking outside the comment box
+            //var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            //g.AddTarget(() => View.EndEditing(true));
+            //g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);
+            //View.AddGestureRecognizer(g);
 
             BTProgressHUD.Dismiss();
         }
@@ -573,6 +575,8 @@ namespace Askker.App.iOS
         {
             UITableView tableView = null;
             UICollectionView collectionView = null;
+
+            CreateSurveyController._nextButton.Hidden = true;
 
             if (!moveViewUp)
             {
@@ -655,6 +659,7 @@ namespace Askker.App.iOS
 
         private void KeyBoardDownNotification(NSNotification notification)
         {
+            CreateSurveyController._nextButton.Hidden = false;
             moveViewUp = false;
             ScrollTheView(moveViewUp);
         }
@@ -763,19 +768,9 @@ namespace Askker.App.iOS
         {
             base.ViewDidAppear(animated);
 
-            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
-
             StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
-
-        public override async void ViewWillAppear(bool animated)
-        {
-            base.ViewWillAppear(animated);
-
-            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
-
-            
-        }
+        
 
         public override void ViewWillDisappear(bool animated)
         {
@@ -887,7 +882,7 @@ namespace Askker.App.iOS
         }                
     }
 
-    class TextOptionCustomCell : UITableViewCell
+    class TextOptionCustomCell : UITableViewCell, IUITextFieldDelegate
     {
         public UITextField textField;
         public UIButton button;
@@ -902,8 +897,8 @@ namespace Askker.App.iOS
             textField = new UITextField();
             textField.Placeholder = "Type your option here";
             textField.TextColor = UIColor.FromRGB(90, 89, 89);
-            textField.AddTarget(Self, new ObjCRuntime.Selector("OnExitTextField:"), UIControlEvent.EditingDidEnd);
-
+            textField.Delegate = this;
+            
             ContentView.Add(textField);
             ContentView.Add(button);
 
@@ -919,21 +914,8 @@ namespace Askker.App.iOS
             );
         }
 
-        [Export("CellButtonBtn:")]
-        private void CellButtonBtn(UIButton button)
-        {
-            if (OptionType.Insert.Equals(type))
-            {
-                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("AddNewRow"), null);
-            }
-            else
-            {
-                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("RemoveRow"), new NSString(indexPath.Row.ToString()));
-            }                
-        }
-
-        [Export("OnExitTextField:")]
-        private void OnExitTextField(UITextField textField)
+        [Export("textFieldDidEndEditing:")]
+        public void EditingEnded(UITextField textField)
         {
             var keys = new[]
             {
@@ -947,9 +929,23 @@ namespace Askker.App.iOS
                 new NSString(textField.Text)
             };
 
-            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateRow"), new NSDictionary<NSString, NSObject>(keys, objects));
+            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateRow"), new NSDictionary<NSString, NSObject>(keys, objects));            
+
         }
 
+        [Export("CellButtonBtn:")]
+        private void CellButtonBtn(UIButton button)
+        {
+            if (OptionType.Insert.Equals(type))
+            {
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("AddNewRow"), null);
+            }
+            else
+            {
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("RemoveRow"), new NSString(indexPath.Row.ToString()));
+            }                
+        }
+                
         public void UpdateCell(string text, OptionType type, NSIndexPath indexPath)
         {
             textField.Text = text;
@@ -1260,7 +1256,7 @@ namespace Askker.App.iOS
         }
     }
 
-    class ImageOptionCustomCell : UICollectionViewCell
+    class ImageOptionCustomCell : UICollectionViewCell, IUITextFieldDelegate
     {
         public UITextField ImageLabel { get; set; }
         public UIImageView Image { get; set; }
@@ -1278,7 +1274,7 @@ namespace Askker.App.iOS
                 Placeholder = "Image Caption",
                 TextColor = UIColor.FromRGB(90, 89, 89)
             };
-            ImageLabel.AddTarget(Self, new ObjCRuntime.Selector("OnExitImageLabel:"), UIControlEvent.EditingDidEnd);
+            ImageLabel.Delegate = this;
 
             Image = new UIImageView()
             {
@@ -1337,8 +1333,8 @@ namespace Askker.App.iOS
             NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("DeleteCell"), new NSString(indexPath.Row.ToString()));
         }
 
-        [Export("OnExitImageLabel:")]
-        private void OnExitTextField(UITextField textField)
+        [Export("textFieldDidEndEditing:")]
+        public void EditingEnded(UITextField textField)
         {
             var keys = new[]
             {
@@ -1353,8 +1349,9 @@ namespace Askker.App.iOS
             };
 
             NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateTextCell"), new NSDictionary<NSString, NSObject>(keys, objects));
-        }
 
+        }
+        
         public void PopulateCell(string label, UIImage image, OptionType type, NSIndexPath indexPath)
         {
             ImageLabel.Text = label.ToUpper();

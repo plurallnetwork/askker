@@ -89,7 +89,7 @@ namespace Askker.App.iOS
                 reportsDatasets.Add(await reportManager.GetResultsByGender(this.userId, this.creationDate, LoginController.tokenModel.access_token));
                 reportsDatasets.Add(await reportManager.GetResultsByAge(this.userId, this.creationDate, LoginController.tokenModel.access_token));
 
-                var feedCellHeight = FeedController.getHeightForFeedCell(survey, View.Frame.Width);
+                var feedCellHeight = Utils.getHeightForFeedCell(survey, View.Frame.Width);
                 feedCell = new FeedCollectionViewCell(new CGRect(0, 0, View.Frame.Width, feedCellHeight));
                 feedController.BindFeedCell(feedCell, survey, indexPathRow);
 
