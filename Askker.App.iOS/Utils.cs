@@ -395,5 +395,25 @@ namespace Askker.App.iOS
 
             return system;
         }
+
+        public static string TimeAgoDisplay(DateTime date)
+        {
+            var secondsAgo = (int)DateTime.Now.Subtract(date).TotalSeconds;
+            var minute = 60;
+            var hour = 60 * minute;
+            var day = 24 * hour;
+
+            if (secondsAgo < minute) {
+                return secondsAgo + " seconds ago";
+            }
+            else if (secondsAgo < hour) {
+                return (secondsAgo / minute) + " minutes ago";
+            }
+            else if (secondsAgo < day) {
+                return (secondsAgo / hour) + " hours ago";
+            }
+
+            return date.ToString("dd MMMM");
+        }
     }
 }
