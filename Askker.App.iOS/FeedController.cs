@@ -149,8 +149,7 @@ namespace Askker.App.iOS
                     if (CreateSurveyController != null)
                     {
                         CreateSurveyController.ScreenState = ScreenState.Edit.ToString();
-                        CreateSurveyController.UserId = survey.userId;
-                        CreateSurveyController.CreationDate = survey.creationDate;
+                        CreateSurveyController.SurveyModel = survey;
 
                         var rootController = this.Storyboard.InstantiateViewController("CreateSurveyNavController");
                         if (rootController != null)

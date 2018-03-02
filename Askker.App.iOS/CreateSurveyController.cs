@@ -25,8 +25,6 @@ namespace Askker.App.iOS
         }
 
         public static string ScreenState;
-        public static string UserId;
-        public static string CreationDate;
         private MultiStepProcessHorizontal _pageViewController;
         private HorizontalSwipePageControl _pageControl;
         private UILabel _pageTitle;
@@ -56,7 +54,7 @@ namespace Askker.App.iOS
             View = new UIView();
             View.BackgroundColor = UIColor.White;
 
-            _pageTitles = new List<string> { "Write your question", "Choose your options", "Who should see this?" };
+            _pageTitles = new List<string> { "Write your question", "Review your post", "Who should see this?" };
             _pageTitle = new UILabel();
             _pageTitle.TextColor = UIColor.FromRGB(255, 200, 0);
             _pageTitle.Font = UIFont.BoldSystemFontOfSize(12);

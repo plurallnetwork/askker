@@ -118,14 +118,6 @@
       <DependentUpon>CreateSurveyController.cs</DependentUpon>
     </Compile>
     <Compile Include="CreateSurveyFirstStep.cs" />
-    <Compile Include="CreateSurveyOptionsStep.cs" />
-    <Compile Include="CreateSurveyOptionsStep.designer.cs">
-      <DependentUpon>CreateSurveyOptionsStep.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CreateSurveyQuestionStep.cs" />
-    <Compile Include="CreateSurveyQuestionStep.designer.cs">
-      <DependentUpon>CreateSurveyQuestionStep.cs</DependentUpon>
-    </Compile>
     <Compile Include="CreateSurveySecondStep.cs" />
     <Compile Include="CreateSurveyShareStep.cs" />
     <Compile Include="CreateSurveyShareStep.designer.cs">
@@ -138,7 +130,6 @@
     <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
     <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
     <Compile Include="CustomViewComponents\SearchUserGroupsCustomCell.cs" />
-    <Compile Include="CustomViewComponents\SurveyOptionCustomCell.cs" />
     <Compile Include="CustomViewComponents\SurveyShareCustomCell.cs" />
     <Compile Include="CustomViewComponents\UIButtonCustomBorder.cs" />
     <Compile Include="CustomViewComponents\ProfileTableViewCell.cs" />
@@ -217,8 +208,6 @@
     <Compile Include="TableControllers\ProfileListTableViewController.cs" />
     <Compile Include="TableControllers\ProfileTableItem.cs" />
     <Compile Include="TableControllers\ProfileSearchTableViewController.cs" />
-    <Compile Include="TableControllers\SurveyOptionTableItem.cs" />
-    <Compile Include="TableControllers\SurveyOptionTableSource.cs" />
     <Compile Include="TableControllers\SurveyShareTableItem.cs" />
     <Compile Include="TableControllers\SurveyShareTableSource.cs" />
     <Compile Include="UserGroupMembersAdminController.cs" />
@@ -245,8 +234,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
-    <InterfaceDefinition Include="Resources\QuestionStepView.xib" />
-    <InterfaceDefinition Include="Resources\OptionsStepView.xib" />
     <InterfaceDefinition Include="Resources\ShareStepView.xib" />
     <InterfaceDefinition Include="Resources\FeedMenuView.xib" />
     <InterfaceDefinition Include="Resources\CommentCell.xib" />

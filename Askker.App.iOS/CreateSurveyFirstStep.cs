@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -117,7 +118,7 @@ namespace Askker.App.iOS
             View.BackgroundColor = UIColor.White;
             
             questionText = new UITextField();
-            questionText.Placeholder = "Type here";
+            questionText.Placeholder = "Type your question here";
             questionText.TextColor = UIColor.FromRGB(90, 89, 89);
 
             questionSeparator = new UIView();
@@ -370,39 +371,42 @@ namespace Askker.App.iOS
 
         private void UpdateNextButton()
         {
-            if (!string.IsNullOrWhiteSpace(questionText.Text.Trim()))
+            if (CreateSurveyController._nextButton != null)
             {
-                if (CreateSurveyController.SurveyModel.type.Equals(SurveyType.Text.ToString()))
+                if (!string.IsNullOrWhiteSpace(questionText.Text.Trim()))
                 {
-                    if (tableItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
+                    if (CreateSurveyController.SurveyModel.type.Equals(SurveyType.Text.ToString()))
                     {
-                        CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                        CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                        if (tableItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
+                        {
+                            CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                            CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                        }
+                        else
+                        {
+                            CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                            CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                        }
                     }
                     else
                     {
-                        CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
-                        CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                        if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
+                        {
+                            CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                            CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+                        }
+                        else
+                        {
+                            CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                            CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                        }
                     }
                 }
                 else
                 {
-                    if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
-                    {
-                        CreateSurveyController._nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
-                        CreateSurveyController._nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
-                    }
-                    else
-                    {
-                        CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
-                        CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
-                    }
+                    CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                    CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
                 }
-            }
-            else
-            {
-                CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
-                CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
             }
         }
 
@@ -457,9 +461,6 @@ namespace Askker.App.iOS
             {
                 try
                 {
-                    CreateSurveyController.SurveyModel = await new FeedManager().GetSurvey(CreateSurveyController.UserId, CreateSurveyController.CreationDate, LoginController.tokenModel.access_token);
-
-                    //pre-cache image options
                     if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
                     {
                         foreach (var option in CreateSurveyController.SurveyModel.options)
@@ -489,7 +490,11 @@ namespace Askker.App.iOS
                     }
                     else
                     {
+                        //UIImageView imageView = new UIImageView();
+                        //Utils.SetImageFromNSUrlSession(option.image, imageView, this, PictureType.OptionImage);
                         UIImage image = Utils.GetImageFromNSUrl(option.image);
+
+
 
                         try
                         {
@@ -625,32 +630,50 @@ namespace Askker.App.iOS
                     }
                 }
 
+                UIView relativePositionView = null;
                 if (collectionView != null)
                 {
                     // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
-                    UIView relativePositionView = collectionView;
+                    relativePositionView = collectionView;
                     CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
 
                     bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
 
                     // Calculate how far we need to scroll
-                    scroll_amount = (float)(r.Height - (imageCollectionView.Frame.Size.Height - bottom));                   
+                    scroll_amount = (float)(r.Height - (imageCollectionView.Frame.Size.Height - bottom));
+
+                    moveViewUp = true;
                 }
                 else if(tableView != null)
                 {
                     // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
-                    UIView relativePositionView = tableView;
+                    relativePositionView = tableView;
                     CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
 
                     bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
 
                     // Calculate how far we need to scroll
                     scroll_amount = (float)(r.Height - (textTableView.Frame.Size.Height - bottom));
+
+                    var pageControlHeight = 50;
+                    var screenHeight = (float)UIScreen.MainScreen.Bounds.Height;
+
+                    var diffActiveScreen = pageControlHeight + relativePositionView.Frame.Y + bottom;
+                    var diffKeyboardScreen = screenHeight - r.Height;
+
+                    if (diffActiveScreen < diffKeyboardScreen)
+                    {
+                        moveViewUp = false;
+                    }
+                    else
+                    {
+                        moveViewUp = true;
+                    }
                 }
 
+                
 
                 // Perform the scrolling
-                moveViewUp = true;
                 ScrollTheView(moveViewUp);
 
                 activeview = null;

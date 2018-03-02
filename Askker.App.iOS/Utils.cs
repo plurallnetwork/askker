@@ -466,6 +466,7 @@ namespace Askker.App.iOS
 
             feedCell.nameLabel.AttributedText = attributedText;
 
+
             bool finished = false;
             if (survey.finishDate != null)
             {
@@ -485,6 +486,11 @@ namespace Askker.App.iOS
                 feedCell.moreButton.Hidden = false;
                 feedCell.optionsTableView.AllowsSelection = true;
                 feedCell.optionsCollectionView.AllowsSelection = true;
+                finished = false;
+            }
+
+            if (isPreview)
+            {
                 finished = false;
             }
 
