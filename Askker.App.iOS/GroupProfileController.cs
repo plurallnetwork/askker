@@ -30,7 +30,8 @@ namespace Askker.App.iOS
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
             imageCache.RemoveAllObjects();
-
+            btnRelationship.SetTitle("", UIControlState.Normal);
+            btnRelationship.Hidden = true;
             profileImageView.Layer.MasksToBounds = true;
             profileImageView.Image = null;
 
@@ -72,6 +73,8 @@ namespace Askker.App.iOS
         {
             try
             {
+                btnRelationship.LoadingIndicatorButton(true);
+
                 if (relationshipStatus == UserGroupRelationshipStatus.NotMember)
                 {
                     relationshipStatus = UserGroupRelationshipStatus.PendingYourApproval;
@@ -102,10 +105,12 @@ namespace Askker.App.iOS
                     await new UserGroupManager().UpdateGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, LoginController.userModel.id,  relationshipStatus);
                 }
 
+                btnRelationship.LoadingIndicatorButton(false);
                 LoadRelationshipButton();
             }
             catch (Exception ex)
             {
+                btnRelationship.LoadingIndicatorButton(false);
                 Utils.HandleException(ex);
             }
         }

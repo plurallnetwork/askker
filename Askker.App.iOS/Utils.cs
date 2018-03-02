@@ -12,7 +12,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public class Utils
+    public static class Utils
     {
         static UIActivityIndicatorView activityIndicator;
         static NSTimer timer;
@@ -415,5 +415,30 @@ namespace Askker.App.iOS
 
             return date.ToString("dd MMMM");
         }
+
+        public static void LoadingIndicatorButton (this UIButton button, bool show)
+        {
+            var tag = 808404;
+            if (show)
+            {
+                button.Enabled = false;
+                button.Alpha = 0.5f;
+                var indicator = new UIActivityIndicatorView();
+                indicator.Center = new CGPoint(button.Bounds.Size.Width / 2, button.Bounds.Size.Height / 2);
+                indicator.Tag = tag;
+                button.AddSubview(indicator);
+                indicator.StartAnimating();
+            }
+            else
+            {
+                button.Enabled = true;
+                button.Alpha = 1.0f;
+                var indicator = (UIActivityIndicatorView)button.ViewWithTag(tag);
+                if (indicator != null) {
+                    indicator.StopAnimating();
+                    indicator.RemoveFromSuperview();
+                }
+            }
+        } 
     }
 }
