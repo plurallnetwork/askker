@@ -13,7 +13,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public class Utils
+    public static class Utils
     {
         static UIActivityIndicatorView activityIndicator;
         static NSTimer timer;
@@ -460,6 +460,8 @@ namespace Askker.App.iOS
                 }
             }
 
+            attributedText.Append(new NSAttributedString(" • " + TimeAgoDisplay(DateTime.ParseExact(survey.creationDate, "yyyyMMddTHHmmss", null)), UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
+
             var paragraphStyle = new NSMutableParagraphStyle();
             paragraphStyle.LineSpacing = 4;
             attributedText.AddAttribute(new NSString("ParagraphStyle"), paragraphStyle, new NSRange(0, attributedText.Length));
@@ -592,5 +594,50 @@ namespace Askker.App.iOS
                 feedCell.totalVotesLabel.Hidden = false;
             }
         }
+
+        public static string TimeAgoDisplay(DateTime date)
+        {
+            var secondsAgo = (int)DateTime.Now.Subtract(date).TotalSeconds;
+            var minute = 60;
+            var hour = 60 * minute;
+            var day = 24 * hour;
+
+            if (secondsAgo < minute) {
+                return secondsAgo + " seconds ago";
+            }
+            else if (secondsAgo < hour) {
+                return (secondsAgo / minute) + " minutes ago";
+            }
+            else if (secondsAgo < day) {
+                return (secondsAgo / hour) + " hours ago";
+            }
+
+            return date.ToString("dd MMMM");
+        }
+
+        public static void LoadingIndicatorButton (this UIButton button, bool show)
+        {
+            var tag = 808404;
+            if (show)
+            {
+                button.Enabled = false;
+                button.Alpha = 0.5f;
+                var indicator = new UIActivityIndicatorView();
+                indicator.Center = new CGPoint(button.Bounds.Size.Width / 2, button.Bounds.Size.Height / 2);
+                indicator.Tag = tag;
+                button.AddSubview(indicator);
+                indicator.StartAnimating();
+            }
+            else
+            {
+                button.Enabled = true;
+                button.Alpha = 1.0f;
+                var indicator = (UIActivityIndicatorView)button.ViewWithTag(tag);
+                if (indicator != null) {
+                    indicator.StopAnimating();
+                    indicator.RemoveFromSuperview();
+                }
+            }
+        } 
     }
 }

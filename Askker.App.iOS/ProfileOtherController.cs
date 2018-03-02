@@ -1,7 +1,6 @@
 ﻿using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Enums;
-using CoreFoundation;
 using Foundation;
 using System;
 using UIKit;
@@ -120,17 +119,21 @@ namespace Askker.App.iOS
         {
             try
             {
+                btnGroupRelationship.LoadingIndicatorButton(true);
+
                 if (groupRelationshipStatus == UserGroupRelationshipStatus.PendingYourApproval)
                 {
                     groupRelationshipStatus = UserGroupRelationshipStatus.Member;
 
                     await new UserGroupManager().UpdateGroupRelationshipStatus(LoginController.tokenModel.access_token, groupId, friendUserId, groupRelationshipStatus);
-                }                
+                }
 
+                btnGroupRelationship.LoadingIndicatorButton(false);
                 LoadGroupRelationshipButton();
             }
             catch (Exception ex)
             {
+                btnGroupRelationship.LoadingIndicatorButton(false);
                 Utils.HandleException(ex);
             }
         }
@@ -139,6 +142,8 @@ namespace Askker.App.iOS
         {
             try
             {
+                btnRelationship.LoadingIndicatorButton(true);
+
                 if (relationshipStatus == RelationshipStatus.NotFriends)
                 {
                     relationshipStatus = RelationshipStatus.PendingFriendApproval;
@@ -172,10 +177,12 @@ namespace Askker.App.iOS
                     await new FriendManager().UpdateUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId, relationshipStatus);
                 }
 
+                btnRelationship.LoadingIndicatorButton(false);
                 LoadRelationshipButton();
             }
             catch (Exception ex)
             {
+                btnRelationship.LoadingIndicatorButton(false);
                 Utils.HandleException(ex);
             }
         }
