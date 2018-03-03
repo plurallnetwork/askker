@@ -77,7 +77,7 @@ namespace Askker.App.iOS
             return collectionViewItems;
         }
 
-        public override void ViewDidUnload()
+        public override void ViewDidDisappear(bool animated)
         {
             base.ViewDidUnload();
 

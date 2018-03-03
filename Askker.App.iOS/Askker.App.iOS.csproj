@@ -127,8 +127,6 @@
     <Compile Include="CustomUITableViewController.cs" />
     <Compile Include="CustomUIViewController.cs" />
     <Compile Include="CustomViewComponents\PlaceholderEnabledUITextView.cs" />
-    <Compile Include="CustomViewComponents\SearchAllCustomCell.cs" />
-    <Compile Include="CustomViewComponents\SearchUserGroupsCustomCell.cs" />
     <Compile Include="CustomViewComponents\SurveyShareCustomCell.cs" />
     <Compile Include="CustomViewComponents\UIButtonCustomBorder.cs" />
     <Compile Include="CustomViewComponents\ProfileTableViewCell.cs" />

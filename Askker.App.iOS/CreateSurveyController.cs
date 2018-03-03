@@ -228,10 +228,19 @@ namespace Askker.App.iOS
                 }
 
                 if (CreateSurveyController.SurveyModel == null ||
-                        CreateSurveyController.SurveyModel.options == null ||
-                        CreateSurveyController.SurveyModel.options.Count < 2)
+                    CreateSurveyController.SurveyModel.options == null ||
+                    CreateSurveyController.SurveyModel.options.Count < 2)
                 {
                     new UIAlertView("Options", "Please give at least two options", null, "OK", null).Show();
+                    BTProgressHUD.Dismiss();
+                    return;
+                }
+
+                if (CreateSurveyController.SurveyModel == null ||
+                    CreateSurveyController.SurveyModel.options == null ||
+                    CreateSurveyController.SurveyModel.options.Where(q => string.IsNullOrEmpty(q.text)).Count() > 0)
+                {
+                    new UIAlertView("Options", "Please enter the text of all the options", null, "OK", null).Show();
                     BTProgressHUD.Dismiss();
                     return;
                 }
