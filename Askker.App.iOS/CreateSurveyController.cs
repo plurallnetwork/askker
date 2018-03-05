@@ -418,6 +418,9 @@ namespace Askker.App.iOS
                     {
                         this.PresentViewController(rootController, true, null);
                         CreateSurveyController.SurveyModel = null;
+
+                        var step0 = Steps[0] as CreateSurveyFirstStep;
+                        step0.ViewDidUnload();
                     }
                 }
                 ), true);

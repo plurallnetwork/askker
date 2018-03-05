@@ -77,7 +77,7 @@ namespace Askker.App.iOS
             return collectionViewItems;
         }
 
-        public override void ViewDidDisappear(bool animated)
+        public override void ViewDidUnload()
         {
             base.ViewDidUnload();
 
@@ -313,8 +313,12 @@ namespace Askker.App.iOS
             byte[] myByteArray = new byte[image.Length];
             System.Runtime.InteropServices.Marshal.Copy(image.Bytes, myByteArray, 0, Convert.ToInt32(image.Length));
 
-            collectionViewItems.RemoveAt(index);
-            collectionViewItems.Insert(index, new ImageOptionTableItem(UIImage.LoadFromData(NSData.FromArray(myByteArray)), myByteArray, "", OptionType.Option));
+            //collectionViewItems.RemoveAt(index);
+            //collectionViewItems.Insert(index, new ImageOptionTableItem(UIImage.LoadFromData(NSData.FromArray(myByteArray)), myByteArray, "", OptionType.Option));
+            collectionViewItems.ElementAt(index).Image = UIImage.LoadFromData(NSData.FromArray(myByteArray));
+            collectionViewItems.ElementAt(index).ImageArray = myByteArray;
+            collectionViewItems.ElementAt(index).Text = "";
+            collectionViewItems.ElementAt(index).Type = OptionType.Option;
             if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Insert)).ToList().Count() <= 0)
             {
                 collectionViewItems.Add(new ImageOptionTableItem(UIImage.FromBundle("AddImage"), null, "", OptionType.Insert));
@@ -410,7 +414,7 @@ namespace Askker.App.iOS
             }
         }
 
-        public override async void ViewDidLoad()
+        public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             
