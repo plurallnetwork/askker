@@ -435,10 +435,10 @@ namespace Askker.App.iOS
                 ), true);
 
             // Keyboard dispose when clicking outside the comment box
-            var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
-            g.AddTarget(() => View.EndEditing(true));
-            g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);
-            View.AddGestureRecognizer(g);
+            //var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
+            //g.AddTarget(() => View.EndEditing(true));
+            //g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);
+            //View.AddGestureRecognizer(g);
         }
 
         public override void ViewDidAppear(bool animated)

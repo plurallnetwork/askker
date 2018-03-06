@@ -602,9 +602,6 @@ namespace Askker.App.iOS
 
         private void KeyBoardUpNotification(NSNotification notification)
         {
-            UITableView tableView = null;
-            UICollectionView collectionView = null;
-
             CreateSurveyController._nextButton.Hidden = true;
 
             if (!moveViewUp)
@@ -613,52 +610,13 @@ namespace Askker.App.iOS
                 CGRect r = UIKeyboard.BoundsFromNotification(notification);
 
                 // Find what opened the keyboard
-                foreach (UIView view in this.View.Subviews)
-                {
-                    if (view.GetType() == typeof(UITextField))
-                    {
-                        if (view.IsFirstResponder)
-                            activeview = view;                        
-                    }
-                    
-                    if (activeview == null && (view.GetType() == typeof(UITableView) || view.GetType() == typeof(UICollectionView)))
-                    {
-                        foreach (UIView view2 in view.Subviews)
-                        {
-                            if (view2.GetType() == typeof(TextOptionCustomCell) || view2.GetType() == typeof(ImageOptionCustomCell))
-                            {                                
-                                foreach (UIView view3 in view2.Subviews)
-                                {
-                                    if (view3.GetType() == typeof(UIView))
-                                    {
-                                        foreach (UIView view4 in view3.Subviews)
-                                        {
-                                            if (view4.IsFirstResponder)
-                                            {
-                                                activeview = view4;
-                                                if (view.GetType() == typeof(UITableView))
-                                                {
-                                                    tableView = view as UITableView;
-                                                }
-
-                                                if (view.GetType() == typeof(UICollectionView))
-                                                {
-                                                    collectionView = view as UICollectionView;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                activeview = Utils.findFirstResponder(this.View);
 
                 UIView relativePositionView = null;
-                if (collectionView != null)
+                if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
                 {
                     // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
-                    relativePositionView = collectionView;
+                    relativePositionView = imageCollectionView;
                     CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
 
                     bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
@@ -668,10 +626,10 @@ namespace Askker.App.iOS
 
                     moveViewUp = true;
                 }
-                else if(tableView != null)
+                else 
                 {
                     // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
-                    relativePositionView = tableView;
+                    relativePositionView = textTableView;
                     CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
 
                     bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
@@ -694,8 +652,6 @@ namespace Askker.App.iOS
                         moveViewUp = true;
                     }
                 }
-
-                
 
                 // Perform the scrolling
                 ScrollTheView(moveViewUp);
@@ -965,6 +921,28 @@ namespace Askker.App.iOS
         public void EditingStarted(UITextField textField)
         {
             button.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
+        }
+
+        [Export("textFieldDidEndEditing:")]
+        public void EditingEnded(UITextField textField)
+        {
+            if (button.ImageView.Image.Equals(UIImage.FromBundle("CheckProfile")))
+            {
+                var keys = new[]
+                {
+                        new NSString("index"),
+                        new NSString("value")
+                    };
+
+                var objects = new[]
+                {
+                        new NSString(indexPath.Row.ToString()),
+                        new NSString(textField.Text)
+                    };
+
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateRow"), new NSDictionary<NSString, NSObject>(keys, objects));
+                button.SetImage(UIImage.FromBundle("DeleteOption"), UIControlState.Normal);
+            }
         }
 
         [Export("CellButtonBtn:")]
@@ -1414,7 +1392,30 @@ namespace Askker.App.iOS
         {
             Button.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
         }
-        
+
+        [Export("textFieldDidEndEditing:")]
+        public void EditingEnded(UITextField textField)
+        {
+            if (Button.ImageView.Image.Equals(UIImage.FromBundle("CheckProfile")))
+            {
+                var keys = new[]
+                {
+                    new NSString("index"),
+                    new NSString("value")
+                };
+
+                var objects = new[]
+                {
+                    new NSString(indexPath.Row.ToString()),
+                    new NSString(ImageLabel.Text)
+                };
+
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateTextCell"), new NSDictionary<NSString, NSObject>(keys, objects));
+
+                Button.SetImage(UIImage.FromBundle("DeleteOption"), UIControlState.Normal);
+            }
+        }
+
         public void PopulateCell(string label, UIImage image, OptionType type, NSIndexPath indexPath)
         {
             ImageLabel.Text = label;

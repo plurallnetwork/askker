@@ -627,5 +627,31 @@ namespace Askker.App.iOS
                 }
             }
         } 
+
+        public static UIView findFirstResponder(UIView view)
+        {
+            UIView result = null;
+
+            foreach (UIView subview in view.Subviews)
+            {
+                if (subview.IsFirstResponder)
+                {
+                    return subview;
+                }
+
+                var _subview = subview;
+
+                if(_subview.Subviews.Length > 0)
+                {
+                    result = findFirstResponder(_subview);
+                    if (result != null && result.IsFirstResponder)
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
