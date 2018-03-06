@@ -17,7 +17,7 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    public partial class CreateSurveyFirstStep : CustomUIViewController, IMultiStepProcessStep
+    public partial class CreateSurveyFirstStep : CustomUIViewController, IMultiStepProcessStep, IUITextFieldDelegate
     {
         public int StepIndex { get; set; }
 
@@ -39,6 +39,7 @@ namespace Askker.App.iOS
         static List<ImageOptionTableItem> collectionViewItems;
 
         UITextField questionText;
+        UIButton checkButton;
         UIView questionSeparator;
         UILabel typeLabel;
         UIButton textBtn;
@@ -120,6 +121,12 @@ namespace Askker.App.iOS
             questionText = new UITextField();
             questionText.Placeholder = "Type your question here";
             questionText.TextColor = UIColor.FromRGB(90, 89, 89);
+            questionText.Delegate = this;
+
+            checkButton = new UIButton();
+            checkButton.AddTarget(Self, new ObjCRuntime.Selector("CheckButtonClick:"), UIControlEvent.TouchUpInside);
+            checkButton.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
+            checkButton.Hidden = true;
 
             questionSeparator = new UIView();
             questionSeparator.BackgroundColor = UIColor.FromRGB(90, 89, 89);
@@ -141,6 +148,7 @@ namespace Askker.App.iOS
             imageCollectionView = new UICollectionView(new CGRect(), new PBCollectionViewWaterfallLayout());
 
             View.Add(questionText);
+            View.Add(checkButton);
             View.Add(questionSeparator);
             View.Add(typeLabel);
             View.Add(textBtn);
@@ -154,8 +162,13 @@ namespace Askker.App.iOS
                 questionText.WithSameCenterX(View),
                 questionText.AtTopOf(View, 70),
                 questionText.AtLeftOf(View, Constants.padding),
-                questionText.AtRightOf(View, Constants.padding),
+                questionText.AtRightOf(View, 40),
                 questionText.Height().EqualTo(30),
+
+                checkButton.AtTopOf(View, 70),
+                checkButton.Width().EqualTo(30),
+                checkButton.WithSameHeight(questionText),
+                checkButton.Left().EqualTo().RightOf(questionText),
 
                 questionSeparator.WithSameCenterX(View),
                 questionSeparator.Below(questionText, Constants.padding /2),
@@ -188,6 +201,19 @@ namespace Askker.App.iOS
                 imageCollectionView.AtLeftOf(View),
                 imageCollectionView.AtRightOf(View)
             );
+        }
+
+        [Export("textFieldDidBeginEditing:")]
+        public void EditingStarted(UITextField textField)
+        {
+            checkButton.Hidden = false;
+        }
+
+        [Export("CheckButtonClick:")]
+        private void CheckButtonClick(UIButton button)
+        {
+            checkButton.Hidden = true;
+            View.EndEditing(true);
         }
 
         [Export("TextButtonBtn:")]
@@ -570,13 +596,7 @@ namespace Askker.App.iOS
 
             // Keyboard Down
             NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
-
-            //// Keyboard dispose when clicking outside the comment box
-            //var g = new UITapGestureRecognizer { CancelsTouchesInView = false };
-            //g.AddTarget(() => View.EndEditing(true));
-            //g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);
-            //View.AddGestureRecognizer(g);
-
+            
             BTProgressHUD.Dismiss();
         }
 
@@ -940,24 +960,11 @@ namespace Askker.App.iOS
                 button.AtTopOf(ContentView, 4)
             );
         }
-
-        [Export("textFieldDidEndEditing:")]
-        public void EditingEnded(UITextField textField)
+        
+        [Export("textFieldDidBeginEditing:")]
+        public void EditingStarted(UITextField textField)
         {
-            var keys = new[]
-            {
-                new NSString("index"),
-                new NSString("value")
-            };
-
-            var objects = new[]
-            {
-                new NSString(indexPath.Row.ToString()),
-                new NSString(textField.Text)
-            };
-
-            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateRow"), new NSDictionary<NSString, NSObject>(keys, objects));            
-
+            button.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
         }
 
         [Export("CellButtonBtn:")]
@@ -969,7 +976,27 @@ namespace Askker.App.iOS
             }
             else
             {
-                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("RemoveRow"), new NSString(indexPath.Row.ToString()));
+                if (button.ImageView.Image.Equals(UIImage.FromBundle("CheckProfile")))
+                {
+                    var keys = new[]
+                    {
+                        new NSString("index"),
+                        new NSString("value")
+                    };
+
+                    var objects = new[]
+                    {
+                        new NSString(indexPath.Row.ToString()),
+                        new NSString(textField.Text)
+                    };
+
+                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateRow"), new NSDictionary<NSString, NSObject>(keys, objects));
+                    button.SetImage(UIImage.FromBundle("DeleteOption"), UIControlState.Normal);
+                }
+                else
+                {
+                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("RemoveRow"), new NSString(indexPath.Row.ToString()));
+                }
             }                
         }
                 
@@ -1356,27 +1383,36 @@ namespace Askker.App.iOS
 
         [Export("ButtonClick:")]
         private void ButtonClick(UIButton button)
-        {
-            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("DeleteCell"), new NSString(indexPath.Row.ToString()));
+        {   
+            if (button.ImageView.Image.Equals(UIImage.FromBundle("CheckProfile")))
+            {
+                var keys = new[]
+                {
+                    new NSString("index"),
+                    new NSString("value")
+                };
+
+                var objects = new[]
+                {
+                    new NSString(indexPath.Row.ToString()),
+                    new NSString(ImageLabel.Text)
+                };
+
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateTextCell"), new NSDictionary<NSString, NSObject>(keys, objects));
+
+                button.SetImage(UIImage.FromBundle("DeleteOption"), UIControlState.Normal);
+            }
+            else
+            {
+                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("DeleteCell"), new NSString(indexPath.Row.ToString()));
+
+            }
         }
 
-        [Export("textFieldDidEndEditing:")]
-        public void EditingEnded(UITextField textField)
+        [Export("textFieldDidBeginEditing:")]
+        public void EditingStarted(UITextField textField)
         {
-            var keys = new[]
-            {
-                new NSString("index"),
-                new NSString("value")
-            };
-
-            var objects = new[]
-            {
-                new NSString(indexPath.Row.ToString()),
-                new NSString(textField.Text)
-            };
-
-            NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateTextCell"), new NSDictionary<NSString, NSObject>(keys, objects));
-
+            Button.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
         }
         
         public void PopulateCell(string label, UIImage image, OptionType type, NSIndexPath indexPath)
