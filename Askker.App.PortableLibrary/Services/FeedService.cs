@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Enums;
+﻿using Askker.App.iOS;
+using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Newtonsoft.Json;
 using System;
@@ -20,7 +21,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getfeed/{0}/{1}/{2}/{3}", userId, filterMine, filterForMe, filterFinished));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/getfeed/{0}/{1}/{2}/{3}", userId, filterMine, filterForMe, filterFinished));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -38,7 +39,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getsurvey/{0}/{1}", userId, creationDate));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/getsurvey/{0}/{1}", userId, creationDate));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -70,7 +71,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey", content);
+                    return await client.PostAsync(EnvironmentConstants.getServerUrl() + "api/survey", content);
                 }
             }
             catch (Exception ex)
@@ -101,7 +102,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/finishsurvey", formContent);
+                    return await client.PostAsync(EnvironmentConstants.getServerUrl() + "api/survey/finishsurvey", formContent);
                 }
             }
             catch (Exception ex)
@@ -116,7 +117,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/cleanvotes/{0}", surveyId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/cleanvotes/{0}", surveyId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);

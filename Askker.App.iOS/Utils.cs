@@ -223,9 +223,9 @@ namespace Askker.App.iOS
         //public static void SetImageFromNSUrlSession(string imagePath, UIImageView imageView, NSCache imageCache = null)
         //{
         //    UIImage imageFromCache = null;
-        //    var url = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath);
+        //    var url = new NSUrl(EnvironmentConstants.getS3Url() + imagePath);
         //    var noCacheStr = "?nocache=" + String.Format("{0:yyyyMMddHHmmssffff}", DateTime.Now);
-        //    var fetchUrl = new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath + noCacheStr);
+        //    var fetchUrl = new NSUrl(EnvironmentConstants.getS3Url() + imagePath + noCacheStr);
 
         //    if (imageCache != null)
         //    {
@@ -288,7 +288,7 @@ namespace Askker.App.iOS
                     placeholder = UIImage.FromBundle("Group");
                 }
 
-                imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), placeholder, SDWebImageOptions.ProgressiveDownload, //HighPriority
+                imageView.SetImage(new NSUrl(EnvironmentConstants.getS3Url() + imagePath), placeholder, SDWebImageOptions.ProgressiveDownload, //HighPriority
                     progressBlock: (receivedSize, completedSize) =>
                     {
                         if (activityIndicator == null)
@@ -320,7 +320,7 @@ namespace Askker.App.iOS
 
                         if (error != null && error.ToString().Contains("1100"))
                         {
-                            imageView.SetImage(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), placeholder, SDWebImageOptions.RetryFailed);
+                            imageView.SetImage(new NSUrl(EnvironmentConstants.getS3Url() + imagePath), placeholder, SDWebImageOptions.RetryFailed);
                         }
 
                         if (image != null)
@@ -338,7 +338,7 @@ namespace Askker.App.iOS
         public static UIImage GetImageFromNSUrl(string imagePath)
         {
             UIImage result = null;
-            SDWebImageManager.SharedManager.Download(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), SDWebImageOptions.ProgressiveDownload, //HighPriority
+            SDWebImageManager.SharedManager.Download(new NSUrl(EnvironmentConstants.getS3Url() + imagePath), SDWebImageOptions.ProgressiveDownload, //HighPriority
                 progressBlock: (receivedSize, completedSize) =>
                 {
                     //do nothing
@@ -352,7 +352,7 @@ namespace Askker.App.iOS
 
                     if(error != null && error.ToString().Contains("1100"))
                     {
-                        SDWebImageManager.SharedManager.Download(new NSUrl("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath), SDWebImageOptions.RetryFailed,
+                        SDWebImageManager.SharedManager.Download(new NSUrl(EnvironmentConstants.getS3Url() + imagePath), SDWebImageOptions.RetryFailed,
                             progressBlock: (receivedSize, completedSize) =>
                             {
                                 //do nothing
@@ -383,9 +383,9 @@ namespace Askker.App.iOS
 
         public static void RemoveImageFromCache(string imagePath)
         {
-            SDWebImageManager.SharedManager.ImageCache.RemoveImage("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath, true ,completion: () =>
+            SDWebImageManager.SharedManager.ImageCache.RemoveImage(EnvironmentConstants.getS3Url() + imagePath, true ,completion: () =>
             {
-                Console.WriteLine("https://s3-us-west-2.amazonaws.com/askker-desenv/" + imagePath + " removed from cache");
+                Console.WriteLine(EnvironmentConstants.getS3Url() + imagePath + " removed from cache");
             });
         }
 

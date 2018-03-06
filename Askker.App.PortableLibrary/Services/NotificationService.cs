@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Models;
+﻿using Askker.App.iOS;
+using Askker.App.PortableLibrary.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/setusernotification", formContent);
+                    return await client.PostAsync(EnvironmentConstants.getServerUrl() + "api/survey/setusernotification", formContent);
                 }
             }
             catch (Exception ex)
@@ -40,7 +41,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/setusernotificationdismissed", formContent);
+                    return await client.PostAsync(EnvironmentConstants.getServerUrl() + "api/survey/setusernotificationdismissed", formContent);
                 }
             }
             catch (Exception ex)
@@ -55,7 +56,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getusernotifications/{0}", userId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/getusernotifications/{0}", userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -73,7 +74,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getuserunreadnotificationscount/{0}", userId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/getuserunreadnotificationscount/{0}", userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -91,7 +92,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/setusernotificationsread/{0}", userId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/setusernotificationsread/{0}", userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 

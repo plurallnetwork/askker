@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Enums;
+﻿using Askker.App.iOS;
+using Askker.App.PortableLibrary.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getusergroups/{0}", userId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/getusergroups/{0}", userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -34,7 +35,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/GetGroupRelationshipStatus/{0}/{1}", groupId, userId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/Account/GetGroupRelationshipStatus/{0}/{1}", groupId, userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);
@@ -52,7 +53,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/RequestPermissionToGroup/{0}/{1}", groupId, userId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/Account/RequestPermissionToGroup/{0}/{1}", groupId, userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.PostAsync(uri, null);
@@ -70,7 +71,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/UpdateUserRelationshipStatusGroup/{0}/{1}/{2}", groupId, userId, groupRelationshipStatus.ToString()));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/Account/UpdateUserRelationshipStatusGroup/{0}/{1}/{2}", groupId, userId, groupRelationshipStatus.ToString()));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.PostAsync(uri, null);
@@ -88,7 +89,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/Account/SearchGroupsByName/{0}", name));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/Account/SearchGroupsByName/{0}", name));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
@@ -107,7 +108,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/GetGroup/{0}", groupId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/GetGroup/{0}", groupId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
@@ -126,7 +127,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/GetGroupMembers/{0}", groupId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/GetGroupMembers/{0}", groupId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 

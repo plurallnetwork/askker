@@ -1,4 +1,5 @@
-﻿using Askker.App.PortableLibrary.Models;
+﻿using Askker.App.iOS;
+using Askker.App.PortableLibrary.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/createsurveycomment", formContent);
+                    return await client.PostAsync(EnvironmentConstants.getServerUrl() + "api/survey/createsurveycomment", formContent);
                 }
             }
             catch (Exception ex)
@@ -40,7 +41,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/deletesurveycomment", formContent);
+                    return await client.PostAsync(EnvironmentConstants.getServerUrl() + "api/survey/deletesurveycomment", formContent);
                 }
             }
             catch (Exception ex)
@@ -55,7 +56,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/getsurveycomments/{0}", surveyId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/getsurveycomments/{0}", surveyId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);

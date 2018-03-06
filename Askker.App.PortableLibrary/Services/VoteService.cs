@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Askker.App.iOS;
 
 namespace Askker.App.PortableLibrary.Services
 {
@@ -21,7 +22,7 @@ namespace Askker.App.PortableLibrary.Services
 
                     var formContent = new StringContent(JsonConvert.SerializeObject(surveyVotes, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json");
 
-                    return await client.PostAsync("https://blinq-development.com:44322/api/survey/vote", formContent);
+                    return await client.PostAsync(EnvironmentConstants.getServerUrl() + "api/survey/vote", formContent);
                 }
             }
             catch (Exception ex)
@@ -36,7 +37,7 @@ namespace Askker.App.PortableLibrary.Services
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format("https://blinq-development.com:44322/api/survey/deletevote/{0}/{1}", surveyId, userId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/deletevote/{0}/{1}", surveyId, userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.PostAsync(uri, null);
