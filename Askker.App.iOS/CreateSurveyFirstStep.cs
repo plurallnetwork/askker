@@ -1381,7 +1381,7 @@ namespace Askker.App.iOS
         
         public void PopulateCell(string label, UIImage image, OptionType type, NSIndexPath indexPath)
         {
-            ImageLabel.Text = label.ToUpper();
+            ImageLabel.Text = label;
             Image.Image = image;
             this.indexPath = indexPath;
 

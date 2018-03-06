@@ -79,10 +79,19 @@ namespace Askker.App.iOS
                 BorderWidthAll = 0.5f
             };
             _nextButton.SetTitle("    Next  >  ", UIControlState.Normal);
-            _nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
             _nextButton.Font = UIFont.SystemFontOfSize(16);
             _nextButton.Frame = new CoreGraphics.CGRect(0, 0, 75, 50);
-            _nextButton.BackgroundColor = UIColor.White;
+
+            if (ScreenState == PortableLibrary.Enums.ScreenState.Edit.ToString())
+            {
+                _nextButton.SetTitleColor(UIColor.White, UIControlState.Normal);
+                _nextButton.BackgroundColor = UIColor.FromRGB(70, 230, 130);
+            }
+            else
+            {
+                _nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+                _nextButton.BackgroundColor = UIColor.White;
+            }
             
             _nextButton.TouchUpInside += NextTapped;
 

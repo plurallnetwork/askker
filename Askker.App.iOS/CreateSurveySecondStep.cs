@@ -47,7 +47,6 @@ namespace Askker.App.iOS
                 feedCell.Height().EqualTo(feedCellHeight)
             );
 
-
             StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
 

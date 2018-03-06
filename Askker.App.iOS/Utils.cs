@@ -410,14 +410,13 @@ namespace Askker.App.iOS
 
             // Heights of the vertical components to format the cell dinamic height
             var knownHeight = 0;
-            if (survey.finishDate != null)
+            if (string.IsNullOrEmpty(survey.finishDate))
             {
-
-                knownHeight = 8 + 44 + 8 + 32 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;
+                knownHeight = 8 + 44 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;
             }
             else
             {
-                knownHeight = 8 + 44 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;
+                knownHeight = 8 + 44 + 8 + 32 + 4 + 4 + optionsHeight + 8 + 24 + 8 + 44;
             }
 
             return rect.Height + knownHeight + 25;
@@ -470,9 +469,16 @@ namespace Askker.App.iOS
 
 
             bool finished = false;
-            if (survey.finishDate != null)
+            if (string.IsNullOrEmpty(survey.finishDate))
             {
-
+                feedCell.finishedLabel.Text = "";
+                feedCell.moreButton.Hidden = false;
+                feedCell.optionsTableView.AllowsSelection = true;
+                feedCell.optionsCollectionView.AllowsSelection = true;
+                finished = false;
+            }
+            else
+            {
                 feedCell.finishedLabel.Text = "Finished";
                 feedCell.moreButton.Hidden = true;
                 feedCell.optionsTableView.AllowsSelection = false;
@@ -481,14 +487,6 @@ namespace Askker.App.iOS
 
                 feedCell.AddSubview(feedCell.finishedLabel);
                 feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.finishedLabel));
-            }
-            else
-            {
-                feedCell.finishedLabel.Text = "";
-                feedCell.moreButton.Hidden = false;
-                feedCell.optionsTableView.AllowsSelection = true;
-                feedCell.optionsCollectionView.AllowsSelection = true;
-                finished = false;
             }
 
             if (isPreview)
@@ -540,6 +538,12 @@ namespace Askker.App.iOS
                 {
                     feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
                 }
+
+                if (isPreview)
+                {
+                    feedCell.optionsTableView.ScrollEnabled = false;
+                    feedCell.optionsTableView.AllowsSelection = false;
+                }
             }
             else
             {
@@ -568,31 +572,15 @@ namespace Askker.App.iOS
                 {
                     feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsCollectionView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
                 }
+
+                if (isPreview)
+                {
+                    feedCell.optionsCollectionView.AllowsSelection = false;
+                }
             }
 
             feedCell.updateTotalVotes(survey.totalVotes);
             feedCell.updateTotalComments(survey.totalComments);
-
-            if (isPreview)
-            {
-                feedCell.moreButton.Hidden = true;
-                feedCell.commentButton.Hidden = true;
-                feedCell.resultButton.Hidden = true;
-                feedCell.dividerLineButtons.Hidden = true;
-                feedCell.contentViewButtons.Hidden = true;
-                feedCell.commentsLabel.Hidden = true;
-                feedCell.totalVotesLabel.Hidden = true;
-            }
-            else
-            {
-                feedCell.moreButton.Hidden = false;
-                feedCell.commentButton.Hidden = false;
-                feedCell.resultButton.Hidden = false;
-                feedCell.dividerLineButtons.Hidden = false;
-                feedCell.contentViewButtons.Hidden = false;
-                feedCell.commentsLabel.Hidden = false;
-                feedCell.totalVotesLabel.Hidden = false;
-            }
         }
 
         public static string TimeAgoDisplay(DateTime date)
