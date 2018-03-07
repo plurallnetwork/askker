@@ -228,7 +228,7 @@ namespace Askker.App.iOS
         {
             if (CreateSurveyController.SurveyModel.type.Equals(SurveyType.Image.ToString()))
             {
-                if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Option) && !string.IsNullOrEmpty(x.Text.Trim())).ToList().Count() >= 2)
+                if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Option) && (!string.IsNullOrEmpty(x.Text.Trim()) || !x.Image.Equals(UIImage.FromBundle("AddImage")))).ToList().Count() >= 2)
                 {
                     nint alertBtn = await Utils.ShowAlert("Options", "All image options will be deleted. Continue?", "Ok", "Cancel");
 
@@ -620,49 +620,52 @@ namespace Askker.App.iOS
                 activeview = Utils.findFirstResponder(this.View);
                 if (activeview != null)
                 {
-                    UIView relativePositionView = null;
-                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                    if (activeview != questionText)
                     {
-                        // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
-                        relativePositionView = imageCollectionView;
-                        CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
-
-                        bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
-
-                        // Calculate how far we need to scroll
-                        scroll_amount = (float)(r.Height - (imageCollectionView.Frame.Size.Height - bottom));
-
-                        moveViewUp = true;
-                    }
-                    else
-                    {
-                        // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
-                        relativePositionView = textTableView;
-                        CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
-
-                        bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
-
-                        // Calculate how far we need to scroll
-                        scroll_amount = (float)(r.Height - (textTableView.Frame.Size.Height - bottom));
-
-                        var pageControlHeight = 50;
-                        var screenHeight = (float)UIScreen.MainScreen.Bounds.Height;
-
-                        var diffActiveScreen = pageControlHeight + relativePositionView.Frame.Y + bottom;
-                        var diffKeyboardScreen = screenHeight - r.Height;
-
-                        if (diffActiveScreen < diffKeyboardScreen)
+                        UIView relativePositionView = null;
+                        if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
                         {
-                            moveViewUp = false;
+                            // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
+                            relativePositionView = imageCollectionView;
+                            CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
+
+                            bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
+
+                            // Calculate how far we need to scroll
+                            scroll_amount = (float)(r.Height - (imageCollectionView.Frame.Size.Height - bottom));
+
+                            moveViewUp = true;
                         }
                         else
                         {
-                            moveViewUp = true;
-                        }
-                    }
+                            // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
+                            relativePositionView = textTableView;
+                            CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
 
-                    // Perform the scrolling
-                    ScrollTheView(moveViewUp);
+                            bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
+
+                            // Calculate how far we need to scroll
+                            scroll_amount = (float)(r.Height - (textTableView.Frame.Size.Height - bottom));
+
+                            var pageControlHeight = 50;
+                            var screenHeight = (float)UIScreen.MainScreen.Bounds.Height;
+
+                            var diffActiveScreen = pageControlHeight + relativePositionView.Frame.Y + bottom;
+                            var diffKeyboardScreen = screenHeight - r.Height;
+
+                            if (diffActiveScreen < diffKeyboardScreen)
+                            {
+                                moveViewUp = false;
+                            }
+                            else
+                            {
+                                moveViewUp = true;
+                            }
+                        }
+
+                        // Perform the scrolling
+                        ScrollTheView(moveViewUp);
+                    }        
 
                     activeview = null;
                 }
@@ -1353,12 +1356,12 @@ namespace Askker.App.iOS
                 Image.AtTopOf(ContentView),
 
                 ImageLabel.Below(Image),
-                ImageLabel.AtRightOf(ContentView, 10),
+                ImageLabel.AtRightOf(ContentView, 15),
                 ImageLabel.AtLeftOf(ContentView, 10),
                 ImageLabel.Height().EqualTo(30),
                                                 
                 Button.Below(Image),
-                Button.Width().EqualTo(20),
+                Button.Width().EqualTo(30),
                 Button.WithSameHeight(ImageLabel),
                 Button.Left().EqualTo().RightOf(ImageLabel),
 

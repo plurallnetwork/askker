@@ -7,9 +7,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.blinq.Askker.App.iOS</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.6</string>
+	<string>1.2.8</string>
 	<key>CFBundleVersion</key>
-	<string>1.2.6</string>
+	<string>1.2.8</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -59,7 +59,5 @@
 	<string>Askker</string>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Media.xcassets/AppIcons.appiconset</string>
-	<key>XSLaunchImageAssets</key>
-	<string>Resources/Media.xcassets/LaunchImages.launchimage</string>
 </dict>
 </plist>
