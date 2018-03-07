@@ -34,9 +34,10 @@ namespace Askker.App.iOS
 
         private UINavigationController navigationController;
 
-
         static List<TextOptionTableItem> tableItems;
         static List<ImageOptionTableItem> collectionViewItems;
+
+        public static bool editInProgress = false;
 
         UITextField questionText;
         UIButton checkButton;
@@ -207,6 +208,12 @@ namespace Askker.App.iOS
         public void EditingStarted(UITextField textField)
         {
             checkButton.Hidden = false;
+        }
+
+        [Export("textFieldDidEndEditing:")]
+        public void EditingEnded(UITextField textField)
+        {
+            checkButton.Hidden = true;
         }
 
         [Export("CheckButtonClick:")]
@@ -611,52 +618,54 @@ namespace Askker.App.iOS
 
                 // Find what opened the keyboard
                 activeview = Utils.findFirstResponder(this.View);
-
-                UIView relativePositionView = null;
-                if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
+                if (activeview != null)
                 {
-                    // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
-                    relativePositionView = imageCollectionView;
-                    CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
-
-                    bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
-
-                    // Calculate how far we need to scroll
-                    scroll_amount = (float)(r.Height - (imageCollectionView.Frame.Size.Height - bottom));
-
-                    moveViewUp = true;
-                }
-                else 
-                {
-                    // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
-                    relativePositionView = textTableView;
-                    CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
-
-                    bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
-
-                    // Calculate how far we need to scroll
-                    scroll_amount = (float)(r.Height - (textTableView.Frame.Size.Height - bottom));
-
-                    var pageControlHeight = 50;
-                    var screenHeight = (float)UIScreen.MainScreen.Bounds.Height;
-
-                    var diffActiveScreen = pageControlHeight + relativePositionView.Frame.Y + bottom;
-                    var diffKeyboardScreen = screenHeight - r.Height;
-
-                    if (diffActiveScreen < diffKeyboardScreen)
+                    UIView relativePositionView = null;
+                    if (CreateSurveyController.SurveyModel.type == SurveyType.Image.ToString())
                     {
-                        moveViewUp = false;
+                        // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
+                        relativePositionView = imageCollectionView;
+                        CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
+
+                        bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
+
+                        // Calculate how far we need to scroll
+                        scroll_amount = (float)(r.Height - (imageCollectionView.Frame.Size.Height - bottom));
+
+                        moveViewUp = true;
                     }
                     else
                     {
-                        moveViewUp = true;
+                        // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
+                        relativePositionView = textTableView;
+                        CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
+
+                        bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
+
+                        // Calculate how far we need to scroll
+                        scroll_amount = (float)(r.Height - (textTableView.Frame.Size.Height - bottom));
+
+                        var pageControlHeight = 50;
+                        var screenHeight = (float)UIScreen.MainScreen.Bounds.Height;
+
+                        var diffActiveScreen = pageControlHeight + relativePositionView.Frame.Y + bottom;
+                        var diffKeyboardScreen = screenHeight - r.Height;
+
+                        if (diffActiveScreen < diffKeyboardScreen)
+                        {
+                            moveViewUp = false;
+                        }
+                        else
+                        {
+                            moveViewUp = true;
+                        }
                     }
+
+                    // Perform the scrolling
+                    ScrollTheView(moveViewUp);
+
+                    activeview = null;
                 }
-
-                // Perform the scrolling
-                ScrollTheView(moveViewUp);
-
-                activeview = null;
             }
         }
 
@@ -920,12 +929,14 @@ namespace Askker.App.iOS
         [Export("textFieldDidBeginEditing:")]
         public void EditingStarted(UITextField textField)
         {
+            CreateSurveyFirstStep.editInProgress = true;
             button.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
         }
 
         [Export("textFieldDidEndEditing:")]
         public void EditingEnded(UITextField textField)
         {
+            CreateSurveyFirstStep.editInProgress = false;
             if (button.ImageView.Image.Equals(UIImage.FromBundle("CheckProfile")))
             {
                 var keys = new[]
@@ -950,30 +961,37 @@ namespace Askker.App.iOS
         {
             if (OptionType.Insert.Equals(type))
             {
-                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("AddNewRow"), null);
+                if (!CreateSurveyFirstStep.editInProgress)
+                {
+                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("AddNewRow"), null);
+                }
             }
             else
             {
                 if (button.ImageView.Image.Equals(UIImage.FromBundle("CheckProfile")))
                 {
+                    CreateSurveyFirstStep.editInProgress = false;
                     var keys = new[]
                     {
-                        new NSString("index"),
-                        new NSString("value")
-                    };
+                    new NSString("index"),
+                    new NSString("value")
+                };
 
                     var objects = new[]
                     {
-                        new NSString(indexPath.Row.ToString()),
-                        new NSString(textField.Text)
-                    };
+                    new NSString(indexPath.Row.ToString()),
+                    new NSString(textField.Text)
+                };
 
                     NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("UpdateRow"), new NSDictionary<NSString, NSObject>(keys, objects));
                     button.SetImage(UIImage.FromBundle("DeleteOption"), UIControlState.Normal);
                 }
                 else
                 {
-                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("RemoveRow"), new NSString(indexPath.Row.ToString()));
+                    if (!CreateSurveyFirstStep.editInProgress)
+                    {
+                        NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("RemoveRow"), new NSString(indexPath.Row.ToString()));
+                    }
                 }
             }                
         }
@@ -1364,6 +1382,7 @@ namespace Askker.App.iOS
         {   
             if (button.ImageView.Image.Equals(UIImage.FromBundle("CheckProfile")))
             {
+                CreateSurveyFirstStep.editInProgress = false;
                 var keys = new[]
                 {
                     new NSString("index"),
@@ -1382,20 +1401,24 @@ namespace Askker.App.iOS
             }
             else
             {
-                NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("DeleteCell"), new NSString(indexPath.Row.ToString()));
-
+                if (!CreateSurveyFirstStep.editInProgress)
+                {
+                    NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("DeleteCell"), new NSString(indexPath.Row.ToString()));
+                }
             }
         }
 
         [Export("textFieldDidBeginEditing:")]
         public void EditingStarted(UITextField textField)
         {
+            CreateSurveyFirstStep.editInProgress = true;
             Button.SetImage(UIImage.FromBundle("CheckProfile"), UIControlState.Normal);
         }
 
         [Export("textFieldDidEndEditing:")]
         public void EditingEnded(UITextField textField)
         {
+            CreateSurveyFirstStep.editInProgress = false;
             if (Button.ImageView.Image.Equals(UIImage.FromBundle("CheckProfile")))
             {
                 var keys = new[]
@@ -1518,22 +1541,24 @@ namespace Askker.App.iOS
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
         {
-            this.indexPath = indexPath;
+            if (!CreateSurveyFirstStep.editInProgress)
+            {
+                this.indexPath = indexPath;
 
-            //var mainWindow = UIApplication.SharedApplication.KeyWindow;
-            //var viewController = mainWindow?.RootViewController;
-            //while (viewController?.PresentedViewController != null)
-            //{
-            //    viewController = viewController.PresentedViewController;
-            //}
-            //if (viewController == null)
-            //    viewController = this.viewController;
-            //imagePicker.View.Frame = viewController.View.Frame;
-            //viewController.PresentModalViewController(imagePicker, true);
+                //var mainWindow = UIApplication.SharedApplication.KeyWindow;
+                //var viewController = mainWindow?.RootViewController;
+                //while (viewController?.PresentedViewController != null)
+                //{
+                //    viewController = viewController.PresentedViewController;
+                //}
+                //if (viewController == null)
+                //    viewController = this.viewController;
+                //imagePicker.View.Frame = viewController.View.Frame;
+                //viewController.PresentModalViewController(imagePicker, true);
 
-            this.navigationController.PresentModalViewController(imagePicker, true);
+                this.navigationController.PresentModalViewController(imagePicker, true);
+            }
         }
-
 
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
