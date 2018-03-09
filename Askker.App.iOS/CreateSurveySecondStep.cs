@@ -30,14 +30,6 @@ namespace Askker.App.iOS
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
-            foreach (UIView subview in View.Subviews)
-            {
-                if(subview.GetType() == typeof(FeedCollectionViewCell))
-                {
-                    subview.RemoveFromSuperview();
-                }
-            }
-
             var feedCellHeight = Utils.getHeightForFeedCell(CreateSurveyController.SurveyModel, View.Frame.Width);
             feedCell = new FeedCollectionViewCell(new CGRect(0, 0, View.Frame.Width, feedCellHeight));
 
@@ -61,6 +53,14 @@ namespace Askker.App.iOS
         public override void ViewWillDisappear(bool animated)
         {
             base.ViewWillDisappear(animated);
+
+            foreach (UIView subview in View.Subviews)
+            {
+                if (subview.GetType() == typeof(FeedCollectionViewCell))
+                {
+                    subview.RemoveFromSuperview();
+                }
+            }
 
             StepDeactivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }

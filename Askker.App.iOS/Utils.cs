@@ -600,7 +600,14 @@ namespace Askker.App.iOS
                 return (secondsAgo / hour) + " hours ago";
             }
 
-            return date.ToString("dd MMMM");
+            if (date.Year.Equals(DateTime.Now.Year))
+            {
+                return date.ToString("MMMM dd");
+            }
+            else
+            {
+                return date.ToString("MMMM dd") + ", " + date.Year;
+            }
         }
 
         public static void LoadingIndicatorButton (this UIButton button, bool show)
