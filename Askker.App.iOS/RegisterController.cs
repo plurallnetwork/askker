@@ -69,6 +69,12 @@ namespace Askker.App.iOS
                     alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
                     PresentViewController(alert, true, null);
                 }
+                else if (!txtConfirmPassword.Text.Any(c => char.IsDigit(c)))
+                {
+                    var alert = UIAlertController.Create("Confirm Password", "Password must have at least one number", UIAlertControllerStyle.Alert);
+                    alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                    PresentViewController(alert, true, null);
+                }
                 else if (!txtPassword.Text.Equals(txtConfirmPassword.Text))
                 {
                     var alert = UIAlertController.Create("Confirm Password", "Password and Confirm Password must match", UIAlertControllerStyle.Alert);
