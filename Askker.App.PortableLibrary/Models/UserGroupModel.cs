@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Askker.App.PortableLibrary.Models
 {    
@@ -15,6 +16,9 @@ namespace Askker.App.PortableLibrary.Models
         public string description { get; set; }
 
         public string profilePicture { get; set; }
+
+        [JsonIgnore]
+        public List<UserGroupMemberModel> members { get; set; }
                 
         public UserGroupModel(string userId, string creationDate, string name, string profilePicture)
         {
@@ -22,6 +26,15 @@ namespace Askker.App.PortableLibrary.Models
             this.creationDate = creationDate;
             this.name = name;
             this.profilePicture = profilePicture;
+        }
+
+        public UserGroupModel(string userId, string creationDate, string name, string profilePicture, List<UserGroupMemberModel> members)
+        {
+            this.userId = userId;
+            this.creationDate = creationDate;
+            this.name = name;
+            this.profilePicture = profilePicture;
+            this.members = members;
         }
 
         [JsonConstructor]

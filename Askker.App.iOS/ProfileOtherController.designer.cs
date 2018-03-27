@@ -20,10 +20,6 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton btnGroupRelationship { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton btnRelationship { get; set; }
 
         [Outlet]
@@ -33,6 +29,14 @@ namespace Askker.App.iOS
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField genderText { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITableView groupsTableView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel groupsTitleLabel { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -49,11 +53,6 @@ namespace Askker.App.iOS
                 ageText = null;
             }
 
-            if (btnGroupRelationship != null) {
-                btnGroupRelationship.Dispose ();
-                btnGroupRelationship = null;
-            }
-
             if (btnRelationship != null) {
                 btnRelationship.Dispose ();
                 btnRelationship = null;
@@ -67,6 +66,16 @@ namespace Askker.App.iOS
             if (genderText != null) {
                 genderText.Dispose ();
                 genderText = null;
+            }
+
+            if (groupsTableView != null) {
+                groupsTableView.Dispose ();
+                groupsTableView = null;
+            }
+
+            if (groupsTitleLabel != null) {
+                groupsTitleLabel.Dispose ();
+                groupsTitleLabel = null;
             }
 
             if (nameText != null) {

@@ -52,6 +52,56 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
+        public async Task<List<UserGroupModel>> GetGroupsWithMembers(string userId, string authenticationToken)
+        {
+            try
+            {
+                UserGroupService groupService = new UserGroupService();
+                var groups = new List<UserGroupModel>();
+
+                var response = await groupService.GetGroups(userId, authenticationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonGroups = JArray.Parse(await response.Content.ReadAsStringAsync());
+
+                    if (jsonGroups.HasValues)
+                    {
+                        foreach (var group in jsonGroups)
+                        {
+                            var groupMembers = new List<UserGroupMemberModel>();
+                            if (group["members"] != null && group["members"].HasValues)
+                            {
+                                for (int i = 0; i < group["members"]["ids"].ToObject<JArray>().Count; i++)
+                                {
+                                    groupMembers.Add(new UserGroupMemberModel(group["members"]["ids"][i].ToString(), group["members"]["relationshipsStatus"][i].ToString(), group["members"]["requestDates"][i].ToString(), group["members"]["profilePictures"][i].ToString()));
+                                }
+                            }
+
+                            groups.Add(new UserGroupModel(group["userId"].ToString(), group["creationDate"].ToString(), group["name"].ToString(), group["profilePicture"].ToString(), groupMembers));
+                        }
+                    }
+
+                    return groups;
+                }
+                else
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<UserGroupRelationshipStatus> GetGroupRelationshipStatus(string authenticationToken, string groupId, string userId)
         {
             try
