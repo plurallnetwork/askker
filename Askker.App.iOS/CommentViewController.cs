@@ -238,6 +238,7 @@ namespace Askker.App.iOS
                 if (feedController.NavigationController == null)
                 {
                     feedCell.resultButton.Params[2] = this.NavigationController;
+                    feedCell.totalVotesLabel.Params[2] = this.NavigationController;
                     feedCell.moreButton.Params[2] = this;
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
