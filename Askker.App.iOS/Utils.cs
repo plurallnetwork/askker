@@ -122,21 +122,48 @@ namespace Askker.App.iOS
             }
             else
             {
-                if (UIApplication.SharedApplication.KeyWindow != null)
+                var errorCodes = new Dictionary<string, string>
                 {
-                    ShowToast(ex.Message, 3000);
+                    {"900", "Sorry, but some unexpected error happened"},
+                    {"901", "Incorrect user and/or password, please try again"},
+                    {"902", "Your email address has already been registered, try to login"},
+                    {"903", "Sorry, an unexpected error happened, please try again later"},
+                    {"904", "Sorry, an unexpected error happened, please try again later"},
+                    {"905", "Your registration has not yet been confirmed, we will send the confirmation link to your email"},
+                    {"906", "Email not registered, please register"},
+                    {"907", "Sorry, an unexpected error happened, please try again later"},
+                    {"908", "We have received your contact email, thank you!"},
+                    {"909", "Email already registered by Facebook. Please try to login with Facebook"},
+                    {"910", "Email already registered by Google. Please try to login with Google"},
+                    {"911", "Email already registered. Please try to login or recover your password"},
+                };
+
+                string message;
+
+                if (errorCodes.ContainsKey(ex.Message))
+                {
+                    message = errorCodes[ex.Message];
                 }
                 else
                 {
+                    message = ex.Message;                    
+                }
+
+                //if (UIApplication.SharedApplication.KeyWindow != null)
+                //{
+                //    ShowToast(message, 3000);
+                //}
+                //else
+                //{
                     var alert = new UIAlertView
                     {
                         Title = "Something went wrong",
-                        Message = ex.Message
+                        Message = message
                     };
 
                     alert.AddButton("OK");
                     alert.Show();
-                }
+                //}
             }
         }
 

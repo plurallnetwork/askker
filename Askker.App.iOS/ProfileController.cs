@@ -195,7 +195,7 @@ namespace Askker.App.iOS
         private async void Update()
         {
             try
-            {
+            {                
                 if (string.IsNullOrEmpty(fileName))
                 {
                     await new LoginManager().Update(LoginController.tokenModel.access_token, LoginController.userModel, null, null);
@@ -227,6 +227,15 @@ namespace Askker.App.iOS
         {
             if (nameText.Enabled)
             {
+                if ("".Equals(nameText.Text))
+                {
+                    var alert = UIAlertController.Create("Name", "Please fill in the Name", UIAlertControllerStyle.Alert);
+                    alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+                    PresentViewController(alert, true, null);
+
+                    return;
+                }
+
                 LoginController.userModel.name = nameText.Text;
                 nameButton.SetImage(UIImage.FromBundle("EditProfile"), UIControlState.Normal);
                 enableButtons("nameButton");

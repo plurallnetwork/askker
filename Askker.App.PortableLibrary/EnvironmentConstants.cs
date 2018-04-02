@@ -7,7 +7,7 @@ namespace Askker.App.iOS
     public static class EnvironmentConstants
     {
         //SET THIS VARIABLE TO THE ENVIRONMENT YOU WANT
-        private static bool isDesenv = true;
+        private static bool isDesenv = false;
 
         private static string serverUrl;
         private static string s3Url;
