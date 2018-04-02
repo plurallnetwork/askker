@@ -227,7 +227,7 @@ namespace Askker.App.iOS
         {
             if (nameText.Enabled)
             {
-                if ("".Equals(nameText.Text))
+                if ("".Equals(nameText.Text.Trim()))
                 {
                     var alert = UIAlertController.Create("Name", "Please fill in the Name", UIAlertControllerStyle.Alert);
                     alert.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
