@@ -14,8 +14,8 @@ namespace Askker.App.iOS
         private UIView activeview;             // Controller that activated the keyboard
         private float scroll_amount = 0.0f;    // amount to scroll 
         private float bottom = 0.0f;           // bottom point
-        private float offset = 10.0f;          // extra offset
-        private bool moveViewUp = false;           // which direction are we moving
+        private float offset = 8.0f;           // extra offset
+        private bool moveViewUp = false;       // which direction are we moving
 
         public string Email { get; set; }
 
@@ -46,6 +46,7 @@ namespace Askker.App.iOS
 
             txtPassword.ShouldReturn = delegate (UITextField textField)
             {
+                View.EndEditing(true);
                 txtConfirmPassword.BecomeFirstResponder();
                 return true;
             };
@@ -72,43 +73,48 @@ namespace Askker.App.iOS
 
         private void KeyBoardUpNotification(NSNotification notification)
         {
-            // get the keyboard size
-            CGRect r = UIKeyboard.BoundsFromNotification(notification);
-
-            // Find what opened the keyboard
-            foreach (UIView view in this.View.Subviews)
+            if (!moveViewUp)
             {
-                if (view.IsFirstResponder)
-                    activeview = view;
-            }
+                // get the keyboard size
+                CGRect r = UIKeyboard.BoundsFromNotification(notification);
 
-            // Bottom of the controller = initial position + height + offset      
-            bottom = (float)(activeview.Frame.Y + activeview.Frame.Height + offset);
+                // Find what opened the keyboard
+                foreach (UIView view in this.View.Subviews)
+                {
+                    if (view.IsFirstResponder)
+                        activeview = view;
+                }
 
-            // Calculate how far we need to scroll
-            scroll_amount = (float)(r.Height - (View.Frame.Size.Height - bottom));
-                        
-            // Perform the scrolling
-            if (scroll_amount > 0)
-            {
+                if (activeview != null)
+                {
+                    // Bottom of the controller = initial position + height - View Y position + offset (relative to the screen)     
+                    UIView relativePositionView = UIApplication.SharedApplication.KeyWindow;
+                    CGRect relativeFrame = activeview.Superview.ConvertRectToView(activeview.Frame, relativePositionView);
+
+                    bottom = (float)((relativeFrame.Y) + relativeFrame.Height - View.Frame.Y + offset);
+
+                    // Calculate how far we need to scroll
+                    scroll_amount = (float)(r.Height - (View.Frame.Size.Height - bottom));
+                }
+                else
+                {
+                    scroll_amount = 0;
+                }
+
+                // Perform the scrolling
                 moveViewUp = true;
                 ScrollTheView(moveViewUp);
             }
-            else
-            {
-                moveViewUp = false;
-            }
-
         }
 
         private void KeyBoardDownNotification(NSNotification notification)
         {
-            if (moveViewUp) { ScrollTheView(false); }
+            moveViewUp = false;
+            ScrollTheView(moveViewUp);
         }
 
         private void ScrollTheView(bool move)
         {
-
             // scroll the view up or down
             UIView.BeginAnimations(string.Empty, System.IntPtr.Zero);
             UIView.SetAnimationDuration(0.3);
@@ -117,7 +123,10 @@ namespace Askker.App.iOS
 
             if (move)
             {
-                frame.Y -= scroll_amount;
+                if (scroll_amount > 0)
+                {
+                    frame.Y -= scroll_amount;
+                }
             }
             else
             {
