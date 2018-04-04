@@ -24,6 +24,10 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton deleteBtn { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton editBtn { get; set; }
 
         [Outlet]
@@ -40,6 +44,11 @@ namespace Askker.App.iOS
             if (cleanBtn != null) {
                 cleanBtn.Dispose ();
                 cleanBtn = null;
+            }
+
+            if (deleteBtn != null) {
+                deleteBtn.Dispose ();
+                deleteBtn = null;
             }
 
             if (editBtn != null) {

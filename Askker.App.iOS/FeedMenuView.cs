@@ -44,6 +44,12 @@ namespace Askker.App.iOS
             set { finishBtn = value; }
         }
 
+        public UIButton DeleteButton
+        {
+            get { return deleteBtn; }
+            set { deleteBtn = value; }
+        }
+
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
@@ -53,8 +59,8 @@ namespace Askker.App.iOS
             editBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
             cleanBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
             finishBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+            deleteBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
         }
-
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {

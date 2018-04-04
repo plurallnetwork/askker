@@ -109,6 +109,8 @@ namespace Askker.App.iOS
         private void ResetCredentials()
         {
             CredentialsService.DeleteCredentials();
+            LoginController.tokenModel = null;
+            LoginController.userModel = null;
 
             var loginController = this.Window.RootViewController.Storyboard.InstantiateViewController("LoginNavController") as LoginController;
 
