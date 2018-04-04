@@ -96,6 +96,35 @@ namespace Askker.App.iOS
             }
         }
 
+        [Export("DeleteSelector:")]
+        private async void DeleteSelector(UIFeedButton but)
+        {
+            nint button = await Utils.ShowAlert("Delete Survey", "The survey will be deleted. Continue?", "Ok", "Cancel");
+            
+            try
+            {
+                if (button == 0)
+                {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+                    await new FeedManager().DeleteSurvey(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
+
+                    surveys.Remove(survey);
+                    this.feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
+                    this.feedCollectionView.ReloadData();
+                }
+
+                MenuViewController.feedMenu.Hidden = true;
+                MenuViewController.sidebarController.View.Alpha = 1f;
+                BTProgressHUD.Dismiss();
+            }
+            catch (Exception ex)
+            {
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);
+            }
+        }
+
         [Export("CleanSelector:")]
         private async void CleanSelector(UIFeedButton but)
         {
@@ -462,6 +491,16 @@ namespace Askker.App.iOS
             {
                 MenuViewController.feedMenu.FinishButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
                 MenuViewController.feedMenu.FinishButton.AddTarget(this, new Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
+            }
+
+            if (MenuViewController.feedMenu.DeleteButton.AllTargets.Count <= 0)
+            {
+                MenuViewController.feedMenu.DeleteButton.AddTarget(this, new Selector("DeleteSelector:"), UIControlEvent.TouchUpInside);
+            }
+            else if (!MenuViewController.feedMenu.DeleteButton.AllTargets.IsEqual(this))
+            {
+                MenuViewController.feedMenu.DeleteButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                MenuViewController.feedMenu.DeleteButton.AddTarget(this, new Selector("DeleteSelector:"), UIControlEvent.TouchUpInside);
             }
         }        
     }
