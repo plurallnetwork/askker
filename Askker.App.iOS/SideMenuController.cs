@@ -14,7 +14,7 @@ namespace Askker.App.iOS
 {
     public partial class SideMenuController : UIViewController
     {
-        MenuViewController menuViewController;
+        public MenuViewController menuViewController { get; set; }
         private NSObject updateProfilePictureObserver;
         private NSObject updateUserNameObserver;
         UIImageView profileImageView;

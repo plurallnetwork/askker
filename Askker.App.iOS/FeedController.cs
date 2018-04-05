@@ -57,6 +57,7 @@ namespace Askker.App.iOS
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+            MenuViewController.feedMenu.feedView = MenuViewController.menuView;
 
             BTProgressHUD.Show("Refreshing feed...", -1, ProgressHUD.MaskType.Clear);
             fetchSurveys(filterMine, filterForMe, filterFinished);
@@ -86,7 +87,7 @@ namespace Askker.App.iOS
                 }
 
                 MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -115,7 +116,7 @@ namespace Askker.App.iOS
                 }
 
                 MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -151,7 +152,7 @@ namespace Askker.App.iOS
                 }
 
                 MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -189,7 +190,7 @@ namespace Askker.App.iOS
                 }
 
                 MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -296,7 +297,7 @@ namespace Askker.App.iOS
             }, "showMenu");
 
             MenuViewController.feedMenu.Hidden = false;
-            MenuViewController.sidebarController.View.Alpha = 0.5f;
+            MenuViewController.feedMenu.feedView.Alpha = 0.5f;
         }
 
         [Export("TapProfilePictureSelector:")]

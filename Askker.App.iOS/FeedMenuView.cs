@@ -50,6 +50,8 @@ namespace Askker.App.iOS
             set { deleteBtn = value; }
         }
 
+        public UIView feedView { get; set; }
+
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
@@ -70,7 +72,7 @@ namespace Askker.App.iOS
             if(touch != null && touch.View.GetType() == typeof (FeedMenuView))
             {
                 this.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                feedView.Alpha = 1f;
             }
         }
     }

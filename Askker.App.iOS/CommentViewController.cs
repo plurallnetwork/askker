@@ -125,6 +125,7 @@ namespace Askker.App.iOS
             g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);                                        
             View.AddGestureRecognizer(g);
 
+            MenuViewController.feedMenu.feedView = this.View;
             commentMenu.commentView = this.View;
             commentMenu.Hidden = true;
             commentMenu.CancelButton.TouchUpInside += (object sender, EventArgs e) =>
@@ -137,7 +138,7 @@ namespace Askker.App.iOS
                 }, "hideMenu");
 
                 commentMenu.Hidden = true;
-                View.Alpha = 1f;
+                commentMenu.commentView.Alpha = 1f;
             };
 
             var rootViewController = UIApplication.SharedApplication.KeyWindow?.RootViewController;
@@ -519,7 +520,7 @@ namespace Askker.App.iOS
                 }, "showMenu");
 
                 commentMenu.Hidden = false;
-                View.Alpha = 0.5f;
+                commentMenu.commentView.Alpha = 0.5f;
             }
         }
 
@@ -551,7 +552,7 @@ namespace Askker.App.iOS
                 }
 
                 commentMenu.Hidden = true;
-                View.Alpha = 1f;
+                commentMenu.commentView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
