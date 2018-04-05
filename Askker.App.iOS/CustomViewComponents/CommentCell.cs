@@ -45,6 +45,7 @@ namespace Askker.App.iOS.Resources
 
             commentText.BackgroundColor = UIColor.White;
             commentText.TextColor = UIColor.FromRGB(90, 89, 89);
+            commentText.Selectable = false;
 
             nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
         }
