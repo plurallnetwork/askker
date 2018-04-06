@@ -485,7 +485,7 @@ namespace Askker.App.iOS
                     attributedText.Append(new NSAttributedString("\n" + survey.targetAudience, UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
                 }
 
-                attributedText.Append(new NSAttributedString(" • " + TimeAgoDisplay(DateTime.ParseExact(survey.creationDate, "yyyyMMddTHHmmss", null)), UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
+                attributedText.Append(new NSAttributedString(" • " + TimeAgoDisplay(ConvertToLocalTime(DateTime.ParseExact(survey.creationDate, "yyyyMMddTHHmmss", null))), UIFont.SystemFontOfSize(12), UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1"))));
             }
 
             var paragraphStyle = new NSMutableParagraphStyle();
@@ -635,6 +635,11 @@ namespace Askker.App.iOS
             {
                 return date.ToString("MMMM dd") + ", " + date.Year;
             }
+        }
+
+        public static DateTime ConvertToLocalTime(DateTime date)
+        {
+            return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(date, EnvironmentConstants.getServerTimeZone(), TimeZoneInfo.Local.Id);
         }
 
         public static void LoadingIndicatorButton (this UIButton button, bool show)

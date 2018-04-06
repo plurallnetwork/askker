@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Askker.App.iOS
+﻿namespace Askker.App.iOS
 {
     public static class EnvironmentConstants
     {
@@ -34,6 +30,11 @@ namespace Askker.App.iOS
                 s3Url = "https://s3-us-west-2.amazonaws.com/askker-prod/";
             }
             return s3Url;            
+        }
+
+        public static string getServerTimeZone()
+        {
+            return "America/Los_Angeles";
         }
     }
 }
