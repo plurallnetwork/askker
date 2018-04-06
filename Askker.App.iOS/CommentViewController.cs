@@ -596,20 +596,23 @@ namespace Askker.App.iOS
 
             commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, commentViewController.NavigationController, comments[indexPath.Row].userId);
 
-            var longPress = new UICommentLongPressGestureRecognizer(commentViewController, new Selector("HandleLongPressSelector:"));
-            longPress.Params = new List<object>() { comments[indexPath.Row] };
-            commentCell.AddGestureRecognizer(longPress);
-
-            if (CommentViewController.commentMenu.DeleteButton.AllTargets.Count <= 0)
+            if (comments[indexPath.Row].userId == LoginController.userModel.id)
             {
-                CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
-            }
-            else if (!CommentViewController.commentMenu.DeleteButton.AllTargets.IsEqual(this))
-            {
-                CommentViewController.commentMenu.DeleteButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
-                CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
-            }
+                var longPress = new UICommentLongPressGestureRecognizer(commentViewController, new Selector("HandleLongPressSelector:"));
+                longPress.Params = new List<object>() { comments[indexPath.Row] };
+                commentCell.AddGestureRecognizer(longPress);
 
+                if (CommentViewController.commentMenu.DeleteButton.AllTargets.Count <= 0)
+                {
+                    CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
+                }
+                else if (!CommentViewController.commentMenu.DeleteButton.AllTargets.IsEqual(this))
+                {
+                    CommentViewController.commentMenu.DeleteButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                    CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
+                }
+            }
+            
             return commentCell;
         }
 
