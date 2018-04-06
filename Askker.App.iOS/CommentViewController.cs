@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UIKit;
+using ObjCRuntime;
 
 namespace Askker.App.iOS
 {
@@ -42,7 +43,10 @@ namespace Askker.App.iOS
         private float lastCommentBottom = 0.0f; // Bottom of the last comment
 
         //Variables used to resize the comment textView
-        private UIView activeviewarea;         // CommentArea
+        private UIView activeviewarea;          // CommentArea
+
+        public static CommentMenuView commentMenu = CommentMenuView.Create();
+        public SurveyCommentModel comment { get; set; }
 
         public CommentViewController (IntPtr handle) : base (handle)
         {
@@ -120,6 +124,33 @@ namespace Askker.App.iOS
             g.AddTarget(() => View.EndEditing(true));
             g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);                                        
             View.AddGestureRecognizer(g);
+
+            MenuViewController.feedMenu.feedView = this.View;
+            commentMenu.commentView = this.View;
+            commentMenu.Hidden = true;
+            commentMenu.CancelButton.TouchUpInside += (object sender, EventArgs e) =>
+            {
+                commentMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+                {
+                    Duration = 0.2,
+                    Type = CoreAnimation.CAAnimation.TransitionPush,
+                    Subtype = CoreAnimation.CAAnimation.TransitionFromBottom
+                }, "hideMenu");
+
+                commentMenu.Hidden = true;
+                commentMenu.commentView.Alpha = 1f;
+            };
+
+            var rootViewController = UIApplication.SharedApplication.KeyWindow?.RootViewController;
+            while (rootViewController?.PresentedViewController != null)
+            {
+                rootViewController = rootViewController.PresentedViewController;
+            }
+            if (rootViewController == null)
+                rootViewController = this;
+
+            commentMenu.Frame = rootViewController.View.Frame;
+            rootViewController.View.AddSubview(commentMenu);
         }
 
         private void CommentButton_TouchUpInside(object sender, EventArgs e)
@@ -243,7 +274,7 @@ namespace Askker.App.iOS
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
 
-                feed.Source = new CommentsCollectionViewSource(comments, feedCell, this.NavigationController);
+                feed.Source = new CommentsCollectionViewSource(comments, feedCell, this);
                 feed.Delegate = new CommentsCollectionViewDelegate((float) feedCell.Frame.Height);
                 feed.ReloadData();
 
@@ -472,6 +503,64 @@ namespace Askker.App.iOS
             NSIndexPath finalIndexPath = NSIndexPath.FromRowSection(finalRow, 0);
             feed.ScrollToItem(finalIndexPath, UICollectionViewScrollPosition.Top, animated);
         }
+
+        [Export("HandleLongPressSelector:")]
+        private void HandleLongPressSelector(UICommentLongPressGestureRecognizer gestureRecognizer)
+        {
+            if (gestureRecognizer.State == UIGestureRecognizerState.Began)
+            {
+                View.EndEditing(true);
+                this.comment = (SurveyCommentModel)gestureRecognizer.Params.ToArray()[0];
+
+                commentMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+                {
+                    Duration = 0.2,
+                    Type = CoreAnimation.CAAnimation.TransitionPush,
+                    Subtype = CoreAnimation.CAAnimation.TransitionFromTop
+                }, "showMenu");
+
+                commentMenu.Hidden = false;
+                commentMenu.commentView.Alpha = 0.5f;
+            }
+        }
+
+        [Export("DeleteCommentSelector:")]
+        private async void DeleteCommentSelector(UIFeedButton but)
+        {
+            nint button = await Utils.ShowAlert("Delete Comment", "The comment will be deleted. Continue?", "Ok", "Cancel");
+
+            try
+            {
+                if (button == 0)
+                {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+                    await new CommentManager().DeleteSurveyComment(comment, LoginController.tokenModel.access_token);
+
+                    comments.Remove(comment);
+
+                    if (survey.totalComments > 0)
+                    {
+                        survey.totalComments--;
+                    }
+
+                    feedCell.updateTotalComments(survey.totalComments);
+
+                    feed.Source = new CommentsCollectionViewSource(comments, feedCell, this);
+                    feed.Delegate = new CommentsCollectionViewDelegate((float)feedCell.Frame.Height);
+                    feed.ReloadData();
+                }
+
+                commentMenu.Hidden = true;
+                commentMenu.commentView.Alpha = 1f;
+                BTProgressHUD.Dismiss();
+            }
+            catch (Exception ex)
+            {
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);
+            }
+        }
     }
 
     public class CommentsCollectionViewSource : UICollectionViewSource
@@ -479,13 +568,13 @@ namespace Askker.App.iOS
         public List<SurveyCommentModel> comments { get; set; }
         public FeedCollectionViewCell feedCell { get; set; }
         public static NSCache imageCache = new NSCache();
-        public UINavigationController navigationController { get; set; }
+        public CommentViewController commentViewController { get; set; }
 
-        public CommentsCollectionViewSource(List<SurveyCommentModel> comments, FeedCollectionViewCell feedCell, UINavigationController navigationController)
+        public CommentsCollectionViewSource(List<SurveyCommentModel> comments, FeedCollectionViewCell feedCell, CommentViewController commentViewController)
         {
             this.comments = comments;
             this.feedCell = feedCell;
-            this.navigationController = navigationController;
+            this.commentViewController = commentViewController;
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
@@ -505,7 +594,21 @@ namespace Askker.App.iOS
                 Utils.SetImageFromNSUrlSession(comments[indexPath.Row].profilePicture, imageView, this, PictureType.Profile);
             }
 
-            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, this.navigationController, comments[indexPath.Row].userId);
+            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, commentViewController.NavigationController, comments[indexPath.Row].userId);
+
+            var longPress = new UICommentLongPressGestureRecognizer(commentViewController, new Selector("HandleLongPressSelector:"));
+            longPress.Params = new List<object>() { comments[indexPath.Row] };
+            commentCell.AddGestureRecognizer(longPress);
+
+            if (CommentViewController.commentMenu.DeleteButton.AllTargets.Count <= 0)
+            {
+                CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
+            }
+            else if (!CommentViewController.commentMenu.DeleteButton.AllTargets.IsEqual(this))
+            {
+                CommentViewController.commentMenu.DeleteButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
+            }
 
             return commentCell;
         }
@@ -556,6 +659,15 @@ namespace Askker.App.iOS
         public override CGSize GetReferenceSizeForHeader(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
         {
             return new CGSize(collectionView.Frame.Width, heightHeaderCell);
+        }
+    }
+
+    public class UICommentLongPressGestureRecognizer : UILongPressGestureRecognizer
+    {
+        public List<Object> Params { get; set; }
+
+        public UICommentLongPressGestureRecognizer(NSObject target, Selector action) : base(target, action)
+        {
         }
     }
 }

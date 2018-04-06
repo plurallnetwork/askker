@@ -1,8 +1,15 @@
 ﻿using BigTed;
+using CoreGraphics;
 using Foundation;
+using ObjCRuntime;
+using Plugin.DeviceInfo;
 using SDWebImage;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using UIKit;
 
 namespace Askker.App.iOS
@@ -15,7 +22,7 @@ namespace Askker.App.iOS
     {
         // class-level declarations
         public static string AppName { get { return "askker"; } }
-
+        
         public override UIWindow Window
         {
             get;
@@ -36,6 +43,10 @@ namespace Askker.App.iOS
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+
+
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
 
@@ -98,6 +109,8 @@ namespace Askker.App.iOS
         private void ResetCredentials()
         {
             CredentialsService.DeleteCredentials();
+            LoginController.tokenModel = null;
+            LoginController.userModel = null;
 
             var loginController = this.Window.RootViewController.Storyboard.InstantiateViewController("LoginNavController") as LoginController;
 
@@ -111,6 +124,8 @@ namespace Askker.App.iOS
         {
             // Restart any tasks that were paused (or not yet started) while the application was inactive. 
             // If the application was previously in the background, optionally refresh the user interface.
+
+            DisplayCrashReport();
         }
 
         public override void WillTerminate(UIApplication application)
@@ -155,5 +170,85 @@ namespace Askker.App.iOS
                 Utils.HandleException(ex);
             }
         }
+
+        /// <summary>
+        // If there is an unhandled exception, the exception information is diplayed 
+        // on screen the next time the app is started (only in debug configuration)
+        /// </summary>
+        //[Conditional("DEBUG")]
+        private static void DisplayCrashReport()
+        {
+            const string errorFilename = "Fatal.log";
+            var libraryPath = Environment.GetFolderPath(Environment.SpecialFolder.Resources);
+            var errorFilePath = Path.Combine(libraryPath, errorFilename);
+
+            if (!File.Exists(errorFilePath))
+            {
+                return;
+            }
+
+            var errorText = File.ReadAllText(errorFilePath);
+
+            new PortableLibrary.Business.CrashReportManager().PostCrashReport(CredentialsService.access_token,errorText);
+
+            File.Delete(errorFilePath);
+
+            var alertView = new UIAlertView("Application unexpectedly terminated", "Unfortunately, an unexpected error occurred.\nA crash report has been sent to the operator so that the error can be corrected as quickly as possible.\nThank you for your patience and support.", null, "OK") { UserInteractionEnabled = true };
+            alertView.Clicked += (sender, args) =>
+            {
+                if (args.ButtonIndex != 0)
+                {
+                    File.Delete(errorFilePath);
+                }
+            };
+            alertView.Show();
+        }
+
+        #region Task Schedular Exception
+
+        private static void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
+        {
+            var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
+            LogUnhandledException(newExc);
+        }
+
+        #endregion
+
+        #region Current Domain Exception
+
+        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+            //var deviceName = UIDevice.CurrentDevice.Model;
+            //var osVersion = UIDevice.CurrentDevice.SystemVersion;
+            //var osName = UIDevice.CurrentDevice.SystemName;
+            //var device = UIDevice.CurrentDevice.LocalizedModel;
+            //var device2 = UIDevice.CurrentDevice.IdentifierForVendor;
+            var newExc = new Exception("CurrentDomainOnUnhandledException", unhandledExceptionEventArgs.ExceptionObject as Exception);
+            LogUnhandledException(newExc);
+        }
+
+        #endregion
+
+        internal static void LogUnhandledException(Exception exception)
+        {
+            try
+            {
+                const string errorFileName = "Fatal.log";
+                var libraryPath = Environment.GetFolderPath(Environment.SpecialFolder.Resources);
+                var errorFilePath = Path.Combine(libraryPath, errorFileName);
+                var errorMessage = String.Format("Device: {0}\r\nOS Version: {1}\r\nManufacturer: {2}\r\nAskker Version: {3}\r\nIs Physical Device: {4}\r\nDevice Architecture: {5}\r\nDevice Type: {6}\r\nTime: {7}\r\n\r\nError: Unhandled Exception\r\n{8}",
+                    Xamarin.iOS.DeviceHardware.Model, CrossDeviceInfo.Current.Platform.ToString() + " " + CrossDeviceInfo.Current.Version, CrossDeviceInfo.Current.Manufacturer,
+                    CrossDeviceInfo.Current.AppVersion, CrossDeviceInfo.Current.IsDevice.ToString(), Xamarin.iOS.DeviceHardware.Version, CrossDeviceInfo.Current.Idiom.ToString(), DateTime.Now, exception.ToString());
+                File.WriteAllText(errorFilePath, errorMessage);
+
+                new PortableLibrary.Business.CrashReportManager().PostCrashReport(CredentialsService.access_token, errorMessage);
+
+                File.Delete(errorFilePath);
+            }
+            catch(Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+        }        
     }
 }

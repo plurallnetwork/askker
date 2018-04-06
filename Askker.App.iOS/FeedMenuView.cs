@@ -44,6 +44,14 @@ namespace Askker.App.iOS
             set { finishBtn = value; }
         }
 
+        public UIButton DeleteButton
+        {
+            get { return deleteBtn; }
+            set { deleteBtn = value; }
+        }
+
+        public UIView feedView { get; set; }
+
         public override void LayoutSubviews()
         {
             base.LayoutSubviews();
@@ -53,8 +61,8 @@ namespace Askker.App.iOS
             editBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
             cleanBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
             finishBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+            deleteBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
         }
-
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
@@ -64,7 +72,7 @@ namespace Askker.App.iOS
             if(touch != null && touch.View.GetType() == typeof (FeedMenuView))
             {
                 this.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                feedView.Alpha = 1f;
             }
         }
     }

@@ -11,8 +11,8 @@ using UIKit;
 
 namespace Askker.App.iOS
 {
-    [Register ("FeedMenuView")]
-    partial class FeedMenuView
+    [Register ("CommentMenuView")]
+    partial class CommentMenuView
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -20,19 +20,7 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton cleanBtn { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton deleteBtn { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton editBtn { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton finishBtn { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -41,24 +29,9 @@ namespace Askker.App.iOS
                 cancelBtn = null;
             }
 
-            if (cleanBtn != null) {
-                cleanBtn.Dispose ();
-                cleanBtn = null;
-            }
-
             if (deleteBtn != null) {
                 deleteBtn.Dispose ();
                 deleteBtn = null;
-            }
-
-            if (editBtn != null) {
-                editBtn.Dispose ();
-                editBtn = null;
-            }
-
-            if (finishBtn != null) {
-                finishBtn.Dispose ();
-                finishBtn = null;
             }
         }
     }

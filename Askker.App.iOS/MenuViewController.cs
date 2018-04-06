@@ -12,6 +12,7 @@ namespace Askker.App.iOS
     {
         public static SidebarController sidebarController { get; private set; }
         public static FeedMenuView feedMenu = FeedMenuView.Create();
+        public static UIView menuView { get; set; }
         private NSObject closeMenuObserver;
         private NSObject updateUnreadNotificationsCountObserver;
         public int unreadNotifications { get; set; }
@@ -61,7 +62,7 @@ namespace Askker.App.iOS
             updateUnreadNotificationsCountObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateUnreadNotificationsCount"), UpdateUnreadNotificationsMessageRecieved);
 
             feedMenu.Hidden = true;
-            
+            menuView = this.View;
             feedMenu.CancelButton.TouchUpInside += (object sender, EventArgs e) =>
             {
                 feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
@@ -72,7 +73,7 @@ namespace Askker.App.iOS
                 }, "hideMenu");
 
                 feedMenu.Hidden = true;
-                sidebarController.View.Alpha = 1f;
+                feedMenu.feedView.Alpha = 1f;
             };
 
             var mainWindow = UIApplication.SharedApplication.KeyWindow;

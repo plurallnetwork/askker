@@ -57,6 +57,7 @@ namespace Askker.App.iOS
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
+            MenuViewController.feedMenu.feedView = MenuViewController.menuView;
 
             BTProgressHUD.Show("Refreshing feed...", -1, ProgressHUD.MaskType.Clear);
             fetchSurveys(filterMine, filterForMe, filterFinished);
@@ -86,7 +87,36 @@ namespace Askker.App.iOS
                 }
 
                 MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                MenuViewController.feedMenu.feedView.Alpha = 1f;
+                BTProgressHUD.Dismiss();
+            }
+            catch (Exception ex)
+            {
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);
+            }
+        }
+
+        [Export("DeleteSelector:")]
+        private async void DeleteSelector(UIFeedButton but)
+        {
+            nint button = await Utils.ShowAlert("Delete Survey", "The survey will be deleted. Continue?", "Ok", "Cancel");
+            
+            try
+            {
+                if (button == 0)
+                {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+                    await new FeedManager().DeleteSurvey(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
+
+                    surveys.Remove(survey);
+                    this.feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
+                    this.feedCollectionView.ReloadData();
+                }
+
+                MenuViewController.feedMenu.Hidden = true;
+                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -122,7 +152,7 @@ namespace Askker.App.iOS
                 }
 
                 MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -160,7 +190,7 @@ namespace Askker.App.iOS
                 }
 
                 MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.sidebarController.View.Alpha = 1f;
+                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -267,7 +297,7 @@ namespace Askker.App.iOS
             }, "showMenu");
 
             MenuViewController.feedMenu.Hidden = false;
-            MenuViewController.sidebarController.View.Alpha = 0.5f;
+            MenuViewController.feedMenu.feedView.Alpha = 0.5f;
         }
 
         [Export("TapProfilePictureSelector:")]
@@ -462,6 +492,16 @@ namespace Askker.App.iOS
             {
                 MenuViewController.feedMenu.FinishButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
                 MenuViewController.feedMenu.FinishButton.AddTarget(this, new Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
+            }
+
+            if (MenuViewController.feedMenu.DeleteButton.AllTargets.Count <= 0)
+            {
+                MenuViewController.feedMenu.DeleteButton.AddTarget(this, new Selector("DeleteSelector:"), UIControlEvent.TouchUpInside);
+            }
+            else if (!MenuViewController.feedMenu.DeleteButton.AllTargets.IsEqual(this))
+            {
+                MenuViewController.feedMenu.DeleteButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
+                MenuViewController.feedMenu.DeleteButton.AddTarget(this, new Selector("DeleteSelector:"), UIControlEvent.TouchUpInside);
             }
         }        
     }
