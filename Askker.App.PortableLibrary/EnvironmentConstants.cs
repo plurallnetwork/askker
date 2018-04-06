@@ -34,7 +34,7 @@
 
         public static string getServerTimeZone()
         {
-            return "America/Los_Angeles";
+            return "America/Sao_Paulo";
         }
     }
 }
