@@ -185,7 +185,7 @@ namespace Askker.App.iOS
                 }
 
                 resultCell.pieChartView.AnimateWithXAxisDuration(1.4, ChartEasingOption.EaseOutBack);
-                resultCell.pieChartView.DescriptionText = "";
+                resultCell.pieChartView.ChartDescription.Text = "";
                 var colorAttributes = new UIStringAttributes
                 {
                     ForegroundColor = UIColor.FromRGB(90, 89, 89)                    
@@ -286,7 +286,7 @@ namespace Askker.App.iOS
                 }
                 
                 resultCell.barChartView.AnimateWithXAxisDuration(1.4, ChartEasingOption.Linear);
-                resultCell.barChartView.DescriptionText = "";
+                resultCell.barChartView.ChartDescription.Text = "";
                 resultCell.barChartView.NoDataText = "No results to show";
 
                 resultCell.AddSubview(resultCell.barChartView);
@@ -384,14 +384,14 @@ namespace Askker.App.iOS
 
             pieChartView = new PieChartView();
             pieChartView.TranslatesAutoresizingMaskIntoConstraints = false;
-            pieChartView.DescriptionTextColor = UIColor.FromRGB(90, 89, 89);
+            pieChartView.ChartDescription.TextColor = UIColor.FromRGB(90, 89, 89);
             pieChartView.EntryLabelColor = UIColor.FromRGB(90, 89, 89);
             pieChartView.TintColor = UIColor.FromRGB(90, 89, 89);
             pieChartView.NoDataTextColor = UIColor.FromRGB(90, 89, 89);
 
             barChartView = new BarChartView();
             barChartView.TranslatesAutoresizingMaskIntoConstraints = false;
-            barChartView.DescriptionTextColor = UIColor.FromRGB(90, 89, 89);
+            barChartView.ChartDescription.TextColor = UIColor.FromRGB(90, 89, 89);
             barChartView.BorderColor = UIColor.FromRGB(90, 89, 89);
             barChartView.TintColor = UIColor.FromRGB(90, 89, 89);
             barChartView.NoDataTextColor = UIColor.FromRGB(90, 89, 89);
