@@ -23,12 +23,15 @@ namespace Askker.App.iOS
 
         public event EventHandler<MultiStepProcessStepEventArgs> StepActivated;
         public event EventHandler<MultiStepProcessStepEventArgs> StepDeactivated;
+        private NSObject textChangeObserver;
         private NSObject addNewRowObserver;
         private NSObject removeRowObserver;
         private NSObject updateRowObserver;
         private NSObject updateCellObserver;
         private NSObject updateTextCellObserver;
         private NSObject deleteCellObserver;
+        private NSObject keyboardUpObserver;
+        private NSObject keyboardDownObserver;
 
         static NSString imageCellId = new NSString("ImageCellId");
 
@@ -83,6 +86,11 @@ namespace Askker.App.iOS
         {
             base.ViewDidUnload();
 
+            if (textChangeObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(textChangeObserver);
+            }
+
             if (addNewRowObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(addNewRowObserver);
@@ -111,6 +119,16 @@ namespace Askker.App.iOS
             if (updateTextCellObserver != null)
             {
                 NSNotificationCenter.DefaultCenter.RemoveObserver(updateTextCellObserver);
+            }
+
+            if (keyboardUpObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(keyboardUpObserver);
+            }
+
+            if (keyboardDownObserver != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(keyboardDownObserver);
             }
         }
 
@@ -453,7 +471,7 @@ namespace Askker.App.iOS
             
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
-            NSNotificationCenter.DefaultCenter.AddObserver(UITextField.TextFieldTextDidChangeNotification, TextChangedEvent);
+            textChangeObserver = NSNotificationCenter.DefaultCenter.AddObserver(UITextField.TextFieldTextDidChangeNotification, TextChangedEvent);
             addNewRowObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("AddNewRow"), AddNewRow);
             removeRowObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("RemoveRow"), RemoveRow);
             updateRowObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateRow"), UpdateRow);
@@ -599,10 +617,10 @@ namespace Askker.App.iOS
             }
 
             // Keyboard popup
-            NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.DidShowNotification, KeyBoardUpNotification);
+            keyboardUpObserver = NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.DidShowNotification, KeyBoardUpNotification);
 
             // Keyboard Down
-            NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
+            keyboardDownObserver = NSNotificationCenter.DefaultCenter.AddObserver(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
             
             BTProgressHUD.Dismiss();
         }
