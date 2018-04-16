@@ -570,8 +570,7 @@ namespace Askker.App.iOS
         public UIView contentViewButtons { get; set; }
 
         public static NSString optionCellId = new NSString("optionCell");
-        public static string[] alphabet = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
-
+        
         [Export("initWithFrame:")]
         public FeedCollectionViewCell(CGRect frame) : base(frame)
         {
@@ -754,8 +753,6 @@ namespace Askker.App.iOS
             optionCell.SelectionStyle = UITableViewCellSelectionStyle.None;
             optionCell.Tag = survey.options[indexPath.Row].id;
 
-            optionCell.optionLetterLabel.Text = FeedCollectionViewCell.alphabet[indexPath.Row];
-            optionCell.optionLetterLabel.TextColor = UIColor.FromRGB(90, 89, 89);
             optionCell.optionLabel.Text = survey.options[indexPath.Row].text;
             optionCell.optionLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
@@ -827,7 +824,6 @@ namespace Askker.App.iOS
     public partial class OptionTableViewCell : UITableViewCell
     {
         public bool isSelected { get; set; }
-        public UILabel optionLetterLabel { get; set; }
         public UILabel optionLabel { get; set; }
         public UIImageView optionCheckImage { get; set; }
         public UIImageView optionEmptyCircle { get; set; }
@@ -835,10 +831,6 @@ namespace Askker.App.iOS
         protected OptionTableViewCell(IntPtr handle) : base(handle)
         {
             isSelected = false;
-
-            optionLetterLabel = new UILabel();
-            optionLetterLabel.Font = UIFont.BoldSystemFontOfSize(16);
-            optionLetterLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             optionLabel = new UILabel();
             optionLabel.Font = UIFont.SystemFontOfSize(14);
@@ -850,12 +842,10 @@ namespace Askker.App.iOS
             optionEmptyCircle = new UIImageView(UIImage.FromBundle("EmptyCircleText"));
             optionEmptyCircle.Frame = new CGRect(0, 0, 38, 38);
 
-            ContentView.Add(optionLetterLabel);
             ContentView.Add(optionLabel);
 
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-35-[v0(25)]-10-[v1]-8-|", new NSLayoutFormatOptions(), "v0", optionLetterLabel, "v1", optionLabel));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-24-[v0]-8-|", new NSLayoutFormatOptions(), "v0", optionLabel));
 
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLetterLabel));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
         }
     }
@@ -898,7 +888,6 @@ namespace Askker.App.iOS
             }
             
 
-            optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCell.alphabet[indexPath.Row] + "  ";
             optionCell.optionLabel.Text = survey.options[indexPath.Row].text;
 
             if (survey.optionSelected == survey.options[indexPath.Row].id)
@@ -1009,7 +998,6 @@ namespace Askker.App.iOS
         public UIImageView optionImageView { get; set; }
         public UIView optionCheckOpacityView { get; set; }
         public UIView optionView { get; set; }
-        public UILabel optionLetterLabel { get; set; }
         public UILabel optionLabel { get; set; }
         public UIImageView optionCheckImageView { get; set; }
         public UIImageView optionEmptyCircle { get; set; }
@@ -1047,22 +1035,15 @@ namespace Askker.App.iOS
             optionView.Layer.InsertSublayer(gradientLayer, 0);
             optionView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            optionLetterLabel = new UILabel();
-            optionLetterLabel.Font = UIFont.BoldSystemFontOfSize(14);
-            optionLetterLabel.TextColor = UIColor.White;
-            optionLetterLabel.BackgroundColor = UIColor.Clear;
-            optionLetterLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-
             optionLabel = new UILabel();
             optionLabel.Font = UIFont.SystemFontOfSize(12);
             optionLabel.TextColor = UIColor.White;
             optionLabel.BackgroundColor = UIColor.Clear;
             optionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            optionView.AddSubviews(optionLetterLabel, optionLabel);
+            optionView.AddSubviews(optionLabel);
 
-            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(25)][v1]|", new NSLayoutFormatOptions(), "v0", optionLetterLabel, "v1", optionLabel));
-            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLetterLabel));
+            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0]|", new NSLayoutFormatOptions(), "v0", optionLabel));
             optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
 
             optionCheckImageView = new UIImageView();
