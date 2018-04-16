@@ -9,7 +9,6 @@ using Askker.App.PortableLibrary.Util;
 using Askker.App.PortableLibrary.Enums;
 using ObjCRuntime;
 using BigTed;
-using CoreAnimation;
 using System.Linq;
 
 namespace Askker.App.iOS
@@ -554,7 +553,6 @@ namespace Askker.App.iOS
         public UILabel nameLabel { get; set; }
         public UILabel finishedLabel { get; set; }
         public UITextView questionText { get; set; }
-        public UIView dividerLineView { get; set; }
         public UIOptionsTableView optionsTableView { get; set; }
         public OptionsTableViewSource optionsTableViewSource { get; set; }
         public UIOptionsCollectionView optionsCollectionView { get; set; }
@@ -562,7 +560,7 @@ namespace Askker.App.iOS
         public OptionsCollectionViewDelegate optionsCollectionViewDelegate { get; set; }
         public UIFeedButton totalVotesLabel { get; set; }
         public UIFeedButton commentsLabel { get; set; }
-        public UIView dividerLineView2 { get; set; }
+        public UIView dividerLineView { get; set; }
         public UIFeedButton commentButton { get; set; }
         public UIFeedButton resultButton { get; set; }
         public UIFeedButton moreButton { get; set; }
@@ -592,10 +590,11 @@ namespace Askker.App.iOS
             nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
             finishedLabel = new UILabel();
-            finishedLabel.BackgroundColor = UIColor.FromRGB(250, 60, 60);
             finishedLabel.TextColor = UIColor.White;
             finishedLabel.TextAlignment = UITextAlignment.Center;
             finishedLabel.Font = UIFont.BoldSystemFontOfSize(14);
+            finishedLabel.Layer.BackgroundColor = UIColor.FromRGB(250, 60, 60).CGColor;
+            finishedLabel.Layer.CornerRadius = 10.0f;
             finishedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             questionText = new UITextView();
@@ -606,10 +605,6 @@ namespace Askker.App.iOS
             questionText.TranslatesAutoresizingMaskIntoConstraints = false;
             questionText.TintColor = UIColor.FromRGB(90, 89, 89);
             questionText.TextColor = UIColor.FromRGB(90, 89, 89);
-
-            dividerLineView = new UIView();
-            dividerLineView.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
-            dividerLineView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             optionsTableView = new UIOptionsTableView();
             optionsTableView.RegisterClassForCellReuse(typeof(OptionTableViewCell), optionCellId);
@@ -622,6 +617,7 @@ namespace Askker.App.iOS
             });
             optionsCollectionView.BackgroundColor = UIColor.White;
             optionsCollectionView.RegisterClassForCell(typeof(OptionCollectionViewCell), optionCellId);
+            optionsCollectionView.ShowsHorizontalScrollIndicator = false;
 
             optionsCollectionViewSource = new OptionsCollectionViewSource();
 
@@ -641,9 +637,9 @@ namespace Askker.App.iOS
             commentsLabel.TranslatesAutoresizingMaskIntoConstraints = false;
             commentsLabel.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
 
-            dividerLineView2 = new UIView();
-            dividerLineView2.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
-            dividerLineView2.TranslatesAutoresizingMaskIntoConstraints = false;
+            dividerLineView = new UIView();
+            dividerLineView.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
+            dividerLineView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             resultButton = buttonForTitle(title: "Result", imageName: "result");
             commentButton = buttonForTitle(title: "Comment", imageName: "comment");
@@ -661,17 +657,15 @@ namespace Askker.App.iOS
             AddSubview(nameLabel);
             AddSubview(moreButton);
             AddSubview(questionText);
-            AddSubview(dividerLineView);
             AddSubview(totalVotesLabel);
             AddSubview(commentsLabel);
-            AddSubview(dividerLineView2);
+            AddSubview(dividerLineView);
             AddSubview(contentViewButtons);
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]-[v2(40)]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel, "v2", moreButton));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-12-[v0(v1)]-[v1]-12-|", NSLayoutFormatOptions.AlignAllCenterY, "v0", totalVotesLabel, "v1", commentsLabel));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView2));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", contentViewButtons));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(v2)][v1(1)][v2]|", new NSLayoutFormatOptions(), "v0", resultButton, "v1", dividerLineButtons, "v2", commentButton));
@@ -896,7 +890,6 @@ namespace Askker.App.iOS
                     Utils.SetImageFromNSUrlSession(survey.options[indexPath.Row].image, optionCell.optionImageView, this, PictureType.OptionImage);
                 }
             }
-            
 
             optionCell.optionLetterLabel.Text = "  " + FeedCollectionViewCell.alphabet[indexPath.Row] + "  ";
             optionCell.optionLabel.Text = survey.options[indexPath.Row].text;
@@ -939,12 +932,17 @@ namespace Askker.App.iOS
 
         public override CGSize GetSizeForItem(UICollectionView collectionView, UICollectionViewLayout layout, NSIndexPath indexPath)
         {
-            return new CGSize(270, 220);
+            return new CGSize(293, 280);
         }
 
         public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
         {
-            return 1;
+            return 12;
+        }
+
+        public override UIEdgeInsets GetInsetForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
+        {
+            return new UIEdgeInsets(0, 8, 0, 8);
         }
 
         public override void ItemSelected(UICollectionView collectionView, NSIndexPath indexPath)
@@ -1018,13 +1016,26 @@ namespace Askker.App.iOS
         public OptionCollectionViewCell(CGRect frame) : base(frame)
         {
             isSelected = false;
+            
+            ContentView.Layer.CornerRadius = 10.0f;
+            ContentView.Layer.BorderWidth = 1.0f;
+            ContentView.Layer.BorderColor = UIColor.Clear.CGColor;
+            ContentView.Layer.MasksToBounds = true;
+
+            Layer.CornerRadius = 10.0f;
+            Layer.ShadowColor = UIColor.FromRGB(90, 89, 89).CGColor;
+            Layer.ShadowOffset = new CGSize(width: 3, height: 3);
+            Layer.ShadowRadius = 5.0f;
+            Layer.ShadowOpacity = 0.5f;
+            Layer.MasksToBounds = false;
+            Layer.ShadowPath = UIBezierPath.FromRoundedRect(Bounds, ContentView.Layer.CornerRadius).CGPath;
 
             optionImageView = new UIImageView();
             optionImageView.Image = null;
             optionImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
             optionImageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            optionCheckOpacityView = new UIView(new CGRect(0, 0, 270, 220));
+            optionCheckOpacityView = new UIView(new CGRect(0, 0, 293, 220));
             optionCheckOpacityView.BackgroundColor = UIColor.Green;
             optionCheckOpacityView.Alpha = 0.3f;
             optionCheckOpacityView.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -1035,16 +1046,8 @@ namespace Askker.App.iOS
             optionImageView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionCheckOpacityView));
             optionImageView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", optionCheckOpacityView));
 
-            optionView = new UIView(new CGRect(0, 0, 270, 25));
+            optionView = new UIView(new CGRect(0, 0, 293, 60));
             optionView.BackgroundColor = UIColor.Clear;
-            optionView.Alpha = 0.8f;
-            var colorTop = UIColor.FromRGB(90, 89, 89).CGColor;
-            var colorBottom = UIColor.Clear.CGColor;
-            var gradientLayer = new CAGradientLayer();
-            gradientLayer.Colors = new CGColor[] { colorTop, colorBottom };
-            gradientLayer.Locations = new NSNumber[] { 0.3, 0.9 };
-            gradientLayer.Frame = optionView.Bounds;
-            optionView.Layer.InsertSublayer(gradientLayer, 0);
             optionView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             optionLetterLabel = new UILabel();
@@ -1054,41 +1057,37 @@ namespace Askker.App.iOS
             optionLetterLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             optionLabel = new UILabel();
-            optionLabel.Font = UIFont.SystemFontOfSize(12);
-            optionLabel.TextColor = UIColor.White;
+            optionLabel.Font = UIFont.SystemFontOfSize(14);
+            optionLabel.TextColor = UIColor.FromRGB(90, 89, 89);
             optionLabel.BackgroundColor = UIColor.Clear;
             optionLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-
-            optionView.AddSubviews(optionLetterLabel, optionLabel);
-
-            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(25)][v1]|", new NSLayoutFormatOptions(), "v0", optionLetterLabel, "v1", optionLabel));
-            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLetterLabel));
-            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
 
             optionCheckImageView = new UIImageView();
             optionCheckImageView.Image = UIImage.FromBundle("OptionCheck");
             optionCheckImageView.TranslatesAutoresizingMaskIntoConstraints = false;
             optionCheckImageView.Hidden = true;
 
-            optionEmptyCircle = new UIImageView();
-            optionEmptyCircle.Image = UIImage.FromBundle("EmptyCircleImage");
+            optionEmptyCircle = new UIImageView(UIImage.FromBundle("EmptyCircleText"));
+            optionEmptyCircle.Frame = new CGRect(0, 0, 36, 36);
             optionEmptyCircle.TranslatesAutoresizingMaskIntoConstraints = false;
             optionEmptyCircle.Hidden = false;
 
-            AddSubview(optionImageView);
-            AddSubview(optionView);
-            AddSubview(optionCheckImageView);
-            AddSubview(optionEmptyCircle);
+            optionView.AddSubviews(optionLabel, optionCheckImageView, optionEmptyCircle);
 
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0(40)]-4-|", new NSLayoutFormatOptions(), "v0", optionCheckImageView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0(40)]-4-|", new NSLayoutFormatOptions(), "v0", optionEmptyCircle));
+            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0][v1(36)]-8-|", new NSLayoutFormatOptions(), "v0", optionLabel, "v1", optionCheckImageView));
+            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0][v1(36)]-8-|", new NSLayoutFormatOptions(), "v0", optionLabel, "v1", optionEmptyCircle));
 
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-20-[v0(25)]", new NSLayoutFormatOptions(), "v0", optionView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(40)]-26-|", new NSLayoutFormatOptions(), "v0", optionCheckImageView));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(40)]-26-|", new NSLayoutFormatOptions(), "v0", optionEmptyCircle));
+            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(60)]", new NSLayoutFormatOptions(), "v0", optionLabel));
+            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0(36)]", new NSLayoutFormatOptions(), "v0", optionCheckImageView));
+            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0(36)]", new NSLayoutFormatOptions(), "v0", optionEmptyCircle));
+
+            ContentView.AddSubview(optionImageView);
+            ContentView.AddSubview(optionView);
+
+            ContentView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
+            ContentView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionView));
+
+            ContentView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(220)][v1(60)]", new NSLayoutFormatOptions(), "v0", optionImageView, "v1", optionView));
         }
     }
 

@@ -428,7 +428,7 @@ namespace Askker.App.iOS
         {
             var rect = new NSString(survey.question.text).GetBoundingRect(new CGSize(width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.BoldSystemFontOfSize(16) }, null);
 
-            var optionsHeight = 176;
+            var optionsHeight = 290;
 
             if (survey.type == SurveyType.Text.ToString())
             {
@@ -513,7 +513,7 @@ namespace Askker.App.iOS
                 finished = true;
 
                 feedCell.AddSubview(feedCell.finishedLabel);
-                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feedCell.finishedLabel));
+                feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0]-8-|", new NSLayoutFormatOptions(), "v0", feedCell.finishedLabel));
             }
 
             if (isPreview)
@@ -543,6 +543,7 @@ namespace Askker.App.iOS
 
                 feedCell.optionsTableViewSource.survey = survey;
                 feedCell.optionsTableView.Source = feedCell.optionsTableViewSource;
+                feedCell.optionsTableView.TableFooterView = new UIView(frame: new CGRect(x: 0, y: 0, width: feedCell.optionsTableView.Frame.Size.Width, height: 1));
                 feedCell.optionsTableView.ReloadData();
 
                 feedCell.optionsCollectionView.RemoveFromSuperview();
@@ -552,11 +553,11 @@ namespace Askker.App.iOS
 
                 if (finished)
                 {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3(1)][v4]-8-[v5(24)]-8-[v6(1)][v7(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.dividerLineView, "v4", feedCell.optionsTableView, "v5", feedCell.totalVotesLabel, "v6", feedCell.dividerLineView2, "v7", feedCell.contentViewButtons));
+                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView, "v6", feedCell.contentViewButtons));
                 }
                 else
                 {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsTableView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
+                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2]-8-[v3(24)]-8-[v4(1)][v5(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.optionsTableView, "v3", feedCell.totalVotesLabel, "v4", feedCell.dividerLineView, "v5", feedCell.contentViewButtons));
                 }
 
                 if (isPreview)
@@ -586,11 +587,11 @@ namespace Askker.App.iOS
 
                 if (finished)
                 {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3(1)][v4(<=176)]-8-[v5(24)]-8-[v6(1)][v7(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.dividerLineView, "v4", feedCell.optionsCollectionView, "v5", feedCell.totalVotesLabel, "v6", feedCell.dividerLineView2, "v7", feedCell.contentViewButtons));
+                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3(290)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.optionsCollectionView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView, "v6", feedCell.contentViewButtons));
                 }
                 else
                 {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(1)][v3(<=176)]-8-[v4(24)]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.dividerLineView, "v3", feedCell.optionsCollectionView, "v4", feedCell.totalVotesLabel, "v5", feedCell.dividerLineView2, "v6", feedCell.contentViewButtons));
+                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(290)]-8-[v3(24)]-8-[v4(1)][v5(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.optionsCollectionView, "v3", feedCell.totalVotesLabel, "v4", feedCell.dividerLineView, "v5", feedCell.contentViewButtons));
                 }
 
                 if (isPreview)
