@@ -178,10 +178,6 @@
     <Compile Include="ProfileOtherController.designer.cs">
       <DependentUpon>ProfileOtherController.cs</DependentUpon>
     </Compile>
-    <Compile Include="CustomViewComponents\CommentCell.cs" />
-    <Compile Include="CustomViewComponents\CommentCell.designer.cs">
-      <DependentUpon>CommentCell.cs</DependentUpon>
-    </Compile>
     <Compile Include="ResultViewController.cs" />
     <Compile Include="ResultViewController.designer.cs">
       <DependentUpon>ResultViewController.cs</DependentUpon>
@@ -237,7 +233,6 @@
     <None Include="packages.config" />
     <InterfaceDefinition Include="Resources\ShareStepView.xib" />
     <InterfaceDefinition Include="Resources\FeedMenuView.xib" />
-    <InterfaceDefinition Include="Resources\CommentCell.xib" />
     <InterfaceDefinition Include="Resources\CommentAreaView.xib" />
     <InterfaceDefinition Include="Resources\CommentMenuView.xib" />
   </ItemGroup>

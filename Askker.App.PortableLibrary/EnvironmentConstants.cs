@@ -1,4 +1,7 @@
-﻿namespace Askker.App.iOS
+﻿using System;
+using System.Net.Http;
+
+namespace Askker.App.iOS
 {
     public static class EnvironmentConstants
     {
@@ -35,6 +38,27 @@
         public static string getServerTimeZone()
         {
             return "America/Sao_Paulo";
+        }
+
+        public static DateTime getServerDateTime()
+        {
+            try
+            {
+                HttpResponseMessage response;
+                using (var client = new HttpClient())
+                {
+                    response = client.GetAsync(getServerUrl() + "api/survey/GetServerDatetime").Result;
+                }
+
+                var stringDatetime = response.Content.ReadAsStringAsync().Result;
+
+                return DateTime.ParseExact(stringDatetime, "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
     }
 }

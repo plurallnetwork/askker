@@ -1,5 +1,4 @@
-﻿using Askker.App.iOS.Resources;
-using Askker.App.PortableLibrary.Business;
+﻿using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
 using Askker.App.PortableLibrary.Util;
@@ -12,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UIKit;
 using ObjCRuntime;
+using Cirrious.FluentLayouts.Touch;
 
 namespace Askker.App.iOS
 {
@@ -76,8 +76,8 @@ namespace Askker.App.iOS
 
             feed = new UICollectionView(new CGRect(), new UICollectionViewFlowLayout());
             feed.BackgroundColor = UIColor.White;
-            //feed.RegisterClassForCell(typeof(UICollectionViewCell), commentCellId);
-            feed.RegisterNibForCell(UINib.FromName("CommentCell", NSBundle.MainBundle), commentCellId);
+            feed.RegisterClassForCell(typeof(CommentCell), commentCellId);
+            //feed.RegisterNibForCell(UINib.FromName("CommentCell", NSBundle.MainBundle), commentCellId);
             feed.RegisterClassForSupplementaryView(typeof(UICollectionReusableView), UICollectionElementKindSection.Header, feedHeadId);
             feed.AlwaysBounceVertical = true;
             feed.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -161,6 +161,9 @@ namespace Askker.App.iOS
             surveyCommentModel.profilePicture = LoginController.userModel.profilePicturePath;
             surveyCommentModel.userId = LoginController.userModel.id;
             surveyCommentModel.userName = LoginController.userModel.name;
+            surveyCommentModel.commentDate = EnvironmentConstants.getServerDateTime().ToString("yyyyMMddTHHmmssfff");
+
+
 
             comments.Add(surveyCommentModel);
             var indexes = new NSIndexPath[] { NSIndexPath.FromItemSection(comments.IndexOf(comments.Last()), 0) };
@@ -275,7 +278,7 @@ namespace Askker.App.iOS
                 }
 
                 feed.Source = new CommentsCollectionViewSource(comments, feedCell, this);
-                feed.Delegate = new CommentsCollectionViewDelegate((float) feedCell.Frame.Height);
+                feed.Delegate = new CommentsCollectionViewDelegate((float) feedCell.Frame.Height);                
                 feed.ReloadData();
 
                 var section = (int)feed.NumberOfSections() - 1;
@@ -594,7 +597,7 @@ namespace Askker.App.iOS
                 Utils.SetImageFromNSUrlSession(comments[indexPath.Row].profilePicture, imageView, this, PictureType.Profile);
             }
 
-            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, commentViewController.NavigationController, comments[indexPath.Row].userId);
+            commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, comments[indexPath.Row].commentDate, commentViewController.NavigationController, comments[indexPath.Row].userId);
 
             if (comments[indexPath.Row].userId == LoginController.userModel.id)
             {
@@ -641,17 +644,18 @@ namespace Askker.App.iOS
             if (!comment.Equals(""))
             {
                 var rect = new NSString(comment).GetBoundingRect(new CGSize(collectionView.Frame.Width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.SystemFontOfSize(14) }, null);
-                
+
                 // Heights of the vertical components to format the cell dinamic height
                 // top padding = 8
                 // profileImage = 40
+                // date label = 18
                 // bootom padding 8
-                var knownHeight = 56;
+                var knownHeight = 84;
 
                 return new CGSize(collectionView.Frame.Width, rect.Height + knownHeight);
             }
 
-            return new CGSize(collectionView.Frame.Width, 68);
+            return new CGSize(collectionView.Frame.Width, 88);
         }
 
         public override nfloat GetMinimumLineSpacingForSection(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
@@ -671,6 +675,130 @@ namespace Askker.App.iOS
 
         public UICommentLongPressGestureRecognizer(NSObject target, Selector action) : base(target, action)
         {
+        }
+    }
+
+    class CommentCell : UICollectionViewCell
+    {
+        public UITextView commentText { get; set; }
+        public UIImageView imageView { get; set; }
+        public UIView lineSeparator { get; set; }
+        public UILabel nameLabel { get; set; }
+        public UILabel dateLabel { get; set; }
+
+        [Export("initWithFrame:")]
+        public CommentCell(CGRect frame) : base(frame)
+        {
+            imageView = new UIImageView();
+            imageView.Layer.CornerRadius = 22;
+            imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+            imageView.Layer.MasksToBounds = true;
+            imageView.UserInteractionEnabled = true;
+            imageView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            commentText = new UITextView();
+            commentText.BackgroundColor = UIColor.White;
+            commentText.TextColor = UIColor.FromRGB(90, 89, 89);
+            commentText.Selectable = false;
+            commentText.Font = UIFont.SystemFontOfSize(14);
+            commentText.TranslatesAutoresizingMaskIntoConstraints = false;
+            commentText.Editable = false;
+
+            nameLabel = new UILabel();
+            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
+            nameLabel.Font = UIFont.BoldSystemFontOfSize(14);
+
+            dateLabel = new UILabel();
+            dateLabel.TextColor = UIColor.FromRGB(90, 89, 89);
+            dateLabel.Font = UIFont.SystemFontOfSize(12);
+
+            lineSeparator = new UIView();
+            lineSeparator.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
+
+            ContentView.Add(imageView);
+            ContentView.Add(nameLabel);
+            ContentView.Add(commentText);
+            ContentView.Add(dateLabel);
+            ContentView.Add(lineSeparator);
+
+            ContentView.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
+            ContentView.AddConstraints(
+                imageView.AtLeftOf(ContentView, 8),
+                imageView.Width().EqualTo(40),
+                imageView.Height().EqualTo(40),
+                imageView.AtTopOf(ContentView, 8),
+
+                nameLabel.AtRightOf(ContentView, 8),
+                nameLabel.AtTopOf(ContentView, 8),
+                nameLabel.Left().EqualTo().RightOf(imageView).Plus(8),
+                nameLabel.Height().EqualTo(20),
+
+                commentText.AtTopOf(ContentView, 28),
+                commentText.AtRightOf(ContentView, 8),
+                commentText.Left().EqualTo().RightOf(imageView).Plus(3),
+                commentText.AtBottomOf(ContentView, 30),
+
+                dateLabel.Below(commentText, 5),
+                dateLabel.AtRightOf(ContentView, 8),
+                dateLabel.AtLeftOf(ContentView, 56),                
+                dateLabel.AtBottomOf(ContentView, 5),
+
+                lineSeparator.AtBottomOf(ContentView, 1),
+                lineSeparator.AtRightOf(ContentView, 8),
+                lineSeparator.AtLeftOf(ContentView, 8),
+                lineSeparator.Height().EqualTo(1)
+
+            );
+        }
+
+        public void UpdateCell(string name, string text, string commentDate, UINavigationController navigationController, string id)
+        {
+            nameLabel.Text = name;
+            commentText.Text = text;
+
+            dateLabel.Text = Utils.TimeAgoDisplay(Utils.ConvertToLocalTime(DateTime.ParseExact(commentDate, "yyyyMMddTHHmmssfff", null)));
+
+            var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
+            List<Object> tapProfilePictureValues = new List<Object>();
+            tapProfilePictureValues.Add(navigationController);
+            tapProfilePictureValues.Add(id);
+            feedTapGestureRecognizer.Params = tapProfilePictureValues;
+            imageView.AddGestureRecognizer(feedTapGestureRecognizer);
+
+            LayoutSubviews();
+        }
+
+        public override void LayoutSubviews()
+        {
+            base.LayoutSubviews();
+            imageView.Layer.CornerRadius = 22;
+            imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+            imageView.Layer.MasksToBounds = true;
+            imageView.UserInteractionEnabled = true;
+            imageView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            commentText.BackgroundColor = UIColor.White;
+            commentText.TextColor = UIColor.FromRGB(90, 89, 89);
+            commentText.Selectable = false;
+            commentText.Font = UIFont.SystemFontOfSize(14);
+
+            nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
+            nameLabel.Font = UIFont.BoldSystemFontOfSize(14);
+
+            dateLabel.TextColor = UIColor.FromRGB(90, 89, 89);
+            dateLabel.Font = UIFont.SystemFontOfSize(12);
+
+        }
+
+        public UIImageView GetImageView()
+        {
+            return this.imageView;
+        }
+
+        [Export("TapProfilePictureSelector:")]
+        public void TapProfilePictureSelector(UIFeedTapGestureRecognizer tapGesture)
+        {
+            Utils.OpenUserProfile((UINavigationController)tapGesture.Params.ToArray()[0], (string)tapGesture.Params.ToArray()[1]);
         }
     }
 }

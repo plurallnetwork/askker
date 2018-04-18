@@ -623,11 +623,11 @@ namespace Askker.App.iOS
 
             if (date.Year.Equals(DateTime.Now.Year))
             {
-                return date.ToString("MMMM dd");
+                return date.ToString("MMM dd");
             }
             else
             {
-                return date.ToString("MMMM dd") + ", " + date.Year;
+                return date.ToString("MMM dd") + ", " + date.Year;
             }
         }
 
