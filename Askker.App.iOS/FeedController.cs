@@ -899,6 +899,8 @@ namespace Askker.App.iOS
                 optionCell.isSelected = false;
             }
 
+            optionCell.optionNumber.Text = (indexPath.Row + 1) + "/" + survey.options.Count;
+
             return optionCell;
         }
 
@@ -999,6 +1001,7 @@ namespace Askker.App.iOS
         public UILabel optionLabel { get; set; }
         public UIImageView optionCheckImageView { get; set; }
         public UIImageView optionEmptyCircle { get; set; }
+        public UILabel optionNumber { get; set; }
 
         [Export("initWithFrame:")]
         public OptionCollectionViewCell(CGRect frame) : base(frame)
@@ -1029,10 +1032,23 @@ namespace Askker.App.iOS
             optionCheckOpacityView.TranslatesAutoresizingMaskIntoConstraints = false;
             optionCheckOpacityView.Hidden = true;
 
-            optionImageView.AddSubview(optionCheckOpacityView);
+            optionNumber = new UILabel();
+            optionNumber.TextColor = UIColor.White;
+            optionNumber.TextAlignment = UITextAlignment.Center;
+            optionNumber.Font = UIFont.SystemFontOfSize(12);
+            optionNumber.Alpha = 0.5f;
+            optionNumber.Layer.BackgroundColor = UIColor.Black.CGColor;
+            optionNumber.Layer.CornerRadius = 12.0f;
+            optionNumber.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            optionImageView.AddSubviews(optionCheckOpacityView, optionNumber);
 
             optionImageView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionCheckOpacityView));
+            optionImageView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[v0(45)]", new NSLayoutFormatOptions(), "v0", optionNumber));
+
             optionImageView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", optionCheckOpacityView));
+            optionImageView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-(<=1)-[v1(25)]", NSLayoutFormatOptions.AlignAllCenterX, "v0", optionImageView, "v1", optionNumber));
+            optionImageView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0]-4-|", new NSLayoutFormatOptions(), "v0", optionNumber));
 
             optionView = new UIView(new CGRect(0, 0, 293, 60));
             optionView.BackgroundColor = UIColor.Clear;
@@ -1047,7 +1063,7 @@ namespace Askker.App.iOS
             optionView.AddSubviews(optionLabel);
 
             optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0]|", new NSLayoutFormatOptions(), "v0", optionLabel));
-            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(25)]", new NSLayoutFormatOptions(), "v0", optionLabel));
+            optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(60)]", new NSLayoutFormatOptions(), "v0", optionLabel));
 
             optionCheckImageView = new UIImageView();
             optionCheckImageView.Image = UIImage.FromBundle("OptionCheck");
@@ -1068,8 +1084,7 @@ namespace Askker.App.iOS
             optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0(36)]", new NSLayoutFormatOptions(), "v0", optionCheckImageView));
             optionView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0(36)]", new NSLayoutFormatOptions(), "v0", optionEmptyCircle));
 
-            ContentView.AddSubview(optionImageView);
-            ContentView.AddSubview(optionView);
+            ContentView.AddSubviews(optionImageView, optionView);
 
             ContentView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionImageView));
             ContentView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", optionView));

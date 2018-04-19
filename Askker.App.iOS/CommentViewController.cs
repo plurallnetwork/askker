@@ -466,6 +466,9 @@ namespace Askker.App.iOS
 
         void AdjustInputToolbar(nfloat change)
         {
+            var feedFrame = feed.Frame;
+            var commentAreaFrame = commentArea.Frame;
+
             toolbarHeightConstraint.Constant += change;
 
             var topCorrect = commentArea.CommentText.ContentSize.Height - commentArea.CommentText.Bounds.Size.Height;
@@ -473,9 +476,12 @@ namespace Askker.App.iOS
 
             if (toolbarHeightConstraint.Constant < 46f)
                 toolbarHeightConstraint.Constant = 46f;
-
+            
             View.SetNeedsUpdateConstraints();
             View.LayoutIfNeeded();
+
+            feed.Frame = new CGRect(feed.Frame.X, (feedFrame.Y - change), feed.Frame.Width, feedFrame.Height);
+            commentArea.Frame = new CGRect(commentArea.Frame.X, (commentAreaFrame.Y - change), commentArea.Frame.Width, commentArea.Frame.Height);
         }
 
         private void CommentText_Changed(object sender, EventArgs e)
