@@ -135,12 +135,36 @@ namespace Askker.App.iOS
             this.reportsDatasets = reportsDatasets;
 
             this.chartColors = new List<UIColor>();
-            this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.97"), nfloat.Parse("0.65"), nfloat.Parse("0.14"), nfloat.Parse("1")));
-            this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.98"), nfloat.Parse("0.74"), nfloat.Parse("0.36"), nfloat.Parse("1")));
-            this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.99"), nfloat.Parse("0.96"), nfloat.Parse("0.58"), nfloat.Parse("1")));
-            this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.76"), nfloat.Parse("0.72"), nfloat.Parse("0.32"), nfloat.Parse("1")));
-            this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.57"), nfloat.Parse("0.49"), nfloat.Parse("0.36"), nfloat.Parse("1")));
-            this.chartColors.Add(UIColor.FromRGBA(nfloat.Parse("0.72"), nfloat.Parse("0.0"), nfloat.Parse("0.48"), nfloat.Parse("1"))); 
+            this.chartColors.Add(UIColor.FromRGBA(0, 211, 213, 100));
+            this.chartColors.Add(UIColor.FromRGBA(0, 160, 70, 100));
+            this.chartColors.Add(UIColor.FromRGBA(220, 40, 40, 100));
+            this.chartColors.Add(UIColor.FromRGBA(250, 220, 0, 100));
+            this.chartColors.Add(UIColor.FromRGBA(190, 40, 150, 100));
+            this.chartColors.Add(UIColor.FromRGBA(0, 74, 91, 100));
+            this.chartColors.Add(UIColor.FromRGBA(0, 143, 152, 100));
+            this.chartColors.Add(UIColor.FromRGBA(0, 128, 46, 100));
+            this.chartColors.Add(UIColor.FromRGBA(168, 24, 24, 100));
+            this.chartColors.Add(UIColor.FromRGBA(190, 160, 0, 100));
+            this.chartColors.Add(UIColor.FromRGBA(0, 96, 22, 100));
+            this.chartColors.Add(UIColor.FromRGBA(116, 8, 8, 100));
+            this.chartColors.Add(UIColor.FromRGBA(130, 100, 0, 100));
+            this.chartColors.Add(UIColor.FromRGBA(94, 8, 54, 100));
+            this.chartColors.Add(UIColor.FromRGBA(142, 24, 102, 100));
+            this.chartColors.Add(UIColor.FromRGBA(176, 54, 121, 100));
+            this.chartColors.Add(UIColor.FromRGBA(184, 98, 26, 100));
+            this.chartColors.Add(UIColor.FromRGBA(204, 64, 147, 100));
+            this.chartColors.Add(UIColor.FromRGBA(255, 84, 44, 100));
+            this.chartColors.Add(UIColor.FromRGBA(140, 100, 210, 100));
+            this.chartColors.Add(UIColor.FromRGBA(210, 36, 114, 100));
+            this.chartColors.Add(UIColor.FromRGBA(179, 49, 9, 100));
+            this.chartColors.Add(UIColor.FromRGBA(155, 73, 9, 100));
+            this.chartColors.Add(UIColor.FromRGBA(120, 68, 162, 100));
+            this.chartColors.Add(UIColor.FromRGBA(217, 66, 26, 100));
+            this.chartColors.Add(UIColor.FromRGBA(20, 20, 20, 100));
+            this.chartColors.Add(UIColor.FromRGBA(56, 56, 56, 100));
+            this.chartColors.Add(UIColor.FromRGBA(92, 92, 92, 100));
+            this.chartColors.Add(UIColor.FromRGBA(128, 128, 128, 100));
+            this.chartColors.Add(UIColor.FromRGBA(164, 164, 164, 100));
         }
 
         public override nint GetItemsCount(UICollectionView collectionView, nint section)
