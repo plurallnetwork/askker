@@ -76,8 +76,7 @@ namespace Askker.App.iOS
                     await new FeedManager().FinishSurvey(survey, LoginController.tokenModel.access_token);
 
                     surveyCell.finishedLabel.Text = "Finished";
-                    surveyCell.moreButton.Hidden = true;
-
+                    
                     if (surveys.Count > 0 && !this.filterFinished)
                     {
                         surveys.Remove(survey);
@@ -295,6 +294,27 @@ namespace Askker.App.iOS
                 Type = CoreAnimation.CAAnimation.TransitionPush,
                 Subtype = CoreAnimation.CAAnimation.TransitionFromTop
             }, "showMenu");
+
+            if (!string.IsNullOrEmpty(this.survey.finishDate)) //is finished
+            {
+                MenuViewController.feedMenu.EditButton.Enabled = false;
+                MenuViewController.feedMenu.FinishButton.Enabled = false;
+                MenuViewController.feedMenu.CleanButton.Enabled = false;
+
+                MenuViewController.feedMenu.EditButton.SetTitleColor(UIColor.LightGray, UIControlState.Disabled);
+                MenuViewController.feedMenu.FinishButton.SetTitleColor(UIColor.LightGray, UIControlState.Disabled);
+                MenuViewController.feedMenu.CleanButton.SetTitleColor(UIColor.LightGray, UIControlState.Disabled);
+            }
+            else
+            {
+                MenuViewController.feedMenu.EditButton.Enabled = true;
+                MenuViewController.feedMenu.FinishButton.Enabled = true;
+                MenuViewController.feedMenu.CleanButton.Enabled = true;
+
+                MenuViewController.feedMenu.EditButton.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+                MenuViewController.feedMenu.FinishButton.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+                MenuViewController.feedMenu.CleanButton.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+            }
 
             MenuViewController.feedMenu.Hidden = false;
             MenuViewController.feedMenu.feedView.Alpha = 0.5f;

@@ -527,14 +527,7 @@ namespace Askker.App.iOS
             }
             else
             {
-                if (finished)
-                {
-                    feedCell.moreButton.Hidden = true;
-                }
-                else
-                {
-                    feedCell.moreButton.Hidden = false;
-                }
+                feedCell.moreButton.Hidden = false;                
             }
 
             feedCell.questionText.Text = survey.question.text;
