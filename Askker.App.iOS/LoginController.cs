@@ -109,12 +109,6 @@ namespace Askker.App.iOS
 
         public void Login()
         {
-            //In iOS 6 and later, the  ViewDidUnload method is never called. So the observer is removed here, because it was causing an error on social login after logging out from e-mail authentication.
-            if (finishAuthenticationObserver != null)
-            {
-                NSNotificationCenter.DefaultCenter.RemoveObserver(finishAuthenticationObserver);
-            }
-
             var menuController = this.Storyboard.InstantiateViewController("MenuNavController");
             if (menuController != null)
             {
