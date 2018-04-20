@@ -198,7 +198,8 @@ namespace Askker.App.iOS
 
                     dataSet.ValueFormatter = new ChartDefaultValueFormatter(new NSNumberFormatter() { MinimumFractionDigits = 0 });
                     dataSet.SliceSpace = 2;
-                    dataSet.Colors = ChartColorTemplates.Joyful;
+                    //dataSet.Colors = ChartColorTemplates.Joyful;
+                    dataSet.Colors = this.chartColors.ToArray();
                     dataSet.ValueTextColor = UIColor.FromRGB(90, 89, 89);
                     dataSet.ValueLineColor = UIColor.FromRGB(90, 89, 89);
                     dataSet.EntryLabelColor = UIColor.FromRGB(90, 89, 89);
