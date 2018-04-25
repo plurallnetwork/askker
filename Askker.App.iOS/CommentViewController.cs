@@ -649,14 +649,15 @@ namespace Askker.App.iOS
             var comment = CommentViewController.comments[indexPath.Row].text;
             if (!comment.Equals(""))
             {
-                var rect = new NSString(comment).GetBoundingRect(new CGSize(collectionView.Frame.Width, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.SystemFontOfSize(14) }, null);
+                // 80 is a padding number to decrease from width, because the comment view dowsn't have the same width of screen
+                var rect = new NSString(comment).GetBoundingRect(new CGSize(collectionView.Frame.Width - 80, 1000), NSStringDrawingOptions.UsesFontLeading | NSStringDrawingOptions.UsesLineFragmentOrigin, new UIStringAttributes() { Font = UIFont.SystemFontOfSize(14) }, null);
 
                 // Heights of the vertical components to format the cell dinamic height
                 // top padding = 8
                 // profileImage = 40
                 // date label = 18
                 // bootom padding 8
-                var knownHeight = 84;
+                var knownHeight = 68;
 
                 return new CGSize(collectionView.Frame.Width, rect.Height + knownHeight);
             }
@@ -672,7 +673,7 @@ namespace Askker.App.iOS
         public override CGSize GetReferenceSizeForHeader(UICollectionView collectionView, UICollectionViewLayout layout, nint section)
         {
             return new CGSize(collectionView.Frame.Width, heightHeaderCell);
-        }
+        }        
     }
 
     public class UICommentLongPressGestureRecognizer : UILongPressGestureRecognizer
@@ -745,6 +746,7 @@ namespace Askker.App.iOS
                 commentText.AtBottomOf(ContentView, 30),
 
                 dateLabel.Below(commentText, 5),
+                dateLabel.Height().EqualTo(20),
                 dateLabel.AtRightOf(ContentView, 8),
                 dateLabel.AtLeftOf(ContentView, 56),                
                 dateLabel.AtBottomOf(ContentView, 5),

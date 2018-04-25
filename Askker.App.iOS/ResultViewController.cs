@@ -191,7 +191,7 @@ namespace Askker.App.iOS
                         if (Convert.ToInt32(reportDataSet.dataSets[0][i]) > 0)
                         {
                             dataEntries.Add(new PieChartDataEntry(reportDataSet.dataSets[0][i], reportDataSet.labels[i]));
-                        }
+                        }                        
                     }
 
                     var dataSet = new PieChartDataSet(dataEntries.ToArray(), "");
@@ -272,7 +272,10 @@ namespace Askker.App.iOS
 
                         for (int j = 0; j < groupCount; j++)
                         {
-                            dataEntries.Add(new BarChartDataEntry(i, reportDataSet.dataSets[i][j]));
+                            if (Convert.ToInt32(reportDataSet.dataSets[i][j]) > 0)
+                            {
+                                dataEntries.Add(new BarChartDataEntry(i, reportDataSet.dataSets[i][j]));
+                            }
                         }
 
                         dataEntriesList.Add(dataEntries);
@@ -280,16 +283,27 @@ namespace Askker.App.iOS
 
                     var chartDataSetList = new List<BarChartDataSet>();
 
+                    var k = 0;
+
                     for (int i = 0; i < dataEntriesList.Count; i++)
                     {
                         var barChartDataSet = new BarChartDataSet(dataEntriesList[i].ToArray(), reportDataSet.labels[i]);
-                        barChartDataSet.SetColor(this.chartColors[i]);
+
+                        if (dataEntriesList[i].ToArray().Length > 0)
+                        {
+                            barChartDataSet.SetColor(this.chartColors[k++]);
+                        }
+                        else
+                        {
+                            barChartDataSet.SetColor(UIColor.Clear);
+                        }
+
                         barChartDataSet.ValueFormatter = new ChartDefaultValueFormatter(new NSNumberFormatter() { MinimumFractionDigits = 0, ZeroSymbol = "" });
                         barChartDataSet.ValueTextColor = UIColor.FromRGB(90, 89, 89);
-                        barChartDataSet.BarBorderColor = UIColor.FromRGB(90, 89, 89);                        
+                        barChartDataSet.BarBorderColor = UIColor.FromRGB(90, 89, 89);
 
                         chartDataSetList.Add(barChartDataSet);
-                    }
+                    }                    
 
                     var dataSets = chartDataSetList.ToArray();
 
@@ -317,7 +331,7 @@ namespace Askker.App.iOS
                 resultCell.AddSubview(resultCell.barChartView);
 
                 resultCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", resultCell.barChartView));
-                resultCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(24)][v1]|", new NSLayoutFormatOptions(), "v0", resultCell.sectionLabel, "v1", resultCell.barChartView));
+                resultCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0(24)][v1]|", new NSLayoutFormatOptions(), "v0", resultCell.sectionLabel, "v1", resultCell.barChartView));                
             }
 
             return resultCell;
@@ -420,6 +434,11 @@ namespace Askker.App.iOS
             barChartView.BorderColor = UIColor.FromRGB(90, 89, 89);
             barChartView.TintColor = UIColor.FromRGB(90, 89, 89);
             barChartView.NoDataTextColor = UIColor.FromRGB(90, 89, 89);
+            barChartView.HighlightFullBarEnabled = false;
+            barChartView.HighlightPerDragEnabled = false;
+            barChartView.HighlightPerTapEnabled = false;
+            barChartView.UserInteractionEnabled = false;
+            barChartView.PinchZoomEnabled = false;
 
             AddSubview(sectionLabel);
 
