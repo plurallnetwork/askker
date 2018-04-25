@@ -345,8 +345,13 @@ namespace Askker.App.iOS
                 if (feedController != null)
                 {                    
                     this.PresentViewController(feedController, true, null);
+
+                    var step0 = Steps[0] as CreateSurveyFirstStep;
+                    step0.ViewDidUnload();
+
                     CreateSurveyController.SurveyModel = null;
                 }
+
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
