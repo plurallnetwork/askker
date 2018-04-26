@@ -780,7 +780,7 @@ namespace Askker.App.iOS
                     CreateSurveyController.SurveyModel.question = new Question();
                 }
                 CreateSurveyController.SurveyModel.question.text = questionText.Text;
-                CreateSurveyController.SurveyModel.question.image = "";                
+                CreateSurveyController.SurveyModel.question.image = "";
             }
 
             UpdateNextButton();
@@ -946,7 +946,17 @@ namespace Askker.App.iOS
                 button.AtTopOf(ContentView, 4)
             );
         }
-        
+
+        [Export("textField:shouldChangeCharactersInRange:replacementString:")]
+        public bool ShouldChangeCharacters(UITextField textField, NSRange range, string ReplacementString)
+        {
+            if (textField.Text.Length + ReplacementString.Length > 20)
+            {
+                return false;
+            }
+            return true;
+        }
+
         [Export("textFieldDidBeginEditing:")]
         public void EditingStarted(UITextField textField)
         {
@@ -1427,6 +1437,16 @@ namespace Askker.App.iOS
                     NSNotificationCenter.DefaultCenter.PostNotificationName(new NSString("DeleteCell"), new NSString(indexPath.Row.ToString()));
                 }
             }
+        }
+
+        [Export("textField:shouldChangeCharactersInRange:replacementString:")]
+        public bool ShouldChangeCharacters(UITextField textField, NSRange range, string ReplacementString)
+        {
+            if (textField.Text.Length + ReplacementString.Length > 20)
+            {
+                return false;
+            }
+            return true;
         }
 
         [Export("textFieldDidBeginEditing:")]
