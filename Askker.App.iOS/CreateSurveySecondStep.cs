@@ -20,8 +20,6 @@ namespace Askker.App.iOS
         {
             View = new UIView();
             View.BackgroundColor = UIColor.White;
-
-            
         }
 
         public override void ViewDidAppear(bool animated)
@@ -34,18 +32,31 @@ namespace Askker.App.iOS
             feedCell = new FeedCollectionViewCell(new CGRect(0, 0, View.Frame.Width, feedCellHeight));
 
             Utils.BindFeedCell(feedCell, CreateSurveyController.SurveyModel, 0, this, true);
-            
-            View.Add(feedCell);
 
-            View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
-            View.AddConstraints(
+            UIScrollView scrollView = new UIScrollView();
+            scrollView.Frame = new CGRect(0, 70, View.Frame.Width, View.Frame.Height - 70);
+            scrollView.ContentSize = new CGSize(View.Frame.Width, feedCellHeight);
+            scrollView.LayoutIfNeeded();
+            scrollView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+            scrollView.AddSubview(feedCell);
 
-                feedCell.WithSameCenterX(View),
-                feedCell.AtTopOf(View, 70),
-                feedCell.AtLeftOf(View),
-                feedCell.AtRightOf(View),
-                feedCell.Height().EqualTo(feedCellHeight)
-            );
+            View.AddSubview(scrollView);
+
+            //View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
+            //View.AddConstraints(
+
+            //    scrollView.WithSameCenterX(View),
+            //    scrollView.AtTopOf(View, 70),
+            //    scrollView.AtLeftOf(View),
+            //    scrollView.AtRightOf(View),
+            //    scrollView.Height().EqualTo(feedCellHeight),
+
+            //    feedCell.WithSameCenterX(scrollView),
+            //    feedCell.AtTopOf(scrollView),
+            //    feedCell.AtLeftOf(scrollView),
+            //    feedCell.AtRightOf(scrollView),
+            //    feedCell.Height().EqualTo(feedCellHeight)
+            //);
 
             StepActivated?.Invoke(this, new MultiStepProcessStepEventArgs { Index = StepIndex });
         }
