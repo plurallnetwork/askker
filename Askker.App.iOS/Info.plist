@@ -7,9 +7,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.blinq.Askker.App.iOS</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.3.2</string>
+	<string>1.4.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.3.2</string>
+	<string>1.4.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
@@ -57,7 +57,5 @@
 	<string>919804201485283</string>
 	<key>FacebookDisplayName</key>
 	<string>Askker</string>
-	<key>XSAppIconAssets</key>
-	<string>Resources/Media.xcassets/AppIcons.appiconset</string>
 </dict>
 </plist>
