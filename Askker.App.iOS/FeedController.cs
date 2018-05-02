@@ -138,7 +138,7 @@ namespace Askker.App.iOS
 
                     this.survey.optionSelected = null;
                     this.survey.totalVotes = 0;
-                    surveyCell.totalVotesLabel.SetTitle("0 Votes", UIControlState.Normal);
+                    surveyCell.updateTotalVotes(0);
                     if (this.survey.type == SurveyType.Text.ToString())
                     {
                         surveyCell.optionsTableView.ReloadData();
@@ -462,20 +462,6 @@ namespace Askker.App.iOS
             moreValues.Add(this);
             feedCell.moreButton.Params = moreValues;
 
-            feedCell.commentsLabel.AddTarget(this, new Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
-            List<Object> commentLabelValues = new List<Object>();
-            commentLabelValues.Add(survey);
-            commentLabelValues.Add(indexPathRow);
-            commentLabelValues.Add(this.NavigationController);
-            feedCell.commentsLabel.Params = commentLabelValues;
-
-            feedCell.totalVotesLabel.AddTarget(this, new Selector("ResultSelector:"), UIControlEvent.TouchUpInside);
-            List<Object> resultVotesValues = new List<Object>();
-            resultVotesValues.Add(survey);
-            resultVotesValues.Add(indexPathRow);
-            resultVotesValues.Add(this.NavigationController);
-            feedCell.totalVotesLabel.Params = resultVotesValues;
-
             var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
             List<Object> tapProfilePictureValues = new List<Object>();
             tapProfilePictureValues.Add(this.NavigationController);
@@ -558,14 +544,16 @@ namespace Askker.App.iOS
         public UIOptionsCollectionView optionsCollectionView { get; set; }
         public OptionsCollectionViewSource optionsCollectionViewSource { get; set; }
         public OptionsCollectionViewDelegate optionsCollectionViewDelegate { get; set; }
-        public UIFeedButton totalVotesLabel { get; set; }
-        public UIFeedButton commentsLabel { get; set; }
         public UIView dividerLineView { get; set; }
         public UIFeedButton commentButton { get; set; }
         public UIFeedButton resultButton { get; set; }
+        public UIFeedButton likeButton { get; set; }
         public UIFeedButton moreButton { get; set; }
         public UIView dividerLineButtons { get; set; }
+        public UIView dividerLineButtons2 { get; set; }
         public UIView contentViewButtons { get; set; }
+        public UILabel badge { get; set; }
+        public UILabel buttonLabel { get; set; }
 
         public static NSString optionCellId = new NSString("optionCell");
         
@@ -622,52 +610,40 @@ namespace Askker.App.iOS
 
             optionsCollectionViewDelegate = new OptionsCollectionViewDelegate();
 
-            totalVotesLabel = new UIFeedButton();
-            totalVotesLabel.Font = UIFont.SystemFontOfSize(12);
-            totalVotesLabel.HorizontalAlignment = UIControlContentHorizontalAlignment.Left;
-            totalVotesLabel.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1")), UIControlState.Normal);
-            totalVotesLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-            totalVotesLabel.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
-
-            commentsLabel = new UIFeedButton();
-            commentsLabel.Font = UIFont.SystemFontOfSize(12);
-            commentsLabel.HorizontalAlignment = UIControlContentHorizontalAlignment.Right;
-            commentsLabel.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.60"), nfloat.Parse("0.63"), nfloat.Parse("0.67"), nfloat.Parse("1")), UIControlState.Normal);
-            commentsLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-            commentsLabel.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
-
             dividerLineView = new UIView();
             dividerLineView.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
             dividerLineView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             resultButton = buttonForTitle(title: "Result", imageName: "result");
             commentButton = buttonForTitle(title: "Comment", imageName: "comment");
+            likeButton = buttonForTitle(title: "Like", imageName: "like");
             moreButton = buttonForTitle(title: "", imageName: "More");
             
             dividerLineButtons = new UIView();
             dividerLineButtons.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
             dividerLineButtons.TranslatesAutoresizingMaskIntoConstraints = false;
 
+            dividerLineButtons2 = new UIView();
+            dividerLineButtons2.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
+            dividerLineButtons2.TranslatesAutoresizingMaskIntoConstraints = false;
+
             contentViewButtons = new UIView();
-            contentViewButtons.AddSubviews(resultButton, dividerLineButtons, commentButton);
+            contentViewButtons.AddSubviews(resultButton, dividerLineButtons, commentButton, dividerLineButtons2, likeButton);
             contentViewButtons.TranslatesAutoresizingMaskIntoConstraints = false;
 
             AddSubview(profileImageView);
             AddSubview(nameLabel);
             AddSubview(moreButton);
             AddSubview(questionText);
-            AddSubview(totalVotesLabel);
-            AddSubview(commentsLabel);
             AddSubview(dividerLineView);
             AddSubview(contentViewButtons);
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]-[v2(40)]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel, "v2", moreButton));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-12-[v0(v1)]-[v1]-12-|", NSLayoutFormatOptions.AlignAllCenterY, "v0", totalVotesLabel, "v1", commentsLabel));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", contentViewButtons));
-            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(v2)][v1(1)][v2]|", new NSLayoutFormatOptions(), "v0", resultButton, "v1", dividerLineButtons, "v2", commentButton));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0(v4)][v1(1)][v2(v4)][v3(1)][v4]|", new NSLayoutFormatOptions(), "v0", resultButton, "v1", dividerLineButtons, "v2", commentButton, "v3", dividerLineButtons2, "v4", likeButton));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", nameLabel));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-12-[v0]", new NSLayoutFormatOptions(), "v0", moreButton));
@@ -675,55 +651,94 @@ namespace Askker.App.iOS
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", resultButton));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0]-8-|", new NSLayoutFormatOptions(), "v0", dividerLineButtons));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", commentButton));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0]-8-|", new NSLayoutFormatOptions(), "v0", dividerLineButtons2));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[v0(44)]|", new NSLayoutFormatOptions(), "v0", likeButton));
         }
 
         public UIFeedButton buttonForTitle(string title, string imageName)
         {
             var button = new UIFeedButton();
-            button.SetTitle(title, UIControlState.Normal);
-            button.SetTitleColor(UIColor.FromRGBA(nfloat.Parse("0.56"), nfloat.Parse("0.58"), nfloat.Parse("0.63"), nfloat.Parse("1")), UIControlState.Normal);
-            button.TitleLabel.Font = UIFont.BoldSystemFontOfSize(14);
+
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                // label
+                nfloat buttonHeight = 44;
+                nfloat buttonWidth = ContentView.Frame.Width / 3;
+                nfloat labelWidth = buttonWidth * 0.60f;
+                nfloat labelHeight = 30;
+                nfloat labelOriginX = 8; // Half of the icon width
+                nfloat labelOriginY = 7;
+
+                this.buttonLabel = new UILabel();
+                this.buttonLabel.TextColor = UIColor.FromRGBA(nfloat.Parse("0.56"), nfloat.Parse("0.58"), nfloat.Parse("0.63"), nfloat.Parse("1"));
+                this.buttonLabel.Font = UIFont.SystemFontOfSize(14);
+                this.buttonLabel.TextAlignment = UITextAlignment.Center;
+                this.buttonLabel.Frame = CoreGraphics.CGRect.FromLTRB(labelOriginX, labelOriginY, labelOriginX + labelWidth, labelOriginY + labelHeight);
+                this.buttonLabel.Text = title;
+
+                button.AddSubview(this.buttonLabel);
+            }
 
             if (!imageName.Equals(""))
             {
                 button.SetImage(UIImage.FromBundle(imageName), UIControlState.Normal);
             }
 
-            button.TitleEdgeInsets = new UIEdgeInsets(0, 8, 0, 0);
             button.TranslatesAutoresizingMaskIntoConstraints = false;
+                        
+            return button;
+        }
+
+        public UIFeedButton insertBadge(UIFeedButton button, int count)
+        {
+            // Count Badge
+            nfloat badgePct = 0.55f;
+            if (button.Equals(resultButton))
+            {
+                badgePct = 0.6f;
+            }
+
+            if (button.Equals(commentButton))
+            {
+                badgePct = 0.7f;
+            }
+
+            nfloat buttonHeight = 44;
+            nfloat buttonWidth = ContentView.Frame.Width / 3;
+            nfloat badgeSize = 30;
+            nfloat badgeOriginX = buttonWidth * badgePct; 
+            nfloat badgeOriginY = 7;
+
+            this.badge = new UILabel();
+            this.badge.TextColor = UIColor.Black;
+            this.badge.BackgroundColor = UIColor.FromRGBA(232, 232, 232, 255);
+            this.badge.Font = UIFont.SystemFontOfSize(11);
+            this.badge.TextAlignment = UITextAlignment.Center;
+            this.badge.Frame = CoreGraphics.CGRect.FromLTRB(badgeOriginX, badgeOriginY, badgeOriginX + badgeSize, badgeOriginY + badgeSize);
+            this.badge.Layer.CornerRadius = badgeSize / 2;
+            this.badge.Layer.MasksToBounds = true;
+            this.badge.Layer.BorderWidth = 1;
+            this.badge.Layer.BorderColor = UIColor.White.CGColor;
+            this.badge.Text = count.ToString();
+            
+            button.AddSubview(this.badge);
+
             return button;
         }
 
         public void updateTotalVotes(int totalVotes)
         {
-            if (totalVotes == 1)
-            {
-                this.totalVotesLabel.SetTitle("1 Vote", UIControlState.Normal);
-            }
-            else if (totalVotes == 0)
-            {
-                this.totalVotesLabel.SetTitle("0 Votes", UIControlState.Normal);
-            }
-            else
-            {
-                this.totalVotesLabel.SetTitle(Common.FormatNumberAbbreviation(totalVotes) + " Votes", UIControlState.Normal);
-            }
+            insertBadge(resultButton, totalVotes);
         }
 
         public void updateTotalComments(int totalComments)
         {
-            if (totalComments == 1)
-            {
-                this.commentsLabel.SetTitle("1 Comment", UIControlState.Normal);
-            }
-            else if (totalComments == 0)
-            {
-                this.commentsLabel.SetTitle("0 Comments", UIControlState.Normal);
-            }
-            else
-            {
-                this.commentsLabel.SetTitle(Common.FormatNumberAbbreviation(totalComments) + " Comments", UIControlState.Normal);
-            }
+            insertBadge(commentButton, totalComments);
+        }
+
+        public void updateTotalLikes(int totalLikes)
+        {
+            insertBadge(likeButton, totalLikes);
         }
     }
 

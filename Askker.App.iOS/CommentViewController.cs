@@ -266,13 +266,9 @@ namespace Askker.App.iOS
                 feedCell.commentButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
                 feedCell.commentButton.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
 
-                feedCell.commentsLabel.RemoveTarget(null, null, UIControlEvent.AllEvents);
-                feedCell.commentsLabel.AddTarget(this, new ObjCRuntime.Selector("CommentSelector:"), UIControlEvent.TouchUpInside);
-
                 if (feedController.NavigationController == null)
                 {
                     feedCell.resultButton.Params[2] = this.NavigationController;
-                    feedCell.totalVotesLabel.Params[2] = this.NavigationController;
                     feedCell.moreButton.Params[2] = this;
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
@@ -710,6 +706,7 @@ namespace Askker.App.iOS
             commentText.Font = UIFont.SystemFontOfSize(14);
             commentText.TranslatesAutoresizingMaskIntoConstraints = false;
             commentText.Editable = false;
+            commentText.ScrollEnabled = false;
 
             nameLabel = new UILabel();
             nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);

@@ -96,12 +96,10 @@ namespace Askker.App.iOS
                 feedController.BindFeedCell(feedCell, survey, indexPathRow);
 
                 feedCell.resultButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
-                feedCell.totalVotesLabel.RemoveTarget(null, null, UIControlEvent.AllEvents);
 
                 if (feedController.NavigationController == null)
                 {
                     feedCell.commentButton.Params[2] = this.NavigationController;
-                    feedCell.commentsLabel.Params[2] = this.NavigationController;
                     feedCell.moreButton.Params[2] = this;
                     (feedCell.profileImageView.GestureRecognizers[0] as UIFeedTapGestureRecognizer).Params[0] = this.NavigationController;
                 }
