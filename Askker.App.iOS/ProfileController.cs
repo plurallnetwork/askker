@@ -192,11 +192,11 @@ namespace Askker.App.iOS
             UpdateGenderButtonStatus(LoginController.userModel.gender);
         }
 
-        private async void Update()
+        private async void Update(bool updatePicture = false)
         {
             try
             {                
-                if (string.IsNullOrEmpty(fileName))
+                if (string.IsNullOrEmpty(fileName) || !updatePicture)
                 {
                     await new LoginManager().Update(LoginController.tokenModel.access_token, LoginController.userModel, null, null);
                 }
@@ -377,7 +377,7 @@ namespace Askker.App.iOS
                 {
                     profileImageView.Image = originalImage;
                     fileName = "1.jpg";
-                    Update();                    
+                    Update(true);
                 }
             }
             else
