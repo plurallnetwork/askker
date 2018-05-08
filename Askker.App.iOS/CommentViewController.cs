@@ -19,7 +19,7 @@ namespace Askker.App.iOS
     {
         public UICollectionView feed { get; set; }
         public static List<SurveyCommentModel> comments { get; set; }
-        public SurveyModel survey { get; set; }
+        public SurveyModel survey { get; set; }        
         NSLayoutConstraint toolbarHeightConstraint;
         NSLayoutConstraint toolbarBottomConstraint;
         CommentAreaView commentArea = CommentAreaView.Create();
@@ -257,7 +257,7 @@ namespace Askker.App.iOS
                     this.creationDate = survey.creationDate;
                 }
 
-                comments = await new CommentManager().GetSurveyComments(this.userId + this.creationDate, LoginController.tokenModel.access_token);
+                comments = await new CommentManager().GetSurveyComments(this.userId + this.creationDate, LoginController.userModel.id ,LoginController.tokenModel.access_token);
 
                 var feedCellHeight = Utils.getHeightForFeedCell(survey, View.Frame.Width);
                 feedCell = new FeedCollectionViewCell(new CGRect(0, 0, View.Frame.Width, feedCellHeight));
@@ -599,6 +599,8 @@ namespace Askker.App.iOS
                 Utils.SetImageFromNSUrlSession(comments[indexPath.Row].profilePicture, imageView, this, PictureType.Profile);
             }
 
+            commentCell.surveyCommentModel = comments[indexPath.Row];
+
             commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, comments[indexPath.Row].commentDate, commentViewController.NavigationController, comments[indexPath.Row].userId);
 
             if (comments[indexPath.Row].userId == LoginController.userModel.id)
@@ -617,7 +619,18 @@ namespace Askker.App.iOS
                     CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
                 }
             }
-            
+
+            if (comments[indexPath.Row].userLiked == true)
+            {
+                commentCell.updateLikeButton(false);
+            }
+            else if (comments[indexPath.Row].userLiked == null || comments[indexPath.Row].userLiked == false)
+            {
+                commentCell.updateLikeButton(true);
+            }
+
+            commentCell.updateLikeCount(comments[indexPath.Row].totalLikes);
+
             return commentCell;
         }
 
@@ -683,11 +696,14 @@ namespace Askker.App.iOS
 
     class CommentCell : UICollectionViewCell
     {
+        public CommentLikeManager commentLikeManager = new CommentLikeManager();
         public UITextView commentText { get; set; }
         public UIImageView imageView { get; set; }
+        public UIFeedButton likeButton { get; set; }
         public UIView lineSeparator { get; set; }
         public UILabel nameLabel { get; set; }
         public UILabel dateLabel { get; set; }
+        public SurveyCommentModel surveyCommentModel { get; set; }
 
         [Export("initWithFrame:")]
         public CommentCell(CGRect frame) : base(frame)
@@ -708,6 +724,10 @@ namespace Askker.App.iOS
             commentText.Editable = false;
             commentText.ScrollEnabled = false;
 
+            likeButton = new UIFeedButton();
+            likeButton.SetTitle("Like", UIControlState.Normal);
+            likeButton.AddTarget(Self, new ObjCRuntime.Selector("LikeCommentClick:"), UIControlEvent.TouchUpInside);
+
             nameLabel = new UILabel();
             nameLabel.TextColor = UIColor.FromRGB(90, 89, 89);
             nameLabel.Font = UIFont.BoldSystemFontOfSize(14);
@@ -720,6 +740,7 @@ namespace Askker.App.iOS
             lineSeparator.BackgroundColor = UIColor.FromRGBA(nfloat.Parse("0.88"), nfloat.Parse("0.89"), nfloat.Parse("0.90"), nfloat.Parse("1"));
 
             ContentView.Add(imageView);
+            ContentView.Add(likeButton);
             ContentView.Add(nameLabel);
             ContentView.Add(commentText);
             ContentView.Add(dateLabel);
@@ -732,7 +753,12 @@ namespace Askker.App.iOS
                 imageView.Height().EqualTo(40),
                 imageView.AtTopOf(ContentView, 8),
 
-                nameLabel.AtRightOf(ContentView, 8),
+                likeButton.AtRightOf(ContentView, 8),
+                likeButton.Width().EqualTo(60),
+                likeButton.Height().EqualTo(24),
+                likeButton.AtTopOf(ContentView, 4),
+
+                nameLabel.Right().EqualTo().LeftOf(likeButton).Plus(8),
                 nameLabel.AtTopOf(ContentView, 8),
                 nameLabel.Left().EqualTo().RightOf(imageView).Plus(8),
                 nameLabel.Height().EqualTo(20),
@@ -763,6 +789,8 @@ namespace Askker.App.iOS
 
             dateLabel.Text = Utils.TimeAgoDisplay(Utils.ConvertToLocalTime(DateTime.ParseExact(commentDate, "yyyyMMddTHHmmssfff", null)));
 
+            dateLabel.Text += " • 0 Like";
+
             var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
             List<Object> tapProfilePictureValues = new List<Object>();
             tapProfilePictureValues.Add(navigationController);
@@ -782,6 +810,14 @@ namespace Askker.App.iOS
             imageView.UserInteractionEnabled = true;
             imageView.TranslatesAutoresizingMaskIntoConstraints = false;
 
+            likeButton.BackgroundColor = UIColor.White;
+            likeButton.SetTitleColor(UIColor.FromRGB(117, 227, 213), UIControlState.Normal);
+            likeButton.Font = UIFont.BoldSystemFontOfSize(14);            
+            likeButton.Layer.BorderColor = UIColor.FromRGB(117, 227, 213).CGColor;
+            likeButton.Layer.BorderWidth = 1;
+            likeButton.Layer.CornerRadius = 4;
+            likeButton.TranslatesAutoresizingMaskIntoConstraints = false;
+
             commentText.BackgroundColor = UIColor.White;
             commentText.TextColor = UIColor.FromRGB(90, 89, 89);
             commentText.Selectable = false;
@@ -793,6 +829,75 @@ namespace Askker.App.iOS
             dateLabel.TextColor = UIColor.FromRGB(90, 89, 89);
             dateLabel.Font = UIFont.SystemFontOfSize(12);
 
+        }
+
+        [Export("LikeCommentClick:")]
+        private async void LikeCommentClick(UIFeedButton button)
+        {
+            button.LoadingIndicatorButton(true);
+
+            if ("Like".Equals(button.CurrentTitle))
+            {
+                button.SetTitle("Unlike", UIControlState.Normal);
+
+                updateLikeCount(++surveyCommentModel.totalLikes);
+
+                SurveyCommentLikeModel surveyCommentLikeModel = new SurveyCommentLikeModel();
+                surveyCommentLikeModel.commentId = surveyCommentModel.surveyId + surveyCommentModel.commentDate;
+                surveyCommentLikeModel.user = new User();
+                surveyCommentLikeModel.user.id = LoginController.userModel.id;
+
+                surveyCommentModel.userLiked = true;
+
+                await commentLikeManager.LikeComment(surveyCommentLikeModel, LoginController.tokenModel.access_token);
+            }
+            else
+            {
+                button.SetTitle("Like", UIControlState.Normal);
+                updateLikeCount(--surveyCommentModel.totalLikes);
+
+                surveyCommentModel.userLiked = null;
+
+                await commentLikeManager.UnlikeComment(surveyCommentModel.surveyId + surveyCommentModel.commentDate, LoginController.userModel.id, LoginController.tokenModel.access_token);
+            }
+
+            LayoutSubviews();
+
+            button.LoadingIndicatorButton(false);
+        }
+
+        private string getLikeText(int likeCount)
+        {
+            if(likeCount > 1)
+            {
+                return " " + likeCount + " Likes";
+            }
+            else
+            {
+                return " " + likeCount + " Like";
+            }
+        }
+
+        public void updateLikeCount(int totalLikes)
+        {
+            dateLabel.Text = dateLabel.Text.Remove(dateLabel.Text.IndexOf("•") + 1);
+            dateLabel.Text += getLikeText(totalLikes);
+
+            LayoutSubviews();
+        }
+
+        public void updateLikeButton(bool fromLike)
+        {
+            if (fromLike)
+            {
+                likeButton.SetTitle("Like", UIControlState.Normal);                
+            }
+            else
+            {
+                likeButton.SetTitle("Unlike", UIControlState.Normal);                
+            }
+
+            LayoutSubviews();
         }
 
         public UIImageView GetImageView()

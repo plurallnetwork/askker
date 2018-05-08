@@ -19,5 +19,9 @@ namespace Askker.App.PortableLibrary.Models
         public string profilePicture { get; set; }
 
         public string text { get; set; }
+
+        public bool? userLiked { get; set; }
+
+        public int totalLikes { get; set; }
     }
 }

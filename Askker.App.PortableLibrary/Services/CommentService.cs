@@ -50,13 +50,13 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> GetSurveyComments(string surveyId, string authenticationToken)
+        public async Task<HttpResponseMessage> GetSurveyComments(string surveyId, string userId, string authenticationToken)
         {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/getsurveycomments/{0}", surveyId));
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/getsurveycomments/{0}/{1}", surveyId, userId));
 
                     client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
                     return await client.GetAsync(uri);

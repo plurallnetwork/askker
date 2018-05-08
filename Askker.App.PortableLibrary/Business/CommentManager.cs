@@ -54,13 +54,13 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task<List<SurveyCommentModel>> GetSurveyComments(string surveyId, string authenticationToken)
+        public async Task<List<SurveyCommentModel>> GetSurveyComments(string surveyId, string userId, string authenticationToken)
         {
             try
             {
                 CommentService commentService = new CommentService();
 
-                var response = await commentService.GetSurveyComments(surveyId, authenticationToken);
+                var response = await commentService.GetSurveyComments(surveyId, userId, authenticationToken);
 
                 if (response.IsSuccessStatusCode)
                 {

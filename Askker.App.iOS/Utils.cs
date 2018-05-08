@@ -603,6 +603,15 @@ namespace Askker.App.iOS
             feedCell.updateTotalVotes(survey.totalVotes);
             feedCell.updateTotalComments(survey.totalComments);
             feedCell.updateTotalLikes(survey.totalLikes);
+
+            if (survey.userLiked == true)
+            {
+                feedCell.updateLikeButtonText(false, survey.totalLikes);
+            }
+            else if (survey.userLiked == null || survey.userLiked == false)
+            {
+                feedCell.updateLikeButtonText(true, survey.totalLikes);
+            }
         }
 
         public static string TimeAgoDisplay(DateTime date)
@@ -679,6 +688,62 @@ namespace Askker.App.iOS
                 {
                     result = findFirstResponder(_subview);
                     if (result != null && result.IsFirstResponder)
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static UILabel findFirstLabelWithText(UIView view, string text)
+        {
+            UILabel result = null;
+
+            foreach (UIView subview in view.Subviews)
+            {
+                if (subview.GetType() == typeof(UILabel))
+                {
+                    if (text.Equals(((UILabel)subview).Text))
+                    {
+                        return (UILabel)subview;
+                    }
+                }
+                var _subview = subview;
+
+                if (_subview.Subviews.Length > 0)
+                {
+                    result = findFirstLabelWithText(_subview, text);
+                    if (result != null && text.Equals(((UILabel)result).Text))
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static UILabel findFirstLabelWithBkgColor(UIView view, UIColor color)
+        {
+            UILabel result = null;
+
+            foreach (UIView subview in view.Subviews)
+            {
+                if (subview.GetType() == typeof(UILabel))
+                {
+                    if (color.Equals(((UILabel)subview).BackgroundColor))
+                    {
+                        return (UILabel)subview;
+                    }
+                }
+                var _subview = subview;
+
+                if (_subview.Subviews.Length > 0)
+                {
+                    result = findFirstLabelWithBkgColor(_subview, color);
+                    if (result != null && color.Equals(((UILabel)result).BackgroundColor))
                     {
                         return result;
                     }

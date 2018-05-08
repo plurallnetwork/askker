@@ -39,6 +39,8 @@ namespace Askker.App.PortableLibrary.Models
 
         public int? optionSelected { get; set; }
 
+        public bool? userLiked { get; set; }
+
         public string targetAudience { get; set; }
 
         public AudienceUsers targetAudienceUsers { get; set; }

@@ -18,6 +18,7 @@ namespace Askker.App.iOS
         public List<SurveyModel> surveys { get; set; }
         public static NSCache imageCache = new NSCache();
         public static VoteManager voteManager = new VoteManager();
+        public LikeManager likeManager = new LikeManager();
         public bool filterMine { get; set; }
         public bool filterForMe { get; set; }
         public bool filterFinished { get; set; }
@@ -280,6 +281,41 @@ namespace Askker.App.iOS
             (buttonParams[2] as UINavigationController).PushViewController(resultController, true);
         }
 
+        [Export("LikeSelector:")]
+        private async void LikeSelector(UIFeedButton button)
+        {
+            button.LoadingIndicatorButton(true);
+
+            var buttonParams = button.Params.ToArray();
+            var surveyModel = (SurveyModel)button.Params.ToArray()[0];
+            var indexPathRow = (int)buttonParams[1];
+            var feedCell = (FeedCollectionViewCell)buttonParams[2];
+
+            if ("Like".Equals(feedCell.getCurrentLikeButtonTitle()))
+            {
+                SurveyLikeModel surveyLikeModel = new SurveyLikeModel();
+                surveyLikeModel.surveyId = surveyModel.userId + surveyModel.creationDate;
+                surveyLikeModel.user = new User();
+                surveyLikeModel.user.id = LoginController.userModel.id;
+
+                await likeManager.Like(surveyLikeModel, LoginController.tokenModel.access_token);
+                
+                feedCell.updateLikeButtonText(false, ++surveyModel.totalLikes);
+
+                surveyModel.userLiked = true;
+            }
+            else
+            {
+                await likeManager.Unlike(surveyModel.userId + surveyModel.creationDate, LoginController.userModel.id, LoginController.tokenModel.access_token);
+                                
+                feedCell.updateLikeButtonText(true, --surveyModel.totalLikes);
+
+                surveyModel.userLiked = null;
+            }
+
+            button.LoadingIndicatorButton(false);
+        }
+
         [Export("MoreSelector:")]
         private void MoreSelector(UIFeedButton button)
         {
@@ -454,6 +490,13 @@ namespace Askker.App.iOS
             resultValues.Add(indexPathRow);
             resultValues.Add(this.NavigationController);
             feedCell.resultButton.Params = resultValues;
+
+            feedCell.likeButton.AddTarget(this, new Selector("LikeSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> likeValues = new List<Object>();
+            likeValues.Add(survey);
+            likeValues.Add(indexPathRow);
+            likeValues.Add(feedCell);
+            feedCell.likeButton.Params = likeValues;
 
             feedCell.moreButton.AddTarget(this, new Selector("MoreSelector:"), UIControlEvent.TouchUpInside);
             List<Object> moreValues = new List<Object>();
@@ -691,6 +734,11 @@ namespace Askker.App.iOS
 
         public UIFeedButton insertBadge(UIFeedButton button, int count)
         {
+            var oldBadge = Utils.findFirstLabelWithBkgColor(button, UIColor.FromRGBA(232, 232, 232, 255));
+            if (oldBadge != null)
+            {
+                oldBadge.RemoveFromSuperview();
+            }
             // Count Badge
             nfloat badgePct = 0.55f;
             if (button.Equals(resultButton))
@@ -738,6 +786,47 @@ namespace Askker.App.iOS
 
         public void updateTotalLikes(int totalLikes)
         {
+            insertBadge(likeButton, totalLikes);
+        }
+
+        public string getCurrentLikeButtonTitle()
+        {
+            UILabel label = Utils.findFirstLabelWithText(likeButton, "Unlike");
+            if (label != null)
+            {
+                return label.Text;             
+            }
+
+            label = Utils.findFirstLabelWithText(likeButton, "Like");
+            if (label != null)
+            {
+                return label.Text;
+            }
+
+            return null;
+        }
+
+        public void updateLikeButtonText(bool fromLike, int totalLikes)
+        {
+            if (fromLike)
+            {
+                UILabel label = Utils.findFirstLabelWithText(likeButton, "Unlike");
+                if (label != null)
+                {
+                    label.Text = "Like";
+                    label.TextColor = UIColor.FromRGBA(nfloat.Parse("0.56"), nfloat.Parse("0.58"), nfloat.Parse("0.63"), nfloat.Parse("1"));
+                }
+            }
+            else
+            {
+                UILabel label = Utils.findFirstLabelWithText(likeButton, "Like");
+                if (label != null)
+                {
+                    label.Text = "Unlike";
+                    label.TextColor = UIColor.FromRGB(117, 227, 213);
+                }
+            }
+
             insertBadge(likeButton, totalLikes);
         }
     }
