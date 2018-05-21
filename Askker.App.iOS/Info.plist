@@ -57,7 +57,7 @@
 	<string>919804201485283</string>
 	<key>FacebookDisplayName</key>
 	<string>Askker</string>
-	<key>XSAppIconAssets</key>
-	<string>Resources/Media.xcassets/AppIcons.appiconset</string>
+	<key>NSUbiquitousContainerIsDocumentScopePublic</key>
+	<true/>
 </dict>
 </plist>

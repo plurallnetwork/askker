@@ -14,7 +14,7 @@ namespace Askker.App.iOS
         public static string getServerUrl(){
             if (isDesenv)
             {
-                serverUrl = "https://blinq-development.com:44322/";
+                serverUrl = "https://blinq-development.com:44325/";
             }
             else
             {
@@ -26,7 +26,7 @@ namespace Askker.App.iOS
         public static string getS3Url(){
             if (isDesenv)
             {
-                s3Url = "https://s3-us-west-2.amazonaws.com/askker-desenv/";
+                s3Url = "https://s3-us-west-2.amazonaws.com/workdone-desenv/";
             }
             else
             {

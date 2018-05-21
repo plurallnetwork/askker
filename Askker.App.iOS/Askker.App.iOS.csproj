@@ -175,6 +175,13 @@
     <Compile Include="NotificationsController.designer.cs">
       <DependentUpon>NotificationsController.cs</DependentUpon>
     </Compile>
+    <Compile Include="PDFComponents\CrossFilePicker.cs" />
+    <Compile Include="PDFComponents\FileData.cs" />
+    <Compile Include="PDFComponents\FilePickerEventArgs.cs" />
+    <Compile Include="PDFComponents\FilePickerImplementation.cs" />
+    <Compile Include="PDFComponents\IFilePicker.cs" />
+    <Compile Include="PDFComponents\PreviewControllerDS.cs" />
+    <Compile Include="PDFComponents\QLPreviewItemFileSystem.cs" />
     <Compile Include="ProfileOtherController.cs" />
     <Compile Include="ProfileOtherController.designer.cs">
       <DependentUpon>ProfileOtherController.cs</DependentUpon>
