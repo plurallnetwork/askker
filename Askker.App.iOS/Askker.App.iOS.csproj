@@ -400,6 +400,24 @@
     <None Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
+    <ImageAsset Include="Media.xcassets\AdminGroup.imageset\admin-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\AdminGroup.imageset\admin-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\AdminGroup.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\WorkdoneLogo.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\WorkdoneLogo.imageset\workdone_logo_x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\WorkdoneLogo.imageset\workdone_logo_x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\AddFriends.imageset\add-friends-x2.png">
       <Visible>false</Visible>
     </ImageAsset>
