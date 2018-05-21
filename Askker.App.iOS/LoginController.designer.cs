@@ -24,14 +24,6 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton btnLoginFacebook { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton btnLoginGoogle { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton btnSignUp { get; set; }
 
         [Outlet]
@@ -60,16 +52,6 @@ namespace Askker.App.iOS
             if (btnForgotPassword != null) {
                 btnForgotPassword.Dispose ();
                 btnForgotPassword = null;
-            }
-
-            if (btnLoginFacebook != null) {
-                btnLoginFacebook.Dispose ();
-                btnLoginFacebook = null;
-            }
-
-            if (btnLoginGoogle != null) {
-                btnLoginGoogle.Dispose ();
-                btnLoginGoogle = null;
             }
 
             if (btnSignUp != null) {

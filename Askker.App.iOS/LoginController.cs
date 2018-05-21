@@ -27,8 +27,8 @@ namespace Askker.App.iOS
             NavigationController.SetNavigationBarHidden(true, false);
             base.ViewDidAppear(animated);
             
-            btnLoginFacebook.TouchUpInside += btnLoginFacebook_TouchUpInside;
-            btnLoginGoogle.TouchUpInside += btnLoginGoogle_TouchUpInside;
+            //btnLoginFacebook.TouchUpInside += btnLoginFacebook_TouchUpInside;
+            //btnLoginGoogle.TouchUpInside += btnLoginGoogle_TouchUpInside;
             btnSignUp.TouchUpInside += BtnSignUp_TouchUpInside;
             btnForgotPassword.TouchUpInside += BtnForgotPassword_TouchUpInside;
 
@@ -40,8 +40,8 @@ namespace Askker.App.iOS
         {
             base.ViewDidDisappear(animated);
 
-            btnLoginFacebook.TouchUpInside -= btnLoginFacebook_TouchUpInside;
-            btnLoginGoogle.TouchUpInside -= btnLoginGoogle_TouchUpInside;
+            //btnLoginFacebook.TouchUpInside -= btnLoginFacebook_TouchUpInside;
+            //btnLoginGoogle.TouchUpInside -= btnLoginGoogle_TouchUpInside;
             btnSignUp.TouchUpInside -= BtnSignUp_TouchUpInside;
             btnForgotPassword.TouchUpInside -= BtnForgotPassword_TouchUpInside;
         }

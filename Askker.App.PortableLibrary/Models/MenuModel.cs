@@ -38,8 +38,8 @@ namespace Askker.App.iOS.Models
         public MenuFilterModel()
         {
             MenuItems = new List<MenuModel>();
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Mine, Title = "My surveys", ImageName = "MySurveys" });
-            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.ForMe, Title = "For me", ImageName = "ForMe" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Mine, Title = "Admin", ImageName = "AdminGroup" });
+            MenuItems.Add(new MenuModel() { MenuItem = MenuItem.ForMe, Title = "Members", ImageName = "ForMe" });
             MenuItems.Add(new MenuModel() { MenuItem = MenuItem.Finished, Title = "Finished", ImageName = "Finished" });
         }
     }
