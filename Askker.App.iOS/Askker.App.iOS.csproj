@@ -89,7 +89,7 @@
     <ConsolePause>False</ConsolePause>
     <MtouchArch>ARMv7, ARM64</MtouchArch>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>Askker Distribution</CodesignProvision>
+    <CodesignProvision>Askker Distribution (iCloud2)</CodesignProvision>
     <CodesignKey>iPhone Distribution: BLINQ SOLUTIONS INTERNET SERVICOS EM TECNOLOGIA DA INFORMACAO LTDA - me (4T48YB4VHD)</CodesignKey>
     <BuildIpa>true</BuildIpa>
   </PropertyGroup>
