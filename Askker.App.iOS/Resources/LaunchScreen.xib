@@ -12,8 +12,12 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="assets/img/logo_180.png" translatesAutoresizingMaskIntoConstraints="NO" id="8">
-                    <rect key="frame" x="150" y="150" width="180" height="180"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="5486" translatesAutoresizingMaskIntoConstraints="NO" image="WorkdoneLogo" misplaced="YES">
+                    <rect key="frame" x="130" y="159" width="220" height="106"/>
+                    <constraints>
+                        <constraint id="6040" firstItem="5486" firstAttribute="width" constant="220"/>
+                        <constraint id="6041" firstItem="5486" firstAttribute="height" constant="106"/>
+                    </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -21,16 +25,12 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="548" y="455"/>
             <constraints>
-                <constraint id="4934" firstItem="8" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY"/>
-                <constraint id="4935" firstItem="8" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX"/>
+                <constraint id="5488" firstItem="5486" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX"/>
+                <constraint id="5489" firstItem="iN0-l3-epB" firstAttribute="centerY" secondItem="5486" secondAttribute="centerY"/>
             </constraints>
         </view>
     </objects>
     <resources>
-        <image name="images/icons/image.png" width="48" height="48"/>
-        <image name="images/icons/man.png" width="32" height="32"/>
-        <image name="images/icons/text.gif" width="48" height="48"/>
-        <image name="images/icons/woman.png" width="32" height="32"/>
         <image name="images/purple-pip-circle.png" width="8" height="8"/>
         <image name="images/purple-pip-full.png" width="8" height="8"/>
         <image name="images/white-pip-circle.png" width="8" height="8"/>
@@ -52,7 +52,7 @@
         <image name="assets/img/threelines.png" width="30" height="30"/>
         <image name="OptionCheck" width="68" height="68"/>
         <image name="Profile" width="180" height="180"/>
-        <image name="AddFriends" width="48" height="48"/>
+        <image name="AddFriends" width="40" height="42"/>
         <image name="AddSurvey" width="48" height="48"/>
         <image name="AskkerLogo" width="205" height="45"/>
         <image name="BackBlack" width="17" height="30"/>
@@ -79,7 +79,7 @@
         <image name="MySurveys" width="40" height="31"/>
         <image name="NextStep" width="17" height="30"/>
         <image name="NextStepGray" width="17" height="30"/>
-        <image name="Notification" width="48" height="48"/>
+        <image name="Notification" width="27" height="34"/>
         <image name="PictureOption" width="52" height="41"/>
         <image name="Step1" width="35" height="35"/>
         <image name="Step2" width="35" height="35"/>
@@ -89,5 +89,23 @@
         <image name="StepCheck" width="35" height="35"/>
         <image name="TextOption" width="49" height="49"/>
         <image name="ValidateSurvey" width="47" height="36"/>
+        <image name="AdminGroup" width="38" height="30"/>
+        <image name="WorkdoneLogo" width="344" height="166"/>
+        <image name="AddImage" width="127" height="146"/>
+        <image name="AddLine" width="67" height="67"/>
+        <image name="DeleteOption" width="33" height="42"/>
+        <image name="FeedClearFilters" width="602" height="658"/>
+        <image name="FeedNoAnswers" width="602" height="711"/>
+        <image name="FindFriendsEmpty" width="602" height="485"/>
+        <image name="FindGroup" width="49" height="42"/>
+        <image name="FindGroupsEmpty" width="602" height="618"/>
+        <image name="Group" width="180" height="180"/>
+        <image name="ImageSurveyActive" width="291" height="78"/>
+        <image name="ImageSurveyInactive" width="292" height="80"/>
+        <image name="MyFriendsEmpty" width="602" height="658"/>
+        <image name="MyGroup" width="44" height="34"/>
+        <image name="MyGroupsEmpty" width="602" height="658"/>
+        <image name="TextSurveyActive" width="254" height="78"/>
+        <image name="TextSurveyInactive" width="255" height="80"/>
     </resources>
 </document>

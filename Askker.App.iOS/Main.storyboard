@@ -1951,25 +1951,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="assets/img/logo_180.png" translatesAutoresizingMaskIntoConstraints="NO" id="6015">
-                                <rect key="frame" x="87" y="52" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="6063"/>
-                                    <constraint firstAttribute="height" constant="128" id="6064"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="6063"/>
-                                        <exclude reference="6064"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="6063"/>
-                                        <include reference="6064"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="E-mail adress" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6018">
                                 <rect key="frame" x="24" y="345" width="370" height="46"/>
                                 <constraints>
@@ -2005,7 +1986,7 @@
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
-                                    <color key="backgroundColor" red="0.094117647058823528" green="0.82745098039215681" blue="0.82745098039215681" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" colorSpace="calibratedRGB" red="0.12156862745098039" green="0.6470588235294118" blue="0.62352941176470589" alpha="1"/>
                                     <mask key="constraints">
                                         <include reference="6057"/>
                                     </mask>
@@ -2051,6 +2032,13 @@
                                     </mask>
                                 </variation>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="58027" translatesAutoresizingMaskIntoConstraints="NO" image="WorkdoneLogo" misplaced="YES">
+                                <rect key="frame" x="97" y="58" width="220" height="106"/>
+                                <constraints>
+                                    <constraint id="58030" firstItem="58027" firstAttribute="height" constant="106"/>
+                                    <constraint id="58031" firstItem="58027" firstAttribute="width" constant="220"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -2069,22 +2057,17 @@
                             <constraint firstItem="6020" firstAttribute="leading" secondItem="5880" secondAttribute="leadingMargin" constant="4" id="6058"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6020" secondAttribute="trailing" constant="4" id="6059"/>
                             <constraint firstItem="6020" firstAttribute="top" secondItem="6024" secondAttribute="centerY" constant="17" id="6060"/>
-                            <constraint firstItem="6015" firstAttribute="top" secondItem="5880" secondAttribute="top" constant="52" id="6062"/>
-                            <constraint firstItem="6015" firstAttribute="centerX" secondItem="5880" secondAttribute="centerX" id="6066"/>
-                            <constraint firstItem="6015" firstAttribute="centerX" secondItem="5880" secondAttribute="centerX" id="6287"/>
+                            <constraint id="58028" firstItem="58027" firstAttribute="top" secondItem="5880" secondAttribute="top" constant="76"/>
+                            <constraint id="58029" firstItem="58027" firstAttribute="centerX" secondItem="5880" secondAttribute="centerX"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="6015"/>
                                 <exclude reference="6018"/>
                                 <exclude reference="6020"/>
                                 <exclude reference="6024"/>
                                 <exclude reference="6026"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="6062"/>
-                                <exclude reference="6066"/>
-                                <exclude reference="6287"/>
                                 <exclude reference="6040"/>
                                 <exclude reference="6045"/>
                                 <exclude reference="6033"/>
@@ -2104,16 +2087,12 @@
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
-                                <include reference="6015"/>
                                 <include reference="6018"/>
                                 <include reference="6020"/>
                                 <include reference="6024"/>
                                 <include reference="6026"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="6062"/>
-                                <include reference="6066"/>
-                                <include reference="6287"/>
                                 <include reference="6040"/>
                                 <include reference="6045"/>
                                 <include reference="6033"/>
@@ -2186,25 +2165,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6264">
-                                <rect key="frame" x="87" y="52" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="6283"/>
-                                    <constraint firstAttribute="height" constant="128" id="6284"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="6283"/>
-                                        <exclude reference="6284"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=compact" image="assets/img/logo_180.png">
-                                    <mask key="constraints">
-                                        <include reference="6283"/>
-                                        <include reference="6284"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter the 4-digit code you received in your e-mail box:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6265">
                                 <rect key="frame" x="24" y="160" width="374" height="55"/>
                                 <constraints>
@@ -2267,7 +2227,7 @@
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
-                                    <color key="backgroundColor" red="0.094117647058823528" green="0.82745098039215681" blue="0.82745098039215681" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="backgroundColor" colorSpace="calibratedRGB" red="0.12156862745098039" green="0.6470588235294118" blue="0.62352941176470589" alpha="1"/>
                                     <mask key="constraints">
                                         <include reference="6461"/>
                                     </mask>
@@ -2346,11 +2306,16 @@
                                     </mask>
                                 </variation>
                             </textField>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="58363" translatesAutoresizingMaskIntoConstraints="NO" image="WorkdoneLogo" misplaced="YES">
+                                <rect key="frame" x="87" y="42" width="200" height="82"/>
+                                <constraints>
+                                    <constraint id="58366" firstItem="58363" firstAttribute="width" constant="170"/>
+                                    <constraint id="58367" firstItem="58363" firstAttribute="height" constant="82"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="6264" firstAttribute="top" secondItem="6121" secondAttribute="top" constant="52" id="6286"/>
-                            <constraint firstItem="6264" firstAttribute="centerX" secondItem="6121" secondAttribute="centerX" id="6288"/>
                             <constraint firstAttribute="trailing" secondItem="6265" secondAttribute="trailing" constant="16" id="6305"/>
                             <constraint firstItem="6265" firstAttribute="top" secondItem="6121" secondAttribute="top" constant="160" id="6306"/>
                             <constraint firstItem="6265" firstAttribute="leading" secondItem="6121" secondAttribute="leadingMargin" constant="4" id="6309"/>
@@ -2375,10 +2340,11 @@
                             <constraint firstItem="6269" firstAttribute="top" secondItem="6267" secondAttribute="bottom" constant="21" id="51011"/>
                             <constraint firstItem="6277" firstAttribute="top" secondItem="6269" secondAttribute="bottom" constant="11" id="51013"/>
                             <constraint firstItem="6271" firstAttribute="top" secondItem="6280" secondAttribute="bottom" constant="20" id="52061"/>
+                            <constraint id="58364" firstItem="58363" firstAttribute="top" secondItem="6121" secondAttribute="top" constant="70"/>
+                            <constraint id="58365" firstItem="6121" firstAttribute="centerX" secondItem="58363" secondAttribute="centerX"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="6264"/>
                                 <exclude reference="6265"/>
                                 <exclude reference="6267"/>
                                 <exclude reference="6269"/>
@@ -2389,8 +2355,6 @@
                                 <exclude reference="6280"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="6286"/>
-                                <exclude reference="6288"/>
                                 <exclude reference="6305"/>
                                 <exclude reference="6306"/>
                                 <exclude reference="6309"/>
@@ -2416,7 +2380,6 @@
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
-                                <include reference="6264"/>
                                 <include reference="6265"/>
                                 <include reference="6267"/>
                                 <include reference="6269"/>
@@ -2427,8 +2390,6 @@
                                 <include reference="6280"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="6286"/>
-                                <include reference="6288"/>
                                 <include reference="6305"/>
                                 <include reference="6306"/>
                                 <include reference="6309"/>
@@ -2862,5 +2823,6 @@
         <image name="TextSurveyInactive" width="255" height="80"/>
         <image name="ValidateSurvey" width="47" height="36"/>
         <image name="WorkdoneLogo" width="344" height="166"/>
+        <image name="AdminGroup" width="38" height="30"/>
     </resources>
 </document>

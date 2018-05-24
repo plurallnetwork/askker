@@ -55,7 +55,8 @@ namespace Askker.App.iOS
 
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
 
-            this.NavigationItem.TitleView = new UIImageView(UIImage.FromBundle("AskkerLogo"));
+            this.NavigationItem.TitleView = new UIImageView(UIImage.FromBundle("WorkdoneInlineLogo"));
+            //this.NavigationItem.TitleView = new UIImageView(UIImage.FromBundle("AskkerLogo"));
             this.NavigationController.NavigationBar.BarTintColor = UIColor.White;
 
             closeMenuObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("CloseSideMenu"), CloseMessageRecieved);
