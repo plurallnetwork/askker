@@ -436,6 +436,15 @@
     <ImageAsset Include="Media.xcassets\PreviewPDF.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Media.xcassets\WorkdoneInlineLogo.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\WorkdoneInlineLogo.imageset\logo-feed-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\WorkdoneInlineLogo.imageset\logo-feed-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Media.xcassets\WorkdoneLogo.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -619,13 +628,13 @@
     <ImageAsset Include="Resources\Media.xcassets\EmptyCircleText.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\FeedClearFilters.imageset\01.02-empty_clear_filters-x2.png">
-      <Visible>false</Visible>
-    </ImageAsset>
-    <ImageAsset Include="Resources\Media.xcassets\FeedClearFilters.imageset\01.02-empty_clear_filters-x3.png">
-      <Visible>false</Visible>
-    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\FeedClearFilters.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FeedClearFilters.imageset\There-is-no-posts-to-see-FILTER-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Media.xcassets\FeedClearFilters.imageset\There-is-no-posts-to-see-FILTER-x3.png">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\FeedNoAnswers.imageset\01.03-empty_no_answers_to_show-x2.png">
