@@ -10,6 +10,9 @@ using Askker.App.PortableLibrary.Enums;
 using ObjCRuntime;
 using BigTed;
 using System.Linq;
+using Askker.App.iOS.PDFComponents;
+using QuickLook;
+using System.IO;
 
 namespace Askker.App.iOS
 {
@@ -316,6 +319,28 @@ namespace Askker.App.iOS
             button.LoadingIndicatorButton(false);
         }
 
+        [Export("PreviewPdfSelector:")]
+        private void PreviewPdfSelector(UIFeedButton button)
+        {
+            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+            this.survey = (SurveyModel)button.Params.ToArray()[0];
+            this.surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
+            this.viewController = (UIViewController)button.Params.ToArray()[2];
+
+            var filename = "questionImage.pdf";
+            var fileData = Utils.GetPDFFromNSUrl(this.survey.question.image);
+            var directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string filePath = Path.Combine(directory.ToString(), filename);
+
+            BTProgressHUD.Dismiss();
+
+            QLPreviewItemBundle prevItem = new QLPreviewItemBundle(filename, new NSUrl("file://" + filePath));
+            QLPreviewController previewController = new QLPreviewController();
+            previewController.DataSource = new PreviewControllerDS(prevItem);
+            this.viewController.NavigationController.PushViewController(previewController, true);
+        }
+
         [Export("MoreSelector:")]
         private void MoreSelector(UIFeedButton button)
         {
@@ -440,7 +465,7 @@ namespace Askker.App.iOS
                 Utils.HandleException(ex);
             }
         }
-
+        
         public static async void deleteVote(SurveyModel survey, FeedCollectionViewCell feedCell)
         {
             try
@@ -504,6 +529,13 @@ namespace Askker.App.iOS
             moreValues.Add(feedCell);
             moreValues.Add(this);
             feedCell.moreButton.Params = moreValues;
+
+            feedCell.previewPdfButton.AddTarget(this, new Selector("PreviewPdfSelector:"), UIControlEvent.TouchUpInside);
+            List<Object> pdfValues = new List<Object>();
+            pdfValues.Add(survey);
+            pdfValues.Add(feedCell);
+            pdfValues.Add(this);
+            feedCell.previewPdfButton.Params = pdfValues;
 
             var feedTapGestureRecognizer = new UIFeedTapGestureRecognizer(this, new Selector("TapProfilePictureSelector:"));
             List<Object> tapProfilePictureValues = new List<Object>();
@@ -582,6 +614,7 @@ namespace Askker.App.iOS
         public UILabel nameLabel { get; set; }
         public UILabel finishedLabel { get; set; }
         public UITextView questionText { get; set; }
+        public UIFeedButton previewPdfButton { get; set; }
         public UIOptionsTableView optionsTableView { get; set; }
         public OptionsTableViewSource optionsTableViewSource { get; set; }
         public UIOptionsCollectionView optionsCollectionView { get; set; }
@@ -636,6 +669,9 @@ namespace Askker.App.iOS
             questionText.TintColor = UIColor.FromRGB(90, 89, 89);
             questionText.TextColor = UIColor.FromRGB(90, 89, 89);
 
+            previewPdfButton = new UIFeedButton();
+            previewPdfButton.TranslatesAutoresizingMaskIntoConstraints = false;
+
             optionsTableView = new UIOptionsTableView();
             optionsTableView.RegisterClassForCellReuse(typeof(OptionTableViewCell), optionCellId);
 
@@ -678,11 +714,13 @@ namespace Askker.App.iOS
             AddSubview(nameLabel);
             AddSubview(moreButton);
             AddSubview(questionText);
+            AddSubview(previewPdfButton);
             AddSubview(dividerLineView);
             AddSubview(contentViewButtons);
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0(44)]-8-[v1]-[v2(40)]|", new NSLayoutFormatOptions(), "v0", profileImageView, "v1", nameLabel, "v2", moreButton));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-4-[v0]-4-|", new NSLayoutFormatOptions(), "v0", questionText));
+            AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|-8-[v0]", new NSLayoutFormatOptions(), "v0", previewPdfButton));
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", dividerLineView));
 
             AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", contentViewButtons));

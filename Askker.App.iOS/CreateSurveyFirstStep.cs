@@ -1,4 +1,5 @@
 ﻿using Askker.App.iOS.HorizontalSwipe;
+using Askker.App.iOS.PDFComponents;
 using Askker.App.PortableLibrary.Business;
 using Askker.App.PortableLibrary.Enums;
 using Askker.App.PortableLibrary.Models;
@@ -7,6 +8,7 @@ using BigTed;
 using Cirrious.FluentLayouts.Touch;
 using CoreGraphics;
 using Foundation;
+using QuickLook;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,6 +41,7 @@ namespace Askker.App.iOS
 
         static List<TextOptionTableItem> tableItems;
         static List<ImageOptionTableItem> collectionViewItems;
+        static byte[] surveyPdf;
 
         public static bool editInProgress = false;
 
@@ -46,8 +49,7 @@ namespace Askker.App.iOS
         UIButton checkButton;
         UIView questionSeparator;
         UILabel typeLabel;
-        UIButton textBtn;
-        UIButton imageBtn;
+        UIButton pdfBtn;
         UITableView textTableView;
         UICollectionView imageCollectionView;
 
@@ -70,6 +72,11 @@ namespace Askker.App.iOS
         public CreateSurveyFirstStep(UINavigationController navigationController) : base()
         {
             this.navigationController = navigationController;
+        }
+
+        public static byte[] GetPdf()
+        {
+            return surveyPdf;
         }
 
         public static List<TextOptionTableItem> GetTextItems()
@@ -151,16 +158,12 @@ namespace Askker.App.iOS
             questionSeparator.BackgroundColor = UIColor.FromRGB(90, 89, 89);
 
             typeLabel = new UILabel();
-            typeLabel.Text = "Choose the type:";
+            typeLabel.Text = "Upload PDF:";
             typeLabel.TextColor = UIColor.FromRGB(90, 89, 89);
 
-            textBtn = new UIButton();
-            textBtn.SetImage(UIImage.FromBundle("TextSurveyActive"), UIControlState.Normal);
-            textBtn.AddTarget(Self, new ObjCRuntime.Selector("TextButtonBtn:"), UIControlEvent.TouchUpInside);
-
-            imageBtn = new UIButton();
-            imageBtn.SetImage(UIImage.FromBundle("ImageSurveyInactive"), UIControlState.Normal);
-            imageBtn.AddTarget(Self, new ObjCRuntime.Selector("ImageButtonBtn:"), UIControlEvent.TouchUpInside);
+            pdfBtn = new UIButton();
+            pdfBtn.SetImage(UIImage.FromBundle("AddPDF"), UIControlState.Normal);
+            pdfBtn.AddTarget(Self, new ObjCRuntime.Selector("TextButtonBtn:"), UIControlEvent.TouchUpInside);
 
             textTableView = new UITableView();
 
@@ -170,8 +173,7 @@ namespace Askker.App.iOS
             View.Add(checkButton);
             View.Add(questionSeparator);
             View.Add(typeLabel);
-            View.Add(textBtn);
-            View.Add(imageBtn);
+            View.Add(pdfBtn);
             View.Add(textTableView);
             View.Add(imageCollectionView);
 
@@ -198,23 +200,18 @@ namespace Askker.App.iOS
                 typeLabel.Below(questionSeparator, Constants.padding),
                 typeLabel.AtLeftOf(View, Constants.padding),
 
-                textBtn.Below(typeLabel, Constants.padding),
-                textBtn.AtLeftOf(View, Constants.padding),
-                textBtn.Width().EqualTo(Constants.cellWidth),
-                textBtn.Height().EqualTo(40),
+                pdfBtn.Below(typeLabel, Constants.padding),
+                pdfBtn.AtLeftOf(View, Constants.padding),
+                //pdfBtn.Width().EqualTo(Constants.cellWidth),
+                pdfBtn.Height().EqualTo(40),
 
-                imageBtn.Below(typeLabel, Constants.padding),
-                imageBtn.WithSameWidth(textBtn),
-                imageBtn.Left().EqualTo().RightOf(textBtn).Plus(Constants.padding),
-                imageBtn.WithSameHeight(textBtn),
-
-                textTableView.Below(textBtn, Constants.padding),
+                textTableView.Below(pdfBtn, Constants.padding),
                 textTableView.WithSameWidth(View),
                 textTableView.AtBottomOf(View),
                 textTableView.AtLeftOf(View),
                 textTableView.AtRightOf(View),
 
-                imageCollectionView.Below(textBtn, Constants.padding),
+                imageCollectionView.Below(pdfBtn, Constants.padding),
                 imageCollectionView.WithSameWidth(View),
                 imageCollectionView.AtBottomOf(View),
                 imageCollectionView.AtLeftOf(View),
@@ -244,36 +241,66 @@ namespace Askker.App.iOS
         [Export("TextButtonBtn:")]
         private async void TextButtonBtn(UIButton button)
         {
-            if (CreateSurveyController.SurveyModel.type.Equals(SurveyType.Image.ToString()))
+            //if (CreateSurveyController.SurveyModel.type.Equals(SurveyType.Image.ToString()))
+            //{
+            //    if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Option) && (!string.IsNullOrEmpty(x.Text.Trim()) || !x.Image.Equals(UIImage.FromBundle("AddImage")))).ToList().Count() >= 2)
+            //    {
+            //        nint alertBtn = await Utils.ShowAlert("Options", "All image options will be deleted. Continue?", "Ok", "Cancel");
+
+            //        if (alertBtn == 1)
+            //        {
+            //            return;
+            //        }
+            //    }
+
+            //    CreateSurveyController.SurveyModel.type = SurveyType.Text.ToString();
+
+            //    textTableView.Hidden = false;
+            //    imageCollectionView.Hidden = true;
+
+            //    tableItems = new List<TextOptionTableItem>();
+            //    tableItems.Add(new TextOptionTableItem("", OptionType.Option));
+            //    tableItems.Add(new TextOptionTableItem("", OptionType.Option));
+            //    tableItems.Add(new TextOptionTableItem("Add new option -->", OptionType.Insert));
+            //    tableSource = new TextOptionSource(tableItems, this);
+            //    textTableView.Source = tableSource;
+            //    textTableView.ReloadData();
+
+            //    pdfBtn.SetImage(UIImage.FromBundle("TextSurveyActive"), UIControlState.Normal);
+
+            //    CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
+            //    CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+            //}
+
+            try
             {
-                if (collectionViewItems.Where(x => x.Type.Equals(OptionType.Option) && (!string.IsNullOrEmpty(x.Text.Trim()) || !x.Image.Equals(UIImage.FromBundle("AddImage")))).ToList().Count() >= 2)
-                {
-                    nint alertBtn = await Utils.ShowAlert("Options", "All image options will be deleted. Continue?", "Ok", "Cancel");
+                FileData fileData = await CrossFilePicker.Current.PickFile(this.navigationController);
+                if (fileData == null)
+                    return; // user canceled file picking
 
-                    if (alertBtn == 1)
-                    {
-                        return;
-                    }
-                }
+                string fileName = fileData.FileName;
+                string path = fileData.FilePath;
+                //string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
 
-                CreateSurveyController.SurveyModel.type = SurveyType.Text.ToString();
+                NSUrl url = new NSUrl("file://" + path);
 
-                textTableView.Hidden = false;
-                imageCollectionView.Hidden = true;
+                System.Console.WriteLine("File name chosen: " + fileName);
+                System.Console.WriteLine("File path: " + path);
+                //System.Console.WriteLine("File data: " + contents);
 
-                tableItems = new List<TextOptionTableItem>();
-                tableItems.Add(new TextOptionTableItem("", OptionType.Option));
-                tableItems.Add(new TextOptionTableItem("", OptionType.Option));
-                tableItems.Add(new TextOptionTableItem("Add new option -->", OptionType.Insert));
-                tableSource = new TextOptionSource(tableItems, this);
-                textTableView.Source = tableSource;
-                textTableView.ReloadData();
+                surveyPdf = fileData.DataArray;
 
-                textBtn.SetImage(UIImage.FromBundle("TextSurveyActive"), UIControlState.Normal);
-                imageBtn.SetImage(UIImage.FromBundle("ImageSurveyInactive"), UIControlState.Normal);
+                pdfBtn.SetImage(UIImage.FromBundle("ChangePDF"), UIControlState.Normal);
 
-                CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
-                CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
+                //QLPreviewItemBundle prevItem = new QLPreviewItemBundle(fileName, url);
+                //QLPreviewController previewController = new QLPreviewController();
+                //previewController.DataSource = new PreviewControllerDS(prevItem);
+                //this.navigationController.PushViewController(previewController, true);
+                //PresentViewController(previewController, true, null);                
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine("Exception choosing file: " + ex.ToString());
             }
         }
 
@@ -311,9 +338,8 @@ namespace Askker.App.iOS
                 cellWidth = Constants.cellWidth;
                 UpdateLayout();
 
-                textBtn.SetImage(UIImage.FromBundle("TextSurveyInactive"), UIControlState.Normal);
-                imageBtn.SetImage(UIImage.FromBundle("ImageSurveyActive"), UIControlState.Normal);
-
+                pdfBtn.SetImage(UIImage.FromBundle("TextSurveyInactive"), UIControlState.Normal);
+                
                 CreateSurveyController._nextButton.SetTitleColor(UIColor.FromRGB(220, 220, 220), UIControlState.Normal);
                 CreateSurveyController._nextButton.BackgroundColor = UIColor.White;
             }
@@ -509,8 +535,7 @@ namespace Askker.App.iOS
 
                 CreateSurveyController.SurveyModel.type = SurveyType.Text.ToString();
 
-                textBtn.SetImage(UIImage.FromBundle("TextSurveyActive"), UIControlState.Normal);
-                imageBtn.SetImage(UIImage.FromBundle("ImageSurveyInactive"), UIControlState.Normal);
+                pdfBtn.SetImage(UIImage.FromBundle("AddPDF"), UIControlState.Normal);                
             }
             else
             {
@@ -529,6 +554,7 @@ namespace Askker.App.iOS
                     }
                     questionText.Text = CreateSurveyController.SurveyModel.question.text;
 
+                    surveyPdf = Utils.GetPDFFromNSUrl(CreateSurveyController.SurveyModel.question.image);
                     //questionText.BecomeFirstResponder();
                 }
                 catch (Exception ex)
@@ -579,8 +605,7 @@ namespace Askker.App.iOS
                     textTableView.Source = tableSource;
                     textTableView.ReloadData();
 
-                    textBtn.SetImage(UIImage.FromBundle("TextSurveyActive"), UIControlState.Normal);
-                    imageBtn.SetImage(UIImage.FromBundle("ImageSurveyInactive"), UIControlState.Normal);
+                    pdfBtn.SetImage(UIImage.FromBundle("ChangePDF"), UIControlState.Normal);                    
                 }
                 else
                 {
@@ -609,8 +634,7 @@ namespace Askker.App.iOS
                     vdelegate.cellHeights = cellHeights;
                     layout.UpdateLayout();
 
-                    textBtn.SetImage(UIImage.FromBundle("TextSurveyInactive"), UIControlState.Normal);
-                    imageBtn.SetImage(UIImage.FromBundle("ImageSurveyActive"), UIControlState.Normal);
+                    pdfBtn.SetImage(UIImage.FromBundle("TextSurveyInactive"), UIControlState.Normal);
                 }
 
                 UpdateNextButton();

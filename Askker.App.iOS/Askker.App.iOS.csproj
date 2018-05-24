@@ -400,6 +400,12 @@
     <None Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
+    <ImageAsset Include="Media.xcassets\AddPDF.imageset\button-add-pdf-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\AddPDF.imageset\button-add-pdf-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Media.xcassets\AdminGroup.imageset\admin-x2.png">
       <Visible>false</Visible>
     </ImageAsset>
@@ -407,6 +413,27 @@
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Media.xcassets\AdminGroup.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\AddPDF.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\ChangePDF.imageset\button-change-pdf-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\ChangePDF.imageset\button-change-pdf-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\ChangePDF.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\PreviewPDF.imageset\button-pdf-preview-feed-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\PreviewPDF.imageset\button-pdf-preview-feed-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\PreviewPDF.imageset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
     <ImageAsset Include="Media.xcassets\WorkdoneLogo.imageset\Contents.json">

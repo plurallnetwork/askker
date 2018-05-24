@@ -51,7 +51,7 @@ namespace Askker.App.PortableLibrary.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SaveSurvey(SurveyModel surveyModel, string authenticationToken, Stream questionImage, List<KeyValuePair<string, byte[]>> optionImages)
+        public async Task<HttpResponseMessage> SaveSurvey(SurveyModel surveyModel, string authenticationToken, KeyValuePair<string, byte[]> questionImage, List<KeyValuePair<string, byte[]>> optionImages)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Askker.App.PortableLibrary.Services
                     string boundary = "---8d0f01e6b3b5dafaaadaad";
                     var content = new MultipartFormDataContent(boundary);
                     content.Add(new StringContent(JsonConvert.SerializeObject(surveyModel, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), Encoding.UTF8, "application/json"), "model");
-                    content.Add(new StreamContent(new MemoryStream()), "questionImg");
+                    content.Add(CreatePDFFileContent(questionImage.Value, questionImage.Key));
 
                     if (surveyModel.type == SurveyType.Image.ToString()) {
                         foreach (var img in optionImages)
@@ -89,6 +89,18 @@ namespace Askker.App.PortableLibrary.Services
             fileContent.Headers.ContentDisposition.Parameters.Add(new NameValueHeaderValue("fileName", "optionImage-" + Path.GetFileNameWithoutExtension(fileName)));
 
             fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/"+Path.GetExtension(fileName).Replace(".",""));
+            return fileContent;
+        }
+
+        private ByteArrayContent CreatePDFFileContent(byte[] stream, string fileName)
+        {
+            var fileContent = new ByteArrayContent(stream.ToArray());
+            fileContent.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse("form-data");
+            fileContent.Headers.ContentDisposition.Parameters.Add(new NameValueHeaderValue("name", Path.GetFileNameWithoutExtension(fileName)));
+
+            fileContent.Headers.ContentDisposition.Parameters.Add(new NameValueHeaderValue("fileName", Path.GetFileNameWithoutExtension(fileName)));
+
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/pdf");
             return fileContent;
         }
 

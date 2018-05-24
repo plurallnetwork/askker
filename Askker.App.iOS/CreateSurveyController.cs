@@ -40,7 +40,7 @@ namespace Askker.App.iOS
         public List<IMultiStepProcessStep> Steps => _steps ?? (_steps = GetSteps());
 
         public static SurveyModel SurveyModel { get; set; }
-        public static Stream QuestionImage { get; set; }
+        public static KeyValuePair<string, byte[]> QuestionImage { get; set; }
         public static List<KeyValuePair<string, byte[]>> OptionImages { get; set; }
 
         public CreateSurveyController (IntPtr handle) : base (handle)
@@ -173,6 +173,16 @@ namespace Askker.App.iOS
                     return;
                 }
 
+                if (CreateSurveyFirstStep.GetPdf() == null || CreateSurveyFirstStep.GetPdf().Length <= 0)
+                {
+                    new UIAlertView("Question", "Please upload a PDF document", null, "OK", null).Show();
+                    BTProgressHUD.Dismiss();
+                    return;
+                }
+
+                CreateSurveyController.SurveyModel.question.image = "";
+                CreateSurveyController.QuestionImage = new KeyValuePair<string, byte[]>("questionImage.pdf", CreateSurveyFirstStep.GetPdf());
+
                 if (CreateSurveyController.SurveyModel.type == SurveyType.Text.ToString())
                 {
 
@@ -196,7 +206,7 @@ namespace Askker.App.iOS
                                 optionId++;
                             }
                         });
-                    }
+                    }                   
                 }
                 else
                 {

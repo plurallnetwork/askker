@@ -74,7 +74,7 @@ namespace Askker.App.PortableLibrary.Business
             }
         }
 
-        public async Task SaveSurvey(SurveyModel surveyModel, string authenticationToken, Stream questionImage, List<KeyValuePair<string, byte[]>> optionImages)
+        public async Task SaveSurvey(SurveyModel surveyModel, string authenticationToken, KeyValuePair<string, byte[]> questionImage, List<KeyValuePair<string, byte[]>> optionImages)
         {
             try
             {

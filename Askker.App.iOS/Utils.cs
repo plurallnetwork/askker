@@ -7,6 +7,8 @@ using Foundation;
 using SDWebImage;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using UIKit;
@@ -408,6 +410,22 @@ namespace Askker.App.iOS
             return result;
         }
 
+        public static byte[] GetPDFFromNSUrl(string imagePath)
+        {
+            byte[] result = null;
+
+            var filename = "questionImage.pdf";
+            var directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string filePath = Path.Combine(directory.ToString(), filename);
+
+            WebClient webClient = new WebClient();
+            webClient.DownloadFile(EnvironmentConstants.getS3Url() + imagePath, filePath);
+
+            result = File.ReadAllBytes(filePath);
+
+            return result;
+        }
+
         public static void RemoveImageFromCache(string imagePath)
         {
             SDWebImageManager.SharedManager.ImageCache.RemoveImage(EnvironmentConstants.getS3Url() + imagePath, true ,completion: () =>
@@ -439,11 +457,11 @@ namespace Askker.App.iOS
             var knownHeight = 0;
             if (string.IsNullOrEmpty(survey.finishDate))
             {
-                knownHeight = 8 + 44 + 4 + 4 + optionsHeight + 8 + 44;
+                knownHeight = 8 + 44 + 4 + 4 + 32 + 4 +optionsHeight + 8 + 44;
             }
             else
             {
-                knownHeight = 8 + 44 + 8 + 32 + 4 + 4 + optionsHeight + 8 + 44;
+                knownHeight = 8 + 44 + 8 + 32 + 4 + 4 + 32 + 4 + optionsHeight + 8 + 44;
             }
 
             return rect.Height + knownHeight + 25;
@@ -519,6 +537,7 @@ namespace Askker.App.iOS
             if (isPreview)
             {
                 finished = false;
+                feedCell.previewPdfButton.Enabled = false;
             }
 
             if (!survey.userId.Equals(LoginController.userModel.id))
@@ -531,6 +550,9 @@ namespace Askker.App.iOS
             }
 
             feedCell.questionText.Text = survey.question.text;
+
+            feedCell.previewPdfButton.SetImage(UIImage.FromBundle("PreviewPDF"), UIControlState.Normal);
+            
 
             if (survey.type == SurveyType.Text.ToString())
             {
@@ -553,12 +575,21 @@ namespace Askker.App.iOS
 
                 if (finished)
                 {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3]-8-[v4(1)][v5(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.optionsTableView, "v4",feedCell.dividerLineView, "v5", feedCell.contentViewButtons));
+                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3(32)]-4-[v4]-8-[v5(1)][v6(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.previewPdfButton, "v4", feedCell.optionsTableView, "v5", feedCell.dividerLineView, "v6", feedCell.contentViewButtons));
                 }
                 else
                 {
-                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2]-8-[v3(1)][v4(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.optionsTableView, "v3", feedCell.dividerLineView, "v4", feedCell.contentViewButtons));
+                    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2(32)]-4-[v3]-8-[v4(1)][v5(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.previewPdfButton, "v3", feedCell.optionsTableView, "v4", feedCell.dividerLineView, "v5", feedCell.contentViewButtons));
                 }
+
+                //if (finished)
+                //{
+                //    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-8-[v1(32)]-4-[v2]-4-[v3]-8-[v4(1)][v5(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.finishedLabel, "v2", feedCell.questionText, "v3", feedCell.optionsTableView, "v4", feedCell.dividerLineView, "v5", feedCell.contentViewButtons));
+                //}
+                //else
+                //{
+                //    feedCell.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-8-[v0(44)]-4-[v1]-4-[v2]-8-[v3(1)][v4(44)]|", new NSLayoutFormatOptions(), "v0", feedCell.profileImageView, "v1", feedCell.questionText, "v2", feedCell.optionsTableView, "v3", feedCell.dividerLineView, "v4", feedCell.contentViewButtons));
+                //}
 
                 if (isPreview)
                 {
