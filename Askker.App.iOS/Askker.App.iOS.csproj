@@ -28,8 +28,8 @@
     <IOSDebuggerPort>10000</IOSDebuggerPort>
     <CodesignKey>iPhone Developer: Alex Tubone (3S64Q987J7)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>
-    </CodesignProvision>
+    <CodesignProvision>Askker Developer (Alex)</CodesignProvision>
+    <MtouchExtraArgs>--optimize=-remove-dynamic-registrar</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -92,6 +92,7 @@
     <CodesignProvision>Askker Distribution (iCloud2)</CodesignProvision>
     <CodesignKey>iPhone Distribution: BLINQ SOLUTIONS INTERNET SERVICOS EM TECNOLOGIA DA INFORMACAO LTDA - me (4T48YB4VHD)</CodesignKey>
     <BuildIpa>true</BuildIpa>
+    <MtouchExtraArgs>--optimize=-remove-dynamic-registrar</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>

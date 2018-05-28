@@ -61,6 +61,8 @@ namespace Askker.App.iOS.PDFComponents
 
             string filename = doc.LocalizedName;
             string pathname = doc.FileUrl?.Path;
+            var nspath = new NSString(pathname).CreateStringByAddingPercentEscapes(NSStringEncoding.UTF8);
+            pathname = nspath.ToString();
             e.Url.StopAccessingSecurityScopedResource();
 
             // iCloud drive can return null for LocalizedName.
@@ -167,7 +169,8 @@ namespace Askker.App.iOS.PDFComponents
 
                 tcs?.SetResult(new FileData(e.FilePath, e.FileName, () =>
                 {
-                    var url = new NSUrl(e.FilePath);
+                    //var nspath = new NSString(e.FilePath).CreateStringByAddingPercentEscapes(NSStringEncoding.UTF8);
+                    var url = new NSUrl(e.FilePath);                    
                     return new FileStream(url.Path, FileMode.Open, FileAccess.Read);
                 }));
             };

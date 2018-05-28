@@ -320,25 +320,25 @@ namespace Askker.App.iOS
         }
 
         [Export("PreviewPdfSelector:")]
-        private void PreviewPdfSelector(UIFeedButton button)
+        private async void PreviewPdfSelector(UIFeedButton button)
         {
-            BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
-
+            button.LoadingIndicatorButton(true);
+                        
             this.survey = (SurveyModel)button.Params.ToArray()[0];
             this.surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
             this.viewController = (UIViewController)button.Params.ToArray()[2];
 
             var filename = "questionImage.pdf";
-            var fileData = Utils.GetPDFFromNSUrl(this.survey.question.image);
+            var fileData = await Utils.GetPDFFromNSUrl(this.survey.question.image);
             var directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string filePath = Path.Combine(directory.ToString(), filename);
-
-            BTProgressHUD.Dismiss();
-
+                        
             QLPreviewItemBundle prevItem = new QLPreviewItemBundle(filename, new NSUrl("file://" + filePath));
             QLPreviewController previewController = new QLPreviewController();
             previewController.DataSource = new PreviewControllerDS(prevItem);
             this.viewController.NavigationController.PushViewController(previewController, true);
+
+            button.LoadingIndicatorButton(false);            
         }
 
         [Export("MoreSelector:")]
@@ -670,6 +670,7 @@ namespace Askker.App.iOS
             questionText.TextColor = UIColor.FromRGB(90, 89, 89);
 
             previewPdfButton = new UIFeedButton();
+            previewPdfButton.SetImage(UIImage.FromBundle("PreviewPDF"), UIControlState.Normal);
             previewPdfButton.TranslatesAutoresizingMaskIntoConstraints = false;
 
             optionsTableView = new UIOptionsTableView();

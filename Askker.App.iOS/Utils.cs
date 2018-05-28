@@ -410,7 +410,7 @@ namespace Askker.App.iOS
             return result;
         }
 
-        public static byte[] GetPDFFromNSUrl(string imagePath)
+        public static async Task<byte[]> GetPDFFromNSUrl(string imagePath)
         {
             byte[] result = null;
 
@@ -419,7 +419,7 @@ namespace Askker.App.iOS
             string filePath = Path.Combine(directory.ToString(), filename);
 
             WebClient webClient = new WebClient();
-            webClient.DownloadFile(EnvironmentConstants.getS3Url() + imagePath, filePath);
+            await webClient.DownloadFileTaskAsync(EnvironmentConstants.getS3Url() + imagePath, filePath);
 
             result = File.ReadAllBytes(filePath);
 
@@ -551,7 +551,7 @@ namespace Askker.App.iOS
 
             feedCell.questionText.Text = survey.question.text;
 
-            feedCell.previewPdfButton.SetImage(UIImage.FromBundle("PreviewPDF"), UIControlState.Normal);
+//            feedCell.previewPdfButton.SetImage(UIImage.FromBundle("PreviewPDF"), UIControlState.Normal);
             
 
             if (survey.type == SurveyType.Text.ToString())
@@ -686,6 +686,7 @@ namespace Askker.App.iOS
                 button.Alpha = 0.5f;
                 var indicator = new UIActivityIndicatorView();
                 indicator.Center = new CGPoint(button.Bounds.Size.Width / 2, button.Bounds.Size.Height / 2);
+                indicator.Color = UIColor.FromRGB(42, 166, 158);
                 indicator.Tag = tag;
                 button.AddSubview(indicator);
                 indicator.StartAnimating();
@@ -700,6 +701,8 @@ namespace Askker.App.iOS
                     indicator.RemoveFromSuperview();
                 }
             }
+            button.SetNeedsLayout();
+            button.LayoutIfNeeded();
         } 
 
         public static UIView findFirstResponder(UIView view)

@@ -278,15 +278,17 @@ namespace Askker.App.iOS
                 if (fileData == null)
                     return; // user canceled file picking
 
-                string fileName = fileData.FileName;
-                string path = fileData.FilePath;
-                //string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
+                //string fileName = fileData.FileName;
+                //string path = fileData.FilePath;
+                ////string contents = System.Text.Encoding.UTF8.GetString(fileData.DataArray);
 
-                NSUrl url = new NSUrl("file://" + path);
+                //NSString nspath = new NSString(path);
+                //nspath = nspath.CreateStringByAddingPercentEscapes(NSStringEncoding.UTF8);
+                //NSUrl url = new NSUrl("file://" + nspath);
 
-                System.Console.WriteLine("File name chosen: " + fileName);
-                System.Console.WriteLine("File path: " + path);
-                //System.Console.WriteLine("File data: " + contents);
+                //System.Console.WriteLine("File name chosen: " + fileName);
+                //System.Console.WriteLine("File path: " + path);
+                ////System.Console.WriteLine("File data: " + contents);
 
                 surveyPdf = fileData.DataArray;
 
@@ -300,7 +302,7 @@ namespace Askker.App.iOS
             }
             catch (Exception ex)
             {
-                System.Console.WriteLine("Exception choosing file: " + ex.ToString());
+                Utils.HandleException(ex);
             }
         }
 
@@ -554,7 +556,7 @@ namespace Askker.App.iOS
                     }
                     questionText.Text = CreateSurveyController.SurveyModel.question.text;
 
-                    surveyPdf = Utils.GetPDFFromNSUrl(CreateSurveyController.SurveyModel.question.image);
+                    surveyPdf = Utils.GetPDFFromNSUrl(CreateSurveyController.SurveyModel.question.image).Result;
                     //questionText.BecomeFirstResponder();
                 }
                 catch (Exception ex)
