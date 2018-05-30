@@ -20,6 +20,10 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel lblAgree { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UISwitch swAgree { get; set; }
 
         [Outlet]
@@ -43,6 +47,11 @@ namespace Askker.App.iOS
             if (btnRegister != null) {
                 btnRegister.Dispose ();
                 btnRegister = null;
+            }
+
+            if (lblAgree != null) {
+                lblAgree.Dispose ();
+                lblAgree = null;
             }
 
             if (swAgree != null) {

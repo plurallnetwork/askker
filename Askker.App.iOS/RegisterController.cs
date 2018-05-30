@@ -5,6 +5,7 @@ using Foundation;
 using System;
 using System.Linq;
 using UIKit;
+using SafariServices;
 
 namespace Askker.App.iOS
 {
@@ -131,6 +132,11 @@ namespace Askker.App.iOS
                     }
                 }
             };
+
+            var gAgree = new UITapGestureRecognizer();
+            gAgree.AddTarget(() => PresentViewControllerAsync(new SFSafariViewController(new NSUrl("https://askker.io/privacy-policy.html")), true));
+            lblAgree.AddGestureRecognizer(gAgree);
+            lblAgree.UserInteractionEnabled = true;
         }
     }
 }

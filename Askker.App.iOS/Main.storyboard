@@ -337,7 +337,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I agree with Askker terms and conditions and privacy policy" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="452">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I agree with WorkDone terms and conditions and privacy policy" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="452">
                                 <rect key="frame" x="92" y="390" width="302" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="4440"/>
@@ -489,6 +489,7 @@
                         <outlet property="txtEmail" destination="448" id="name-outlet-448"/>
                         <outlet property="txtName" destination="449" id="name-outlet-449"/>
                         <outlet property="txtPassword" destination="450" id="name-outlet-450"/>
+                        <outlet property="lblAgree" destination="452" id="name-outlet-452"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="445" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2057,7 +2058,7 @@
                             <constraint firstItem="6020" firstAttribute="leading" secondItem="5880" secondAttribute="leadingMargin" constant="4" id="6058"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6020" secondAttribute="trailing" constant="4" id="6059"/>
                             <constraint firstItem="6020" firstAttribute="top" secondItem="6024" secondAttribute="centerY" constant="17" id="6060"/>
-                            <constraint id="58028" firstItem="58027" firstAttribute="top" secondItem="5880" secondAttribute="top" constant="76"/>
+                            <constraint id="58028" firstItem="58027" firstAttribute="top" secondItem="5880" secondAttribute="top" constant="94"/>
                             <constraint id="58029" firstItem="58027" firstAttribute="centerX" secondItem="5880" secondAttribute="centerX"/>
                         </constraints>
                         <variation key="default">
@@ -2785,11 +2786,11 @@
         <image name="EmptyCircleImage" width="84" height="84"/>
         <image name="EmptyCircleMenu" width="68" height="68"/>
         <image name="EmptyCircleText" width="68" height="68"/>
-        <image name="FeedClearFilters" width="602" height="658"/>
-        <image name="FeedNoAnswers" width="602" height="711"/>
-        <image name="FindFriendsEmpty" width="602" height="485"/>
+        <image name="FeedClearFilters" width="452" height="494"/>
+        <image name="FeedNoAnswers" width="452" height="534"/>
+        <image name="FindFriendsEmpty" width="452" height="364"/>
         <image name="FindGroup" width="49" height="42"/>
-        <image name="FindGroupsEmpty" width="602" height="618"/>
+        <image name="FindGroupsEmpty" width="452" height="464"/>
         <image name="Finished" width="32" height="32"/>
         <image name="ForMe" width="23" height="33"/>
         <image name="Friends" width="44" height="34"/>
@@ -2803,9 +2804,9 @@
         <image name="Menu" width="50" height="34"/>
         <image name="More" width="11" height="39"/>
         <image name="MyFriends" width="33" height="27"/>
-        <image name="MyFriendsEmpty" width="602" height="658"/>
+        <image name="MyFriendsEmpty" width="452" height="494"/>
         <image name="MyGroup" width="44" height="34"/>
-        <image name="MyGroupsEmpty" width="602" height="658"/>
+        <image name="MyGroupsEmpty" width="452" height="494"/>
         <image name="MySurveys" width="40" height="31"/>
         <image name="NextStep" width="17" height="30"/>
         <image name="NextStepGray" width="17" height="30"/>
@@ -2824,5 +2825,9 @@
         <image name="ValidateSurvey" width="47" height="36"/>
         <image name="WorkdoneLogo" width="344" height="166"/>
         <image name="AdminGroup" width="38" height="30"/>
+        <image name="AddPDF" width="292" height="80"/>
+        <image name="ChangePDF" width="304" height="84"/>
+        <image name="PreviewPDF" width="260" height="70"/>
+        <image name="WorkdoneInlineLogo" width="252" height="66"/>
     </resources>
 </document>
