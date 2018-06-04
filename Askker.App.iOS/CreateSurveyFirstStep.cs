@@ -518,8 +518,8 @@ namespace Askker.App.iOS
                 imageCollectionView.Hidden = true;
 
                 tableItems = new List<TextOptionTableItem>();
-                tableItems.Add(new TextOptionTableItem("", OptionType.Option));
-                tableItems.Add(new TextOptionTableItem("", OptionType.Option));
+                tableItems.Add(new TextOptionTableItem("Yes", OptionType.Option));
+                tableItems.Add(new TextOptionTableItem("No", OptionType.Option));
                 tableItems.Add(new TextOptionTableItem("Add new option -->", OptionType.Insert));
                 tableSource = new TextOptionSource(tableItems, this);
                 textTableView.Source = tableSource;
