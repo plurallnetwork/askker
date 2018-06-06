@@ -45,8 +45,9 @@ namespace Askker.App.iOS
         //Variables used to resize the comment textView
         private UIView activeviewarea;          // CommentArea
 
-        public static CommentMenuView commentMenu = CommentMenuView.Create();
         public SurveyCommentModel comment { get; set; }
+
+        UIAlertController commentAction;
 
         public CommentViewController (IntPtr handle) : base (handle)
         {
@@ -124,32 +125,6 @@ namespace Askker.App.iOS
             g.AddTarget(() => View.EndEditing(true));
             g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);                                        
             View.AddGestureRecognizer(g);
-
-            commentMenu.commentView = this.View;
-            commentMenu.Hidden = true;
-            commentMenu.CancelButton.TouchUpInside += (object sender, EventArgs e) =>
-            {
-                commentMenu.Layer.AddAnimation(new CoreAnimation.CATransition
-                {
-                    Duration = 0.2,
-                    Type = CoreAnimation.CAAnimation.TransitionPush,
-                    Subtype = CoreAnimation.CAAnimation.TransitionFromBottom
-                }, "hideMenu");
-
-                commentMenu.Hidden = true;
-                commentMenu.commentView.Alpha = 1f;
-            };
-
-            var rootViewController = UIApplication.SharedApplication.KeyWindow?.RootViewController;
-            while (rootViewController?.PresentedViewController != null)
-            {
-                rootViewController = rootViewController.PresentedViewController;
-            }
-            if (rootViewController == null)
-                rootViewController = this;
-
-            commentMenu.Frame = rootViewController.View.Frame;
-            rootViewController.View.AddSubview(commentMenu);
         }
 
         private void CommentButton_TouchUpInside(object sender, EventArgs e)
@@ -516,20 +491,36 @@ namespace Askker.App.iOS
                 View.EndEditing(true);
                 this.comment = (SurveyCommentModel)gestureRecognizer.Params.ToArray()[0];
 
-                commentMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+                commentAction = UIAlertController.Create("Comment Menu", "Select your action", UIAlertControllerStyle.ActionSheet);
+                if (commentAction.Actions.Count() <= 0)
                 {
-                    Duration = 0.2,
-                    Type = CoreAnimation.CAAnimation.TransitionPush,
-                    Subtype = CoreAnimation.CAAnimation.TransitionFromTop
-                }, "showMenu");
+                    if (!this.comment.userId.Equals(LoginController.userModel.id))// not comment owner
+                    {
+                        commentAction.AddAction(UIAlertAction.Create("Report Comment", UIAlertActionStyle.Destructive, null));
+                        commentAction.AddAction(UIAlertAction.Create("Report User", UIAlertActionStyle.Destructive, null));
+                    }
+                    else
+                    {
+                        commentAction.AddAction(UIAlertAction.Create("Delete Comment", UIAlertActionStyle.Destructive, alert => DeleteCommentSelector()));
+                    }
 
-                commentMenu.Hidden = false;
-                commentMenu.commentView.Alpha = 0.5f;
+                    commentAction.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+                }
+
+                var mainWindow = UIApplication.SharedApplication.KeyWindow;
+                var viewController = mainWindow?.RootViewController;
+                while (viewController?.PresentedViewController != null)
+                {
+                    viewController = viewController.PresentedViewController;
+                }
+                if (viewController == null)
+                    viewController = this;
+
+                viewController.PresentViewController(commentAction, true, null);
             }
         }
 
-        [Export("DeleteCommentSelector:")]
-        private async void DeleteCommentSelector(UIFeedButton but)
+        private async void DeleteCommentSelector()
         {
             nint button = await Utils.ShowAlert("Delete Comment", "The comment will be deleted. Continue?", "Ok", "Cancel");
 
@@ -555,8 +546,6 @@ namespace Askker.App.iOS
                     feed.ReloadData();
                 }
 
-                commentMenu.Hidden = true;
-                commentMenu.commentView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -602,22 +591,10 @@ namespace Askker.App.iOS
 
             commentCell.UpdateCell(comments[indexPath.Row].userName, comments[indexPath.Row].text, comments[indexPath.Row].commentDate, commentViewController.NavigationController, comments[indexPath.Row].userId);
 
-            if (comments[indexPath.Row].userId == LoginController.userModel.id)
-            {
-                var longPress = new UICommentLongPressGestureRecognizer(commentViewController, new Selector("HandleLongPressSelector:"));
-                longPress.Params = new List<object>() { comments[indexPath.Row] };
-                commentCell.AddGestureRecognizer(longPress);
-
-                if (CommentViewController.commentMenu.DeleteButton.AllTargets.Count <= 0)
-                {
-                    CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
-                }
-                else if (!CommentViewController.commentMenu.DeleteButton.AllTargets.IsEqual(this))
-                {
-                    CommentViewController.commentMenu.DeleteButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
-                    CommentViewController.commentMenu.DeleteButton.AddTarget(commentViewController, new Selector("DeleteCommentSelector:"), UIControlEvent.TouchUpInside);
-                }
-            }
+            var longPress = new UICommentLongPressGestureRecognizer(commentViewController, new Selector("HandleLongPressSelector:"));
+            longPress.Params = new List<object>() { comments[indexPath.Row] };
+            commentCell.AddGestureRecognizer(longPress);
+                
 
             if (comments[indexPath.Row].userLiked == true)
             {

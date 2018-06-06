@@ -105,10 +105,6 @@
     <Compile Include="CommentAreaView.designer.cs">
       <DependentUpon>CommentAreaView.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommentMenuView.cs" />
-    <Compile Include="CommentMenuView.designer.cs">
-      <DependentUpon>CommentMenuView.cs</DependentUpon>
-    </Compile>
     <Compile Include="CommentViewController.cs" />
     <Compile Include="CommentViewController.designer.cs">
       <DependentUpon>CommentViewController.cs</DependentUpon>
@@ -230,7 +226,6 @@
     <None Include="packages.config" />
     <InterfaceDefinition Include="Resources\ShareStepView.xib" />
     <InterfaceDefinition Include="Resources\CommentAreaView.xib" />
-    <InterfaceDefinition Include="Resources\CommentMenuView.xib" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="QuestionStepView.cs" />
