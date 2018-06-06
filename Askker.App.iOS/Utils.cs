@@ -499,7 +499,7 @@ namespace Askker.App.iOS
             if (string.IsNullOrEmpty(survey.finishDate))
             {
                 feedCell.finishedLabel.Text = "";
-                feedCell.moreButton.Hidden = false;
+                //feedCell.moreButton.Hidden = false;
                 feedCell.optionsTableView.AllowsSelection = true;
                 feedCell.optionsCollectionView.AllowsSelection = true;
                 finished = false;
@@ -507,7 +507,7 @@ namespace Askker.App.iOS
             else
             {
                 feedCell.finishedLabel.Text = "Finished";
-                feedCell.moreButton.Hidden = true;
+                //feedCell.moreButton.Hidden = true;
                 feedCell.optionsTableView.AllowsSelection = false;
                 feedCell.optionsCollectionView.AllowsSelection = false;
                 finished = true;
@@ -520,16 +520,7 @@ namespace Askker.App.iOS
             {
                 finished = false;
             }
-
-            if (!survey.userId.Equals(LoginController.userModel.id))
-            {
-                feedCell.moreButton.Hidden = true;
-            }
-            else
-            {
-                feedCell.moreButton.Hidden = false;                
-            }
-
+            
             feedCell.questionText.Text = survey.question.text;
 
             if (survey.type == SurveyType.Text.ToString())

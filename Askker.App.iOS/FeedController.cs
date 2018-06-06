@@ -28,6 +28,8 @@ namespace Askker.App.iOS
         public FeedCollectionViewCell surveyCell { get; set; }
         public UIViewController viewController { get; set; }
 
+        UIAlertController moreAction;
+
         public FeedController (IntPtr handle) : base (handle)
         {            
         }
@@ -38,7 +40,7 @@ namespace Askker.App.iOS
             
             this.RestrictRotation(UIInterfaceOrientationMask.Portrait);
             imageCache.RemoveAllObjects();
-
+            
             surveys = new List<SurveyModel>();
 
             feedCollectionView.RegisterClassForCell(typeof(FeedCollectionViewCell), feedCellId);
@@ -57,14 +59,12 @@ namespace Askker.App.iOS
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            MenuViewController.feedMenu.feedView = MenuViewController.menuView;
-
+            
             BTProgressHUD.Show("Refreshing feed...", -1, ProgressHUD.MaskType.Clear);
             fetchSurveys(filterMine, filterForMe, filterFinished);
         }
 
-        [Export("FinishSelector:")]
-        private async void FinishSelector(UIFeedButton but)
+        private async void FinishSelector()
         {
             nint button = await Utils.ShowAlert("Close Survey", "The survey will be closed. Continue?", "Ok", "Cancel");
 
@@ -85,8 +85,6 @@ namespace Askker.App.iOS
                     }
                 }
 
-                MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -96,8 +94,7 @@ namespace Askker.App.iOS
             }
         }
 
-        [Export("DeleteSelector:")]
-        private async void DeleteSelector(UIFeedButton but)
+        private async void DeleteSelector()
         {
             nint button = await Utils.ShowAlert("Delete Survey", "The survey will be deleted. Continue?", "Ok", "Cancel");
             
@@ -114,8 +111,6 @@ namespace Askker.App.iOS
                     this.feedCollectionView.ReloadData();
                 }
 
-                MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -125,8 +120,7 @@ namespace Askker.App.iOS
             }
         }
 
-        [Export("CleanSelector:")]
-        private async void CleanSelector(UIFeedButton but)
+        private async void CleanSelector()
         {
             nint button = await Utils.ShowAlert("Clean Votes", "All survey votes will be deleted. Continue?", "Ok", "Cancel");
 
@@ -150,8 +144,6 @@ namespace Askker.App.iOS
                     }
                 }
 
-                MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -161,8 +153,7 @@ namespace Askker.App.iOS
             }
         }
 
-        [Export("EditSelector:")]
-        private void EditSelector(UIFeedButton but)
+        private void EditSelector()
         {
             BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
             try
@@ -188,8 +179,6 @@ namespace Askker.App.iOS
                     }
                 }
 
-                MenuViewController.feedMenu.Hidden = true;
-                MenuViewController.feedMenu.feedView.Alpha = 1f;
                 BTProgressHUD.Dismiss();
             }
             catch (Exception ex)
@@ -323,36 +312,39 @@ namespace Askker.App.iOS
             this.surveyCell = (FeedCollectionViewCell)button.Params.ToArray()[1];
             this.viewController = (UIViewController)button.Params.ToArray()[2];
 
-            MenuViewController.feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
+            moreAction = UIAlertController.Create("Survey Menu", "Select your action", UIAlertControllerStyle.ActionSheet);
+            if (moreAction.Actions.Count() <= 0)
             {
-                Duration = 0.2,
-                Type = CoreAnimation.CAAnimation.TransitionPush,
-                Subtype = CoreAnimation.CAAnimation.TransitionFromTop
-            }, "showMenu");
+                if (!survey.userId.Equals(LoginController.userModel.id)) //not owned survey
+                {
+                    moreAction.AddAction(UIAlertAction.Create("Report Survey", UIAlertActionStyle.Destructive, null));
+                    moreAction.AddAction(UIAlertAction.Create("Report User", UIAlertActionStyle.Destructive, null));
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(this.survey.finishDate)) //is not finished
+                    {
+                        moreAction.AddAction(UIAlertAction.Create("Edit Survey", UIAlertActionStyle.Default, alert => EditSelector()));
+                        moreAction.AddAction(UIAlertAction.Create("Clean Votes", UIAlertActionStyle.Default, alert => CleanSelector()));
+                        moreAction.AddAction(UIAlertAction.Create("Finish Survey", UIAlertActionStyle.Default, alert => FinishSelector()));
+                    }
 
-            if (!string.IsNullOrEmpty(this.survey.finishDate)) //is finished
-            {
-                MenuViewController.feedMenu.EditButton.Enabled = false;
-                MenuViewController.feedMenu.FinishButton.Enabled = false;
-                MenuViewController.feedMenu.CleanButton.Enabled = false;
+                    moreAction.AddAction(UIAlertAction.Create("Delete Survey", UIAlertActionStyle.Destructive, alert => DeleteSelector()));
+                }
 
-                MenuViewController.feedMenu.EditButton.SetTitleColor(UIColor.LightGray, UIControlState.Disabled);
-                MenuViewController.feedMenu.FinishButton.SetTitleColor(UIColor.LightGray, UIControlState.Disabled);
-                MenuViewController.feedMenu.CleanButton.SetTitleColor(UIColor.LightGray, UIControlState.Disabled);
-            }
-            else
-            {
-                MenuViewController.feedMenu.EditButton.Enabled = true;
-                MenuViewController.feedMenu.FinishButton.Enabled = true;
-                MenuViewController.feedMenu.CleanButton.Enabled = true;
-
-                MenuViewController.feedMenu.EditButton.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
-                MenuViewController.feedMenu.FinishButton.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
-                MenuViewController.feedMenu.CleanButton.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+                moreAction.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
             }
 
-            MenuViewController.feedMenu.Hidden = false;
-            MenuViewController.feedMenu.feedView.Alpha = 0.5f;
+            var mainWindow = UIApplication.SharedApplication.KeyWindow;
+            var viewController = mainWindow?.RootViewController;
+            while (viewController?.PresentedViewController != null)
+            {
+                viewController = viewController.PresentedViewController;
+            }
+            if (viewController == null)
+                viewController = this;
+
+            viewController.PresentViewController(moreAction, true, null);            
         }
 
         [Export("TapProfilePictureSelector:")]
@@ -511,46 +503,6 @@ namespace Askker.App.iOS
             tapProfilePictureValues.Add(survey.userId);
             feedTapGestureRecognizer.Params = tapProfilePictureValues;
             feedCell.profileImageView.AddGestureRecognizer(feedTapGestureRecognizer);
-
-            if (MenuViewController.feedMenu.CleanButton.AllTargets.Count <= 0)
-            {
-                MenuViewController.feedMenu.CleanButton.AddTarget(this, new Selector("CleanSelector:"), UIControlEvent.TouchUpInside);
-            }
-            else if (!MenuViewController.feedMenu.CleanButton.AllTargets.IsEqual(this))
-            {
-                MenuViewController.feedMenu.CleanButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
-                MenuViewController.feedMenu.CleanButton.AddTarget(this, new Selector("CleanSelector:"), UIControlEvent.TouchUpInside);
-            }
-
-            if (MenuViewController.feedMenu.EditButton.AllTargets.Count <= 0)
-            {
-                MenuViewController.feedMenu.EditButton.AddTarget(this, new Selector("EditSelector:"), UIControlEvent.TouchUpInside);
-            }
-            else if (!MenuViewController.feedMenu.EditButton.AllTargets.IsEqual(this))
-            {
-                MenuViewController.feedMenu.EditButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
-                MenuViewController.feedMenu.EditButton.AddTarget(this, new Selector("EditSelector:"), UIControlEvent.TouchUpInside);
-            }
-
-            if (MenuViewController.feedMenu.FinishButton.AllTargets.Count <= 0)
-            {
-                MenuViewController.feedMenu.FinishButton.AddTarget(this, new Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
-            }
-            else if (!MenuViewController.feedMenu.FinishButton.AllTargets.IsEqual(this))
-            {
-                MenuViewController.feedMenu.FinishButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
-                MenuViewController.feedMenu.FinishButton.AddTarget(this, new Selector("FinishSelector:"), UIControlEvent.TouchUpInside);
-            }
-
-            if (MenuViewController.feedMenu.DeleteButton.AllTargets.Count <= 0)
-            {
-                MenuViewController.feedMenu.DeleteButton.AddTarget(this, new Selector("DeleteSelector:"), UIControlEvent.TouchUpInside);
-            }
-            else if (!MenuViewController.feedMenu.DeleteButton.AllTargets.IsEqual(this))
-            {
-                MenuViewController.feedMenu.DeleteButton.RemoveTarget(null, null, UIControlEvent.AllEvents);
-                MenuViewController.feedMenu.DeleteButton.AddTarget(this, new Selector("DeleteSelector:"), UIControlEvent.TouchUpInside);
-            }
         }        
     }
 

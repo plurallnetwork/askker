@@ -11,7 +11,6 @@ namespace Askker.App.iOS
     public partial class MenuViewController : CustomUIViewController
     {
         public static SidebarController sidebarController { get; private set; }
-        public static FeedMenuView feedMenu = FeedMenuView.Create();
         public static UIView menuView { get; set; }
         private NSObject closeMenuObserver;
         private NSObject updateUnreadNotificationsCountObserver;
@@ -61,21 +60,8 @@ namespace Askker.App.iOS
             closeMenuObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("CloseSideMenu"), CloseMessageRecieved);
             updateUnreadNotificationsCountObserver = NSNotificationCenter.DefaultCenter.AddObserver(new NSString("UpdateUnreadNotificationsCount"), UpdateUnreadNotificationsMessageRecieved);
 
-            feedMenu.Hidden = true;
             menuView = this.View;
-            feedMenu.CancelButton.TouchUpInside += (object sender, EventArgs e) =>
-            {
-                feedMenu.Layer.AddAnimation(new CoreAnimation.CATransition
-                {
-                    Duration = 0.2,
-                    Type = CoreAnimation.CAAnimation.TransitionPush,
-                    Subtype = CoreAnimation.CAAnimation.TransitionFromBottom
-                }, "hideMenu");
-
-                feedMenu.Hidden = true;
-                feedMenu.feedView.Alpha = 1f;
-            };
-
+            
             var mainWindow = UIApplication.SharedApplication.KeyWindow;
             var viewController = mainWindow?.RootViewController;
             while (viewController?.PresentedViewController != null)
@@ -84,10 +70,7 @@ namespace Askker.App.iOS
             }
             if (viewController == null)
                 viewController = this;
-
-            feedMenu.Frame = viewController.View.Frame;
-            viewController.View.AddSubview(feedMenu);
-
+                        
             content = this.Storyboard.InstantiateViewController("FeedController") as FeedController;
             content.filterMine = false;
             content.filterForMe = false;

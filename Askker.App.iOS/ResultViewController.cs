@@ -60,8 +60,6 @@ namespace Askker.App.iOS
 
             View.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[v0]|", new NSLayoutFormatOptions(), "v0", feed));
             View.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[v0]|", new NSLayoutFormatOptions(), "v0", feed));
-
-            MenuViewController.feedMenu.feedView = this.View;
         }
 
         public override void ViewWillAppear(bool animated)

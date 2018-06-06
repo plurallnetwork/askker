@@ -139,10 +139,6 @@
     <Compile Include="FeedController.designer.cs">
       <DependentUpon>FeedController.cs</DependentUpon>
     </Compile>
-    <Compile Include="FeedMenuView.cs" />
-    <Compile Include="FeedMenuView.designer.cs">
-      <DependentUpon>FeedMenuView.cs</DependentUpon>
-    </Compile>
     <Compile Include="ForgotPasswordController.cs" />
     <Compile Include="ForgotPasswordController.designer.cs">
       <DependentUpon>ForgotPasswordController.cs</DependentUpon>
@@ -233,7 +229,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
     <InterfaceDefinition Include="Resources\ShareStepView.xib" />
-    <InterfaceDefinition Include="Resources\FeedMenuView.xib" />
     <InterfaceDefinition Include="Resources\CommentAreaView.xib" />
     <InterfaceDefinition Include="Resources\CommentMenuView.xib" />
   </ItemGroup>

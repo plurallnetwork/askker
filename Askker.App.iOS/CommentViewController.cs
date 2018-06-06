@@ -125,7 +125,6 @@ namespace Askker.App.iOS
             g.ShouldReceiveTouch += (recognizer, touch) => !(touch.View is UIControl);                                        
             View.AddGestureRecognizer(g);
 
-            MenuViewController.feedMenu.feedView = this.View;
             commentMenu.commentView = this.View;
             commentMenu.Hidden = true;
             commentMenu.CancelButton.TouchUpInside += (object sender, EventArgs e) =>
