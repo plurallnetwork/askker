@@ -20,6 +20,10 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton btnBlock { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton btnRelationship { get; set; }
 
         [Outlet]
@@ -51,6 +55,11 @@ namespace Askker.App.iOS
             if (ageText != null) {
                 ageText.Dispose ();
                 ageText = null;
+            }
+
+            if (btnBlock != null) {
+                btnBlock.Dispose ();
+                btnBlock = null;
             }
 
             if (btnRelationship != null) {

@@ -58,6 +58,8 @@ namespace Askker.App.iOS
 
             emailText.EditingDidEnd += EmailText_EditingDidEnd;
 
+            logoutBtn.TouchUpInside += LogoutBtn_TouchUpInside;
+
             ageText.KeyboardType = UIKeyboardType.NumberPad;
             ageText.ShouldChangeCharacters = (textField, range, replacement) =>
             {
@@ -70,7 +72,24 @@ namespace Askker.App.iOS
 
             uploadButton.TintColor = UIColor.FromRGB(90, 89, 89);
             uploadButton.SetTitleColor( UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+
+            logoutBtn.Layer.BorderColor = UIColor.FromRGB(90, 89, 89).CGColor;
+            logoutBtn.Layer.BorderWidth = 1f;
+            logoutBtn.Layer.CornerRadius = 5;
             
+
+            logoutBtn.TintColor = UIColor.FromRGB(90, 89, 89);
+            logoutBtn.SetTitle("   Logout   ", UIControlState.Normal);
+            logoutBtn.SetTitleColor(UIColor.FromRGB(90, 89, 89), UIControlState.Normal);
+
+            deleteBtn.Layer.BorderColor = UIColor.Red.CGColor;
+            deleteBtn.Layer.BorderWidth = 1f;
+            deleteBtn.Layer.CornerRadius = 5;
+            
+            deleteBtn.TintColor = UIColor.Red;
+            deleteBtn.SetTitle("   Delete Account   ", UIControlState.Normal);
+            deleteBtn.SetTitleColor(UIColor.Red, UIControlState.Normal);
+
             nameText.TextColor = UIColor.FromRGB(90, 89, 89);
             emailText.TextColor = UIColor.FromRGB(90, 89, 89);
             ageText.TextColor = UIColor.FromRGB(90, 89, 89);
@@ -101,6 +120,19 @@ namespace Askker.App.iOS
                 profileImageView.Image = UIImage.FromBundle("Profile");
             }
             BTProgressHUD.Dismiss();
+        }
+
+        private void LogoutBtn_TouchUpInside(object sender, EventArgs e)
+        {
+            CredentialsService.DeleteCredentials();
+            LoginController.tokenModel = null;
+            LoginController.userModel = null;
+
+            var loginController = this.Storyboard.InstantiateViewController("LoginNavController");
+            if (loginController != null)
+            {
+                this.PresentViewController(loginController, true, null);
+            }
         }
 
         private void UpdateGenderButtonStatus(string genderPressioned)

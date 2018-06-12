@@ -24,6 +24,10 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton deleteBtn { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton emailButton { get; set; }
 
         [Outlet]
@@ -33,6 +37,10 @@ namespace Askker.App.iOS
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField genderText { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton logoutBtn { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -70,6 +78,11 @@ namespace Askker.App.iOS
                 ageText = null;
             }
 
+            if (deleteBtn != null) {
+                deleteBtn.Dispose ();
+                deleteBtn = null;
+            }
+
             if (emailButton != null) {
                 emailButton.Dispose ();
                 emailButton = null;
@@ -83,6 +96,11 @@ namespace Askker.App.iOS
             if (genderText != null) {
                 genderText.Dispose ();
                 genderText = null;
+            }
+
+            if (logoutBtn != null) {
+                logoutBtn.Dispose ();
+                logoutBtn = null;
             }
 
             if (manButton != null) {

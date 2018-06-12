@@ -20,6 +20,7 @@ namespace Askker.App.iOS
         public UserModel friendUserModel { get; set; }
 
         public RelationshipStatus relationshipStatus { get; set; }
+        public BlockStatus blockStatus { get; set; }
 
         public ProfileOtherController (IntPtr handle) : base (handle)
         {
@@ -43,6 +44,9 @@ namespace Askker.App.iOS
             {
                 btnRelationship.SetTitle("", UIControlState.Normal);
                 btnRelationship.Hidden = true;
+                btnBlock.SetTitle("", UIControlState.Normal);
+                btnBlock.Hidden = true;
+
                 profileImageView.Layer.MasksToBounds = true;
 
                 friendUserModel = await new LoginManager().GetUserById(LoginController.tokenModel.access_token, friendUserId);
@@ -69,6 +73,8 @@ namespace Askker.App.iOS
 
                 relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId);
                 LoadRelationshipButton();
+                //relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId);
+                LoadBlockButton();
 
                 var adminGroups = (await new UserGroupManager().GetGroupsWithMembers(LoginController.userModel.id, LoginController.tokenModel.access_token))
                                                                .Where(g => g.userId == LoginController.userModel.id && g.members.Any(m => m.id == friendUserId)).ToList();
@@ -90,7 +96,48 @@ namespace Askker.App.iOS
             }
 
             btnRelationship.TouchUpInside += BtnRelationship_TouchUpInside;
+            btnBlock.TouchUpInside += BtnBlock_TouchUpInside;
             BTProgressHUD.Dismiss();
+        }
+
+        private void BtnBlock_TouchUpInside(object sender, EventArgs e)
+        {
+            try
+            {
+                btnBlock.LoadingIndicatorButton(true);
+
+                if (blockStatus == BlockStatus.Unblocked)
+                {
+                    blockStatus = BlockStatus.Blocked;
+
+                    var userOwnerAndFriend = new List<UserModel>();
+                    userOwnerAndFriend.Add(LoginController.userModel);
+                    userOwnerAndFriend.Add(friendUserModel);
+                    //await new FriendManager().AddFriend(LoginController.tokenModel.access_token, friendUserId);
+                }
+                else
+                {
+                    switch (blockStatus)
+                    {
+                        case BlockStatus.Blocked:
+                            blockStatus = BlockStatus.Unblocked;
+                            break;
+                        default:
+                            blockStatus = BlockStatus.Unblocked;
+                            break;
+                    }
+
+                    //await new FriendManager().UpdateUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId, blockStatus);
+                }
+
+                btnBlock.LoadingIndicatorButton(false);
+                LoadBlockButton();
+            }
+            catch (Exception ex)
+            {
+                btnBlock.LoadingIndicatorButton(false);
+                Utils.HandleException(ex);
+            }
         }
 
         private async void BtnRelationship_TouchUpInside(object sender, EventArgs e)
@@ -191,6 +238,29 @@ namespace Askker.App.iOS
                 default:
                     btnRelationship.Enabled = true;
                     btnRelationship.Hidden = false;
+                    break;
+            }
+        }
+
+        private void LoadBlockButton()
+        {
+            switch (blockStatus)
+            {
+                case BlockStatus.Unblocked:
+                    btnBlock.SetTitle(" Block ", UIControlState.Normal);
+                    btnBlock.BackgroundColor = UIColor.Red;
+                    btnBlock.Enabled = true;
+                    btnBlock.Hidden = false;
+                    break;
+                case BlockStatus.Blocked:
+                    btnBlock.SetTitle(" Unblock ", UIControlState.Normal);
+                    btnBlock.BackgroundColor = UIColor.FromRGB(0, 134, 255);
+                    btnBlock.Enabled = true;
+                    btnBlock.Hidden = false;
+                    break;
+                default:
+                    btnBlock.Enabled = true;
+                    btnBlock.Hidden = false;
                     break;
             }
         }
