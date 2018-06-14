@@ -67,5 +67,23 @@ namespace Askker.App.PortableLibrary.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<HttpResponseMessage> ReportComment(string userId, string commentId, string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/survey/ReportComment/{0}/{1}", userId, commentId));
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+                    return await client.PostAsync(uri, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

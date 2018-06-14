@@ -496,8 +496,8 @@ namespace Askker.App.iOS
                 {
                     if (!this.comment.userId.Equals(LoginController.userModel.id))// not comment owner
                     {
-                        commentAction.AddAction(UIAlertAction.Create("Report Comment", UIAlertActionStyle.Destructive, null));
-                        commentAction.AddAction(UIAlertAction.Create("Report User", UIAlertActionStyle.Destructive, null));
+                        commentAction.AddAction(UIAlertAction.Create("Report Comment", UIAlertActionStyle.Destructive, alert => ReportComment()));
+                        commentAction.AddAction(UIAlertAction.Create("Report Comment User", UIAlertActionStyle.Destructive, alert => ReportCommentUser()));
                     }
                     else
                     {
@@ -540,6 +540,63 @@ namespace Askker.App.iOS
                     }
 
                     feedCell.updateTotalComments(survey.totalComments);
+
+                    feed.Source = new CommentsCollectionViewSource(comments, feedCell, this);
+                    feed.Delegate = new CommentsCollectionViewDelegate((float)feedCell.Frame.Height);
+                    feed.ReloadData();
+                }
+
+                BTProgressHUD.Dismiss();
+            }
+            catch (Exception ex)
+            {
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);
+            }
+        }
+
+        private async void ReportComment()
+        {
+            nint button = await Utils.ShowAlert("Report Comment", "The comment will be reported. Continue?", "Ok", "Cancel");
+
+            try
+            {
+                if (button == 0)
+                {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+                    await new CommentManager().ReportComment(LoginController.userModel.id, comment.surveyId + comment.commentDate, LoginController.tokenModel.access_token);
+
+                    comments.Remove(comment);
+
+                    feed.Source = new CommentsCollectionViewSource(comments, feedCell, this);
+                    feed.Delegate = new CommentsCollectionViewDelegate((float)feedCell.Frame.Height);
+                    feed.ReloadData();
+                }
+
+                BTProgressHUD.Dismiss();
+            }
+            catch (Exception ex)
+            {
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);
+            }
+        }
+
+        private async void ReportCommentUser()
+        {
+            nint button = await Utils.ShowAlert("Report Comment User", "The user will be reported. Continue?", "Ok", "Cancel");
+
+            try
+            {
+                if (button == 0)
+                {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+                    await new UserManager().BlockUser(LoginController.userModel.id, comment.userId, LoginController.tokenModel.access_token);
+
+                    //comments.Remove(comment);
+                    comments = await new CommentManager().GetSurveyComments(this.userId + this.creationDate, LoginController.userModel.id, LoginController.tokenModel.access_token);
 
                     feed.Source = new CommentsCollectionViewSource(comments, feedCell, this);
                     feed.Delegate = new CommentsCollectionViewDelegate((float)feedCell.Frame.Height);

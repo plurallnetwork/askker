@@ -77,5 +77,24 @@ namespace Askker.App.PortableLibrary.Business
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task ReportComment(string userId, string commentId, string authenticationToken)
+        {
+            try
+            {
+                CommentService commentService = new CommentService();
+
+                var response = await commentService.ReportComment(userId, commentId, authenticationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

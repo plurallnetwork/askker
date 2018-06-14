@@ -79,6 +79,11 @@ namespace Askker.App.iOS
                     
                     if (surveys.Count > 0 && !this.filterFinished)
                     {
+                        if (survey.userId.Equals(LoginController.userModel.id) && (survey.reportedByUsersIds != null && survey.reportedByUsersIds.Count > 0))
+                        {
+                            surveyCell.reportedLabel.RemoveFromSuperview();
+                        }
+
                         surveys.Remove(survey);
                         this.feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
                         this.feedCollectionView.ReloadData();
@@ -107,6 +112,64 @@ namespace Askker.App.iOS
                     await new FeedManager().DeleteSurvey(survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
 
                     surveys.Remove(survey);
+                    this.feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
+                    this.feedCollectionView.ReloadData();
+                }
+
+                BTProgressHUD.Dismiss();
+            }
+            catch (Exception ex)
+            {
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);
+            }
+        }
+
+        private async void ReportSurvey()
+        {
+            nint button = await Utils.ShowAlert("Report Survey", "The survey will be reported. Continue?", "Ok", "Cancel");
+
+            try
+            {
+                if (button == 0)
+                {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+                    await new FeedManager().ReportSurvey(LoginController.userModel.id, survey.userId + survey.creationDate, LoginController.tokenModel.access_token);
+
+                    surveys.Remove(survey);
+                    this.feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
+                    this.feedCollectionView.ReloadData();
+                }
+
+                BTProgressHUD.Dismiss();
+            }
+            catch (Exception ex)
+            {
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);
+            }
+        }
+
+        private async void ReportUser()
+        {
+            nint button = await Utils.ShowAlert("Report Survey User", "The user will be reported. Continue?", "Ok", "Cancel");
+
+            try
+            {
+                if (button == 0)
+                {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+
+                    await new UserManager().BlockUser(LoginController.userModel.id, survey.userId, LoginController.tokenModel.access_token);
+
+                    surveys = await new FeedManager().GetFeed(LoginController.userModel.id, filterMine, filterForMe, filterFinished, LoginController.tokenModel.access_token);
+
+                    foreach (var survey in surveys)
+                    {
+                        survey.options = Common.Randomize(survey.options);
+                    }
+
                     this.feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
                     this.feedCollectionView.ReloadData();
                 }
@@ -317,8 +380,8 @@ namespace Askker.App.iOS
             {
                 if (!survey.userId.Equals(LoginController.userModel.id)) //not owned survey
                 {
-                    moreAction.AddAction(UIAlertAction.Create("Report Survey", UIAlertActionStyle.Destructive, null));
-                    moreAction.AddAction(UIAlertAction.Create("Report User", UIAlertActionStyle.Destructive, null));
+                    moreAction.AddAction(UIAlertAction.Create("Report Survey", UIAlertActionStyle.Destructive, alert => ReportSurvey()));
+                    moreAction.AddAction(UIAlertAction.Create("Report User", UIAlertActionStyle.Destructive, alert => ReportUser()));
                 }
                 else
                 {
@@ -533,6 +596,7 @@ namespace Askker.App.iOS
         public UIImageView profileImageView { get; set; }
         public UILabel nameLabel { get; set; }
         public UILabel finishedLabel { get; set; }
+        public UILabel reportedLabel { get; set; }
         public UITextView questionText { get; set; }
         public UIOptionsTableView optionsTableView { get; set; }
         public OptionsTableViewSource optionsTableViewSource { get; set; }
@@ -578,6 +642,14 @@ namespace Askker.App.iOS
             finishedLabel.Layer.BackgroundColor = UIColor.FromRGB(250, 60, 60).CGColor;
             finishedLabel.Layer.CornerRadius = 10.0f;
             finishedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            reportedLabel = new UILabel();
+            reportedLabel.TextColor = UIColor.White;
+            reportedLabel.TextAlignment = UITextAlignment.Center;
+            reportedLabel.Font = UIFont.BoldSystemFontOfSize(14);
+            reportedLabel.Layer.BackgroundColor = UIColor.FromRGB(255, 201, 3).CGColor;
+            reportedLabel.Layer.CornerRadius = 10.0f;
+            reportedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             questionText = new UITextView();
             questionText.Font = UIFont.BoldSystemFontOfSize(14);

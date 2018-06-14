@@ -20,7 +20,7 @@ namespace Askker.App.iOS
         public UserModel friendUserModel { get; set; }
 
         public RelationshipStatus relationshipStatus { get; set; }
-        public BlockStatus blockStatus { get; set; }
+        public bool isUserBlocked { get; set; }
 
         public ProfileOtherController (IntPtr handle) : base (handle)
         {
@@ -73,7 +73,8 @@ namespace Askker.App.iOS
 
                 relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId);
                 LoadRelationshipButton();
-                //relationshipStatus = await new FriendManager().GetUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId);
+
+                isUserBlocked = await new UserManager().IsUserBlocked(friendUserId, LoginController.tokenModel.access_token);
                 LoadBlockButton();
 
                 var adminGroups = (await new UserGroupManager().GetGroupsWithMembers(LoginController.userModel.id, LoginController.tokenModel.access_token))
@@ -100,34 +101,34 @@ namespace Askker.App.iOS
             BTProgressHUD.Dismiss();
         }
 
-        private void BtnBlock_TouchUpInside(object sender, EventArgs e)
+        private async void BtnBlock_TouchUpInside(object sender, EventArgs e)
         {
             try
             {
                 btnBlock.LoadingIndicatorButton(true);
 
-                if (blockStatus == BlockStatus.Unblocked)
+                if (!isUserBlocked)
                 {
-                    blockStatus = BlockStatus.Blocked;
+                    isUserBlocked = true;
 
                     var userOwnerAndFriend = new List<UserModel>();
                     userOwnerAndFriend.Add(LoginController.userModel);
                     userOwnerAndFriend.Add(friendUserModel);
-                    //await new FriendManager().AddFriend(LoginController.tokenModel.access_token, friendUserId);
+                    await new UserManager().BlockUser(LoginController.userModel.id, friendUserId, LoginController.tokenModel.access_token);
                 }
                 else
                 {
-                    switch (blockStatus)
+                    switch (isUserBlocked)
                     {
-                        case BlockStatus.Blocked:
-                            blockStatus = BlockStatus.Unblocked;
+                        case true:
+                            isUserBlocked = false;
                             break;
                         default:
-                            blockStatus = BlockStatus.Unblocked;
+                            isUserBlocked = false;
                             break;
                     }
 
-                    //await new FriendManager().UpdateUserRelationshipStatus(LoginController.tokenModel.access_token, friendUserId, blockStatus);
+                    await new UserManager().UnblockUser(LoginController.userModel.id, friendUserId, LoginController.tokenModel.access_token);
                 }
 
                 btnBlock.LoadingIndicatorButton(false);
@@ -244,15 +245,15 @@ namespace Askker.App.iOS
 
         private void LoadBlockButton()
         {
-            switch (blockStatus)
+            switch (isUserBlocked)
             {
-                case BlockStatus.Unblocked:
+                case false:
                     btnBlock.SetTitle(" Block ", UIControlState.Normal);
                     btnBlock.BackgroundColor = UIColor.Red;
                     btnBlock.Enabled = true;
                     btnBlock.Hidden = false;
                     break;
-                case BlockStatus.Blocked:
+                case true:
                     btnBlock.SetTitle(" Unblock ", UIControlState.Normal);
                     btnBlock.BackgroundColor = UIColor.FromRGB(0, 134, 255);
                     btnBlock.Enabled = true;

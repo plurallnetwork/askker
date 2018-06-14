@@ -177,5 +177,31 @@ namespace Askker.App.PortableLibrary.Business
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task ReportSurvey(string userId, string surveyId, string authenticationToken)
+        {
+            try
+            {
+                FeedService feedService = new FeedService();
+
+                var response = await feedService.ReportSurvey(userId, surveyId, authenticationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

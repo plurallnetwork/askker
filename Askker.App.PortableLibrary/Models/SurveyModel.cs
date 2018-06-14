@@ -46,6 +46,8 @@ namespace Askker.App.PortableLibrary.Models
         public AudienceUsers targetAudienceUsers { get; set; }
 
         public AudienceGroups targetAudienceGroups { get; set; }
+
+        public List<string> reportedByUsersIds { get; set; }
     }
 
     public class Question

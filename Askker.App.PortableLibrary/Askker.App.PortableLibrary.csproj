@@ -44,8 +44,8 @@
     <Compile Include="Business\LoginManager.cs" />
     <Compile Include="Business\NotificationManager.cs" />
     <Compile Include="Business\RegisterManager.cs" />
+    <Compile Include="Business\UserManager.cs" />
     <Compile Include="Business\VoteManager.cs" />
-    <Compile Include="Enums\BlockStatus.cs" />
     <Compile Include="Enums\OptionType.cs" />
     <Compile Include="Enums\ProfileType.cs" />
     <Compile Include="Enums\UserGroupRelationshipStatus.cs" />
@@ -88,6 +88,7 @@
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\RegisterService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Util\Common.cs" />
     <Compile Include="Services\VoteService.cs" />
   </ItemGroup>
