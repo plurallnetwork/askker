@@ -102,5 +102,31 @@ namespace Askker.App.PortableLibrary.Business
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task DeleteUserAndData(string authenticationToken)
+        {
+            try
+            {
+                UserService userService = new UserService();
+
+                var response = await userService.DeleteUserAndData(authenticationToken);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        throw new Exception("Unauthorized");
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString() + " - " + response.ReasonPhrase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

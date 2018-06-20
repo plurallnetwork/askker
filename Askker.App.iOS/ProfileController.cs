@@ -60,6 +60,8 @@ namespace Askker.App.iOS
 
             logoutBtn.TouchUpInside += LogoutBtn_TouchUpInside;
 
+            deleteBtn.TouchUpInside += DeleteBtn_TouchUpInside;
+
             ageText.KeyboardType = UIKeyboardType.NumberPad;
             ageText.ShouldChangeCharacters = (textField, range, replacement) =>
             {
@@ -120,6 +122,27 @@ namespace Askker.App.iOS
                 profileImageView.Image = UIImage.FromBundle("Profile");
             }
             BTProgressHUD.Dismiss();
+        }
+
+        private async void DeleteBtn_TouchUpInside(object sender, EventArgs e)
+        {
+            nint button = await Utils.ShowAlert("Delete Profile", "It will delete all data from your profile. Continue?", "Ok", "Cancel");
+
+            try
+            {
+                if (button == 0)
+                {
+                    BTProgressHUD.Show(null, -1, ProgressHUD.MaskType.Clear);
+                    await new UserManager().DeleteUserAndData(LoginController.tokenModel.access_token);
+                }
+
+                BTProgressHUD.Dismiss();
+            }
+            catch (Exception ex)
+            {
+                BTProgressHUD.Dismiss();
+                Utils.HandleException(ex);
+            }
         }
 
         private void LogoutBtn_TouchUpInside(object sender, EventArgs e)

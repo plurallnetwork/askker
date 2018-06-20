@@ -63,5 +63,23 @@ namespace Askker.App.PortableLibrary.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<HttpResponseMessage> DeleteUserAndData(string authenticationToken)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var uri = new Uri(string.Format(EnvironmentConstants.getServerUrl() + "api/account/DeleteUserAndData"));
+
+                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Bearer " + authenticationToken);
+                    return await client.PostAsync(uri, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
