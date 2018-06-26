@@ -24,6 +24,10 @@ namespace Askker.App.iOS
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextView termsText { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITextField txtConfirmPassword { get; set; }
 
         [Outlet]
@@ -48,6 +52,11 @@ namespace Askker.App.iOS
             if (swAgree != null) {
                 swAgree.Dispose ();
                 swAgree = null;
+            }
+
+            if (termsText != null) {
+                termsText.Dispose ();
+                termsText = null;
             }
 
             if (txtConfirmPassword != null) {

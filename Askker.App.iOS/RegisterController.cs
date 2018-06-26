@@ -2,6 +2,7 @@
 using Askker.App.PortableLibrary.Models;
 using BigTed;
 using Foundation;
+using SafariServices;
 using System;
 using System.Linq;
 using UIKit;
@@ -25,6 +26,17 @@ namespace Askker.App.iOS
             txtEmail.TextColor = UIColor.FromRGB(90, 89, 89);
             txtPassword.TextColor = UIColor.FromRGB(90, 89, 89);
             txtConfirmPassword.TextColor = UIColor.FromRGB(90, 89, 89);
+
+            NSMutableAttributedString terms = new NSMutableAttributedString("I agree with Askker terms and conditions and privacy policy");
+            var linkRange = terms.MutableString.LocalizedStandardRangeOfString(new NSString("Askker terms"));
+            terms.AddAttribute(UIStringAttributeKey.ForegroundColor, UIColor.Blue, linkRange);
+
+            termsText.AttributedText = terms;
+
+            var gAgree = new UITapGestureRecognizer();
+            gAgree.AddTarget(() => PresentViewControllerAsync(new SFSafariViewController(new NSUrl("https://askker.io/privacy-policy.html")), true));
+            termsText.AddGestureRecognizer(gAgree);
+            termsText.UserInteractionEnabled = true;
 
             UINavigationBar.Appearance.TitleTextAttributes = new UIStringAttributes
             {

@@ -512,6 +512,12 @@ namespace Askker.App.iOS
             bool finished = false;
             bool reported = false;
 
+            var reportedLabel = findFirstLabelWithBkgColor(feedCell, UIColor.FromRGB(255, 201, 3));
+            if (reportedLabel != null)
+            {
+                reportedLabel.RemoveFromSuperview();
+            }
+
             if (string.IsNullOrEmpty(survey.finishDate))
             {
                 feedCell.finishedLabel.Text = "";
@@ -549,6 +555,7 @@ namespace Askker.App.iOS
             if (isPreview)
             {
                 finished = false;
+                reported = false;
             }
             
             feedCell.questionText.Text = survey.question.text;
