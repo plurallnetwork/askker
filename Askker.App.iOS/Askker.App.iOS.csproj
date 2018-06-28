@@ -369,6 +369,15 @@
     <None Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
+    <ImageAsset Include="Media.xcassets\SplashScreenLogo.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\SplashScreenLogo.imageset\splash-screen-x2.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Media.xcassets\SplashScreenLogo.imageset\splash-screen-x3.png">
+      <Visible>false</Visible>
+    </ImageAsset>
     <ImageAsset Include="Resources\Media.xcassets\AddFriends.imageset\add-friends-x2.png">
       <Visible>false</Visible>
     </ImageAsset>
