@@ -79,11 +79,6 @@ namespace Askker.App.iOS
                     
                     if (surveys.Count > 0 && !this.filterFinished)
                     {
-                        if (survey.userId.Equals(LoginController.userModel.id) && (survey.reportedByUsersIds != null && survey.reportedByUsersIds.Count > 0))
-                        {
-                            surveyCell.reportedLabel.RemoveFromSuperview();
-                        }
-
                         surveys.Remove(survey);
                         this.feedCollectionView.Delegate = new FeedCollectionViewDelegate(surveys);
                         this.feedCollectionView.ReloadData();
@@ -596,7 +591,6 @@ namespace Askker.App.iOS
         public UIImageView profileImageView { get; set; }
         public UILabel nameLabel { get; set; }
         public UILabel finishedLabel { get; set; }
-        public UILabel reportedLabel { get; set; }
         public UITextView questionText { get; set; }
         public UIOptionsTableView optionsTableView { get; set; }
         public OptionsTableViewSource optionsTableViewSource { get; set; }
@@ -642,14 +636,6 @@ namespace Askker.App.iOS
             finishedLabel.Layer.BackgroundColor = UIColor.FromRGB(250, 60, 60).CGColor;
             finishedLabel.Layer.CornerRadius = 10.0f;
             finishedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
-
-            reportedLabel = new UILabel();
-            reportedLabel.TextColor = UIColor.White;
-            reportedLabel.TextAlignment = UITextAlignment.Center;
-            reportedLabel.Font = UIFont.BoldSystemFontOfSize(14);
-            reportedLabel.Layer.BackgroundColor = UIColor.FromRGB(255, 201, 3).CGColor;
-            reportedLabel.Layer.CornerRadius = 10.0f;
-            reportedLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
             questionText = new UITextView();
             questionText.Font = UIFont.BoldSystemFontOfSize(14);
